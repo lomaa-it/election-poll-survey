@@ -1,0 +1,69 @@
+{
+  "name": "polling_survey",
+  "version": "0.1.0",
+  "private": true,
+  "homepage": "/polling_survey",
+  "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@fontsource/inter": "^5.0.15",
+    "@hookform/resolvers": "^2.9.3",
+    "@iconify/react": "^4.1.0",
+    "@mui/icons-material": "^5.2.1",
+    "@mui/joy": "^5.0.0-beta.15",
+    "@mui/lab": "^5.0.0-alpha.88",
+    "@mui/material": "^5.8.6",
+    "@mui/styles": "^5.2.3",
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "apexcharts": "^3.36.0",
+    "axios": "^0.24.0",
+    "date-fns": "^2.29.3",
+    "mui-datatables": "^4.2.2",
+    "numeral": "^2.0.6",
+    "react": "^18.2.0",
+    "react-apexcharts": "^1.4.0",
+    "react-custom-scrollbars": "^4.2.1",
+    "react-dom": "^18.2.0",
+    "react-helmet-async": "^1.3.0",
+    "react-hook-form": "^7.43.1",
+    "react-redux": "^7.2.6",
+    "react-router-dom": "^6.8.1",
+    "react-scripts": "^5.0.1",
+    "redux": "^4.1.2",
+    "redux-devtools-extension": "^2.13.9",
+    "redux-thunk": "^2.4.1",
+    "web-vitals": "^2.1.4",
+    "yup": "^1.0.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "gh-pages": "^6.1.0"
+  }
+}
