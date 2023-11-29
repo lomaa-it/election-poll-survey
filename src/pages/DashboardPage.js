@@ -41,7 +41,12 @@ import {
   pendingColor,
 } from "../utils/constants";
 import instance from "../utils/axios";
-import { getAllMandalRoute, getDivisionsById } from "../utils/apis";
+import {
+  getAllMandalRoute,
+  getDivisionsById,
+  getSachivalayamById,
+  getPartsById,
+} from "../utils/apis";
 
 // Define custom styles
 const useStyles = makeStyles({
@@ -69,7 +74,7 @@ const DashboardApp = ({ dashboard }) => {
     mandal_id: "",
     division_id: "",
     sachivalayam_id: "",
-    part_no_id: "",
+    part_no: "",
     age: "",
     user_id: "",
     next_level_user_id: "",
@@ -86,17 +91,15 @@ const DashboardApp = ({ dashboard }) => {
   useEffect(() => {
     const getMandalData = async () => {
       try {
-        console.log("route", "getMandalData");
         const response = await instance.get(getAllMandalRoute);
         const responseData = response.data.message;
-        console.log("mandal-data", responseData);
+
         const filterData = responseData.map((item) => {
           return {
             label: item.mandal_name,
             mandal_id: item.mandal_pk,
           };
         });
-        console.log("mandal-filterData", filterData);
 
         setSearchFiltersData({ ...searchFilters, mandal: filterData });
       } catch (error) {
@@ -106,19 +109,17 @@ const DashboardApp = ({ dashboard }) => {
 
     const getDivisionData = async () => {
       try {
-        console.log("route", "getDivisionData");
         const response = await instance.get(
           getDivisionsById + saveSearchFilters.mandal_id
         );
         const responseData = response.data.message;
-        console.log("division-data", responseData);
+
         const filterData = responseData.map((item) => {
           return {
             label: item.division_name,
             division_id: item.division_pk,
           };
         });
-        console.log("division-filterData", filterData);
 
         setSearchFiltersData({ ...searchFilters, division: filterData });
       } catch (error) {
@@ -126,10 +127,62 @@ const DashboardApp = ({ dashboard }) => {
       }
     };
 
+    const getSachivalayamData = async () => {
+      try {
+        const response = await instance.get(
+          getSachivalayamById + saveSearchFilters.division_id
+        );
+
+        const responseData = response.data.message;
+
+        const filterData = responseData.map((item) => {
+          return {
+            label: item.sachivalayam_name,
+            sachivalayam_id: item.sachivalayam_pk,
+          };
+        });
+
+        setSearchFiltersData({ ...searchFilters, sachivalayam: filterData });
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
+
+    const getPartNoData = async () => {
+      try {
+        console.log("route", "getPartNoData");
+        const response = await instance.get(
+          getPartsById + saveSearchFilters.sachivalayam_id
+        );
+        console.log("part fecthing is done");
+        const responseData = response.data.message;
+        console.log("partNo-data", responseData);
+        const filterData = responseData.map((item) => {
+          return {
+            label: item.part_no,
+            part_no: item.part_pk,
+          };
+        });
+        console.log("partNo-filterData", filterData);
+
+        setSearchFiltersData({ ...searchFilters, partNo: filterData });
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
+
     if (searchFilters.mandal.length === 0) {
       getMandalData();
-    } else if(saveSearchFilters.mandal_id !== ""){
+    }
+    if (saveSearchFilters.mandal_id !== "") {
       getDivisionData();
+    }
+    if (saveSearchFilters.division_id !== "") {
+      getSachivalayamData();
+    }
+    if (saveSearchFilters.sachivalayam_id !== "") {
+      console.log("Hi IM here in partNo");
+      getPartNoData();
     }
   }, [saveSearchFilters]);
 
@@ -157,11 +210,11 @@ const DashboardApp = ({ dashboard }) => {
                 onChange={(event, value) => {
                   // console.log("event", event)
                   console.log("value", value);
-                  setSaveSearchFilters({
-                    ...saveSearchFilters,
+                  setSaveSearchFilters((prevState) => ({
+                    ...prevState,
 
                     mandal_id: value ? value.mandal_id : "",
-                  });
+                  }));
                 }}
               />
             </Grid>
@@ -176,19 +229,51 @@ const DashboardApp = ({ dashboard }) => {
                 onChange={(event, value) => {
                   // console.log("event", event)
                   console.log("value", value);
-                  setSaveSearchFilters({
-                    ...saveSearchFilters,
+                  setSaveSearchFilters((prevState) => ({
+                    ...prevState,
 
                     division_id: value ? value.division_id : "",
-                  });
+                  }));
                 }}
               />
             </Grid>
             <Grid item xs={12} md={6} lg={3}>
-              <TextField label="Select Sachivalayam" fullWidth select />
+              <Autocomplete
+                disabled={saveSearchFilters.division_id === ""}
+                id="sachivalayam"
+                options={searchFilters.sachivalayam}
+                renderInput={(params) => (
+                  <TextField {...params} label="Select Sachivalayam" />
+                )}
+                onChange={(event, value) => {
+                  // console.log("event", event)
+                  console.log("value", value);
+                  setSaveSearchFilters((prevSate) => ({
+                    ...prevSate,
+
+                    sachivalayam_id: value ? value.sachivalayam_id : "",
+                  }));
+                }}
+              />
             </Grid>
             <Grid item xs={12} md={6} lg={3}>
-              <TextField label="Select Part No" fullWidth select />
+              <Autocomplete
+                disabled={saveSearchFilters.sachivalayam_id === ""}
+                id="partNo"
+                options={searchFilters.partNo}
+                renderInput={(params) => (
+                  <TextField {...params} label="Select Part No" />
+                )}
+                onChange={(event, value) => {
+                  // console.log("event", event)
+                  console.log("value", value);
+                  setSaveSearchFilters({
+                    ...saveSearchFilters,
+
+                    part_no: value ? value.part_no : "",
+                  });
+                }}
+              />
             </Grid>{" "}
             <Grid item xs={12} md={6} lg={3}>
               <TextField label="Select Age" fullWidth />
