@@ -2,7 +2,7 @@
   "name": "polling_survey",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://lomma-it.github.io/polling_survey",
+  "homepage": "https://lomma-it.github.io/election-poll-survey",
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
