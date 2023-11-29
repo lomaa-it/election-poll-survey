@@ -7,6 +7,7 @@ import {
   TextField,
   Card,
 } from "@mui/material";
+import Autocomplete from "@mui/material/Autocomplete";
 import makeStyles from "@mui/styles/makeStyles";
 import Page from "../components/Page";
 import { connect } from "react-redux";
@@ -39,6 +40,8 @@ import {
   completedColor,
   pendingColor,
 } from "../utils/constants";
+import instance from "../utils/axios";
+import { getAllMandalRoute, getDivisionsById } from "../utils/apis";
 
 // Define custom styles
 const useStyles = makeStyles({
@@ -52,6 +55,86 @@ const useStyles = makeStyles({
 });
 
 const DashboardApp = ({ dashboard }) => {
+  const [searchFilters, setSearchFiltersData] = useState({
+    mandal: [],
+    division: [],
+    sachivalayam: [],
+    partNo: [],
+    age: [],
+    user: [],
+    nextLevelUser: [],
+  });
+
+  const [saveSearchFilters, setSaveSearchFilters] = useState({
+    mandal_id: "",
+    division_id: "",
+    sachivalayam_id: "",
+    part_no_id: "",
+    age: "",
+    user_id: "",
+    next_level_user_id: "",
+  });
+
+  // first call mandal api and get all mandals after user select mandal then call division api and get all divisions
+  // after user select division then call sachivalayam api and get all sachivalayams
+  // after user select sachivalayam then call partNo api and get all partNo
+  // after user select partNo then call age api and get all age
+  // after user select age then call user api and get all users
+  // after user select user then call nextLevelUser api and get all nextLevelUsers
+  // after user select nextLevelUser then call search api and get all data
+
+  useEffect(() => {
+    const getMandalData = async () => {
+      try {
+        console.log("route", "getMandalData");
+        const response = await instance.get(getAllMandalRoute);
+        const responseData = response.data.message;
+        console.log("mandal-data", responseData);
+        const filterData = responseData.map((item) => {
+          return {
+            label: item.mandal_name,
+            mandal_id: item.mandal_pk,
+          };
+        });
+        console.log("mandal-filterData", filterData);
+
+        setSearchFiltersData({ ...searchFilters, mandal: filterData });
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
+
+    const getDivisionData = async () => {
+      try {
+        console.log("route", "getDivisionData");
+        const response = await instance.get(
+          getDivisionsById + saveSearchFilters.mandal_id
+        );
+        const responseData = response.data.message;
+        console.log("division-data", responseData);
+        const filterData = responseData.map((item) => {
+          return {
+            label: item.division_name,
+            division_id: item.division_pk,
+          };
+        });
+        console.log("division-filterData", filterData);
+
+        setSearchFiltersData({ ...searchFilters, division: filterData });
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
+
+    if (searchFilters.mandal.length === 0) {
+      getMandalData();
+    } else if(saveSearchFilters.mandal_id !== ""){
+      getDivisionData();
+    }
+  }, [saveSearchFilters]);
+
+  console.log("saveSearchFilters", saveSearchFilters);
+
   const classes = useStyles();
   return (
     <Page title="Dashboard">
@@ -64,11 +147,42 @@ const DashboardApp = ({ dashboard }) => {
           <Typography sx={{ pb: 2 }}>Search by filter</Typography>
 
           <Grid container spacing={2} alignItems="center">
-            <Grid item xs={12} md={6} lg={3}>
-              <TextField label="Select Mandal" fullWidth select />
+            <Grid item xs={12} md={6} lg={2}>
+              <Autocomplete
+                id="mandal"
+                options={searchFilters.mandal}
+                renderInput={(params) => (
+                  <TextField {...params} label="Select Mandal" />
+                )}
+                onChange={(event, value) => {
+                  // console.log("event", event)
+                  console.log("value", value);
+                  setSaveSearchFilters({
+                    ...saveSearchFilters,
+
+                    mandal_id: value ? value.mandal_id : "",
+                  });
+                }}
+              />
             </Grid>
             <Grid item xs={12} md={6} lg={3}>
-              <TextField label="Select Division" fullWidth select />
+              <Autocomplete
+                disabled={saveSearchFilters.mandal_id === ""}
+                id="division"
+                options={searchFilters.division}
+                renderInput={(params) => (
+                  <TextField {...params} label="Select Division" />
+                )}
+                onChange={(event, value) => {
+                  // console.log("event", event)
+                  console.log("value", value);
+                  setSaveSearchFilters({
+                    ...saveSearchFilters,
+
+                    division_id: value ? value.division_id : "",
+                  });
+                }}
+              />
             </Grid>
             <Grid item xs={12} md={6} lg={3}>
               <TextField label="Select Sachivalayam" fullWidth select />
@@ -150,7 +264,12 @@ const DashboardApp = ({ dashboard }) => {
                 { label: "Cancel", value: 876 },
                 { label: "Escalated", value: 2542 },
               ]}
-              chartColors={[OpenColor, ResolvedColor, CancelColor, EscalatedColor]}
+              chartColors={[
+                OpenColor,
+                ResolvedColor,
+                CancelColor,
+                EscalatedColor,
+              ]}
             />
           </Grid>
 
@@ -191,7 +310,14 @@ const DashboardApp = ({ dashboard }) => {
                 { label: "55-65", value: 2415 },
                 { label: "65+", value: 1443 },
               ]}
-              chartColors={[Age1Color, Age2Color, Age3Color, Age4Color, Age5Color, Age6Color]}
+              chartColors={[
+                Age1Color,
+                Age2Color,
+                Age3Color,
+                Age4Color,
+                Age5Color,
+                Age6Color,
+              ]}
             />
           </Grid>
 

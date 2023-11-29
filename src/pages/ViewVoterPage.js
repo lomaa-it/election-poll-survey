@@ -10,10 +10,47 @@ import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
 
+import CircularProgress from "@mui/material/CircularProgress";
 import ViewVotersList from "../sections/reports/ViewVotersList";
 import Button from "@mui/material/Button";
+import { useState, useEffect } from "react";
+import { getAllVotersRoute } from "../utils/apis";
+import instance from "../utils/axios";
 
 const ViewVoterPage = ({ dashboard }) => {
+  const [votersData, setVotersData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    setIsLoading(true);
+
+    const getVotersData = async () => {
+      try {
+        console.log("api started");
+        const response = await instance.get(getAllVotersRoute);
+        const responseData = response.data.message;
+
+        console.log("data", responseData);
+
+        const filterData = responseData.map((item) => {
+          return [
+            item.voter_id,
+            item.voter_name,
+            item.guardian_name,
+            item.is_resident || "Yes",
+            item.phone_no,
+            item.age,
+          ];
+        });
+        setVotersData(filterData);
+        setIsLoading(false);
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
+    getVotersData();
+  }, []);
+
   return (
     <Page title="View User">
       <Container maxWidth="xl">
@@ -60,7 +97,22 @@ const ViewVoterPage = ({ dashboard }) => {
         </Card>
 
         <Box p={3} />
-        <ViewVotersList />
+
+        {isLoading ? (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+        
+              height: "100vh",
+            }}
+          >
+            <CircularProgress />
+          </Box>
+        ) : (
+          <ViewVotersList votersData={votersData} />
+        )}
+
         <Card sx={{ p: 3, marginTop: "10px" }}>
           <Grid container spacing={2} alignItems="center">
             <Grid

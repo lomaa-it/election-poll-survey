@@ -18,8 +18,10 @@ import { LoadingButton } from "@mui/lab";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
-const ViewVotersList = ({ showAlert }) => {
+const ViewVotersList = ({ showAlert, votersData }) => {
   useEffect(() => {}, []);
+
+  console.log("votersDataList", votersData);
 
   const columns = [
     {
@@ -39,7 +41,7 @@ const ViewVotersList = ({ showAlert }) => {
     },
 
     {
-      label: "Email",
+      label: "Age",
     },
     {
       label: "Edit/Delete",
@@ -70,6 +72,10 @@ const ViewVotersList = ({ showAlert }) => {
     );
   };
 
+  const filterChartData = votersData.map((item) => {
+    return [...item, renderEditAndDelete()];
+  });
+
   return (
     <Card elevation={1}>
       <Stack>
@@ -78,44 +84,7 @@ const ViewVotersList = ({ showAlert }) => {
         <MUIDataTable
           title="Voter List"
           columns={columns}
-          data={[
-            [
-              "5454",
-              "Voter 1",
-              "Rama",
-              "Yes",
-              "Cell 1",
-              "user1@example.com",
-              renderEditAndDelete(),
-            ],
-            [
-              "656456",
-              "Voter 1",
-              "Sita",
-              "Yes",
-              "Cell 1",
-              "user1@example.com",
-              renderEditAndDelete(),
-            ],
-            [
-              "654646",
-              "Voter 1",
-              "laxman",
-              "No",
-              "Cell 1",
-              "user1@example.com",
-              renderEditAndDelete(),
-            ],
-            [
-              "656456456",
-              "Voter 1",
-              "Bharath",
-              "No",
-              "Cell 1",
-              "user1@example.com",
-              renderEditAndDelete(),
-            ],
-          ]}
+          data={filterChartData}
           options={options}
         />
       </Stack>

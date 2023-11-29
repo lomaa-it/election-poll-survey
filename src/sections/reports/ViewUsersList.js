@@ -17,7 +17,10 @@ import { showAlert } from "../../actions/alert";
 import { LoadingButton } from "@mui/lab";
 import ViewUserPage from "../../pages/ViewUserPage";
 
-const ViewUsersList = ({ showAlert }) => {
+import EditNoteIcon from "@mui/icons-material/EditNote";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+
+const ViewUsersList = ({ showAlert, usersData }) => {
   useEffect(() => {}, []);
 
   const columns = [
@@ -58,6 +61,28 @@ const ViewUsersList = ({ showAlert }) => {
     return <CheckBox />;
   };
 
+  const renderEditAndDelete = () => {
+    return (
+      <Box>
+        <EditNoteIcon
+          sx={{
+            color: "#1976d2",
+          }}
+        />
+        <DeleteForeverIcon
+          sx={{
+            color: "#f44336",
+            marginLeft: "10px",
+          }}
+        />
+      </Box>
+    );
+  };
+
+  const filterChartData = usersData.map((item) => {
+    return [renderCheckBox(), ...item, renderEditAndDelete()];
+  });
+
   return (
     <Card elevation={1}>
       <Stack>
@@ -66,48 +91,7 @@ const ViewUsersList = ({ showAlert }) => {
         <MUIDataTable
           title="Users List Table"
           columns={columns}
-          data={[
-            [
-              renderCheckBox(),
-              "Constituency 1",
-              "User 1",
-              "user1",
-              "Mandal 1",
-              "Cell 1",
-              "user1@example.com",
-              "Edit",
-            ],
-            [
-              renderCheckBox(),
-              "Constituency 1",
-              "User 1",
-              "user1",
-              "Mandal 1",
-              "Cell 1",
-              "user1@example.com",
-              "Edit",
-            ],
-            [
-              renderCheckBox(),
-              "Constituency 1",
-              "User 1",
-              "user1",
-              "Mandal 1",
-              "Cell 1",
-              "user1@example.com",
-              "Edit",
-            ],
-            [
-              renderCheckBox(),
-              "Constituency 1",
-              "User 1",
-              "user1",
-              "Mandal 1",
-              "Cell 1",
-              "user1@example.com",
-              "Edit",
-            ],
-          ]}
+          data={filterChartData}
           options={options}
         />
       </Stack>

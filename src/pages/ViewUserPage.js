@@ -9,11 +9,50 @@ import {
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
-
+import CircularProgress from "@mui/material/CircularProgress";
 import ViewUsersList from "../sections/reports/ViewUsersList";
 import Button from "@mui/material/Button";
+import { useEffect, useState } from "react";
+import instance from "../utils/axios";
+import { getAllUsersRoute } from "../utils/apis";
 
 const ViewUserPage = ({ dashboard }) => {
+  const [usersData, setUsersData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    setIsLoading(true);
+
+    const getUsersData = async () => {
+      try {
+        console.log("url", "user data");
+        const response = await instance.get(getAllUsersRoute);
+        const responseData = response.data.message;
+
+        console.log("dsdasda", responseData);
+
+        const filterData = responseData.map((item) => {
+          return [
+            item.consistency_id || "constituency_id",
+            item.username,
+            item.user_displayname,
+            item.mandal_id || "mandal_id",
+            item.phone_no,
+            item.email || "No Email",
+          ];
+        });
+        console.log("filterData", filterData);
+        setUsersData(filterData);
+        setIsLoading(false);
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
+    getUsersData();
+  }, []);
+
+  
+
   return (
     <Page title="View User">
       <Container maxWidth="xl">
@@ -60,7 +99,21 @@ const ViewUserPage = ({ dashboard }) => {
         </Card>
 
         <Box p={3} />
-        <ViewUsersList />
+        {isLoading ? (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+
+              height: "100vh",
+            }}
+          >
+            <CircularProgress />
+          </Box>
+        ) : (
+          <ViewUsersList usersData={usersData} />
+        )}
+
         <Card sx={{ p: 3, marginTop: "10px" }}>
           <Grid container spacing={2} alignItems="center">
             <Grid item xs={12} md={6} lg={6}>
