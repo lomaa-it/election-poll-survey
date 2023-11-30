@@ -34,12 +34,37 @@ import {
 import { ageDropdown } from "../utils/dropdownconstants";
 
 const VotingPollDashBoardPage = ({ dashboard }) => {
+  const exitPollItems = [
+    { name: "YSRCP", value: "60-70" },
+    { name: "TDP", value: "10-20" },
+    { name: "JANASENA", value: "10-20" },
+    { name: "BJP", value: "2-5" },
+    { name: "CONGRESS", value: "5-7" },
+    { name: "OTHERS", value: "1-3" },
+  ];
+
   return (
     <Page title="Dashboard">
       <Container maxWidth="xl">
         <Typography variant="h4" sx={{ mb: 1 }}>
           Voting Poll Dashboard
         </Typography>
+
+        <Card sx={{ p: 3 }}>
+          <Typography sx={{ pb: 2 }}>Exit Poll Survey</Typography>
+
+          <Grid container spacing={3}>
+            {exitPollItems.map((item, index) => (
+              <Grid item xs={12} md={6} lg={2} sx={{ textAlign: "center" }}>
+                <Typography variant="subtitle1">{item.name}</Typography>
+
+                <Typography variant="h6">{item.value}</Typography>
+              </Grid>
+            ))}
+          </Grid>
+        </Card>
+
+        <Box p={1} />
 
         <Card sx={{ p: 3 }}>
           <Typography sx={{ pb: 2 }}>Search by filter</Typography>
