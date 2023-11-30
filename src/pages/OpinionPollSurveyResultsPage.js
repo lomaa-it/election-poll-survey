@@ -1,5 +1,13 @@
 import { useState } from "react";
-import { Grid, Container, Typography, Box, TextField, Card } from "@mui/material";
+import {
+  Grid,
+  Container,
+  Typography,
+  Box,
+  TextField,
+  Card,
+  MenuItem,
+} from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -20,11 +28,33 @@ import OpinionPollSurveyResultsList from "../sections/reports/OpinionPollSurveyR
 import BarChartWidget from "../sections/dashboard/BarChartWidget";
 import PollResultsBarChartWidget from "../sections/opinionPollSurveyResults/PollResultsBarChartWidget";
 
-function totalStats(totalVotes, ycpVotes, male, female, neutral, tdp, jsp, bjp, others) {
+function totalStats(
+  totalVotes,
+  ycpVotes,
+  male,
+  female,
+  neutral,
+  tdp,
+  jsp,
+  bjp,
+  others
+) {
   return { totalVotes, ycpVotes, male, female, neutral, tdp, jsp, bjp, others };
 }
 
-const statsRow = [totalStats("3,00,000", "8888", "4444", "4444", "666", "22", "55", "11", "6666")];
+const statsRow = [
+  totalStats(
+    "3,00,000",
+    "8888",
+    "4444",
+    "4444",
+    "666",
+    "22",
+    "55",
+    "11",
+    "6666"
+  ),
+];
 
 const OpinionPollSurveyResultsPage = ({ dashboard }) => {
   const [page, setPage] = useState(0);
@@ -70,29 +100,23 @@ const OpinionPollSurveyResultsPage = ({ dashboard }) => {
           </Grid>
         </Card>
         <Card sx={{ p: 3 }}>
-          <Typography sx={{ pb: 2 }}>Survey %</Typography>
-
           <Grid container spacing={2} alignItems="center">
-            <Grid item xs={12} md={6} lg={4}>
-              <LoadingButton
-                variant="outlined"
-                sx={{
-                  padding: "15px 40px",
-                  fontSize: "1.2rem",
-                  marginRight: "10px",
-                }}
-              >
-                50 %
-              </LoadingButton>{" "}
-              <LoadingButton
-                variant="contained"
-                sx={{
-                  padding: "15px 40px",
-                  fontSize: "1.2rem",
-                }}
-              >
-                Search
-              </LoadingButton>
+            <Grid item xs={12} md={6} lg={1}>
+              <Typography sx={{ pb: 2 }}>Survey % </Typography>
+            </Grid>
+
+            <Grid item xs={12} md={6} lg={2}>
+              <TextField size="small" label="Select Survey%" fullWidth select>
+                <MenuItem value="10">10</MenuItem>
+                <MenuItem value="20">20</MenuItem>
+                <MenuItem value="30">30</MenuItem>
+                <MenuItem value="40">40</MenuItem>
+                <MenuItem value="50">50</MenuItem>
+              </TextField>
+            </Grid>
+
+            <Grid item xs={12} md={6} lg={2}>
+              <LoadingButton variant="contained">Search</LoadingButton>{" "}
             </Grid>
             <Grid item xs={12} md={6} lg={8}>
               <PollResultsBarChartWidget
@@ -131,28 +155,52 @@ const OpinionPollSurveyResultsPage = ({ dashboard }) => {
                 >
                   Constituency Votes
                 </TableCell>
-                <TableCell align="center" sx={{ fontSize: "1.2rem", fontWeight: "bold" }}>
+                <TableCell
+                  align="center"
+                  sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
+                >
                   YCP Votes
                 </TableCell>
-                <TableCell align="center" sx={{ fontSize: "1.2rem", fontWeight: "bold" }}>
+                <TableCell
+                  align="center"
+                  sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
+                >
                   Male
                 </TableCell>
-                <TableCell align="center" sx={{ fontSize: "1.2rem", fontWeight: "bold" }}>
+                <TableCell
+                  align="center"
+                  sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
+                >
                   Female
                 </TableCell>
-                <TableCell align="center" sx={{ fontSize: "1.2rem", fontWeight: "bold" }}>
+                <TableCell
+                  align="center"
+                  sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
+                >
                   Neutral
                 </TableCell>
-                <TableCell align="center" sx={{ fontSize: "1.2rem", fontWeight: "bold" }}>
+                <TableCell
+                  align="center"
+                  sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
+                >
                   TDP
                 </TableCell>
-                <TableCell align="center" sx={{ fontSize: "1.2rem", fontWeight: "bold" }}>
+                <TableCell
+                  align="center"
+                  sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
+                >
                   JSP
                 </TableCell>
-                <TableCell align="center" sx={{ fontSize: "1.2rem", fontWeight: "bold" }}>
+                <TableCell
+                  align="center"
+                  sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
+                >
                   BJP
                 </TableCell>
-                <TableCell align="center" sx={{ fontSize: "1.2rem", fontWeight: "bold" }}>
+                <TableCell
+                  align="center"
+                  sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
+                >
                   Others
                 </TableCell>
               </TableRow>
