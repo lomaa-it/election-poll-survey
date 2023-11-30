@@ -1,12 +1,5 @@
 import { useState } from "react";
-import {
-  Grid,
-  Container,
-  Typography,
-  Box,
-  TextField,
-  Card,
-} from "@mui/material";
+import { Grid, Container, Typography, Box, TextField, Card } from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -28,20 +21,11 @@ import OpinionPollSurveyResultsList from "../sections/reports/OpinionPollSurveyR
 import VotingPollResultsBarChartWidget from "../sections/votingPollResults/VotingPollResultsBarChartWidget";
 import VotingPollResultsList from "../sections/reports/VotingPollResultsList";
 
-function totalStats(
-  totalVotes,
-  UrveyVotes,
-  ycp,
-  percentage1,
-  others,
-  percentage2
-) {
+function totalStats(totalVotes, UrveyVotes, ycp, percentage1, others, percentage2) {
   return { totalVotes, UrveyVotes, ycp, percentage1, others, percentage2 };
 }
 
-const statsRow = [
-  totalStats("99999999", "8888", "4444", "60%", "99000", "40%"),
-];
+const statsRow = [totalStats("99999999", "8888", "4444", "60%", "99000", "40%")];
 
 const VotingPollingResultsPage = ({ dashboard }) => {
   const [page, setPage] = useState(0);
@@ -59,34 +43,34 @@ const VotingPollingResultsPage = ({ dashboard }) => {
   return (
     <Page title="View Tickets">
       <Container maxWidth="xl">
-        <Typography variant="h4" sx={{ mb: 5 }}>
+        <Typography variant="h4" sx={{ mb: 1 }}>
           Voting Polling Results
         </Typography>
         <Card sx={{ p: 3, mb: 3 }}>
           <Typography sx={{ pb: 2 }}>Search by filter</Typography>
 
           <Grid container spacing={2} alignItems="center">
-            <Grid item xs={12} md={6} lg={3}>
+            <Grid item xs={12} md={6} lg={2}>
               <TextField label="Select Mandal" fullWidth select />
             </Grid>
 
-            <Grid item xs={12} md={6} lg={3}>
+            <Grid item xs={12} md={6} lg={2}>
               <TextField label="Select Division" fullWidth select />
             </Grid>
 
-            <Grid item xs={12} md={6} lg={3}>
+            <Grid item xs={12} md={6} lg={2}>
               <TextField label="Select Sachivalayam" fullWidth select />
             </Grid>
 
-            <Grid item xs={12} md={6} lg={3}>
-              <TextField label="Select Part No" fullWidth select />
+            <Grid item xs={12} md={6} lg={2}>
+              <TextField label="Select Part/Booth No" fullWidth select />
             </Grid>
 
             <Grid
               item
               xs={12}
               md={6}
-              lg={3}
+              lg={2}
               sx={{
                 marginLeft: "auto",
               }}
@@ -136,7 +120,7 @@ const VotingPollingResultsPage = ({ dashboard }) => {
           </Grid>
         </Card>
 
-        <Box p={3} />
+        <Box p={1} />
 
         <TableContainer
           component={Paper}
@@ -157,34 +141,19 @@ const VotingPollingResultsPage = ({ dashboard }) => {
                 >
                   Total Votes
                 </TableCell>
-                <TableCell
-                  align="center"
-                  sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
-                >
+                <TableCell align="center" sx={{ fontSize: "1.2rem", fontWeight: "bold" }}>
                   Urvey Votes
                 </TableCell>
-                <TableCell
-                  align="center"
-                  sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
-                >
+                <TableCell align="center" sx={{ fontSize: "1.2rem", fontWeight: "bold" }}>
                   YCP
                 </TableCell>
-                <TableCell
-                  align="center"
-                  sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
-                >
+                <TableCell align="center" sx={{ fontSize: "1.2rem", fontWeight: "bold" }}>
                   %
                 </TableCell>
-                <TableCell
-                  align="center"
-                  sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
-                >
+                <TableCell align="center" sx={{ fontSize: "1.2rem", fontWeight: "bold" }}>
                   Others
                 </TableCell>
-                <TableCell
-                  align="center"
-                  sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
-                >
+                <TableCell align="center" sx={{ fontSize: "1.2rem", fontWeight: "bold" }}>
                   %
                 </TableCell>
               </TableRow>

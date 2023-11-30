@@ -1,18 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "@fontsource/inter";
-import {
-  Typography,
-  Card,
-  Stack,
-  Grid,
-  Switch,
-  Divider,
-  Box,
-  Chip,
-  Radio,
-  TextField,
-} from "@mui/material";
+import { Typography, Card, Stack, Grid, Switch, Divider, Box, Chip, Radio, TextField } from "@mui/material";
 import { styled } from "@mui/system";
 import { CheckBox } from "@mui/icons-material";
 import Button from "@mui/material/Button";
@@ -118,12 +107,19 @@ const OpinionPollSurveyList = ({ showAlert }) => {
     "&.Mui-checked": {
       color: "grey",
     },
+    "& .MuiSvgIcon-root": {
+      fontSize: 28,
+    },
   });
 
   const YCPRadio = styled(Radio)({
     color: "green",
+    fontSize: 28,
     "&.Mui-checked": {
       color: "green",
+    },
+    "& .MuiSvgIcon-root": {
+      fontSize: 28,
     },
   });
 
@@ -132,12 +128,18 @@ const OpinionPollSurveyList = ({ showAlert }) => {
     "&.Mui-checked": {
       color: "yellow",
     },
+    "& .MuiSvgIcon-root": {
+      fontSize: 28,
+    },
   });
 
   const JSPRadio = styled(Radio)({
     color: "red",
     "&.Mui-checked": {
       color: "red",
+    },
+    "& .MuiSvgIcon-root": {
+      fontSize: 28,
     },
   });
 
@@ -146,6 +148,9 @@ const OpinionPollSurveyList = ({ showAlert }) => {
     "&.Mui-checked": {
       color: "orange",
     },
+    "& .MuiSvgIcon-root": {
+      fontSize: 28,
+    },
   });
 
   const CongressRadio = styled(Radio)({
@@ -153,12 +158,18 @@ const OpinionPollSurveyList = ({ showAlert }) => {
     "&.Mui-checked": {
       color: "violet",
     },
+    "& .MuiSvgIcon-root": {
+      fontSize: 28,
+    },
   });
 
   const OthersRadio = styled(Radio)({
     color: "black",
     "&.Mui-checked": {
       color: "black",
+    },
+    "& .MuiSvgIcon-root": {
+      fontSize: 28,
     },
   });
 
@@ -196,74 +207,10 @@ const OpinionPollSurveyList = ({ showAlert }) => {
           title="Opinion Poll"
           columns={columns}
           data={[
-            [
-              "1",
-              "5454",
-              "varun",
-              "Rama RAO",
-              "23",
-              "912345678",
-              "RailWay New Colony",
-              renderNeutralRadio(),
-              renderYCPRadio(),
-              renderTDPRadio(),
-              renderJSPRadio(),
-              renderBJPRadio(),
-              renderCongressRadio(),
-              renderOthersRadio(),
-              renderEditButton(),
-            ],
-            [
-              "1",
-              "5454",
-              "varun",
-              "Rama RAO",
-              "23",
-              "912345678",
-              "RailWay New Colony",
-              renderNeutralRadio(),
-              renderYCPRadio(),
-              renderTDPRadio(),
-              renderJSPRadio(),
-              renderBJPRadio(),
-              renderCongressRadio(),
-              renderOthersRadio(),
-              renderEditButton(),
-            ],
-            [
-              "1",
-              "5454",
-              "varun",
-              "Rama RAO",
-              "23",
-              "912345678",
-              "RailWay New Colony",
-              renderNeutralRadio(),
-              renderYCPRadio(),
-              renderTDPRadio(),
-              renderJSPRadio(),
-              renderBJPRadio(),
-              renderCongressRadio(),
-              renderOthersRadio(),
-              renderEditButton(),
-            ],
-            [
-              "1",
-              "5454",
-              "varun",
-              "Rama RAO",
-              "23",
-              "912345678",
-              "RailWay New Colony",
-              renderNeutralRadio(),
-              renderYCPRadio(),
-              renderTDPRadio(),
-              renderJSPRadio(),
-              renderBJPRadio(),
-              renderCongressRadio(),
-              renderOthersRadio(),
-              renderEditButton(),
-            ],
+            ["1", "5454", "varun", "Rama RAO", "23", "912345678", "RailWay New Colony", renderNeutralRadio(), renderYCPRadio(), renderTDPRadio(), renderJSPRadio(), renderBJPRadio(), renderCongressRadio(), renderOthersRadio(), renderEditButton()],
+            ["1", "5454", "varun", "Rama RAO", "23", "912345678", "RailWay New Colony", renderNeutralRadio(), renderYCPRadio(), renderTDPRadio(), renderJSPRadio(), renderBJPRadio(), renderCongressRadio(), renderOthersRadio(), renderEditButton()],
+            ["1", "5454", "varun", "Rama RAO", "23", "912345678", "RailWay New Colony", renderNeutralRadio(), renderYCPRadio(), renderTDPRadio(), renderJSPRadio(), renderBJPRadio(), renderCongressRadio(), renderOthersRadio(), renderEditButton()],
+            ["1", "5454", "varun", "Rama RAO", "23", "912345678", "RailWay New Colony", renderNeutralRadio(), renderYCPRadio(), renderTDPRadio(), renderJSPRadio(), renderBJPRadio(), renderCongressRadio(), renderOthersRadio(), renderEditButton()],
           ]}
           options={options}
         />

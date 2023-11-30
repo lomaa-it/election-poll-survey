@@ -7,9 +7,9 @@ export default function SurveyReportsPage() {
   return (
     <Page title="Students">
       <Container maxWidth="xl">
-        <Box mb={5}>
+        <Box mb={1}>
           <Typography variant="h4" gutterBottom>
-           Opinion Survey Reports
+            Opinion Survey Reports
           </Typography>
         </Box>
 

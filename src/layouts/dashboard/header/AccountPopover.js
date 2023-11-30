@@ -23,7 +23,7 @@ const AccountPopover = ({ account, authLogout }) => {
 
   return (
     <>
-      <IconButton onClick={handleOpen}>
+      <IconButton onClick={handleOpen} sx={{ color: "white" }}>
         <MenuIcon />
       </IconButton>
 

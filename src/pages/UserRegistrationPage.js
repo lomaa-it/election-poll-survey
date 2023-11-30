@@ -1,12 +1,4 @@
-import {
-  Grid,
-  Container,
-  Typography,
-  Box,
-  TextField,
-  Card,
-  FormControlLabel,
-} from "@mui/material";
+import { Grid, Container, Typography, Box, TextField, Card, FormControlLabel } from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -17,7 +9,7 @@ const UserRegistrationPage = ({ dashboard }) => {
   return (
     <Page title="User Registration - New">
       <Container maxWidth="xl">
-        <Typography variant="h4" sx={{ mb: 5 }}>
+        <Typography variant="h4" sx={{ mb: 1 }}>
           User Registration
         </Typography>
 
@@ -55,7 +47,7 @@ const UserRegistrationPage = ({ dashboard }) => {
           </Grid>
         </Card>
 
-        <Card sx={{ p: 3, mt: 3 }}>
+        <Card sx={{ p: 3, mt: 1 }}>
           <Typography sx={{ pb: 2 }}>Assign Authority</Typography>
 
           <Grid container spacing={2} alignItems="center">
@@ -101,7 +93,7 @@ const UserRegistrationPage = ({ dashboard }) => {
           </Grid>
         </Card>
 
-        <Card sx={{ p: 3, mt: 3 }}>
+        <Card sx={{ p: 3, mt: 1 }}>
           <Typography sx={{ pb: 2 }}>Assign Authority</Typography>
           <Grid container spacing={2} alignItems="center">
             <Grid item xs={12} md={6} lg={2}>
@@ -138,7 +130,7 @@ const UserRegistrationPage = ({ dashboard }) => {
           </Grid>
         </Card>
 
-        <Box p={3} />
+        <Box p={1} />
       </Container>
     </Page>
   );

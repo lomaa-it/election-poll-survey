@@ -1,12 +1,4 @@
-import {
-  Grid,
-  Container,
-  Typography,
-  Box,
-  TextField,
-  Card,
-  InputAdornment,
-} from "@mui/material";
+import { Grid, Container, Typography, Box, TextField, Card, InputAdornment } from "@mui/material";
 import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
 import CloudUploadRoundedIcon from "@mui/icons-material/CloudUploadRounded";
 
@@ -20,33 +12,27 @@ const AddTicketPage = ({ dashboard }) => {
   return (
     <Page title="Add Ticket">
       <Container maxWidth="xl">
-        <Typography variant="h4" sx={{ mb: 5 }}>
+        <Typography variant="h4" sx={{ mb: 1 }}>
           <Link to="/opinion-poll-survey">
             <ArrowBackIcon />
-          </Link>{"   "}
+          </Link>
+          {"   "}
           Add Ticket
         </Typography>
         <Card sx={{ p: 3 }}>
+          <Typography variant="h6" sx={{ mb: 2 }}>
+            Voter info : V Rama krishna (Ph: 1234567890)
+          </Typography>
+
           <Typography sx={{ pb: 2 }}>Basic Info</Typography>
 
-          <Grid container spacing={2} alignItems="center">
+          <Grid container spacing={2} alignItems="start">
             <Grid item xs={12} md={6} lg={3}>
               <TextField label="Navaratnalu ID" fullWidth select />
             </Grid>
-          </Grid>
-        </Card>
-        <Card sx={{ p: 3, mt: 3 }}>
-          <Typography sx={{ pb: 2 }}>Reason:</Typography>
 
-          <Grid container spacing={2} alignItems="center">
-            <Grid item xs={12} md={6} lg={12}>
-              <TextField
-                label="Write Reason..."
-                fullWidth
-                multiline
-                rows={4}
-                rowsMax={8}
-              />
+            <Grid item xs={12} md={6} lg={9}>
+              <TextField label="Write Reason..." fullWidth multiline rows={4} rowsMax={8} />
             </Grid>
           </Grid>
         </Card>
@@ -84,13 +70,7 @@ const AddTicketPage = ({ dashboard }) => {
               />
             </Grid>
             <Grid item xs={12} md={6} lg={9}>
-              <TextField
-                label="Attachements Description..."
-                fullWidth
-                multiline
-                rows={4}
-                rowsMax={8}
-              />
+              <TextField label="Attachements Description..." fullWidth multiline rows={4} rowsMax={8} />
             </Grid>
             <Grid
               item
@@ -113,7 +93,7 @@ const AddTicketPage = ({ dashboard }) => {
             </Grid>
           </Grid>
         </Card>
-        <Box p={3} />
+        <Box p={1} />
       </Container>
     </Page>
   );

@@ -1,12 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  Grid,
-  Container,
-  Typography,
-  Box,
-  TextField,
-  Card,
-} from "@mui/material";
+import { Grid, Container, Typography, Box, TextField, Card } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
 import makeStyles from "@mui/styles/makeStyles";
 import Page from "../components/Page";
@@ -41,13 +34,7 @@ import {
   pendingColor,
 } from "../utils/constants";
 import instance from "../utils/axios";
-import {
-  getAllMandalRoute,
-  getDivisionsById,
-  getSachivalayamById,
-  getPartsById,
-  getVillageById,
-} from "../utils/apis";
+import { getAllMandalRoute, getDivisionsById, getSachivalayamById, getPartsById, getVillageById } from "../utils/apis";
 import { ageDropdown } from "../utils/dropdownconstants";
 
 // Define custom styles
@@ -111,9 +98,7 @@ const DashboardApp = ({ dashboard }) => {
 
   const getDivisionData = async () => {
     try {
-      const response = await instance.get(
-        getDivisionsById + saveSearchFilters.mandal_id
-      );
+      const response = await instance.get(getDivisionsById + saveSearchFilters.mandal_id);
       const responseData = response.data.message;
 
       const filterData = responseData.map((item) => {
@@ -131,9 +116,7 @@ const DashboardApp = ({ dashboard }) => {
 
   const getSachivalayamData = async () => {
     try {
-      const response = await instance.get(
-        getSachivalayamById + saveSearchFilters.division_id
-      );
+      const response = await instance.get(getSachivalayamById + saveSearchFilters.division_id);
 
       const responseData = response.data.message;
 
@@ -153,9 +136,7 @@ const DashboardApp = ({ dashboard }) => {
   const getPartNoData = async () => {
     try {
       console.log("route", "getPartNoData");
-      const response = await instance.get(
-        getPartsById + saveSearchFilters.sachivalayam_id
-      );
+      const response = await instance.get(getPartsById + saveSearchFilters.sachivalayam_id);
       console.log("part fecthing is done");
       const responseData = response.data.message;
       console.log("partNo-data", responseData);
@@ -176,9 +157,7 @@ const DashboardApp = ({ dashboard }) => {
   const getVillageData = async () => {
     try {
       console.log("route", "getVillageData");
-      const response = await instance.get(
-        getVillageById + saveSearchFilters.part_no
-      );
+      const response = await instance.get(getVillageById + saveSearchFilters.part_no);
       console.log("village fecthing is done");
       const responseData = response.data.message;
       console.log("village-data", responseData);
@@ -222,7 +201,7 @@ const DashboardApp = ({ dashboard }) => {
   return (
     <Page title="Dashboard">
       <Container maxWidth="xl">
-        <Typography variant="h4" sx={{ mb: 5 }}>
+        <Typography variant="h4" sx={{ mb: 1 }}>
           Opinion Dashboard
         </Typography>
 
@@ -234,9 +213,7 @@ const DashboardApp = ({ dashboard }) => {
               <Autocomplete
                 id="mandal"
                 options={searchFilters.mandal}
-                renderInput={(params) => (
-                  <TextField {...params} label="Select Mandal" />
-                )}
+                renderInput={(params) => <TextField {...params} label="Select Mandal" />}
                 onChange={(event, value) => {
                   // console.log("event", event)
                   console.log("value", value);
@@ -269,9 +246,7 @@ const DashboardApp = ({ dashboard }) => {
                 id="division"
                 options={searchFilters.division}
                 defaultValue={searchFilters.division[0]} // assuming the default value is the first option
-                renderInput={(params) => (
-                  <TextField {...params} label="Select Division" />
-                )}
+                renderInput={(params) => <TextField {...params} label="Select Division" />}
                 onChange={(event, value) => {
                   // console.log("event", event)
                   console.log("value", value);
@@ -288,9 +263,7 @@ const DashboardApp = ({ dashboard }) => {
                 disabled={searchFilters.sachivalayam.length === 0}
                 id="sachivalayam"
                 options={searchFilters.sachivalayam}
-                renderInput={(params) => (
-                  <TextField {...params} label="Select Sachivalayam" />
-                )}
+                renderInput={(params) => <TextField {...params} label="Select Sachivalayam" />}
                 onChange={(event, value) => {
                   // console.log("event", event)
                   console.log("value", value);
@@ -307,9 +280,7 @@ const DashboardApp = ({ dashboard }) => {
                 disabled={searchFilters.partNo.length === 0}
                 id="partNo"
                 options={searchFilters.partNo}
-                renderInput={(params) => (
-                  <TextField {...params} label="Select Part No" />
-                )}
+                renderInput={(params) => <TextField {...params} label="Select Part/Booth No" />}
                 onChange={(event, value) => {
                   // console.log("event", event)
                   console.log("value", value);
@@ -328,9 +299,7 @@ const DashboardApp = ({ dashboard }) => {
               <Autocomplete
                 id="age"
                 options={searchFilters.age}
-                renderInput={(params) => (
-                  <TextField {...params} label="Select Age" />
-                )}
+                renderInput={(params) => <TextField {...params} label="Select Age" />}
                 onChange={(event, value) => {
                   // console.log("event", event)
                   console.log("value", value);
@@ -354,7 +323,7 @@ const DashboardApp = ({ dashboard }) => {
           </Grid>
         </Card>
 
-        <Box p={3} />
+        <Box p={1} />
 
         <Grid container spacing={3}>
           <Grid item xs={12} md={6} lg={4}>
@@ -380,15 +349,7 @@ const DashboardApp = ({ dashboard }) => {
                 { label: "BJP", value: 1443 },
                 { label: "CONGRESS", value: 1443 },
               ]}
-              chartColors={[
-                YSRCPColor,
-                NETURALColor,
-                TDPColor,
-                JSPColor,
-                BJPColor,
-                CONGRESSColor,
-                OTHERColor,
-              ]}
+              chartColors={[YSRCPColor, NETURALColor, TDPColor, JSPColor, BJPColor, CONGRESSColor, OTHERColor]}
             />
           </Grid>
 
@@ -413,12 +374,7 @@ const DashboardApp = ({ dashboard }) => {
                 { label: "Cancel", value: 876 },
                 { label: "Escalated", value: 2542 },
               ]}
-              chartColors={[
-                OpenColor,
-                ResolvedColor,
-                CancelColor,
-                EscalatedColor,
-              ]}
+              chartColors={[OpenColor, ResolvedColor, CancelColor, EscalatedColor]}
             />
           </Grid>
 
@@ -426,14 +382,7 @@ const DashboardApp = ({ dashboard }) => {
             <BarChartWidget
               title="Ticktes"
               sx={{ height: "100%" }}
-              chartLabels={[
-                "Pakala",
-                "Ramchandrapuram",
-                "Chinnagottigallu",
-                "Chandragiri",
-                "Yerravanipalem",
-                "Tirupathi (Rural)",
-              ]}
+              chartLabels={["Pakala", "Ramchandrapuram", "Chinnagottigallu", "Chandragiri", "Yerravanipalem", "Tirupathi (Rural)"]}
               chartColors={[completedColor, pendingColor]}
               chartData={[
                 {
@@ -459,14 +408,7 @@ const DashboardApp = ({ dashboard }) => {
                 { label: "55-65", value: 2415 },
                 { label: "65+", value: 1443 },
               ]}
-              chartColors={[
-                Age1Color,
-                Age2Color,
-                Age3Color,
-                Age4Color,
-                Age5Color,
-                Age6Color,
-              ]}
+              chartColors={[Age1Color, Age2Color, Age3Color, Age4Color, Age5Color, Age6Color]}
             />
           </Grid>
 

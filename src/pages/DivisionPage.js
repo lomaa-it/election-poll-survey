@@ -1,11 +1,4 @@
-import {
-  Grid,
-  Container,
-  Typography,
-  Box,
-  TextField,
-  Card,
-} from "@mui/material";
+import { Grid, Container, Typography, Box, TextField, Card } from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -19,7 +12,7 @@ const DivisionPage = ({ dashboard }) => {
   return (
     <Page title="View User">
       <Container maxWidth="xl">
-        <Typography variant="h4" sx={{ mb: 5 }}>
+        <Typography variant="h4" sx={{ mb: 1 }}>
           Division
         </Typography>
 
@@ -41,8 +34,7 @@ const DivisionPage = ({ dashboard }) => {
             >
               {" "}
               <TextField label="Select State" fullWidth select />
-              <TextField label="Select District" fullWidth select />{" "}
-              <TextField label="Select Constituency" fullWidth select />
+              <TextField label="Select District" fullWidth select /> <TextField label="Select Constituency" fullWidth select />
               <TextField label="Select Mandal" fullWidth select />
               <TextField label="Division Name" fullWidth />
               <LoadingButton
@@ -57,7 +49,7 @@ const DivisionPage = ({ dashboard }) => {
           </Grid>
         </Card>
 
-        <Box p={3} />
+        <Box p={1} />
       </Container>
     </Page>
   );

@@ -1,12 +1,4 @@
-import {
-  Grid,
-  Container,
-  Typography,
-  Box,
-  TextField,
-  Card,
-  FormControlLabel,
-} from "@mui/material";
+import { Grid, Container, Typography, Box, TextField, Card, FormControlLabel } from "@mui/material";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControl from "@mui/material/FormControl";
@@ -22,7 +14,7 @@ const AddPollSurveyPage = ({ dashboard }) => {
   return (
     <Page title="Voter Registration">
       <Container maxWidth="xl">
-        <Typography variant="h4" sx={{ mb: 5 }}>
+        <Typography variant="h4" sx={{ mb: 1 }}>
           Add Poll Survey
         </Typography>
 
@@ -69,7 +61,7 @@ const AddPollSurveyPage = ({ dashboard }) => {
           </Grid>
         </Card>
 
-        <Box p={3} />
+        <Box p={1} />
       </Container>
     </Page>
   );

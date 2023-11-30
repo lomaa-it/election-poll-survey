@@ -1,12 +1,5 @@
 import { useState } from "react";
-import {
-  Grid,
-  Container,
-  Typography,
-  Box,
-  TextField,
-  Card,
-} from "@mui/material";
+import { Grid, Container, Typography, Box, TextField, Card } from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -27,20 +20,11 @@ import VotingPollingResultsbyStateList from "../sections/reports/VotingPollingRe
 import VotingPollingResultsbyStateBarChartWidget from "../sections/votingPollingResultsbyState/VotingPollingResultsbyStateBarChartWidget";
 import { PUBLIC_URL } from "../constants";
 
-function totalStats(
-  totalVotes,
-  UrveyVotes,
-  ycp,
-  percentage1,
-  others,
-  percentage2
-) {
+function totalStats(totalVotes, UrveyVotes, ycp, percentage1, others, percentage2) {
   return { totalVotes, UrveyVotes, ycp, percentage1, others, percentage2 };
 }
 
-const statsRow = [
-  totalStats("99999999", "8888", "4444", "60%", "99000", "40%"),
-];
+const statsRow = [totalStats("99999999", "8888", "4444", "60%", "99000", "40%")];
 
 const VotingPollingResultsbyStatePage = ({ dashboard }) => {
   const [page, setPage] = useState(0);
@@ -58,18 +42,14 @@ const VotingPollingResultsbyStatePage = ({ dashboard }) => {
   return (
     <Page title="View Tickets">
       <Container maxWidth="xl">
-        <Typography variant="h4" sx={{ mb: 5 }}>
+        <Typography variant="h4" sx={{ mb: 1 }}>
           Result By District
         </Typography>
 
         <Card sx={{ p: 3 }}>
           <Grid container spacing={2} alignItems="center">
             <Grid item xs={12} md={6} lg={5}>
-              <Box
-                component="img"
-                src={PUBLIC_URL + "/static/images/andhrapradesh.png"}
-                sx={{ width: "100%" }}
-              />
+              <Box component="img" src={PUBLIC_URL + "/static/images/andhrapradesh.png"} sx={{ width: "100%" }} />
             </Grid>
             <Grid item xs={12} md={6} lg={7}>
               <VotingPollingResultsbyStateBarChartWidget
@@ -87,7 +67,7 @@ const VotingPollingResultsbyStatePage = ({ dashboard }) => {
           </Grid>
         </Card>
 
-        <Box p={3} />
+        <Box p={1} />
 
         <Grid container spacing={3}>
           <Grid item xs={12} md={6} lg={12}>

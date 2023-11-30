@@ -1,12 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  Grid,
-  Container,
-  Typography,
-  Box,
-  TextField,
-  Card,
-} from "@mui/material";
+import { Grid, Container, Typography, Box, TextField, Card, MenuItem } from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -38,12 +31,13 @@ import {
   completedColor,
   pendingColor,
 } from "../utils/constants";
+import { ageDropdown } from "../utils/dropdownconstants";
 
 const VotingPollDashBoardPage = ({ dashboard }) => {
   return (
     <Page title="Dashboard">
       <Container maxWidth="xl">
-        <Typography variant="h4" sx={{ mb: 5 }}>
+        <Typography variant="h4" sx={{ mb: 1 }}>
           Voting Poll Dashboard
         </Typography>
 
@@ -51,37 +45,43 @@ const VotingPollDashBoardPage = ({ dashboard }) => {
           <Typography sx={{ pb: 2 }}>Search by filter</Typography>
 
           <Grid container spacing={2} alignItems="center">
-            <Grid item xs={12} md={6} lg={3}>
+            <Grid item xs={12} md={6} lg={2}>
               <TextField label="Select Mandal" fullWidth select />
             </Grid>
-            <Grid item xs={12} md={6} lg={3}>
+            <Grid item xs={12} md={6} lg={2}>
               <TextField label="Select Division" fullWidth select />
             </Grid>
-            <Grid item xs={12} md={6} lg={3}>
+            <Grid item xs={12} md={6} lg={2}>
               <TextField label="Select Sachivalayam" fullWidth select />
             </Grid>
-            <Grid item xs={12} md={6} lg={3}>
-              <TextField label="Select Part No" fullWidth select />
+            <Grid item xs={12} md={6} lg={2}>
+              <TextField label="Select Part/Booth No" fullWidth select />
             </Grid>{" "}
             <Grid item xs={12} md={6} lg={2}>
               <TextField label="Select Village" fullWidth select />
             </Grid>
-            <Grid item xs={12} md={6} lg={3}>
-              <TextField label="Select Age" fullWidth />
+            <Grid item xs={12} md={6} lg={2}>
+              <TextField label="Select Age" fullWidth select>
+                {ageDropdown.map((item, index) => (
+                  <MenuItem key={index} value={item.label}>
+                    {item.label}
+                  </MenuItem>
+                ))}
+              </TextField>
             </Grid>
-            <Grid item xs={12} md={6} lg={3}>
+            <Grid item xs={12} md={6} lg={2}>
               <TextField label="Select User" fullWidth select />
             </Grid>
-            <Grid item xs={12} md={6} lg={3}>
+            <Grid item xs={12} md={6} lg={2}>
               <TextField label="Select Next Level User" fullWidth select />
             </Grid>
-            <Grid item xs={12} md={6} lg={3}>
+            <Grid item xs={12} md={6} lg={2}>
               <LoadingButton variant="contained">Search</LoadingButton>
             </Grid>
           </Grid>
         </Card>
 
-        <Box p={3} />
+        <Box p={1} />
 
         <Grid container spacing={3}>
           <Grid item xs={12} md={6} lg={4}>
@@ -107,15 +107,7 @@ const VotingPollDashBoardPage = ({ dashboard }) => {
                 { label: "BJP", value: 1443 },
                 { label: "CONGRESS", value: 1443 },
               ]}
-              chartColors={[
-                YSRCPColor,
-                NETURALColor,
-                TDPColor,
-                JSPColor,
-                BJPColor,
-                CONGRESSColor,
-                OTHERColor,
-              ]}
+              chartColors={[YSRCPColor, NETURALColor, TDPColor, JSPColor, BJPColor, CONGRESSColor, OTHERColor]}
             />
           </Grid>
 
@@ -140,12 +132,7 @@ const VotingPollDashBoardPage = ({ dashboard }) => {
                 { label: "Cancel", value: 876 },
                 { label: "Escalated", value: 2542 },
               ]}
-              chartColors={[
-                OpenColor,
-                ResolvedColor,
-                CancelColor,
-                EscalatedColor,
-              ]}
+              chartColors={[OpenColor, ResolvedColor, CancelColor, EscalatedColor]}
             />
           </Grid>
 
@@ -153,14 +140,7 @@ const VotingPollDashBoardPage = ({ dashboard }) => {
             <BarChartWidget
               title="Ticktes"
               sx={{ height: "100%" }}
-              chartLabels={[
-                "Pakala",
-                "Ramchandrapuram",
-                "Chinnagottigallu",
-                "Chandragiri",
-                "Yerravanipalem",
-                "Tirupathi (Rural)",
-              ]}
+              chartLabels={["Pakala", "Ramchandrapuram", "Chinnagottigallu", "Chandragiri", "Yerravanipalem", "Tirupathi (Rural)"]}
               chartColors={[completedColor, pendingColor]}
               chartData={[
                 {
@@ -186,14 +166,7 @@ const VotingPollDashBoardPage = ({ dashboard }) => {
                 { label: "55-65", value: 2415 },
                 { label: "65+", value: 1443 },
               ]}
-              chartColors={[
-                Age1Color,
-                Age2Color,
-                Age3Color,
-                Age4Color,
-                Age5Color,
-                Age6Color,
-              ]}
+              chartColors={[Age1Color, Age2Color, Age3Color, Age4Color, Age5Color, Age6Color]}
             />
           </Grid>
 

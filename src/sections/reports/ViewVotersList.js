@@ -1,15 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  Typography,
-  Card,
-  Stack,
-  Grid,
-  Switch,
-  Divider,
-  Box,
-  Chip,
-  TextField,
-} from "@mui/material";
+import { Typography, Card, Stack, Grid, Switch, Divider, Box, Chip, TextField } from "@mui/material";
 import { CheckBox } from "@mui/icons-material";
 import MUIDataTable from "mui-datatables";
 import { connect } from "react-redux";
@@ -28,10 +18,16 @@ const ViewVotersList = ({ showAlert, votersData }) => {
       label: "Voter ID",
     },
     {
+      label: "Part SL No",
+    },
+    {
       label: "Voter Name",
     },
     {
       label: "Father/Mother/Husband",
+    },
+    {
+      label: "Gender",
     },
     {
       label: "Is Resident",
@@ -81,12 +77,7 @@ const ViewVotersList = ({ showAlert, votersData }) => {
       <Stack>
         <Divider />
 
-        <MUIDataTable
-          title="Voter List"
-          columns={columns}
-          data={filterChartData}
-          options={options}
-        />
+        <MUIDataTable title="Voter List" columns={columns} data={filterChartData} options={options} />
       </Stack>
     </Card>
   );

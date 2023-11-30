@@ -1,15 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  Typography,
-  Card,
-  Stack,
-  Grid,
-  Switch,
-  Divider,
-  Box,
-  Chip,
-  TextField,
-} from "@mui/material";
+import { Typography, Card, Stack, Grid, Switch, Divider, Box, Chip, TextField } from "@mui/material";
 import MUIDataTable from "mui-datatables";
 import { connect } from "react-redux";
 import { showAlert } from "../../actions/alert";
@@ -89,28 +79,28 @@ const SurveyReportsList = ({ showAlert }) => {
           <Typography sx={{ pb: 2 }}>Search by filter</Typography>
 
           <Grid container spacing={2} alignItems="center">
-            <Grid item xs={12} md={6} lg={3}>
+            <Grid item xs={12} md={6} lg={2}>
               <TextField label="Select Mandal" fullWidth select />
             </Grid>
-            <Grid item xs={12} md={6} lg={3}>
+            <Grid item xs={12} md={6} lg={2}>
               <TextField label="Select Division" fullWidth select />
             </Grid>
-            <Grid item xs={12} md={6} lg={3}>
+            <Grid item xs={12} md={6} lg={2}>
               <TextField label="Select Sachivalayam" fullWidth select />
             </Grid>
-            <Grid item xs={12} md={6} lg={3}>
-              <TextField label="Select Part No" fullWidth select />
+            <Grid item xs={12} md={6} lg={2}>
+              <TextField label="Select Part/Booth No" fullWidth select />
             </Grid>{" "}
-            <Grid item xs={12} md={6} lg={3}>
+            <Grid item xs={12} md={6} lg={2}>
               <TextField label="Select Village" fullWidth select />
             </Grid>
-            <Grid item xs={12} md={6} lg={3}>
+            <Grid item xs={12} md={6} lg={2}>
               <TextField label="Select User" fullWidth select />
             </Grid>
-            <Grid item xs={12} md={6} lg={3}>
+            <Grid item xs={12} md={6} lg={2}>
               <TextField label="Select Next Level User" fullWidth select />
             </Grid>
-            <Grid item xs={12} md={6} lg={3}>
+            <Grid item xs={12} md={6} lg={2}>
               <LoadingButton variant="contained">Search</LoadingButton>
             </Grid>
           </Grid>
@@ -137,83 +127,10 @@ const SurveyReportsList = ({ showAlert }) => {
           title="Survey Analysis"
           columns={columns}
           data={[
-            [
-              "Mandal 1",
-
-              "Divsion 1",
-              "Sachivalayam 1",
-              "6",
-
-              "Village 1",
-              "25000",
-              "2522",
-              "69%",
-              "888",
-              "24%",
-              "699",
-              "5%",
-              "455",
-              "4%",
-              "230",
-              "2%",
-            ],
-            [
-              "Mandal 2",
-              "Divsion 1",
-              "Sachivalayam 1",
-              "1",
-
-              "Village 1",
-              "25000",
-              "2522",
-              "69%",
-              "888",
-              "24%",
-              "699",
-              "5%",
-              "455",
-              "4%",
-              "230",
-              "2%",
-            ],
-            [
-              "Mandal 3",
-              "Divsion 1",
-              "Sachivalayam 1",
-          "2",
-
-              "Village 1",
-              "25000",
-              "2522",
-              "69%",
-              "888",
-              "24%",
-              "699",
-              "5%",
-              "455",
-              "4%",
-              "230",
-              "2%",
-            ],
-            [
-              "Mandal 4",
-              "Divsion 1",
-              "Sachivalayam 1",
-              "3",
-
-              "Village 1",
-              "25000",
-              "2522",
-              "69%",
-              "888",
-              "24%",
-              "699",
-              "5%",
-              "455",
-              "4%",
-              "230",
-              "2%",
-            ],
+            ["Mandal 1", "Divsion 1", "Sachivalayam 1", "6", "Village 1", "25000", "2522", "69%", "888", "24%", "699", "5%", "455", "4%", "230", "2%"],
+            ["Mandal 2", "Divsion 1", "Sachivalayam 1", "1", "Village 1", "25000", "2522", "69%", "888", "24%", "699", "5%", "455", "4%", "230", "2%"],
+            ["Mandal 3", "Divsion 1", "Sachivalayam 1", "2", "Village 1", "25000", "2522", "69%", "888", "24%", "699", "5%", "455", "4%", "230", "2%"],
+            ["Mandal 4", "Divsion 1", "Sachivalayam 1", "3", "Village 1", "25000", "2522", "69%", "888", "24%", "699", "5%", "455", "4%", "230", "2%"],
           ]}
           options={options}
         />

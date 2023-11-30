@@ -1,12 +1,5 @@
 import { useState } from "react";
-import {
-  Grid,
-  Container,
-  Typography,
-  Box,
-  TextField,
-  Card,
-} from "@mui/material";
+import { Grid, Container, Typography, Box, TextField, Card } from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -27,33 +20,11 @@ import OpinionPollSurveyResultsList from "../sections/reports/OpinionPollSurveyR
 import BarChartWidget from "../sections/dashboard/BarChartWidget";
 import PollResultsBarChartWidget from "../sections/opinionPollSurveyResults/PollResultsBarChartWidget";
 
-function totalStats(
-  totalVotes,
-  ycpVotes,
-  male,
-  female,
-  neutral,
-  tdp,
-  jsp,
-  bjp,
-  others
-) {
+function totalStats(totalVotes, ycpVotes, male, female, neutral, tdp, jsp, bjp, others) {
   return { totalVotes, ycpVotes, male, female, neutral, tdp, jsp, bjp, others };
 }
 
-const statsRow = [
-  totalStats(
-    "3,00,000",
-    "8888",
-    "4444",
-    "4444",
-    "666",
-    "22",
-    "55",
-    "11",
-    "6666"
-  ),
-];
+const statsRow = [totalStats("3,00,000", "8888", "4444", "4444", "666", "22", "55", "11", "6666")];
 
 const OpinionPollSurveyResultsPage = ({ dashboard }) => {
   const [page, setPage] = useState(0);
@@ -71,29 +42,29 @@ const OpinionPollSurveyResultsPage = ({ dashboard }) => {
   return (
     <Page title="View Tickets">
       <Container maxWidth="xl">
-        <Typography variant="h4" sx={{ mb: 5 }}>
+        <Typography variant="h4" sx={{ mb: 1 }}>
           Opinion Results
         </Typography>
         <Card sx={{ p: 3, mb: 3 }}>
           <Typography sx={{ pb: 2 }}>Search by filter</Typography>
 
           <Grid container spacing={2} alignItems="center">
-            <Grid item xs={12} md={6} lg={3}>
+            <Grid item xs={12} md={6} lg={2}>
               <TextField label="Select Mandal" fullWidth select />
             </Grid>
-            <Grid item xs={12} md={6} lg={3}>
+            <Grid item xs={12} md={6} lg={2}>
               <TextField label="Select Division" fullWidth select />
             </Grid>
-            <Grid item xs={12} md={6} lg={3}>
+            <Grid item xs={12} md={6} lg={2}>
               <TextField label="Select Sachivalayam" fullWidth select />
             </Grid>
-            <Grid item xs={12} md={6} lg={3}>
+            <Grid item xs={12} md={6} lg={2}>
               <TextField label="Select Part/Booth No" fullWidth select />
-            </Grid>  <Grid item xs={12} md={6} lg={3}>
+            </Grid>
+            <Grid item xs={12} md={6} lg={2}>
               <TextField label="Select Village" fullWidth select />
             </Grid>
-
-            <Grid item xs={12} md={6} lg={3}>
+            <Grid item xs={12} md={6} lg={2}>
               <LoadingButton variant="contained">Search</LoadingButton>
             </Grid>
           </Grid>
@@ -139,7 +110,7 @@ const OpinionPollSurveyResultsPage = ({ dashboard }) => {
           </Grid>
         </Card>
 
-        <Box p={3} />
+        <Box p={1} />
 
         <TableContainer
           component={Paper}
@@ -160,52 +131,28 @@ const OpinionPollSurveyResultsPage = ({ dashboard }) => {
                 >
                   Constituency Votes
                 </TableCell>
-                <TableCell
-                  align="center"
-                  sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
-                >
+                <TableCell align="center" sx={{ fontSize: "1.2rem", fontWeight: "bold" }}>
                   YCP Votes
                 </TableCell>
-                <TableCell
-                  align="center"
-                  sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
-                >
+                <TableCell align="center" sx={{ fontSize: "1.2rem", fontWeight: "bold" }}>
                   Male
                 </TableCell>
-                <TableCell
-                  align="center"
-                  sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
-                >
+                <TableCell align="center" sx={{ fontSize: "1.2rem", fontWeight: "bold" }}>
                   Female
                 </TableCell>
-                <TableCell
-                  align="center"
-                  sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
-                >
+                <TableCell align="center" sx={{ fontSize: "1.2rem", fontWeight: "bold" }}>
                   Neutral
                 </TableCell>
-                <TableCell
-                  align="center"
-                  sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
-                >
+                <TableCell align="center" sx={{ fontSize: "1.2rem", fontWeight: "bold" }}>
                   TDP
                 </TableCell>
-                <TableCell
-                  align="center"
-                  sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
-                >
+                <TableCell align="center" sx={{ fontSize: "1.2rem", fontWeight: "bold" }}>
                   JSP
                 </TableCell>
-                <TableCell
-                  align="center"
-                  sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
-                >
+                <TableCell align="center" sx={{ fontSize: "1.2rem", fontWeight: "bold" }}>
                   BJP
                 </TableCell>
-                <TableCell
-                  align="center"
-                  sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
-                >
+                <TableCell align="center" sx={{ fontSize: "1.2rem", fontWeight: "bold" }}>
                   Others
                 </TableCell>
               </TableRow>

@@ -1,11 +1,4 @@
-import {
-  Grid,
-  Container,
-  Typography,
-  Box,
-  TextField,
-  Card,
-} from "@mui/material";
+import { Grid, Container, Typography, Box, TextField, Card, MenuItem } from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -18,7 +11,7 @@ const ReportbySurveyandVotingReasonPage = ({ dashboard }) => {
   return (
     <Page title="View User">
       <Container maxWidth="xl">
-        <Typography variant="h4" sx={{ mb: 5 }}>
+        <Typography variant="h4" sx={{ mb: 1 }}>
           Report by Survey and Voting Reason
         </Typography>
 
@@ -26,60 +19,40 @@ const ReportbySurveyandVotingReasonPage = ({ dashboard }) => {
           <Typography sx={{ pb: 2 }}>Search by filter</Typography>
 
           <Grid container spacing={2} alignItems="center">
-            <Grid item xs={12} md={6} lg={3}>
+            <Grid item xs={12} md={6} lg={2}>
               <TextField label="Select Mandal" fullWidth select />
             </Grid>
-            <Grid item xs={12} md={6} lg={3}>
+            <Grid item xs={12} md={6} lg={2}>
               <TextField label="Select Division" fullWidth select />
             </Grid>
-            <Grid item xs={12} md={6} lg={3}>
+            <Grid item xs={12} md={6} lg={2}>
               <TextField label="Select Sachivalayam" fullWidth select />
             </Grid>
-            <Grid item xs={12} md={6} lg={3}>
-              <TextField label="Select Part No" fullWidth select />
+            <Grid item xs={12} md={6} lg={2}>
+              <TextField label="Select Part/Booth No" fullWidth select />
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
               <TextField label="Select Village" fullWidth select />
             </Grid>
-            <Grid
-              item
-              xs={12}
-              md={6}
-              lg={3}
-              sx={{
-                display: "flex",
-              }}
-            >
-              <Typography sx={{ pb: 2, mr: 2 }}>Poll Reason:</Typography>
-              <Typography>YES/NO</Typography>
+            <Grid item xs={12} md={6} lg={2}>
+              <TextField label="Poll Reason" fullWidth select>
+                <MenuItem value="yes">Yes</MenuItem>
+                <MenuItem value="no">No</MenuItem>
+              </TextField>
             </Grid>
-            <Grid
-              item
-              xs={12}
-              md={6}
-              lg={3}
-              sx={{
-                display: "flex",
-              }}
-            >
-              <Typography sx={{ pb: 2, mr: 2 }}>Voting Reason:</Typography>
-              <Typography>YES/NO</Typography>
+            <Grid item xs={12} md={6} lg={2}>
+              <TextField label="Voting Reason" fullWidth select>
+                <MenuItem value="yes">Yes</MenuItem>
+                <MenuItem value="no">No</MenuItem>
+              </TextField>
             </Grid>
-            <Grid
-              item
-              xs={12}
-              md={6}
-              lg={3}
-              sx={{
-                marginLeft: "auto",
-              }}
-            >
+            <Grid item xs={12} md={6} lg={2}>
               <LoadingButton variant="contained">Search</LoadingButton>
             </Grid>
           </Grid>
         </Card>
 
-        <Box p={3} />
+        <Box p={1} />
         <ReportbySurveyandVotingReasonList />
       </Container>
     </Page>
@@ -92,7 +65,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  null
-)(ReportbySurveyandVotingReasonPage);
+export default connect(mapStateToProps, null)(ReportbySurveyandVotingReasonPage);

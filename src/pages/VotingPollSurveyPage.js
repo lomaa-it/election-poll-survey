@@ -1,12 +1,5 @@
 import { useState } from "react";
-import {
-  Grid,
-  Container,
-  Typography,
-  Box,
-  TextField,
-  Card,
-} from "@mui/material";
+import { Grid, Container, Typography, Box, TextField, Card } from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -47,7 +40,7 @@ const VotingPollSurveyPage = ({ dashboard }) => {
   return (
     <Page title="View Tickets">
       <Container maxWidth="xl">
-        <Typography variant="h4" sx={{ mb: 5 }}>
+        <Typography variant="h4" sx={{ mb: 1 }}>
           Voting Poll Survey
         </Typography>
 
@@ -55,37 +48,37 @@ const VotingPollSurveyPage = ({ dashboard }) => {
           <Typography sx={{ pb: 2 }}>Search by filter</Typography>
 
           <Grid container spacing={2} alignItems="center">
-            <Grid item xs={12} md={6} lg={3}>
+            <Grid item xs={12} md={6} lg={2}>
               <TextField label="Select Mandal" fullWidth select />
             </Grid>
-            <Grid item xs={12} md={6} lg={3}>
+            <Grid item xs={12} md={6} lg={2}>
               <TextField label="Select Division" fullWidth select />
             </Grid>
-            <Grid item xs={12} md={6} lg={3}>
+            <Grid item xs={12} md={6} lg={2}>
               <TextField label="Select Sachivalayam" fullWidth select />
             </Grid>
-            <Grid item xs={12} md={6} lg={3}>
-              <TextField label="Select Part No" fullWidth select />
+            <Grid item xs={12} md={6} lg={2}>
+              <TextField label="Select Part/Booth No" fullWidth select />
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
               <TextField label="Select Village" fullWidth select />
             </Grid>
-            <Grid item xs={12} md={6} lg={3}>
+            <Grid item xs={12} md={6} lg={2}>
               <TextField label="Voter ID" fullWidth select />
             </Grid>
-            <Grid item xs={12} md={6} lg={3}>
+            <Grid item xs={12} md={6} lg={2}>
               <TextField label="Voter Name" fullWidth select />
             </Grid>
-            <Grid item xs={12} md={6} lg={3}>
+            <Grid item xs={12} md={6} lg={2}>
               <TextField label="Phone Number" fullWidth select />
             </Grid>
-            <Grid item xs={12} md={6} lg={3}>
+            <Grid item xs={12} md={6} lg={2}>
               <TextField label="Select User" fullWidth select />
             </Grid>
-            <Grid item xs={12} md={6} lg={3}>
+            <Grid item xs={12} md={6} lg={2}>
               <TextField label="Select Next Level User" fullWidth select />
             </Grid>
-            <Grid item xs={12} md={6} lg={3}>
+            <Grid item xs={12} md={6} lg={2}>
               <LoadingButton variant="contained">Search</LoadingButton>
             </Grid>
             <Grid item xs={12} md={6} lg={6}>
@@ -107,16 +100,10 @@ const VotingPollSurveyPage = ({ dashboard }) => {
                       >
                         Total Voters
                       </TableCell>
-                      <TableCell
-                        align="center"
-                        sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
-                      >
+                      <TableCell align="center" sx={{ fontSize: "1.2rem", fontWeight: "bold" }}>
                         Survey Completed
                       </TableCell>
-                      <TableCell
-                        align="center"
-                        sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
-                      >
+                      <TableCell align="center" sx={{ fontSize: "1.2rem", fontWeight: "bold" }}>
                         Pending
                       </TableCell>
                     </TableRow>
@@ -180,7 +167,7 @@ const VotingPollSurveyPage = ({ dashboard }) => {
           </Grid>
         </Card>
 
-        <Box p={3} />
+        <Box p={1} />
 
         <Grid container spacing={3}>
           <Grid item xs={12} md={6} lg={12}>

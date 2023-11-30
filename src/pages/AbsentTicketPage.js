@@ -1,12 +1,4 @@
-import {
-  Grid,
-  Container,
-  Typography,
-  Box,
-  TextField,
-  Card,
-  InputAdornment,
-} from "@mui/material";
+import { Grid, Container, Typography, Box, TextField, Card, InputAdornment } from "@mui/material";
 import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
 import CloudUploadRoundedIcon from "@mui/icons-material/CloudUploadRounded";
 
@@ -20,7 +12,7 @@ const AbsentTicketPage = ({ dashboard }) => {
   return (
     <Page title="Add Ticket">
       <Container maxWidth="xl">
-        <Typography variant="h4" sx={{ mb: 5 }}>
+        <Typography variant="h4" sx={{ mb: 1 }}>
           <Link to="/voting-poll-survey">
             <ArrowBackIcon />
           </Link>
@@ -33,13 +25,7 @@ const AbsentTicketPage = ({ dashboard }) => {
 
           <Grid container spacing={2} alignItems="center">
             <Grid item xs={12} md={6} lg={12}>
-              <TextField
-                label="Write Reason..."
-                fullWidth
-                multiline
-                rows={4}
-                rowsMax={8}
-              />
+              <TextField label="Write Reason..." fullWidth multiline rows={4} rowsMax={8} />
             </Grid>{" "}
             <Grid
               item
@@ -63,7 +49,7 @@ const AbsentTicketPage = ({ dashboard }) => {
           </Grid>
         </Card>
 
-        <Box p={3} />
+        <Box p={1} />
       </Container>
     </Page>
   );

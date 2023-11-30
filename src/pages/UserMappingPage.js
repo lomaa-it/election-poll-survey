@@ -1,11 +1,4 @@
-import {
-  Grid,
-  Container,
-  Typography,
-  Box,
-  TextField,
-  Card,
-} from "@mui/material";
+import { Grid, Container, Typography, Box, TextField, Card } from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -18,7 +11,7 @@ const UserMappingPage = ({ dashboard }) => {
   return (
     <Page title="View User">
       <Container maxWidth="xl">
-        <Typography variant="h4" sx={{ mb: 5 }}>
+        <Typography variant="h4" sx={{ mb: 1 }}>
           User Mapping
         </Typography>
 
@@ -26,27 +19,27 @@ const UserMappingPage = ({ dashboard }) => {
           <Typography sx={{ pb: 2 }}>Search by filter</Typography>
 
           <Grid container spacing={2} alignItems="center">
-            <Grid item xs={12} md={6} lg={3}>
+            <Grid item xs={12} md={6} lg={2}>
               <TextField label="Select Mandal" fullWidth select />
             </Grid>
 
-            <Grid item xs={12} md={6} lg={3}>
+            <Grid item xs={12} md={6} lg={2}>
               <TextField label="Select Division" fullWidth select />
             </Grid>
 
-            <Grid item xs={12} md={6} lg={3}>
+            <Grid item xs={12} md={6} lg={2}>
               <TextField label="Select Sachivalayam" fullWidth select />
             </Grid>
 
-            <Grid item xs={12} md={6} lg={3}>
-              <TextField label="Select Part No" fullWidth select />
+            <Grid item xs={12} md={6} lg={2}>
+              <TextField label="Select Part/Booth No" fullWidth select />
             </Grid>
 
             <Grid
               item
               xs={12}
               md={6}
-              lg={3}
+              lg={2}
               sx={{
                 marginLeft: "auto",
               }}
@@ -56,9 +49,7 @@ const UserMappingPage = ({ dashboard }) => {
           </Grid>
         </Card>
 
-        <Box p={3} />
-        <UserMappingList />
-        <Card sx={{ p: 3, marginTop: "10px" }}>
+        <Card sx={{ p: 3, marginTop: 1 }}>
           <Grid container spacing={2} alignItems="center">
             <Grid item xs={12} md={6} lg={3}>
               <TextField label="Select Designation" fullWidth select />
@@ -88,6 +79,9 @@ const UserMappingPage = ({ dashboard }) => {
             </Grid>
           </Grid>
         </Card>
+
+        <Box p={1} />
+        <UserMappingList />
       </Container>
     </Page>
   );

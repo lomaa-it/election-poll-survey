@@ -1,11 +1,4 @@
-import {
-  Grid,
-  Container,
-  Typography,
-  Box,
-  TextField,
-  Card,
-} from "@mui/material";
+import { Grid, Container, Typography, Box, TextField, Card } from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -18,7 +11,7 @@ const PartiesPage = ({ dashboard }) => {
   return (
     <Page title="View User">
       <Container maxWidth="xl">
-        <Typography variant="h4" sx={{ mb: 5 }}>
+        <Typography variant="h4" sx={{ mb: 1 }}>
           Parties
         </Typography>
 
@@ -38,8 +31,7 @@ const PartiesPage = ({ dashboard }) => {
                 gap: "15px",
               }}
             >
-              <TextField label="Sequence Number" fullWidth />{" "}
-              <TextField label="Party Name" fullWidth />
+              <TextField label="Sequence Number" fullWidth /> <TextField label="Party Name" fullWidth />
               <LoadingButton
                 variant="contained"
                 sx={{
@@ -52,7 +44,7 @@ const PartiesPage = ({ dashboard }) => {
           </Grid>
         </Card>
 
-        <Box p={3} />
+        <Box p={1} />
       </Container>
     </Page>
   );
