@@ -1,4 +1,11 @@
-import { Grid, Container, Typography, Box, TextField, Card } from "@mui/material";
+import {
+  Grid,
+  Container,
+  Typography,
+  Box,
+  TextField,
+  Card,
+} from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -22,19 +29,18 @@ const UserMappingPage = ({ dashboard }) => {
             <Grid item xs={12} md={6} lg={2}>
               <TextField label="Select Mandal" fullWidth select />
             </Grid>
-
             <Grid item xs={12} md={6} lg={2}>
               <TextField label="Select Division" fullWidth select />
             </Grid>
-
             <Grid item xs={12} md={6} lg={2}>
               <TextField label="Select Sachivalayam" fullWidth select />
             </Grid>
-
             <Grid item xs={12} md={6} lg={2}>
               <TextField label="Select Part/Booth No" fullWidth select />
+            </Grid>{" "}
+            <Grid item xs={12} md={6} lg={2}>
+              <TextField label="Select Village" fullWidth select />
             </Grid>
-
             <Grid
               item
               xs={12}

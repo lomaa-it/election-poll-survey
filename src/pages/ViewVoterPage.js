@@ -64,6 +64,10 @@ const ViewVoterPage = ({ dashboard }) => {
             <Grid item xs={12} md={6} lg={2}>
               <TextField label="Select Part/Booth No" fullWidth select />
             </Grid>
+            
+            <Grid item xs={12} md={6} lg={2}>
+              <TextField label="Select Village" fullWidth select />
+            </Grid>
 
             <Grid item xs={12} md={6} lg={2}>
               <TextField label="Age Group" fullWidth select>
