@@ -10,4 +10,5 @@ export const getAllDivisionRoute = "/divisions/getall";
 export const getDivisionsById = "/divisions-get-by-id/";
 export const getSachivalayamById = "/sachivalayam-get-by-id/";
 export const getPartsById = "/parts-get-by-id/";
+export const getVillageById = "/villages-get-by-id/";
 

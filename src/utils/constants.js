@@ -39,3 +39,7 @@ export const TransgenderColor = "#FF93B1";
 /// tickets bar chart
 export const completedColor = "#006955"
 export const pendingColor = "#D64E52"
+
+
+
+

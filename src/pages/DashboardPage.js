@@ -46,7 +46,9 @@ import {
   getDivisionsById,
   getSachivalayamById,
   getPartsById,
+  getVillageById,
 } from "../utils/apis";
+import { ageDropdown } from "../utils/dropdownconstants";
 
 // Define custom styles
 const useStyles = makeStyles({
@@ -65,7 +67,8 @@ const DashboardApp = ({ dashboard }) => {
     division: [],
     sachivalayam: [],
     partNo: [],
-    age: [],
+    village: [],
+    age: ageDropdown,
     user: [],
     nextLevelUser: [],
   });
@@ -79,6 +82,7 @@ const DashboardApp = ({ dashboard }) => {
     user_id: "",
     next_level_user_id: "",
   });
+  const [selectedDivision, setSelectedDivision] = useState(null);
 
   // first call mandal api and get all mandals after user select mandal then call division api and get all divisions
   // after user select division then call sachivalayam api and get all sachivalayams
@@ -87,90 +91,112 @@ const DashboardApp = ({ dashboard }) => {
   // after user select age then call user api and get all users
   // after user select user then call nextLevelUser api and get all nextLevelUsers
   // after user select nextLevelUser then call search api and get all data
+  const getMandalData = async () => {
+    try {
+      const response = await instance.get(getAllMandalRoute);
+      const responseData = response.data.message;
+
+      const filterData = responseData.map((item) => {
+        return {
+          label: item.mandal_name,
+          mandal_id: item.mandal_pk,
+        };
+      });
+
+      setSearchFiltersData({ ...searchFilters, mandal: filterData });
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
+  const getDivisionData = async () => {
+    try {
+      const response = await instance.get(
+        getDivisionsById + saveSearchFilters.mandal_id
+      );
+      const responseData = response.data.message;
+
+      const filterData = responseData.map((item) => {
+        return {
+          label: item.division_name,
+          division_id: item.division_pk,
+        };
+      });
+
+      setSearchFiltersData({ ...searchFilters, division: filterData });
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
+  const getSachivalayamData = async () => {
+    try {
+      const response = await instance.get(
+        getSachivalayamById + saveSearchFilters.division_id
+      );
+
+      const responseData = response.data.message;
+
+      const filterData = responseData.map((item) => {
+        return {
+          label: item.sachivalayam_name,
+          sachivalayam_id: item.sachivalayam_pk,
+        };
+      });
+
+      setSearchFiltersData({ ...searchFilters, sachivalayam: filterData });
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
+  const getPartNoData = async () => {
+    try {
+      console.log("route", "getPartNoData");
+      const response = await instance.get(
+        getPartsById + saveSearchFilters.sachivalayam_id
+      );
+      console.log("part fecthing is done");
+      const responseData = response.data.message;
+      console.log("partNo-data", responseData);
+      const filterData = responseData.map((item) => {
+        return {
+          label: item.part_no,
+          part_no: item.part_pk,
+        };
+      });
+      console.log("partNo-filterData", filterData);
+
+      setSearchFiltersData({ ...searchFilters, partNo: filterData });
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
+  const getVillageData = async () => {
+    try {
+      console.log("route", "getVillageData");
+      const response = await instance.get(
+        getVillageById + saveSearchFilters.part_no
+      );
+      console.log("village fecthing is done");
+      const responseData = response.data.message;
+      console.log("village-data", responseData);
+      const filterData = responseData.map((item) => {
+        return {
+          label: item.village_name,
+          village_id: item.village_pk,
+        };
+      });
+      console.log("village-filterData", filterData);
+
+      setSearchFiltersData({ ...searchFilters, village: filterData });
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
 
   useEffect(() => {
-    const getMandalData = async () => {
-      try {
-        const response = await instance.get(getAllMandalRoute);
-        const responseData = response.data.message;
-
-        const filterData = responseData.map((item) => {
-          return {
-            label: item.mandal_name,
-            mandal_id: item.mandal_pk,
-          };
-        });
-
-        setSearchFiltersData({ ...searchFilters, mandal: filterData });
-      } catch (error) {
-        console.log("error", error);
-      }
-    };
-
-    const getDivisionData = async () => {
-      try {
-        const response = await instance.get(
-          getDivisionsById + saveSearchFilters.mandal_id
-        );
-        const responseData = response.data.message;
-
-        const filterData = responseData.map((item) => {
-          return {
-            label: item.division_name,
-            division_id: item.division_pk,
-          };
-        });
-
-        setSearchFiltersData({ ...searchFilters, division: filterData });
-      } catch (error) {
-        console.log("error", error);
-      }
-    };
-
-    const getSachivalayamData = async () => {
-      try {
-        const response = await instance.get(
-          getSachivalayamById + saveSearchFilters.division_id
-        );
-
-        const responseData = response.data.message;
-
-        const filterData = responseData.map((item) => {
-          return {
-            label: item.sachivalayam_name,
-            sachivalayam_id: item.sachivalayam_pk,
-          };
-        });
-
-        setSearchFiltersData({ ...searchFilters, sachivalayam: filterData });
-      } catch (error) {
-        console.log("error", error);
-      }
-    };
-
-    const getPartNoData = async () => {
-      try {
-        console.log("route", "getPartNoData");
-        const response = await instance.get(
-          getPartsById + saveSearchFilters.sachivalayam_id
-        );
-        console.log("part fecthing is done");
-        const responseData = response.data.message;
-        console.log("partNo-data", responseData);
-        const filterData = responseData.map((item) => {
-          return {
-            label: item.part_no,
-            part_no: item.part_pk,
-          };
-        });
-        console.log("partNo-filterData", filterData);
-
-        setSearchFiltersData({ ...searchFilters, partNo: filterData });
-      } catch (error) {
-        console.log("error", error);
-      }
-    };
-
     if (searchFilters.mandal.length === 0) {
       getMandalData();
     }
@@ -183,6 +209,10 @@ const DashboardApp = ({ dashboard }) => {
     if (saveSearchFilters.sachivalayam_id !== "") {
       console.log("Hi IM here in partNo");
       getPartNoData();
+    }
+    if (saveSearchFilters.part_no !== "") {
+      console.log("Hi IM here in village");
+      getVillageData();
     }
   }, [saveSearchFilters]);
 
@@ -214,15 +244,31 @@ const DashboardApp = ({ dashboard }) => {
                     ...prevState,
 
                     mandal_id: value ? value.mandal_id : "",
+                    division_id: "",
+                    sachivalayam_id: "",
+                    part_no: "",
+                    age: "",
+                    user_id: "",
+                    next_level_user_id: "",
                   }));
+                  setSearchFiltersData({
+                    ...searchFilters,
+                    division: [],
+                    sachivalayam: [],
+                    partNo: [],
+                    age: [],
+                    user: [],
+                    nextLevelUser: [],
+                  });
                 }}
               />
             </Grid>
-            <Grid item xs={12} md={6} lg={3}>
+            <Grid item xs={12} md={6} lg={2}>
               <Autocomplete
-                disabled={saveSearchFilters.mandal_id === ""}
+                disabled={searchFilters.division.length === 0}
                 id="division"
                 options={searchFilters.division}
+                defaultValue={searchFilters.division[0]} // assuming the default value is the first option
                 renderInput={(params) => (
                   <TextField {...params} label="Select Division" />
                 )}
@@ -237,9 +283,9 @@ const DashboardApp = ({ dashboard }) => {
                 }}
               />
             </Grid>
-            <Grid item xs={12} md={6} lg={3}>
+            <Grid item xs={12} md={6} lg={2}>
               <Autocomplete
-                disabled={saveSearchFilters.division_id === ""}
+                disabled={searchFilters.sachivalayam.length === 0}
                 id="sachivalayam"
                 options={searchFilters.sachivalayam}
                 renderInput={(params) => (
@@ -256,9 +302,9 @@ const DashboardApp = ({ dashboard }) => {
                 }}
               />
             </Grid>
-            <Grid item xs={12} md={6} lg={3}>
+            <Grid item xs={12} md={6} lg={2}>
               <Autocomplete
-                disabled={saveSearchFilters.sachivalayam_id === ""}
+                disabled={searchFilters.partNo.length === 0}
                 id="partNo"
                 options={searchFilters.partNo}
                 renderInput={(params) => (
@@ -274,17 +320,35 @@ const DashboardApp = ({ dashboard }) => {
                   });
                 }}
               />
-            </Grid>{" "}
-            <Grid item xs={12} md={6} lg={3}>
-              <TextField label="Select Age" fullWidth />
             </Grid>
-            <Grid item xs={12} md={6} lg={3}>
+            <Grid item xs={12} md={6} lg={2}>
+              <TextField label="Select Village" fullWidth select />
+            </Grid>
+            <Grid item xs={12} md={6} lg={2}>
+              <Autocomplete
+                id="age"
+                options={searchFilters.age}
+                renderInput={(params) => (
+                  <TextField {...params} label="Select Age" />
+                )}
+                onChange={(event, value) => {
+                  // console.log("event", event)
+                  console.log("value", value);
+                  setSaveSearchFilters({
+                    ...saveSearchFilters,
+
+                    age: value ? value.age : "",
+                  });
+                }}
+              />
+            </Grid>
+            <Grid item xs={12} md={6} lg={2}>
               <TextField label="Select User" fullWidth select />
             </Grid>
-            <Grid item xs={12} md={6} lg={3}>
+            <Grid item xs={12} md={6} lg={2}>
               <TextField label="Select Next Level User" fullWidth select />
             </Grid>
-            <Grid item xs={12} md={6} lg={3}>
+            <Grid item xs={12} md={6} lg={2}>
               <LoadingButton variant="contained">Search</LoadingButton>
             </Grid>
           </Grid>
