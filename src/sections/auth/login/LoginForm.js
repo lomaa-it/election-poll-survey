@@ -10,15 +10,26 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
 import { LoadingButton } from "@mui/lab";
 import Iconify from "../../../components/Iconify";
 import { FormProvider, RHFTextField } from "../../../components/hook-form";
 import { connect } from "react-redux";
 import { authSuccess } from "../../../actions/auth";
 import { showAlert } from "../../../actions/alert";
+import instance from "../../../utils/axios";
+import {
+  getAllDivisionRoute,
+  getAllMandalRoute,
+  getAllPartsRoute,
+  getAllSachivalayamRoute,
+  getAllVillageRoute,
+} from "../../../utils/apis";
+import { is } from "date-fns/locale";
 
 const LoginForm = ({ showAlert, authSuccess }) => {
   const navigate = useNavigate();
+  // const [filersData, setFiltersData] = useState([]);
 
   const [isLoading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -43,20 +54,55 @@ const LoginForm = ({ showAlert, authSuccess }) => {
 
   const { handleSubmit } = methods;
 
+  const fetchFiltersData = async () => {
+
+    // mandal data fecthing
+    const mandalResponse = await instance.get(getAllMandalRoute);
+    const mandalsResponseData = mandalResponse.data.message;
+    // division data fecthing
+    const divisionsResponse = await instance.get(getAllDivisionRoute);
+    const divisionsResponseData = divisionsResponse.data.message;
+    // sachivalayam data fecthing
+    const sachivalayamResponse = await instance.get(getAllSachivalayamRoute);
+    const sachivalayamResponseData = sachivalayamResponse.data.message;
+    // parts data fecthing
+    const partsResponse = await instance.get(getAllPartsRoute);
+    const partsResponseData = partsResponse.data.message;
+
+    // vilaage data fecthing
+    const villageResponse = await instance.get(getAllVillageRoute);
+    const villageResponseData = villageResponse.data.message;
+
+    if (mandalsResponseData) {
+      // setFiltersData(responseData);
+      const filersData = {
+        mandals: mandalsResponseData,
+        divisions: divisionsResponseData,
+        sachivalayams: sachivalayamResponseData,
+        parts: partsResponseData,
+        villages: villageResponseData,
+      };
+      localStorage.setItem("filtersData", JSON.stringify(filersData));
+    }
+    setLoading(false);
+  };
+
   const onSubmit = async (data) => {
-    setLoading(true);
     alert("New user? Secure your account by resetting your password.");
     showAlert({
       text: "New user? Secure your account by resetting your password.",
       color: "success",
     });
 
-    if(data.username === "admin" && data.password === "admin123") {
+    if (data.username === "admin" && data.password === "admin123") {
+      setLoading(true); 
+      fetchFiltersData();
+
       navigate("/dashboard");
       return;
     }
+
     navigate("/reset-password");
-    setLoading(false);
   };
 
   return (
@@ -118,6 +164,12 @@ const LoginForm = ({ showAlert, authSuccess }) => {
           Forgot password?
         </Link>
       </Stack>
+      {/* {!isLoading && (
+        <CircularProgress
+          color="inherit"
+          sx={{ position: "absolute", top: "50%", left: "50%" }}
+        />
+      )} */}
 
       <LoadingButton
         fullWidth
@@ -126,7 +178,7 @@ const LoginForm = ({ showAlert, authSuccess }) => {
         type="submit"
         variant="contained"
       >
-        Login
+        {isLoading ? <CircularProgress size={24} color="inherit" /> : "Login"}
       </LoadingButton>
     </FormProvider>
   );

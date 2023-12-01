@@ -1,5 +1,12 @@
 import { useEffect, useState } from "react";
-import { Grid, Container, Typography, Box, TextField, Card } from "@mui/material";
+import {
+  Grid,
+  Container,
+  Typography,
+  Box,
+  TextField,
+  Card,
+} from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
 import makeStyles from "@mui/styles/makeStyles";
 import Page from "../components/Page";
@@ -34,8 +41,15 @@ import {
   pendingColor,
 } from "../utils/constants";
 import instance from "../utils/axios";
-import { getAllMandalRoute, getDivisionsById, getSachivalayamById, getPartsById, getVillageById } from "../utils/apis";
+import {
+  getAllMandalRoute,
+  getDivisionsById,
+  getSachivalayamById,
+  getPartsById,
+  getVillageById,
+} from "../utils/apis";
 import { ageDropdown } from "../utils/dropdownconstants";
+import { parse } from "date-fns";
 
 // Define custom styles
 const useStyles = makeStyles({
@@ -65,11 +79,11 @@ const DashboardApp = ({ dashboard }) => {
     division_id: "",
     sachivalayam_id: "",
     part_no: "",
+    village_id: "",
     age: "",
     user_id: "",
     next_level_user_id: "",
   });
-  const [selectedDivision, setSelectedDivision] = useState(null);
 
   // first call mandal api and get all mandals after user select mandal then call division api and get all divisions
   // after user select division then call sachivalayam api and get all sachivalayams
@@ -78,119 +92,99 @@ const DashboardApp = ({ dashboard }) => {
   // after user select age then call user api and get all users
   // after user select user then call nextLevelUser api and get all nextLevelUsers
   // after user select nextLevelUser then call search api and get all data
-  const getMandalData = async () => {
-    try {
-      const response = await instance.get(getAllMandalRoute);
-      const responseData = response.data.message;
 
-      const filterData = responseData.map((item) => {
-        return {
-          label: item.mandal_name,
-          mandal_id: item.mandal_pk,
-        };
-      });
+  const filtersLocalData = localStorage.getItem("filtersData");
+  const parseJson = JSON.parse(filtersLocalData);
 
-      setSearchFiltersData({ ...searchFilters, mandal: filterData });
-    } catch (error) {
-      console.log("error", error);
-    }
+  console.log("parseJson", parseJson);
+
+  const getMandalData = () => {
+    const filterData = parseJson.mandals.map((item) => {
+      return {
+        label: item.mandal_name,
+        mandal_id: item.mandal_pk,
+      };
+    });
+    setSearchFiltersData({ ...searchFilters, mandal: filterData });
   };
 
   const getDivisionData = async () => {
-    try {
-      const response = await instance.get(getDivisionsById + saveSearchFilters.mandal_id);
-      const responseData = response.data.message;
+    const divisionData = parseJson.divisions.filter((item) => {
+      return item.mandal_id === saveSearchFilters.mandal_id;
+    });
 
-      const filterData = responseData.map((item) => {
-        return {
-          label: item.division_name,
-          division_id: item.division_pk,
-        };
-      });
-
-      setSearchFiltersData({ ...searchFilters, division: filterData });
-    } catch (error) {
-      console.log("error", error);
-    }
+    const filterData = divisionData.map((item) => {
+      return {
+        label: item.division_name,
+        division_id: item.division_pk,
+      };
+    });
+    setSearchFiltersData({ ...searchFilters, division: filterData });
   };
 
   const getSachivalayamData = async () => {
-    try {
-      const response = await instance.get(getSachivalayamById + saveSearchFilters.division_id);
+    const sachivalayamData = parseJson.sachivalayams.filter((item) => {
+      // console.log("item", item);
+      return item.division_pk === saveSearchFilters.division_id;
+    });
+    // console.log("sachivalayamDsssata", sachivalayamData);
 
-      const responseData = response.data.message;
-
-      const filterData = responseData.map((item) => {
-        return {
-          label: item.sachivalayam_name,
-          sachivalayam_id: item.sachivalayam_pk,
-        };
-      });
-
-      setSearchFiltersData({ ...searchFilters, sachivalayam: filterData });
-    } catch (error) {
-      console.log("error", error);
-    }
+    const filterData = sachivalayamData.map((item) => {
+      return {
+        label: item.sachivalayam_name,
+        sachivalayam_id: item.sachivalayam_pk,
+      };
+    });
+    setSearchFiltersData({ ...searchFilters, sachivalayam: filterData });
   };
 
   const getPartNoData = async () => {
-    try {
-      console.log("route", "getPartNoData");
-      const response = await instance.get(getPartsById + saveSearchFilters.sachivalayam_id);
-      console.log("part fecthing is done");
-      const responseData = response.data.message;
-      console.log("partNo-data", responseData);
-      const filterData = responseData.map((item) => {
-        return {
-          label: item.part_no,
-          part_no: item.part_pk,
-        };
-      });
-      console.log("partNo-filterData", filterData);
+    console.log("Partssdklsdk", parseJson.parts);
+    const partNoData = parseJson.parts.filter((item) => {
+      return item.sachivalayam_id === saveSearchFilters.sachivalayam_id;
+    });
 
-      setSearchFiltersData({ ...searchFilters, partNo: filterData });
-    } catch (error) {
-      console.log("error", error);
-    }
+    const filterData = partNoData.map((item) => {
+      return {
+        label: item.part_no,
+        part_no: item.part_no,
+      };
+    });
+    setSearchFiltersData({ ...searchFilters, partNo: filterData });
   };
 
   const getVillageData = async () => {
-    try {
-      console.log("route", "getVillageData");
-      const response = await instance.get(getVillageById + saveSearchFilters.part_no);
-      console.log("village fecthing is done");
-      const responseData = response.data.message;
-      console.log("village-data", responseData);
-      const filterData = responseData.map((item) => {
-        return {
-          label: item.village_name,
-          village_id: item.village_pk,
-        };
-      });
-      console.log("village-filterData", filterData);
+    const villageData = parseJson.villages.filter((item) => {
+      return item.part_no === saveSearchFilters.part_no;
+    });
 
-      setSearchFiltersData({ ...searchFilters, village: filterData });
-    } catch (error) {
-      console.log("error", error);
-    }
+    const filterData = villageData.map((item) => {
+      return {
+        label: item.village_name,
+        village_id: item.village_pk,
+      };
+    });
+    setSearchFiltersData({ ...searchFilters, village: filterData });
   };
 
   useEffect(() => {
-    if (searchFilters.mandal.length === 0) {
+    if (saveSearchFilters.mandal_id === "") {
       getMandalData();
     }
+
     if (saveSearchFilters.mandal_id !== "") {
       getDivisionData();
     }
+
     if (saveSearchFilters.division_id !== "") {
       getSachivalayamData();
     }
+
     if (saveSearchFilters.sachivalayam_id !== "") {
-      console.log("Hi IM here in partNo");
       getPartNoData();
     }
+
     if (saveSearchFilters.part_no !== "") {
-      console.log("Hi IM here in village");
       getVillageData();
     }
   }, [saveSearchFilters]);
@@ -213,7 +207,9 @@ const DashboardApp = ({ dashboard }) => {
               <Autocomplete
                 id="mandal"
                 options={searchFilters.mandal}
-                renderInput={(params) => <TextField {...params} label="Select Mandal" />}
+                renderInput={(params) => (
+                  <TextField {...params} label="Select Mandal" />
+                )}
                 onChange={(event, value) => {
                   // console.log("event", event)
                   console.log("value", value);
@@ -224,29 +220,23 @@ const DashboardApp = ({ dashboard }) => {
                     division_id: "",
                     sachivalayam_id: "",
                     part_no: "",
+                    village_id: "",
                     age: "",
                     user_id: "",
                     next_level_user_id: "",
                   }));
-                  setSearchFiltersData({
-                    ...searchFilters,
-                    division: [],
-                    sachivalayam: [],
-                    partNo: [],
-                    age: [],
-                    user: [],
-                    nextLevelUser: [],
-                  });
                 }}
               />
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
               <Autocomplete
-                disabled={searchFilters.division.length === 0}
+                disabled={saveSearchFilters.mandal_id === "" ? true : false}
                 id="division"
                 options={searchFilters.division}
                 defaultValue={searchFilters.division[0]} // assuming the default value is the first option
-                renderInput={(params) => <TextField {...params} label="Select Division" />}
+                renderInput={(params) => (
+                  <TextField {...params} label="Select Division" />
+                )}
                 onChange={(event, value) => {
                   // console.log("event", event)
                   console.log("value", value);
@@ -254,33 +244,52 @@ const DashboardApp = ({ dashboard }) => {
                     ...prevState,
 
                     division_id: value ? value.division_id : "",
+                    sachivalayam_id: "",
+                    part_no: "",
+                    village_id: "",
+                    age: "",
+                    user_id: "",
+                    next_level_user_id: "",
                   }));
                 }}
               />
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
               <Autocomplete
-                disabled={searchFilters.sachivalayam.length === 0}
+                disabled={saveSearchFilters.division_id === "" ? true : false}
                 id="sachivalayam"
                 options={searchFilters.sachivalayam}
-                renderInput={(params) => <TextField {...params} label="Select Sachivalayam" />}
+                renderInput={(params) => (
+                  <TextField {...params} label="Select Sachivalayam" />
+                )}
                 onChange={(event, value) => {
                   // console.log("event", event)
+
                   console.log("value", value);
-                  setSaveSearchFilters((prevSate) => ({
-                    ...prevSate,
+                  setSaveSearchFilters({
+                    ...saveSearchFilters,
 
                     sachivalayam_id: value ? value.sachivalayam_id : "",
-                  }));
+
+                    part_no: "",
+                    village_id: "",
+                    age: "",
+                    user_id: "",
+                    next_level_user_id: "",
+                  });
                 }}
               />
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
               <Autocomplete
-                disabled={searchFilters.partNo.length === 0}
+                disabled={
+                  saveSearchFilters.sachivalayam_id === "" ? true : false
+                }
                 id="partNo"
                 options={searchFilters.partNo}
-                renderInput={(params) => <TextField {...params} label="Select Part/Booth No" />}
+                renderInput={(params) => (
+                  <TextField {...params} label="Select Part/Booth No" />
+                )}
                 onChange={(event, value) => {
                   // console.log("event", event)
                   console.log("value", value);
@@ -288,18 +297,44 @@ const DashboardApp = ({ dashboard }) => {
                     ...saveSearchFilters,
 
                     part_no: value ? value.part_no : "",
+                    village_id: "",
+                    age: "",
+                    user_id: "",
+                    next_level_user_id: "",
                   });
                 }}
               />
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Select Village" fullWidth select />
+              <Autocomplete
+                disabled={saveSearchFilters.part_no === "" ? true : false}
+                id="village"
+                options={searchFilters.village}
+                renderInput={(params) => (
+                  <TextField {...params} label="Select Village" />
+                )}
+                onChange={(event, value) => {
+                  // console.log("event", event)
+                  console.log("value", value);
+                  setSaveSearchFilters({
+                    ...saveSearchFilters,
+
+                    village_id: value ? value.village_id : "",
+                    age: "",
+                    user_id: "",
+                    next_level_user_id: "",
+
+                  });
+                }}
+              />
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
               <Autocomplete
                 id="age"
                 options={searchFilters.age}
-                renderInput={(params) => <TextField {...params} label="Select Age" />}
+                renderInput={(params) => (
+                  <TextField {...params} label="Select Age" />
+                )}
                 onChange={(event, value) => {
                   // console.log("event", event)
                   console.log("value", value);
@@ -307,6 +342,9 @@ const DashboardApp = ({ dashboard }) => {
                     ...saveSearchFilters,
 
                     age: value ? value.age : "",
+                    user_id: "",
+                    next_level_user_id: "",
+                    
                   });
                 }}
               />
@@ -349,7 +387,15 @@ const DashboardApp = ({ dashboard }) => {
                 { label: "BJP", value: 1443 },
                 { label: "CONGRESS", value: 1443 },
               ]}
-              chartColors={[YSRCPColor, NETURALColor, TDPColor, JSPColor, BJPColor, CONGRESSColor, OTHERColor]}
+              chartColors={[
+                YSRCPColor,
+                NETURALColor,
+                TDPColor,
+                JSPColor,
+                BJPColor,
+                CONGRESSColor,
+                OTHERColor,
+              ]}
             />
           </Grid>
 
@@ -374,7 +420,12 @@ const DashboardApp = ({ dashboard }) => {
                 { label: "Cancel", value: 876 },
                 { label: "Escalated", value: 2542 },
               ]}
-              chartColors={[OpenColor, ResolvedColor, CancelColor, EscalatedColor]}
+              chartColors={[
+                OpenColor,
+                ResolvedColor,
+                CancelColor,
+                EscalatedColor,
+              ]}
             />
           </Grid>
 
@@ -382,7 +433,14 @@ const DashboardApp = ({ dashboard }) => {
             <BarChartWidget
               title="Ticktes"
               sx={{ height: "100%" }}
-              chartLabels={["Pakala", "Ramchandrapuram", "Chinnagottigallu", "Chandragiri", "Yerravanipalem", "Tirupathi (Rural)"]}
+              chartLabels={[
+                "Pakala",
+                "Ramchandrapuram",
+                "Chinnagottigallu",
+                "Chandragiri",
+                "Yerravanipalem",
+                "Tirupathi (Rural)",
+              ]}
               chartColors={[completedColor, pendingColor]}
               chartData={[
                 {
@@ -408,7 +466,14 @@ const DashboardApp = ({ dashboard }) => {
                 { label: "55-65", value: 2415 },
                 { label: "65+", value: 1443 },
               ]}
-              chartColors={[Age1Color, Age2Color, Age3Color, Age4Color, Age5Color, Age6Color]}
+              chartColors={[
+                Age1Color,
+                Age2Color,
+                Age3Color,
+                Age4Color,
+                Age5Color,
+                Age6Color,
+              ]}
             />
           </Grid>
 
