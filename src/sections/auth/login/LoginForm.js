@@ -171,14 +171,22 @@ const LoginForm = ({ showAlert, authSuccess }) => {
         />
       )} */}
 
+      {
+        isLoading && (
+          <CircularProgress
+            color="inherit"
+            sx={{ position: "absolute", top: "50%", left: "50%" }}
+          />
+        )
+      }
+
       <LoadingButton
         fullWidth
         loading={isLoading}
         size="large"
         type="submit"
         variant="contained"
-      >
-        {isLoading ? <CircularProgress size={24} color="inherit" /> : "Login"}
+      >Login
       </LoadingButton>
     </FormProvider>
   );
