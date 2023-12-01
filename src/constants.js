@@ -18,3 +18,5 @@ export function fToNow(value) {
       })
     : "";
 }
+
+export const PARTY_ID = { NEUTRAL: 22, YSRCP: 23, TDP: 24, CONGRESS: 25, BJP: 26, JANASENA: 27 };

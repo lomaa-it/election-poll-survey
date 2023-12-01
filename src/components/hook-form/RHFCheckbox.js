@@ -1,10 +1,5 @@
-import PropTypes from "prop-types";
 import { useFormContext, Controller } from "react-hook-form";
 import { Checkbox, FormControlLabel, FormGroup, RadioGroup, FormControl, Radio } from "@mui/material";
-
-RHFCheckbox.propTypes = {
-  name: PropTypes.string.isRequired,
-};
 
 export function RHFCheckbox({ name, onChange, value, disabled, ...other }) {
   const { control } = useFormContext();
@@ -33,11 +28,6 @@ export function RHFCheckbox({ name, onChange, value, disabled, ...other }) {
     />
   );
 }
-
-RHFMultiCheckbox.propTypes = {
-  name: PropTypes.string.isRequired,
-  options: PropTypes.array.isRequired,
-};
 
 export function RHFMultiCheckbox({ name, options, ...other }) {
   const { control } = useFormContext();

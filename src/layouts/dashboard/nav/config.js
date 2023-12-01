@@ -11,8 +11,6 @@ const navConfig = [
     path: "/voting-poll-dashboard",
     icon: <Iconify icon="ic:round-dashboard" width="24px" height="24px" />,
   },
-
-  // Option Survey with Sub Menu
   {
     title: "Opinion Survey ",
     path: "/opinionsurvey",
@@ -82,7 +80,6 @@ const navConfig = [
   //   ),
   // },
 
-
   // User Management with Sub Menu
   {
     title: "User Management",
@@ -90,16 +87,15 @@ const navConfig = [
     icon: <Iconify icon="ic:baseline-people" width="24px" height="24px" />,
     children: [
       {
-        title: "Add User",
-        path: "/user-management/user-registration",
-      },
-      {
         title: "View User",
         path: "/user-management/view-user",
       },
+      {
+        title: "Add User",
+        path: "/user-management/user-registration",
+      },
     ],
   },
-
 
   // Voter Management with Sub Menu
   {
@@ -108,12 +104,12 @@ const navConfig = [
     icon: <Iconify icon="formkit:people" width="24px" height="24px" />,
     children: [
       {
-        title: "Add Voter",
-        path: "/voter-registration",
-      },
-      {
         title: "View Voter",
         path: "/view-voter",
+      },
+      {
+        title: "Add Voter",
+        path: "/voter-registration",
       },
     ],
   },

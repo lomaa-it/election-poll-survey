@@ -1,13 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  Grid,
-  Container,
-  Typography,
-  Box,
-  TextField,
-  Card,
-  MenuItem,
-} from "@mui/material";
+import { Grid, Container, Typography, Box, TextField, Card, MenuItem } from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -39,10 +31,11 @@ import {
   completedColor,
   pendingColor,
 } from "../utils/constants";
+import { getAllCommonData } from "../actions/common";
+import SearchByFilter from "../sections/common/SearchByFilter";
 import { ageDropdown } from "../utils/dropdownconstants";
-import Autocomplete from "@mui/material/Autocomplete";
 
-const VotingPollDashBoardPage = ({ dashboard }) => {
+const VotingPollDashBoardPage = ({ common, getAllCommonData }) => {
   const exitPollItems = [
     { name: "YSRCP", value: "60-70" },
     { name: "TDP", value: "10-20" },
@@ -51,134 +44,10 @@ const VotingPollDashBoardPage = ({ dashboard }) => {
     { name: "CONGRESS", value: "5-7" },
     { name: "OTHERS", value: "1-3" },
   ];
-  const [searchFilters, setSearchFiltersData] = useState({
-    mandal: [],
-    division: [],
-    sachivalayam: [],
-    partNo: [],
-    village: [],
-    age: ageDropdown,
-    user: [],
-    nextLevelUser: [],
-  });
 
-  const [saveSearchFilters, setSaveSearchFilters] = useState({
-    mandal_id: "",
-    division_id: "",
-    sachivalayam_id: "",
-    part_no: "",
-    village_id: "",
-    age: "",
-    user_id: "",
-    next_level_user_id: "",
-  });
-  const [selectedDivision, setSelectedDivision] = useState(null);
-
-  // first call mandal api and get all mandals after user select mandal then call division api and get all divisions
-  // after user select division then call sachivalayam api and get all sachivalayams
-  // after user select sachivalayam then call partNo api and get all partNo
-  // after user select partNo then call age api and get all age
-  // after user select age then call user api and get all users
-  // after user select user then call nextLevelUser api and get all nextLevelUsers
-  // after user select nextLevelUser then call search api and get all data
-
-  const filtersLocalData = localStorage.getItem("filtersData");
-  const parseJson = JSON.parse(filtersLocalData);
-
-  console.log("parseJson", parseJson);
-
-  const getMandalData = () => {
-    const filterData = parseJson.mandals.map((item) => {
-      return {
-        label: item.mandal_name,
-        mandal_id: item.mandal_pk,
-      };
-    });
-    setSearchFiltersData({ ...searchFilters, mandal: filterData });
+  const onSubmit = async (data) => {
+    // console.log(formValues);
   };
-
-  const getDivisionData = async () => {
-    const divisionData = parseJson.divisions.filter((item) => {
-      return item.mandal_id === saveSearchFilters.mandal_id;
-    });
-
-    const filterData = divisionData.map((item) => {
-      return {
-        label: item.division_name,
-        division_id: item.division_pk,
-      };
-    });
-    setSearchFiltersData({ ...searchFilters, division: filterData });
-  };
-
-  const getSachivalayamData = async () => {
-    const sachivalayamData = parseJson.sachivalayams.filter((item) => {
-      // console.log("item", item);
-      return item.division_pk === saveSearchFilters.division_id;
-    });
-    // console.log("sachivalayamDsssata", sachivalayamData);
-
-    const filterData = sachivalayamData.map((item) => {
-      return {
-        label: item.sachivalayam_name,
-        sachivalayam_id: item.sachivalayam_pk,
-      };
-    });
-    setSearchFiltersData({ ...searchFilters, sachivalayam: filterData });
-  };
-
-  const getPartNoData = async () => {
-    console.log("Partssdklsdk", parseJson.parts);
-    const partNoData = parseJson.parts.filter((item) => {
-      return item.sachivalayam_id === saveSearchFilters.sachivalayam_id;
-    });
-
-    const filterData = partNoData.map((item) => {
-      return {
-        label: item.part_no,
-        part_no: item.part_no,
-      };
-    });
-    setSearchFiltersData({ ...searchFilters, partNo: filterData });
-  };
-
-  const getVillageData = async () => {
-    const villageData = parseJson.villages.filter((item) => {
-      return item.part_no === saveSearchFilters.part_no;
-    });
-
-    const filterData = villageData.map((item) => {
-      return {
-        label: item.village_name,
-        village_id: item.village_pk,
-      };
-    });
-    setSearchFiltersData({ ...searchFilters, village: filterData });
-  };
-
-  useEffect(() => {
-    if (saveSearchFilters.mandal_id === "") {
-      getMandalData();
-    }
-
-    if (saveSearchFilters.mandal_id !== "") {
-      getDivisionData();
-    }
-
-    if (saveSearchFilters.division_id !== "") {
-      getSachivalayamData();
-    }
-
-    if (saveSearchFilters.sachivalayam_id !== "") {
-      getPartNoData();
-    }
-
-    if (saveSearchFilters.part_no !== "") {
-      getVillageData();
-    }
-  }, [saveSearchFilters]);
-
-  console.log("saveSearchFilters", saveSearchFilters);
 
   return (
     <Page title="Dashboard">
@@ -192,7 +61,7 @@ const VotingPollDashBoardPage = ({ dashboard }) => {
 
           <Grid container spacing={3}>
             {exitPollItems.map((item, index) => (
-              <Grid item xs={12} md={6} lg={2} sx={{ textAlign: "center" }}>
+              <Grid key={index} item xs={12} md={6} lg={2} sx={{ textAlign: "center" }}>
                 <Typography variant="subtitle1">{item.name}</Typography>
 
                 <Typography variant="h6">{item.value}</Typography>
@@ -207,158 +76,30 @@ const VotingPollDashBoardPage = ({ dashboard }) => {
           <Typography sx={{ pb: 2 }}>Search by filter</Typography>
 
           <Grid container spacing={2} alignItems="center">
+            <SearchByFilter />
+
             <Grid item xs={12} md={6} lg={2}>
-              <Autocomplete
-                id="mandal"
-                options={searchFilters.mandal}
-                renderInput={(params) => (
-                  <TextField {...params} label="Select Mandal" />
-                )}
-                onChange={(event, value) => {
-                  // console.log("event", event)
-                  console.log("value", value);
-                  setSaveSearchFilters((prevState) => ({
-                    ...prevState,
-
-                    mandal_id: value ? value.mandal_id : "",
-                    division_id: "",
-                    sachivalayam_id: "",
-                    part_no: "",
-                    village_id: "",
-                    age: "",
-                    user_id: "",
-                    next_level_user_id: "",
-                  }));
-                }}
-              />
+              <TextField name="age" label="Select Age" fullWidth select>
+                {ageDropdown.map((item, index) => (
+                  <MenuItem key={index} value={item.label}>
+                    {item.label}
+                  </MenuItem>
+                ))}
+              </TextField>
             </Grid>
-            <Grid item xs={12} md={6} lg={2}>
-              <Autocomplete
-                disabled={saveSearchFilters.mandal_id === "" ? true : false}
-                id="division"
-                options={searchFilters.division}
-                defaultValue={searchFilters.division[0]} // assuming the default value is the first option
-                renderInput={(params) => (
-                  <TextField {...params} label="Select Division" />
-                )}
-                onChange={(event, value) => {
-                  // console.log("event", event)
-                  console.log("value", value);
-                  setSaveSearchFilters((prevState) => ({
-                    ...prevState,
 
-                    division_id: value ? value.division_id : "",
-                    sachivalayam_id: "",
-                    part_no: "",
-                    village_id: "",
-                    age: "",
-                    user_id: "",
-                    next_level_user_id: "",
-                  }));
-                }}
-              />
-            </Grid>
-            <Grid item xs={12} md={6} lg={2}>
-              <Autocomplete
-                disabled={saveSearchFilters.division_id === "" ? true : false}
-                id="sachivalayam"
-                options={searchFilters.sachivalayam}
-                renderInput={(params) => (
-                  <TextField {...params} label="Select Sachivalayam" />
-                )}
-                onChange={(event, value) => {
-                  // console.log("event", event)
-
-                  console.log("value", value);
-                  setSaveSearchFilters({
-                    ...saveSearchFilters,
-
-                    sachivalayam_id: value ? value.sachivalayam_id : "",
-
-                    part_no: "",
-                    village_id: "",
-                    age: "",
-                    user_id: "",
-                    next_level_user_id: "",
-                  });
-                }}
-              />
-            </Grid>
-            <Grid item xs={12} md={6} lg={2}>
-              <Autocomplete
-                disabled={
-                  saveSearchFilters.sachivalayam_id === "" ? true : false
-                }
-                id="partNo"
-                options={searchFilters.partNo}
-                renderInput={(params) => (
-                  <TextField {...params} label="Select Part/Booth No" />
-                )}
-                onChange={(event, value) => {
-                  // console.log("event", event)
-                  console.log("value", value);
-                  setSaveSearchFilters({
-                    ...saveSearchFilters,
-
-                    part_no: value ? value.part_no : "",
-                    village_id: "",
-                    age: "",
-                    user_id: "",
-                    next_level_user_id: "",
-                  });
-                }}
-              />
-            </Grid>
-            <Grid item xs={12} md={6} lg={2}>
-              <Autocomplete
-                disabled={saveSearchFilters.part_no === "" ? true : false}
-                id="village"
-                options={searchFilters.village}
-                renderInput={(params) => (
-                  <TextField {...params} label="Select Village" />
-                )}
-                onChange={(event, value) => {
-                  // console.log("event", event)
-                  console.log("value", value);
-                  setSaveSearchFilters({
-                    ...saveSearchFilters,
-
-                    village_id: value ? value.village_id : "",
-                    age: "",
-                    user_id: "",
-                    next_level_user_id: "",
-                  });
-                }}
-              />
-            </Grid>
-            <Grid item xs={12} md={6} lg={2}>
-              <Autocomplete
-                id="age"
-                options={searchFilters.age}
-                renderInput={(params) => (
-                  <TextField {...params} label="Select Age" />
-                )}
-                onChange={(event, value) => {
-                  // console.log("event", event)
-                  console.log("value", value);
-                  setSaveSearchFilters({
-                    ...saveSearchFilters,
-
-                    age: value ? value.age : "",
-                    user_id: "",
-                    next_level_user_id: "",
-                  });
-                }}
-              />
-            </Grid>
             <Grid item xs={12} md={6} lg={2}>
               <TextField label="Select User" fullWidth select />
             </Grid>
+
             <Grid item xs={12} md={6} lg={2}>
               <TextField label="Select Next Level User" fullWidth select />
             </Grid>
+
             <Grid item xs={12} md={6} lg={2}>
-              <LoadingButton variant="contained">Search</LoadingButton>
+              <LoadingButton type="submit" variant="contained" onClick={onSubmit}>
+                Search
+              </LoadingButton>
             </Grid>
           </Grid>
         </Card>
@@ -389,15 +130,7 @@ const VotingPollDashBoardPage = ({ dashboard }) => {
                 { label: "BJP", value: 1443 },
                 { label: "CONGRESS", value: 1443 },
               ]}
-              chartColors={[
-                YSRCPColor,
-                NETURALColor,
-                TDPColor,
-                JSPColor,
-                BJPColor,
-                CONGRESSColor,
-                OTHERColor,
-              ]}
+              chartColors={[YSRCPColor, NETURALColor, TDPColor, JSPColor, BJPColor, CONGRESSColor, OTHERColor]}
             />
           </Grid>
 
@@ -422,12 +155,7 @@ const VotingPollDashBoardPage = ({ dashboard }) => {
                 { label: "Cancel", value: 876 },
                 { label: "Escalated", value: 2542 },
               ]}
-              chartColors={[
-                OpenColor,
-                ResolvedColor,
-                CancelColor,
-                EscalatedColor,
-              ]}
+              chartColors={[OpenColor, ResolvedColor, CancelColor, EscalatedColor]}
             />
           </Grid>
 
@@ -435,14 +163,7 @@ const VotingPollDashBoardPage = ({ dashboard }) => {
             <BarChartWidget
               title="Ticktes"
               sx={{ height: "100%" }}
-              chartLabels={[
-                "Pakala",
-                "Ramchandrapuram",
-                "Chinnagottigallu",
-                "Chandragiri",
-                "Yerravanipalem",
-                "Tirupathi (Rural)",
-              ]}
+              chartLabels={["Pakala", "Ramchandrapuram", "Chinnagottigallu", "Chandragiri", "Yerravanipalem", "Tirupathi (Rural)"]}
               chartColors={[completedColor, pendingColor]}
               chartData={[
                 {
@@ -468,14 +189,7 @@ const VotingPollDashBoardPage = ({ dashboard }) => {
                 { label: "55-65", value: 2415 },
                 { label: "65+", value: 1443 },
               ]}
-              chartColors={[
-                Age1Color,
-                Age2Color,
-                Age3Color,
-                Age4Color,
-                Age5Color,
-                Age6Color,
-              ]}
+              chartColors={[Age1Color, Age2Color, Age3Color, Age4Color, Age5Color, Age6Color]}
             />
           </Grid>
 
@@ -507,8 +221,8 @@ const VotingPollDashBoardPage = ({ dashboard }) => {
 
 const mapStateToProps = (state) => {
   return {
-    dashboard: state.dashboard,
+    common: state.common,
   };
 };
 
-export default connect(mapStateToProps, null)(VotingPollDashBoardPage);
+export default connect(mapStateToProps, { getAllCommonData })(VotingPollDashBoardPage);

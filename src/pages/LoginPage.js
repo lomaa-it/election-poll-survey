@@ -54,23 +54,18 @@ const useStyles = makeStyles((theme) => ({
 
 const LoginPage = () => {
   const classes = useStyles();
-  const [filersData, setFiltersData] = useState([]);
-
 
   const isDesktop = useResponsive("up", "lg");
-
 
   const fetchFiltersData = async () => {
     const response = await instance.get(getAllMandalRoute);
     const responseData = response.data.message;
     console.log(responseData);
-  }
-
+  };
 
   useEffect(() => {
     fetchFiltersData();
   }, []);
-
 
   return (
     <Page title="Login">
@@ -115,7 +110,7 @@ const LoginPage = () => {
                       <Box component="img" src={PUBLIC_URL + "/static/assets/users.png"} sx={{ width: 80, height: 80 }} />
                     </Box>
 
-                    <Typography variant="h4" gutterBottom >
+                    <Typography variant="h4" gutterBottom>
                       Login
                     </Typography>
 
