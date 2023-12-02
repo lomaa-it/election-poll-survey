@@ -21,9 +21,7 @@ import Sachivalayam from "../../pages/Sachivalayam";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
-const DistrictsList = ({ showAlert }) => {
-  useEffect(() => {}, []);
-
+const DistrictsList = ({ showAlert, districtList }) => {
   const columns = [
     {
       label: "State Name",
@@ -42,6 +40,7 @@ const DistrictsList = ({ showAlert }) => {
     selectableRows: "none",
     responsive: "standard",
   };
+
   const renderEditAndDelete = () => {
     return (
       <Box>
@@ -60,6 +59,11 @@ const DistrictsList = ({ showAlert }) => {
     );
   };
 
+  // convert districtList to muitable format
+  const districtListForTable = districtList.map((district) => {
+    return [district.state_name, district.district_name, renderEditAndDelete()];
+  });
+
   return (
     <Card elevation={1}>
       <Stack>
@@ -68,11 +72,7 @@ const DistrictsList = ({ showAlert }) => {
         <MUIDataTable
           title=""
           columns={columns}
-          data={[
-            ["Andhra Pradesh", "District - 1", renderEditAndDelete()],
-            ["Andhra Pradesh", "District - 1", renderEditAndDelete()],
-            ["Andhra Pradesh", "District - 1", renderEditAndDelete()],
-          ]}
+          data={districtListForTable}
           options={options}
         />
       </Stack>

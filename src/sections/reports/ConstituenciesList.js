@@ -21,8 +21,12 @@ import Sachivalayam from "../../pages/Sachivalayam";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
-const ConstituenciesList = ({ showAlert }) => {
-  useEffect(() => {}, []);
+const ConstituenciesList = ({
+  showAlert,
+  constituenciesList,
+  setConstituenciesList,
+}) => {
+  console.log("constituenciesList", constituenciesList);
 
   const columns = [
     {
@@ -36,6 +40,8 @@ const ConstituenciesList = ({ showAlert }) => {
       label: "Edit/Delete",
     },
   ];
+
+
 
   const options = {
     elevation: 0,
@@ -60,6 +66,16 @@ const ConstituenciesList = ({ showAlert }) => {
     );
   };
 
+    //convert constituenciesList format to MUIDataTable format
+    const constituenciesListForTable = constituenciesList.map((constituency) => {
+      console.log("constituency", constituency);
+      return [
+        constituency.district_name,
+        constituency.consistency_name,
+        renderEditAndDelete(),
+      ];
+    });
+
   return (
     <Card elevation={1}>
       <Stack>
@@ -68,11 +84,7 @@ const ConstituenciesList = ({ showAlert }) => {
         <MUIDataTable
           title=""
           columns={columns}
-          data={[
-            ["District - 1", "constituency - 1", renderEditAndDelete()],
-            ["District - 1", "constituency - 2", renderEditAndDelete()],
-            ["District - 1", "constituency - 3", renderEditAndDelete()],
-          ]}
+          data={constituenciesListForTable}
           options={options}
         />
       </Stack>

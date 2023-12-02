@@ -58,7 +58,7 @@ const StatesPage = ({ dashboard }) => {
   };
 
   return (
-    <Page title="View User">
+    <Page title="States">
       <Container maxWidth="xl">
         <Typography variant="h4" sx={{ mb: 1 }}>
           States
