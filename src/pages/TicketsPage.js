@@ -16,6 +16,7 @@ import TablePagination from "@mui/material/TablePagination";
 
 import Button from "@mui/material/Button";
 import ViewTicketsList from "../sections/reports/ViewTicketsList";
+import SearchByFilter from "../sections/common/SearchByFilter";
 
 function totalStats(name, ofOpen, OfResolved, ofCancelled, ofEscalated) {
   return { name, ofOpen, OfResolved, ofCancelled, ofEscalated };
@@ -47,26 +48,7 @@ const TicketsPage = ({ dashboard }) => {
           <Typography sx={{ pb: 2 }}>Search by filter</Typography>
 
           <Grid container spacing={2} alignItems="center">
-            <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Select Mandal" fullWidth select />
-            </Grid>
-
-            <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Select Division" fullWidth select />
-            </Grid>
-
-            <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Select Sachivalayam" fullWidth select />
-            </Grid>
-
-            <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Select Part/Booth No" fullWidth select />
-            </Grid>
-
-            <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Select Village" fullWidth select />
-            </Grid>
-
+          <SearchByFilter />
             <Grid item xs={12} md={6} lg={2}>
               <TextField label="Select Navaratnalu" fullWidth select />
             </Grid>

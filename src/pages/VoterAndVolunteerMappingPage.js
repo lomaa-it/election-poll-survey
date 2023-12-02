@@ -6,6 +6,7 @@ import { LoadingButton } from "@mui/lab";
 import ViewUsersList from "../sections/reports/ViewUsersList";
 import Button from "@mui/material/Button";
 import VoterAndVolunteerMappingList from "../sections/reports/VoterAndVolunteerMappingList";
+import SearchByFilter from "../sections/common/SearchByFilter";
 
 const VoterAndVolunteerMappingPage = ({ dashboard }) => {
   return (
@@ -19,25 +20,7 @@ const VoterAndVolunteerMappingPage = ({ dashboard }) => {
           <Typography sx={{ pb: 2 }}>Search by filter</Typography>
 
           <Grid container spacing={2} alignItems="center">
-            <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Select Mandal" fullWidth select />
-            </Grid>
-
-            <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Select Division" fullWidth select />
-            </Grid>
-
-            <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Select Sachivalayam" fullWidth select />
-            </Grid>
-
-            <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Select Part/Booth No" fullWidth select />
-            </Grid>
-
-            <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Select Village" fullWidth select />
-            </Grid>
+          <SearchByFilter />
 
             <Grid item xs={12} md={6} lg={2}>
               <LoadingButton variant="contained">Search</LoadingButton>

@@ -10,6 +10,7 @@ import { useState, useEffect } from "react";
 import { getAllVotersRoute } from "../utils/apis";
 import instance from "../utils/axios";
 import { ageDropdown } from "../utils/dropdownconstants";
+import SearchByFilter from "../sections/common/SearchByFilter";
 
 const ViewVoterPage = ({ dashboard }) => {
   const [votersData, setVotersData] = useState([]);
@@ -49,25 +50,7 @@ const ViewVoterPage = ({ dashboard }) => {
           <Typography sx={{ pb: 2 }}>Search by filter</Typography>
 
           <Grid container spacing={2} alignItems="center">
-            <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Select Mandal" fullWidth select />
-            </Grid>
-
-            <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Select Division" fullWidth select />
-            </Grid>
-
-            <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Select Sachivalayam" fullWidth select />
-            </Grid>
-
-            <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Select Part/Booth No" fullWidth select />
-            </Grid>
-            
-            <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Select Village" fullWidth select />
-            </Grid>
+          <SearchByFilter />
 
             <Grid item xs={12} md={6} lg={2}>
               <TextField label="Age Group" fullWidth select>
