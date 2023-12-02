@@ -3,13 +3,7 @@ import { Box, Card, CardHeader } from "@mui/material";
 import { fNumber } from "../../utils/formatNumber";
 import { useChart } from "../../components/chart";
 
-export default function PollResultsBarChartWidget({
-  title,
-  subheader,
-  chartLabels,
-  chartData,
-  ...other
-}) {
+export default function PollResultsBarChartWidget({ title, subheader, chartLabels, chartData, ...other }) {
   const chartOptions = useChart({
     chart: { stacked: true },
     plotOptions: {
@@ -26,7 +20,7 @@ export default function PollResultsBarChartWidget({
     xaxis: {
       categories: chartLabels,
     },
-    colors: ["#00AF50", "#FFFF01", "#FE0000", "#ED7D31", "#000000"], // Add your colors hereAdd your colors here
+    colors: ["#00AF50", "#FFFF01", "#FE0000", "#ED7D31", "#000000"],
   });
 
   return (
@@ -34,12 +28,7 @@ export default function PollResultsBarChartWidget({
       <CardHeader title={title} subheader={subheader} />
 
       <Box sx={{ mx: 3 }} dir="ltr">
-        <ReactApexChart
-          type="bar"
-          series={chartData}
-          options={chartOptions}
-          height={364}
-        />
+        <ReactApexChart type="bar" series={chartData} options={chartOptions} height={364} />
       </Box>
     </Card>
   );

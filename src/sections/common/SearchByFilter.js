@@ -3,9 +3,16 @@ import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { Grid, Container, Typography, Box, TextField, Card, MenuItem } from "@mui/material";
 import { FormProvider, RHFAutoComplete } from "../../components/hook-form";
+import { getAllCommonData } from "../../actions/common";
 
-const SearchByFilter = ({ common, onChanged }) => {
-  const [formValues, setFormValues] = useState({ mandal: null, division: null, sachivalayam: null, partno: null });
+const SearchByFilter = ({ common, getAllCommonData, onChanged }) => {
+  const [formValues, setFormValues] = useState({ mandal: null, division: null, sachivalayam: null, partno: null, village: null });
+
+  useEffect(() => {
+    if (common.mandals.length == 0) {
+      getAllCommonData();
+    }
+  }, []);
 
   const handleChange = (name, value) => {
     const values = {};
@@ -44,7 +51,7 @@ const SearchByFilter = ({ common, onChanged }) => {
   return (
     <>
       <Grid item xs={12} md={6} lg={2}>
-        <RHFAutoComplete name="mandal" label="Select Mandal" value={formValues.mandal} options={common.mandals} getOptionLabel={(option) => option.mandal_name} onChange={handleChange} />
+        <RHFAutoComplete name="mandal" label="Select Mandal" value={formValues.mandal} options={common.mandals} getOptionLabel={(option) => option.mandal_name} onChange={handleChange} loading={common.isLoading} />
       </Grid>
 
       <Grid item xs={12} md={6} lg={2}>
@@ -93,4 +100,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, null)(SearchByFilter);
+export default connect(mapStateToProps, { getAllCommonData })(SearchByFilter);

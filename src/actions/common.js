@@ -1,4 +1,4 @@
-import { getAllDivisionRoute, getAllMandalRoute, getAllSachivalayamRoute, getAllPartsRoute, getAllVillageRoute } from "../utils/apis";
+import { getAllDivisionRoute, getAllMandalRoute, getAllSachivalayamRoute, getAllPartsRoute, getAllVillageRoute, getAllNavaratnaluRoute } from "../utils/apis";
 import instance from "../utils/axios";
 
 export const getAllCommonData = () => async (dispatch) => {
@@ -22,12 +22,16 @@ export const getAllCommonData = () => async (dispatch) => {
     const villageResponse = await instance.get(getAllVillageRoute);
     const villageResponseData = villageResponse.data?.message ?? [];
 
+    const navaratnaluResponse = await instance.get(getAllNavaratnaluRoute);
+    const navaratanaluResponseData = navaratnaluResponse.data?.message ?? [];
+
     const filersData = {
       mandals: mandalsResponseData,
       divisions: divisionsResponseData,
       sachivalayams: sachivalayamResponseData,
       parts: partsResponseData,
       villages: villageResponseData,
+      navaratnalu: navaratanaluResponseData,
     };
 
     console.log(filersData);

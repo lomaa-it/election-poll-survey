@@ -5,42 +5,28 @@ import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
 
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-
-import TablePagination from "@mui/material/TablePagination";
-
-import Button from "@mui/material/Button";
-import ViewTicketsList from "../sections/reports/ViewTicketsList";
 import OpinionPollSurveyList from "../sections/reports/OpinionPollSurveyList";
-import Autocomplete from "@mui/material/Autocomplete";
-import { ageDropdown } from "../utils/dropdownconstants";
 import SearchByFilter from "../sections/common/SearchByFilter";
-import { getAllVotersSurvey } from "../actions/voter";
-import { fi } from "date-fns/locale";
+import { getAllVotersSurvey, clearVoterReducer } from "../actions/voter";
 
-function totalStats(name, ofOpen, OfResolved, ofCancelled, ofEscalated) {
-  return { name, ofOpen, OfResolved, ofCancelled, ofEscalated };
-}
-
-const statsRow = [totalStats("200", "100", "100")];
-
-const OpinionPollSurveyPage = ({ voter, getAllVotersSurvey }) => {
+const OpinionPollSurveyPage = ({ getAllVotersSurvey, clearVoterReducer }) => {
   const [filterValues, setFilterValues] = useState(null);
+  const [isLoading, setLoading] = useState(false);
+
+  useEffect(() => {
+    clearVoterReducer();
+  }, []);
 
   const onSubmit = async () => {
-    console.log(filterValues);
+    setLoading(true);
 
-    getAllVotersSurvey(filterValues);
+    await getAllVotersSurvey(filterValues);
+
+    setLoading(false);
   };
 
   return (
-    <Page title="View Tickets">
+    <Page title="Opinion Survey">
       <Container maxWidth="xl">
         <Typography variant="h4" sx={{ mb: 1 }}>
           Opinion Survey
@@ -68,72 +54,9 @@ const OpinionPollSurveyPage = ({ voter, getAllVotersSurvey }) => {
               <TextField label="Select Next Level User" fullWidth select />
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
-              <LoadingButton variant="contained" onClick={onSubmit}>
+              <LoadingButton loading={isLoading} variant="contained" onClick={onSubmit}>
                 Search
               </LoadingButton>
-            </Grid>
-            <Grid item xs={12} md={6} lg={6}>
-              <TableContainer
-                component={Paper}
-                sx={{
-                  mt: 4,
-                }}
-              >
-                <Table sx={{ minWidth: 650 }} aria-label="caption table">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell
-                        align="center"
-                        sx={{
-                          fontSize: "1.2rem",
-                          fontWeight: "bold",
-                        }}
-                      >
-                        Total Voters
-                      </TableCell>
-                      <TableCell align="center" sx={{ fontSize: "1.2rem", fontWeight: "bold" }}>
-                        Survey Completed
-                      </TableCell>
-                      <TableCell align="center" sx={{ fontSize: "1.2rem", fontWeight: "bold" }}>
-                        Pending
-                      </TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    <TableRow>
-                      <TableCell
-                        align="center"
-                        component="th"
-                        scope="row"
-                        sx={{
-                          color: "blue",
-                          fontSize: "1.2rem",
-                        }}
-                      >
-                        {voter.data.length}
-                      </TableCell>
-                      <TableCell
-                        align="center"
-                        sx={{
-                          color: "blue",
-                          fontSize: "1.2rem",
-                        }}
-                      >
-                        {voter.data.filter((e) => e.intrested_party != null).length}
-                      </TableCell>
-                      <TableCell
-                        align="center"
-                        sx={{
-                          color: "blue",
-                          fontSize: "1.2rem",
-                        }}
-                      >
-                        {voter.data.filter((e) => e.intrested_party == null).length}
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </TableContainer>
             </Grid>
           </Grid>
         </Card>
@@ -150,10 +73,4 @@ const OpinionPollSurveyPage = ({ voter, getAllVotersSurvey }) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    voter: state.voter,
-  };
-};
-
-export default connect(mapStateToProps, { getAllVotersSurvey })(OpinionPollSurveyPage);
+export default connect(null, { getAllVotersSurvey, clearVoterReducer })(OpinionPollSurveyPage);
