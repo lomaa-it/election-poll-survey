@@ -58,16 +58,6 @@ const LoginPage = () => {
 
   const isDesktop = useResponsive("up", "lg");
 
-  const fetchFiltersData = async () => {
-    const response = await instance.get(getAllMandalRoute);
-    const responseData = response.data.message;
-    console.log(responseData);
-  };
-
-  useEffect(() => {
-    fetchFiltersData();
-  }, []);
-
   return (
     <Page title="Login">
       <StyledRoot>

@@ -9,7 +9,7 @@ import PollResultsBarChartWidget from "../sections/opinionPollSurveyResults/Poll
 import SearchByFilter from "../sections/common/SearchByFilter";
 import { getOpinionResults, clearDashboardReducer } from "../actions/dashboard";
 import { BarChartWidget } from "../sections/common";
-import { BJPColor, JSPColor, OTHERColor, TDPColor, YSRCPColor } from "../utils/constants";
+import { BJPColor, CONGRESSColor, JSPColor, NETURALColor, OTHERColor, TDPColor, YSRCPColor } from "../utils/constants";
 
 const OpinionPollSurveyResultsPage = ({ dashboard, getOpinionResults, clearDashboardReducer }) => {
   const [filterValues, setFilterValues] = useState(null);
@@ -70,29 +70,25 @@ const OpinionPollSurveyResultsPage = ({ dashboard, getOpinionResults, clearDashb
             </Grid>
 
             <Grid item xs={12} md={6} lg={12}>
-              {/* <PollResultsBarChartWidget
-                title=""
-                sx={{ height: "100%" }}
-                chartLabels={["YCP", "TDP", "JSP", "BJP", "Others"]}
-                chartData={[
-                  {
-                    name: "Total",
-                    data: ["150", 120, 100, 80, 50],
-                  },
-                ]}
-              /> */}
-
               <BarChartWidget
-                title=""
                 distributed={true}
-                chartLabels={["YCP", "TDP", "JSP", "BJP", "Others"]}
+                withCard={false}
+                chartLabels={["Neutral", "YCP", "TDP", "JSP", "Congress", "BJP", "Others"]}
                 chartData={[
                   {
                     name: "Total",
-                    data: ["150", 120, 100, 80, 50],
+                    data: [
+                      dashboard.opinionResults.reduce((sum, e) => sum + e.neutral, 0),
+                      dashboard.opinionResults.reduce((sum, e) => sum + e.ysrcp, 0),
+                      dashboard.opinionResults.reduce((sum, e) => sum + e.tdp, 0),
+                      dashboard.opinionResults.reduce((sum, e) => sum + e.janasena, 0),
+                      dashboard.opinionResults.reduce((sum, e) => sum + e.congress, 0),
+                      dashboard.opinionResults.reduce((sum, e) => sum + e.bjp, 0),
+                      dashboard.opinionResults.reduce((sum, e) => sum + e.otherss, 0),
+                    ],
                   },
                 ]}
-                colors={[YSRCPColor, TDPColor, JSPColor, BJPColor, OTHERColor]}
+                chartColors={[NETURALColor, YSRCPColor, TDPColor, JSPColor, CONGRESSColor, BJPColor, OTHERColor]}
               />
             </Grid>
           </Grid>

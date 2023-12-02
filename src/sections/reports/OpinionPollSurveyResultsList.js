@@ -109,8 +109,8 @@ const OpinionPollSurveyResultsList = ({ dashboard, showAlert }) => {
           <TableBody>
             <TableRow>
               <TableCell>{dashboard.opinionResults.reduce((sum, e) => sum + e.totalvoters, 0)}</TableCell>
-              <TableCell>{dashboard.opinionResults.reduce((sum, e) => sum + e.ysrcp, 0)}</TableCell>
               <TableCell>{dashboard.opinionResults.reduce((sum, e) => sum + e.neutral, 0)}</TableCell>
+              <TableCell>{dashboard.opinionResults.reduce((sum, e) => sum + e.ysrcp, 0)}</TableCell>
               <TableCell>{dashboard.opinionResults.reduce((sum, e) => sum + e.tdp, 0)}</TableCell>
               <TableCell>{dashboard.opinionResults.reduce((sum, e) => sum + e.janasena, 0)}</TableCell>
               <TableCell>{dashboard.opinionResults.reduce((sum, e) => sum + e.congress, 0)}</TableCell>
