@@ -16,7 +16,7 @@ import TablePagination from "@mui/material/TablePagination";
 
 import Button from "@mui/material/Button";
 
-import BarChartWidget from "../sections/dashboard/BarChartWidget";
+import { BarChartWidget } from "../sections/common";
 import VotingPollSurveyResultsBarChartWidget from "../sections/votingPollSurveyResults/VotingPollSurveyResultsBarChartWidget";
 import VotingPollSurveyResultsList from "../sections/reports/VotingPollSurveyResultsList";
 import SearchByFilter from "../sections/common/SearchByFilter";

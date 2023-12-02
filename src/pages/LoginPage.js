@@ -10,7 +10,8 @@ import instance from "../utils/axios";
 import { getAllMandalRoute } from "../utils/apis";
 
 const StyledRoot = styled("div")(({ theme }) => ({
-  background: "linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.5)) center center / cover no-repeat, url('" + PUBLIC_URL + "/static/images/crowd.jpg') no-repeat center",
+  // background: "linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.5)) center center / cover no-repeat, url('" + PUBLIC_URL + "/static/images/crowd.jpg') no-repeat center",
+  background: "url('" + PUBLIC_URL + "/static/images/crowd.jpg') no-repeat center",
   backgroundSize: "cover",
 }));
 

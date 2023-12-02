@@ -3,8 +3,7 @@ import { Grid, Container, Typography, Box, TextField, Card, MenuItem } from "@mu
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
-import { PieChartWidget } from "../sections/dashboard";
-import BarChartWidget from "../sections/dashboard/BarChartWidget";
+import { BarChartWidget, PieChartWidget } from "../sections/common";
 import {
   Age1Color,
   Age2Color,

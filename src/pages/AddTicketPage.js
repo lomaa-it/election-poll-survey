@@ -1,99 +1,144 @@
-import { Grid, Container, Typography, Box, TextField, Card, InputAdornment } from "@mui/material";
-import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
-import CloudUploadRoundedIcon from "@mui/icons-material/CloudUploadRounded";
-
+import * as Yup from "yup";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { Grid, Container, Typography, Box, TextField, Card, InputAdornment, IconButton, MenuItem } from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
-import { Link } from "react-router-dom";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { useLocation, useNavigate } from "react-router-dom";
+import { FormProvider, RHFTextField } from "../components/hook-form";
 
-const AddTicketPage = ({ dashboard }) => {
+import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
+import CloudUploadRoundedIcon from "@mui/icons-material/CloudUploadRounded";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { addVoterTicket } from "../actions/voter";
+import { showAlert } from "../actions/alert";
+
+const AddTicketPage = ({ common, voter, showAlert }) => {
+  const navigate = useNavigate();
+  const props = useLocation().state;
+
+  const [isLoading, setLoading] = useState(false);
+
+  const schema = Yup.object().shape({
+    navaratnalu_id: Yup.string().required("Navaratnalu is required"),
+    reason: Yup.string().required("Reason is required"),
+  });
+
+  const defaultValues = {
+    navaratnalu_id: "",
+    reason: "",
+  };
+
+  const methods = useForm({
+    resolver: yupResolver(schema),
+    defaultValues,
+  });
+
+  const { handleSubmit, reset } = methods;
+
+  const onSubmit = async (data) => {
+    setLoading(true);
+    var result = await addVoterTicket(props[0], data);
+    setLoading(false);
+
+    if (result) {
+      showAlert({ text: "Ticket submitted", color: "success" });
+      reset();
+    }
+  };
+
   return (
     <Page title="Add Ticket">
       <Container maxWidth="xl">
-        <Typography variant="h4" sx={{ mb: 1 }}>
-          <Link to="/opinion-poll-survey">
-            <ArrowBackIcon />
-          </Link>
-          {"   "}
-          Add Ticket
-        </Typography>
-        <Card sx={{ p: 3 }}>
-          <Typography variant="h6" sx={{ mb: 2 }}>
-            Voter info : V Rama krishna (Ph: 1234567890)
+        <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+          <Typography variant="h4" sx={{ mb: 1, display: "flex", alignItems: "center" }}>
+            <IconButton onClick={() => navigate(-1)}>
+              <ArrowBackIcon />
+            </IconButton>
+            Add Ticket
           </Typography>
 
-          <Typography sx={{ pb: 2 }}>Basic Info</Typography>
+          <Card sx={{ p: 3 }}>
+            <Typography variant="h6" sx={{ mb: 2 }}>
+              Voter info : {props[3]} (Ph: {props[6]})
+            </Typography>
 
-          <Grid container spacing={2} alignItems="start">
-            <Grid item xs={12} md={6} lg={3}>
-              <TextField label="Navaratnalu ID" fullWidth select />
-            </Grid>
+            <Typography sx={{ pb: 2 }}>Basic Info</Typography>
 
-            <Grid item xs={12} md={6} lg={9}>
-              <TextField label="Write Reason..." fullWidth multiline rows={4} rowsMax={8} />
-            </Grid>
-          </Grid>
-        </Card>
-        <Card sx={{ p: 3, mt: 3 }}>
-          <Typography sx={{ pb: 2 }}>Attachements Info</Typography>
+            <Grid container spacing={2} alignItems="start">
+              <Grid item xs={12} md={6} lg={3}>
+                <RHFTextField name="navaratnalu_id" label="Navaratnalu ID" select>
+                  {common.navaratnalu.map((item, index) => (
+                    <MenuItem key={index} value={item.navaratnalu_pk}>
+                      {item.navaratnalu_name}
+                    </MenuItem>
+                  ))}
+                </RHFTextField>
+              </Grid>
 
-          <Grid container spacing={2} alignItems="center">
-            <Grid item xs={12} md={6} lg={3}>
-              <TextField
-                label="Select Attachment *"
-                fullWidth
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <CloudUploadRoundedIcon />
-                    </InputAdornment>
-                  ),
-                }}
-              />
+              <Grid item xs={12} md={6} lg={9}>
+                <RHFTextField name="reason" label="Write Reason..." fullWidth multiline rows={4} />
+              </Grid>
             </Grid>
-            <Grid item xs={12} md={6} lg={3}>
-              <TextField label="Attachment Type *" fullWidth select />
-            </Grid>
-            <Grid item xs={12} md={6} lg={3}>
-              <TextField label="Attachment URL" fullWidth />
-            </Grid>{" "}
-            <Grid item xs={12} md={6} lg={3}>
-              <AddCircleRoundedIcon
+          </Card>
+
+          <Box p={1} />
+
+          <Card sx={{ p: 3 }}>
+            <Typography sx={{ pb: 2 }}>Attachements Info</Typography>
+
+            <Grid container spacing={2} alignItems="center">
+              <Grid item xs={12} md={6} lg={3}>
+                <TextField
+                  label="Select Attachment *"
+                  fullWidth
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <CloudUploadRoundedIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12} md={6} lg={3}>
+                <TextField label="Attachment Type *" fullWidth select />
+              </Grid>
+              <Grid item xs={12} md={6} lg={3}>
+                <TextField label="Attachment URL" fullWidth />
+              </Grid>
+
+              <Grid item xs={12} md={6} lg={3}>
+                <AddCircleRoundedIcon
+                  sx={{
+                    color: "#878F96",
+                    marginLeft: "25px",
+                    fontSize: "55px",
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12} md={6} lg={9}>
+                <TextField label="Attachements Description..." fullWidth multiline rows={4} />
+              </Grid>
+              <Grid
+                item
+                xs={12}
+                md={6}
+                lg={3}
                 sx={{
-                  color: "#878F96",
-
-                  marginLeft: "25px",
-                  fontSize: "55px",
-                }}
-              />
-            </Grid>
-            <Grid item xs={12} md={6} lg={9}>
-              <TextField label="Attachements Description..." fullWidth multiline rows={4} rowsMax={8} />
-            </Grid>
-            <Grid
-              item
-              xs={12}
-              md={6}
-              lg={3}
-              sx={{
-                marginLeft: "auto",
-                marginTop: "55px",
-              }}
-            >
-              <LoadingButton
-                variant="contained"
-                sx={{
-                  padding: "15px 40px",
+                  ml: "auto",
+                  mt: "55px",
                 }}
               >
-                Submit
-              </LoadingButton>
+                <LoadingButton type="submit" loading={isLoading} variant="contained">
+                  Submit
+                </LoadingButton>
+              </Grid>
             </Grid>
-          </Grid>
-        </Card>
-        <Box p={1} />
+          </Card>
+        </FormProvider>
       </Container>
     </Page>
   );
@@ -101,8 +146,9 @@ const AddTicketPage = ({ dashboard }) => {
 
 const mapStateToProps = (state) => {
   return {
-    dashboard: state.dashboard,
+    common: state.common,
+    voter: state.voter,
   };
 };
 
-export default connect(mapStateToProps, null)(AddTicketPage);
+export default connect(mapStateToProps, { showAlert })(AddTicketPage);

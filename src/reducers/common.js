@@ -5,6 +5,7 @@ const initialState = {
   sachivalayams: [],
   parts: [],
   villages: [],
+  navaratnalu: [],
   errorMessage: null,
 };
 
@@ -20,6 +21,7 @@ export default function commonReducer(state = initialState, action) {
         sachivalayams: [],
         parts: [],
         villages: [],
+        navaratnalu: [],
         errorMessage: null,
       };
 

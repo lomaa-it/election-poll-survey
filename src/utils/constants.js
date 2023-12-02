@@ -4,7 +4,7 @@ export const JSPColor = "#E8232A";
 export const BJPColor = "#F97D09";
 export const CONGRESSColor = "#C1DD66";
 export const NETURALColor = "grey";
-export const OTHERColor = "#0772E2";
+export const OTHERColor = "black";
 
 export const HeaderColor = "rgb(1, 49, 87)";
 

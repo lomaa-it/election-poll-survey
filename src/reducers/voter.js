@@ -36,6 +36,13 @@ export default function voterReducer(state = initialState, action) {
       }
       return { ...state };
 
+    case "VOTER_CLEAR_SUCCESS":
+      return {
+        isLoading: false,
+        data: [],
+        errorMessage: null,
+      };
+
     default:
       return state;
   }

@@ -1,47 +1,28 @@
 import { useEffect, useState } from "react";
-import { Grid, Container, Typography, Box, TextField, Card, MenuItem } from "@mui/material";
+import { Grid, Container, Typography, Box, TextField, Card, MenuItem, CircularProgress } from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
-import { PieChartWidget } from "../sections/dashboard";
-import BarChartWidget from "../sections/dashboard/BarChartWidget";
-import {
-  Age1Color,
-  Age2Color,
-  Age3Color,
-  Age4Color,
-  Age5Color,
-  Age6Color,
-  BJPColor,
-  CONGRESSColor,
-  CancelColor,
-  EscalatedColor,
-  FemaleColor,
-  JSPColor,
-  MaleColor,
-  NETURALColor,
-  NotStartedColor,
-  OTHERColor,
-  OpenColor,
-  ResolvedColor,
-  StartedColor,
-  TDPColor,
-  TransgenderColor,
-  YSRCPColor,
-  completedColor,
-  pendingColor,
-} from "../utils/constants";
-import { getAllCommonData } from "../actions/common";
+import { BarChartWidget, PieChartWidget } from "../sections/common";
+import * as Colors from "../utils/constants";
 import SearchByFilter from "../sections/common/SearchByFilter";
 import { LoadingButton } from "@mui/lab";
 import { ageDropdown } from "../utils/dropdownconstants";
+import { getOpinionDashboard, clearDashboardReducer } from "../actions/dashboard";
 
-const DashboardApp = ({ common, getAllCommonData }) => {
+const DashboardApp = ({ dashboard, getOpinionDashboard, clearDashboardReducer }) => {
+  const [filterValues, setFilterValues] = useState(null);
+  const [isLoading, setLoading] = useState(false);
+
   useEffect(() => {
-    getAllCommonData();
+    clearDashboardReducer();
   }, []);
 
-  const onSubmit = async (data) => {
-    // console.log(formValues);
+  const onSubmit = async () => {
+    setLoading(true);
+
+    await getOpinionDashboard(filterValues);
+
+    setLoading(false);
   };
 
   return (
@@ -55,7 +36,7 @@ const DashboardApp = ({ common, getAllCommonData }) => {
           <Typography sx={{ pb: 2 }}>Search by filter</Typography>
 
           <Grid container spacing={2} alignItems="center">
-            <SearchByFilter />
+            <SearchByFilter onChanged={(value) => setFilterValues(value)} />
 
             <Grid item xs={12} md={6} lg={2}>
               <TextField name="age" label="Select Age" fullWidth select>
@@ -76,7 +57,7 @@ const DashboardApp = ({ common, getAllCommonData }) => {
             </Grid>
 
             <Grid item xs={12} md={6} lg={2}>
-              <LoadingButton type="submit" variant="contained" onClick={onSubmit}>
+              <LoadingButton loading={isLoading} variant="contained" onClick={onSubmit}>
                 Search
               </LoadingButton>
             </Grid>
@@ -85,114 +66,122 @@ const DashboardApp = ({ common, getAllCommonData }) => {
 
         <Box p={1} />
 
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={6} lg={4}>
-            <PieChartWidget
-              title="Total Voters"
-              chartData={[
-                { label: "Male", value: 4344 },
-                { label: "Female", value: 5435 },
-                { label: "Transgender", value: 1443 },
-              ]}
-              chartColors={[MaleColor, FemaleColor, TransgenderColor]}
-            />
-          </Grid>
+        {dashboard.isLoading && (
+          <Box minHeight={200} display="flex" justifyContent="center" alignItems="center">
+            <CircularProgress />
+          </Box>
+        )}
 
-          <Grid item xs={12} md={6} lg={4}>
-            <PieChartWidget
-              title="Voters Pulse"
-              chartData={[
-                { label: "YSRCP", value: 4344 },
-                { label: "NETURAL", value: 5435 },
-                { label: "TDP", value: 1443 },
-                { label: "JANASENA", value: 1443 },
-                { label: "BJP", value: 1443 },
-                { label: "CONGRESS", value: 1443 },
-              ]}
-              chartColors={[YSRCPColor, NETURALColor, TDPColor, JSPColor, BJPColor, CONGRESSColor, OTHERColor]}
-            />
-          </Grid>
+        {!dashboard.isLoading && (
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={6} lg={4}>
+              <PieChartWidget
+                title="Total Voters"
+                chartData={[
+                  { label: "Male", value: dashboard.opinion?.gender?.["male"] ?? 0 },
+                  { label: "Female", value: dashboard.opinion?.gender?.["female"] ?? 0 },
+                  { label: "Transgender", value: dashboard.opinion?.gender?.["tg"] ?? 0 },
+                ]}
+                chartColors={[Colors.MaleColor, Colors.FemaleColor, Colors.TransgenderColor]}
+              />
+            </Grid>
 
-          <Grid item xs={12} md={6} lg={4}>
-            <PieChartWidget
-              title="Survey Status"
-              chartData={[
-                { label: "Started", value: 6966 },
-                { label: "Not Started", value: 2542 },
-              ]}
-              chartColors={[StartedColor, NotStartedColor]}
-            />
-          </Grid>
+            <Grid item xs={12} md={6} lg={4}>
+              <PieChartWidget
+                title="Voters Pulse"
+                chartData={[
+                  { label: "YSRCP", value: dashboard.opinion?.opnion_votes?.["ysrcp"] ?? 0 },
+                  { label: "NETURAL", value: dashboard.opinion?.opnion_votes?.["neutral"] ?? 0 },
+                  { label: "TDP", value: dashboard.opinion?.opnion_votes?.["tdp"] ?? 0 },
+                  { label: "JANASENA", value: dashboard.opinion?.opnion_votes?.["janasena"] ?? 0 },
+                  { label: "BJP", value: dashboard.opinion?.opnion_votes?.["bjp"] ?? 0 },
+                  { label: "CONGRESS", value: dashboard.opinion?.opnion_votes?.["congress"] ?? 0 },
+                ]}
+                chartColors={[Colors.YSRCPColor, Colors.NETURALColor, Colors.TDPColor, Colors.JSPColor, Colors.BJPColor, Colors.CONGRESSColor, Colors.OTHERColor]}
+              />
+            </Grid>
 
-          <Grid item xs={12} md={6} lg={4}>
-            <PieChartWidget
-              title="Ticket Status"
-              type="donut"
-              chartData={[
-                { label: "Open", value: 6966 },
-                { label: "Resolved", value: 456 },
-                { label: "Cancel", value: 876 },
-                { label: "Escalated", value: 2542 },
-              ]}
-              chartColors={[OpenColor, ResolvedColor, CancelColor, EscalatedColor]}
-            />
-          </Grid>
+            <Grid item xs={12} md={6} lg={4}>
+              <PieChartWidget
+                title="Survey Status"
+                chartData={[
+                  { label: "Started", value: dashboard.opinion?.survey?.["surveysDone"] ?? 0 },
+                  { label: "Not Started", value: dashboard.opinion?.survey?.["surveysNotDone"] ?? 0 },
+                ]}
+                chartColors={[Colors.StartedColor, Colors.NotStartedColor]}
+              />
+            </Grid>
 
-          <Grid item xs={12} md={6} lg={8}>
-            <BarChartWidget
-              title="Ticktes"
-              sx={{ height: "100%" }}
-              chartLabels={["Pakala", "Ramchandrapuram", "Chinnagottigallu", "Chandragiri", "Yerravanipalem", "Tirupathi (Rural)"]}
-              chartColors={[completedColor, pendingColor]}
-              chartData={[
-                {
-                  name: "Completed",
-                  data: [21, 7, 25, 13, 22, 8],
-                },
-                {
-                  name: "Pending",
-                  data: [7, 7, 5, 13, 7, 3],
-                },
-              ]}
-            />{" "}
-          </Grid>
+            <Grid item xs={12} md={6} lg={4}>
+              <PieChartWidget
+                title="Ticket Status"
+                type="donut"
+                chartData={[
+                  { label: "Open", value: 6966 },
+                  { label: "Resolved", value: 456 },
+                  { label: "Cancel", value: 876 },
+                  { label: "Escalated", value: 2542 },
+                ]}
+                chartColors={[Colors.OpenColor, Colors.ResolvedColor, Colors.CancelColor, Colors.EscalatedColor]}
+              />
+            </Grid>
 
-          <Grid item xs={12} md={6} lg={4}>
-            <PieChartWidget
-              title="Age Wise Voters"
-              chartData={[
-                { label: "18-25", value: 4344 },
-                { label: "25-35", value: 5435 },
-                { label: "35-45", value: 2452 },
-                { label: "45-55", value: 1443 },
-                { label: "55-65", value: 2415 },
-                { label: "65+", value: 1443 },
-              ]}
-              chartColors={[Age1Color, Age2Color, Age3Color, Age4Color, Age5Color, Age6Color]}
-            />
-          </Grid>
+            <Grid item xs={12} md={6} lg={8}>
+              <BarChartWidget
+                title="Ticktes"
+                sx={{ height: "100%" }}
+                chartLabels={["Pakala", "Ramchandrapuram", "Chinnagottigallu", "Chandragiri", "Yerravanipalem", "Tirupathi (Rural)"]}
+                chartColors={[Colors.completedColor, Colors.pendingColor]}
+                chartData={[
+                  {
+                    name: "Completed",
+                    data: [21, 7, 25, 13, 22, 8],
+                  },
+                  {
+                    name: "Pending",
+                    data: [7, 7, 5, 13, 7, 3],
+                  },
+                ]}
+              />
+            </Grid>
 
-          <Grid item xs={12} md={6} lg={4}>
-            <PieChartWidget
-              title="New Voter Registrations"
-              chartData={[
-                { label: "New Registrations", value: 9582 },
-                { label: "Pending", value: 2542 },
-                { label: "Resolved", value: 3698 },
-              ]}
-            />
-          </Grid>
+            <Grid item xs={12} md={6} lg={4}>
+              <PieChartWidget
+                title="Age Wise Voters"
+                chartData={[
+                  { label: "18-25", value: dashboard.opinion?.age?.["18-25"] ?? 0 },
+                  { label: "25-35", value: dashboard.opinion?.age?.["26-35"] ?? 0 },
+                  { label: "35-45", value: dashboard.opinion?.age?.["36-45"] ?? 0 },
+                  { label: "45-55", value: dashboard.opinion?.age?.["46-55"] ?? 0 },
+                  { label: "55-65", value: dashboard.opinion?.age?.["56-65"] ?? 0 },
+                  { label: "65+", value: dashboard.opinion?.age?.["66-66+"] ?? 0 },
+                ]}
+                chartColors={[Colors.Age1Color, Colors.Age2Color, Colors.Age3Color, Colors.Age4Color, Colors.Age5Color, Colors.Age6Color]}
+              />
+            </Grid>
 
-          <Grid item xs={12} md={6} lg={4}>
-            <PieChartWidget
-              title="Residental Status"
-              chartData={[
-                { label: "Residental", value: 9582 },
-                { label: "Non Residental", value: 2542 },
-              ]}
-            />
+            <Grid item xs={12} md={6} lg={4}>
+              <PieChartWidget
+                title="New Voter Registrations"
+                chartData={[
+                  { label: "New Registrations", value: dashboard.opinion?.registrations?.["new"] ?? 0 },
+                  { label: "Pending", value: dashboard.opinion?.registrations?.["pending"] ?? 0 },
+                  { label: "Resolved", value: dashboard.opinion?.registrations?.["resolved"] ?? 0 },
+                ]}
+              />
+            </Grid>
+
+            <Grid item xs={12} md={6} lg={4}>
+              <PieChartWidget
+                title="Residental Status"
+                chartData={[
+                  { label: "Residental", value: dashboard.opinion?.residential?.["residential"] ?? 0 },
+                  { label: "Non Residental", value: dashboard.opinion?.residential?.["nonresidential"] ?? 0 },
+                ]}
+              />
+            </Grid>
           </Grid>
-        </Grid>
+        )}
       </Container>
     </Page>
   );
@@ -200,8 +189,8 @@ const DashboardApp = ({ common, getAllCommonData }) => {
 
 const mapStateToProps = (state) => {
   return {
-    common: state.common,
+    dashboard: state.dashboard,
   };
 };
 
-export default connect(mapStateToProps, { getAllCommonData })(DashboardApp);
+export default connect(mapStateToProps, { getOpinionDashboard, clearDashboardReducer })(DashboardApp);

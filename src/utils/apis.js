@@ -14,9 +14,13 @@ export const getAllSachivalayamRoute = "/sachivalayam/getall";
 export const getAllPartsRoute = "/parts/getall";
 export const getAllVillageRoute = "/villages/getall";
 
+export const getOpinionDashboardRoute = "/getopinionpolldashboard";
+export const getOpinionResultRoute = "/getopinionreports";
 
 export const getAllVotorsSurveyRoute = "/getallvoterswithjoinandwhere";
 export const changeOpinionPollRoute = "/poll_survey";
+
+export const getAllNavaratnaluRoute = "/navaratnalu/getall";
 
 // GET BY ID
 export const getDivisionsById = "/divisions-get-by-id/";
@@ -24,12 +28,10 @@ export const getSachivalayamById = "/sachivalayam-get-by-id/";
 export const getPartsById = "/parts-get-by-id/";
 export const getVillageById = "/villages-get-by-id/";
 
-
 export const createStatesRoute = "/states/";
 
 // Delete By Id
 export const deleteStatesByIdRoute = "/states/";
-
 
 // Update By Id
 export const updateStatesByIdRoute = "/states/";
