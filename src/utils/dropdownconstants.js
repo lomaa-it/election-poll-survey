@@ -15,6 +15,9 @@ export const ageDropdown = [
     label: "55-65",
   },
   {
-    label: "65+",
+    label: "65-80",
   },
+  {
+    label: "80+",
+  }
 ];

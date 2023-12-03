@@ -2,7 +2,17 @@ import * as Yup from "yup";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Grid, Container, Typography, Box, TextField, Card, InputAdornment, IconButton, MenuItem } from "@mui/material";
+import {
+  Grid,
+  Container,
+  Typography,
+  Box,
+  TextField,
+  Card,
+  InputAdornment,
+  IconButton,
+  MenuItem,
+} from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -53,11 +63,14 @@ const AddTicketPage = ({ common, voter, showAlert }) => {
     <Page title="Add Ticket">
       <Container maxWidth="xl">
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-          <Typography variant="h4" sx={{ mb: 1, display: "flex", alignItems: "center" }}>
+          <Typography
+            variant="h4"
+            sx={{ mb: 1, display: "flex", alignItems: "center" }}
+          >
             <IconButton onClick={() => navigate(-1)}>
               <ArrowBackIcon />
             </IconButton>
-            Add Ticket
+            Create Ticket
           </Typography>
 
           <Card sx={{ p: 3 }}>
@@ -69,7 +82,11 @@ const AddTicketPage = ({ common, voter, showAlert }) => {
 
             <Grid container spacing={2} alignItems="start">
               <Grid item xs={12} md={6} lg={3}>
-                <RHFTextField name="navaratnalu_id" label="Navaratnalu ID" select>
+                <RHFTextField
+                  name="navaratnalu_id"
+                  label="Navaratnalu ID"
+                  select
+                >
                   {common.navaratnalu.map((item, index) => (
                     <MenuItem key={index} value={item.navaratnalu_pk}>
                       {item.navaratnalu_name}
@@ -79,7 +96,13 @@ const AddTicketPage = ({ common, voter, showAlert }) => {
               </Grid>
 
               <Grid item xs={12} md={6} lg={9}>
-                <RHFTextField name="reason" label="Write Reason..." fullWidth multiline rows={4} />
+                <RHFTextField
+                  name="reason"
+                  label="Write Reason..."
+                  fullWidth
+                  multiline
+                  rows={4}
+                />
               </Grid>
             </Grid>
           </Card>
@@ -120,7 +143,12 @@ const AddTicketPage = ({ common, voter, showAlert }) => {
                 />
               </Grid>
               <Grid item xs={12} md={6} lg={9}>
-                <TextField label="Attachements Description..." fullWidth multiline rows={4} />
+                <TextField
+                  label="Attachements Description..."
+                  fullWidth
+                  multiline
+                  rows={4}
+                />
               </Grid>
               <Grid
                 item
@@ -132,7 +160,11 @@ const AddTicketPage = ({ common, voter, showAlert }) => {
                   mt: "55px",
                 }}
               >
-                <LoadingButton type="submit" loading={isLoading} variant="contained">
+                <LoadingButton
+                  type="submit"
+                  loading={isLoading}
+                  variant="contained"
+                >
                   Submit
                 </LoadingButton>
               </Grid>

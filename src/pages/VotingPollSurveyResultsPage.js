@@ -1,5 +1,14 @@
 import { useEffect, useState } from "react";
-import { Grid, Container, Typography, Box, TextField, Card, CardHeader, MenuItem } from "@mui/material";
+import {
+  Grid,
+  Container,
+  Typography,
+  Box,
+  TextField,
+  Card,
+  CardHeader,
+  MenuItem,
+} from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -20,12 +29,35 @@ import { BarChartWidget } from "../sections/common";
 import VotingPollSurveyResultsBarChartWidget from "../sections/votingPollSurveyResults/VotingPollSurveyResultsBarChartWidget";
 import VotingPollSurveyResultsList from "../sections/reports/VotingPollSurveyResultsList";
 import SearchByFilter from "../sections/common/SearchByFilter";
+import { searchFiltercolor } from "../constants";
 
-function totalStats(totalVotes, ycpVotes, male, female, neutral, tdp, jsp, bjp, others) {
+function totalStats(
+  totalVotes,
+  ycpVotes,
+  male,
+  female,
+  neutral,
+  tdp,
+  jsp,
+  bjp,
+  others
+) {
   return { totalVotes, ycpVotes, male, female, neutral, tdp, jsp, bjp, others };
 }
 
-const statsRow = [totalStats("3,00,000", "8888", "4444", "4444", "666", "22", "55", "11", "6666")];
+const statsRow = [
+  totalStats(
+    "3,00,000",
+    "8888",
+    "4444",
+    "4444",
+    "666",
+    "22",
+    "55",
+    "11",
+    "6666"
+  ),
+];
 
 const VotingPollSurveyResultsPage = ({ dashboard }) => {
   const [page, setPage] = useState(0);
@@ -46,7 +78,7 @@ const VotingPollSurveyResultsPage = ({ dashboard }) => {
         <Typography variant="h4" sx={{ mb: 1 }}>
           Voting Poll Survey Results
         </Typography>
-        <Card sx={{ p: 3, mb: 3 }}>
+        <Card sx={{ p: 3, mb: 3, backgroundColor: searchFiltercolor }}>
           <Typography sx={{ pb: 2 }}>Search by filter</Typography>
 
           <Grid container spacing={2} alignItems="center">
@@ -134,28 +166,52 @@ const VotingPollSurveyResultsPage = ({ dashboard }) => {
                 >
                   Constituency Votes
                 </TableCell>
-                <TableCell align="center" sx={{ fontSize: "1.2rem", fontWeight: "bold" }}>
+                <TableCell
+                  align="center"
+                  sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
+                >
                   YCP Votes
                 </TableCell>
-                <TableCell align="center" sx={{ fontSize: "1.2rem", fontWeight: "bold" }}>
+                <TableCell
+                  align="center"
+                  sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
+                >
                   Male
                 </TableCell>
-                <TableCell align="center" sx={{ fontSize: "1.2rem", fontWeight: "bold" }}>
+                <TableCell
+                  align="center"
+                  sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
+                >
                   Female
                 </TableCell>
-                <TableCell align="center" sx={{ fontSize: "1.2rem", fontWeight: "bold" }}>
+                <TableCell
+                  align="center"
+                  sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
+                >
                   Neutral
                 </TableCell>
-                <TableCell align="center" sx={{ fontSize: "1.2rem", fontWeight: "bold" }}>
+                <TableCell
+                  align="center"
+                  sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
+                >
                   TDP
                 </TableCell>
-                <TableCell align="center" sx={{ fontSize: "1.2rem", fontWeight: "bold" }}>
+                <TableCell
+                  align="center"
+                  sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
+                >
                   JSP
                 </TableCell>
-                <TableCell align="center" sx={{ fontSize: "1.2rem", fontWeight: "bold" }}>
+                <TableCell
+                  align="center"
+                  sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
+                >
                   BJP
                 </TableCell>
-                <TableCell align="center" sx={{ fontSize: "1.2rem", fontWeight: "bold" }}>
+                <TableCell
+                  align="center"
+                  sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
+                >
                   Others
                 </TableCell>
               </TableRow>

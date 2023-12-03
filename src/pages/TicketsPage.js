@@ -17,6 +17,7 @@ import TablePagination from "@mui/material/TablePagination";
 import Button from "@mui/material/Button";
 import ViewTicketsList from "../sections/reports/ViewTicketsList";
 import SearchByFilter from "../sections/common/SearchByFilter";
+import { searchFiltercolor } from "../constants";
 
 function totalStats(name, ofOpen, OfResolved, ofCancelled, ofEscalated) {
   return { name, ofOpen, OfResolved, ofCancelled, ofEscalated };
@@ -44,17 +45,23 @@ const TicketsPage = ({ dashboard }) => {
           View Tickets
         </Typography>
 
-        <Card sx={{ p: 3 }}>
+        <Card sx={{ p: 3, backgroundColor: searchFiltercolor }}>
           <Typography sx={{ pb: 2 }}>Search by filter</Typography>
 
           <Grid container spacing={2} alignItems="center">
           <SearchByFilter />
             <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Select Navaratnalu" fullWidth select />
+              <TextField label="Select Navaratnalu" fullWidth select  sx={{
+                  backgroundColor: "#fff",
+                  borderRadius: "5px",
+                }}/>
             </Grid>
 
             <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Ticket Status" fullWidth select />
+              <TextField label="Ticket Status" fullWidth select  sx={{
+                  backgroundColor: "#fff",
+                  borderRadius: "5px",
+                }}/>
             </Grid>
 
             <Grid item xs={12} md={6} lg={2}>

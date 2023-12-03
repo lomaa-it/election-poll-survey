@@ -8,6 +8,8 @@ import SearchByFilter from "../common/SearchByFilter";
 import { getOpinionResults, clearDashboardReducer } from "../../actions/dashboard";
 import { BarChartWidget } from "../common";
 import { BJPColor, CONGRESSColor, JSPColor, NETURALColor, OTHERColor, TDPColor, YSRCPColor } from "../../utils/constants";
+import { searchFiltercolor } from "../../constants";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 const SurveyReportsList = ({ dashboard, getOpinionResults, clearDashboardReducer }) => {
   const [filterValues, setFilterValues] = useState(null);
@@ -149,20 +151,41 @@ const SurveyReportsList = ({ dashboard, getOpinionResults, clearDashboardReducer
     responsive: "standard",
   };
 
+  const getMuiTheme = () =>
+  createTheme({
+    components: {
+      MUIDataTableHeadCell: {
+        styleOverrides: {
+          root: {
+            backgroundColor: searchFiltercolor,
+          },
+        },
+      },
+    },
+  });
+
+
+
   return (
     <>
-      <Card sx={{ p: 3 }}>
+      <Card sx={{ p: 3, backgroundColor: searchFiltercolor }}>
         <Typography sx={{ pb: 2 }}>Search by filter</Typography>
 
         <Grid container spacing={2} alignItems="center">
           <SearchByFilter onChanged={(value) => setFilterValues(value)} />
 
           <Grid item xs={12} md={6} lg={2}>
-            <TextField label="Select User" fullWidth select />
+            <TextField label="Select User" fullWidth select  sx={{
+                  backgroundColor: "#fff",
+                  borderRadius: "5px",
+                }}/>
           </Grid>
 
           <Grid item xs={12} md={6} lg={2}>
-            <TextField label="Select Next Level User" fullWidth select />
+            <TextField label="Select Next Level User" fullWidth select  sx={{
+                  backgroundColor: "#fff",
+                  borderRadius: "5px",
+                }}/>
           </Grid>
 
           <Grid item xs={12} md={6} lg={2}>
@@ -208,8 +231,9 @@ const SurveyReportsList = ({ dashboard, getOpinionResults, clearDashboardReducer
             </Box>
 
             <Divider />
-
+            <ThemeProvider  theme={getMuiTheme()}>
             <MUIDataTable title="Opinion Reports" columns={columns} data={dashboard.opinionResults} options={options} />
+            </ThemeProvider>
           </>
         )}
       </Card>

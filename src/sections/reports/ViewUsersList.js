@@ -10,6 +10,7 @@ import {
   Chip,
   TextField,
 } from "@mui/material";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { CheckBox } from "@mui/icons-material";
 import MUIDataTable from "mui-datatables";
 import { connect } from "react-redux";
@@ -19,6 +20,7 @@ import ViewUserPage from "../../pages/ViewUserPage";
 
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import { searchFiltercolor } from "../../constants";
 
 const ViewUsersList = ({ showAlert, usersData }) => {
   useEffect(() => {}, []);
@@ -83,17 +85,30 @@ const ViewUsersList = ({ showAlert, usersData }) => {
     return [renderCheckBox(), ...item, renderEditAndDelete()];
   });
 
+  const getMuiTheme = () =>
+    createTheme({
+      components: {
+        MUIDataTableHeadCell: {
+          styleOverrides: {
+            root: {
+              backgroundColor: searchFiltercolor,
+            },
+          },
+        },
+      },
+    });
   return (
     <Card elevation={1}>
       <Stack>
         <Divider />
-
-        <MUIDataTable
-          title="Users List Table"
-          columns={columns}
-          data={filterChartData}
-          options={options}
-        />
+        <ThemeProvider theme={getMuiTheme()}>
+          <MUIDataTable
+            title="Users List Table"
+            columns={columns}
+            data={filterChartData}
+            options={options}
+          />
+        </ThemeProvider>  
       </Stack>
     </Card>
   );

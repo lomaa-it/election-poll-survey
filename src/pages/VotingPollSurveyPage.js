@@ -1,5 +1,12 @@
 import { useEffect, useState } from "react";
-import { Grid, Container, Typography, Box, TextField, Card } from "@mui/material";
+import {
+  Grid,
+  Container,
+  Typography,
+  Box,
+  TextField,
+  Card,
+} from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -19,6 +26,7 @@ import Button from "@mui/material/Button";
 
 import VotingPollSurveyList from "../sections/reports/VotingPollSurveyList";
 import SearchByFilter from "../sections/common/SearchByFilter";
+import { searchFiltercolor } from "../constants";
 
 function totalStats(name, ofOpen, OfResolved, ofCancelled, ofEscalated) {
   return { name, ofOpen, OfResolved, ofCancelled, ofEscalated };
@@ -46,26 +54,66 @@ const VotingPollSurveyPage = ({ dashboard }) => {
           Voting Poll Survey
         </Typography>
 
-        <Card sx={{ p: 3 }}>
+        <Card sx={{ p: 3, backgroundColor: searchFiltercolor }}>
           <Typography sx={{ pb: 2 }}>Search by filter</Typography>
 
           <Grid container spacing={2} alignItems="center">
             <SearchByFilter />
 
             <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Voter ID" fullWidth select />
+              <TextField
+                label="Voter ID"
+                fullWidth
+                select
+                sx={{
+                  backgroundColor: "#fff",
+                  borderRadius: "5px",
+                }}
+              />
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Voter Name" fullWidth select />
+              <TextField
+                label="Voter Name"
+                fullWidth
+                select
+                sx={{
+                  backgroundColor: "#fff",
+                  borderRadius: "5px",
+                }}
+              />
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Phone Number" fullWidth select />
+              <TextField
+                label="Phone Number"
+                fullWidth
+                select
+                sx={{
+                  backgroundColor: "#fff",
+                  borderRadius: "5px",
+                }}
+              />
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Select User" fullWidth select />
+              <TextField
+                label="Select User"
+                fullWidth
+                select
+                sx={{
+                  backgroundColor: "#fff",
+                  borderRadius: "5px",
+                }}
+              />
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Select Next Level User" fullWidth select />
+              <TextField
+                label="Select Next Level User"
+                fullWidth
+                select
+                sx={{
+                  backgroundColor: "#fff",
+                  borderRadius: "5px",
+                }}
+              />
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
               <LoadingButton variant="contained">Search</LoadingButton>
@@ -89,10 +137,16 @@ const VotingPollSurveyPage = ({ dashboard }) => {
                       >
                         Total Voters
                       </TableCell>
-                      <TableCell align="center" sx={{ fontSize: "1.2rem", fontWeight: "bold" }}>
+                      <TableCell
+                        align="center"
+                        sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
+                      >
                         Survey Completed
                       </TableCell>
-                      <TableCell align="center" sx={{ fontSize: "1.2rem", fontWeight: "bold" }}>
+                      <TableCell
+                        align="center"
+                        sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
+                      >
                         Pending
                       </TableCell>
                     </TableRow>

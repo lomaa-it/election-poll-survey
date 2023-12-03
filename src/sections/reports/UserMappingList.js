@@ -11,12 +11,14 @@ import {
   TextField,
   FormControlLabel,
 } from "@mui/material";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { CheckBox } from "@mui/icons-material";
 import MUIDataTable from "mui-datatables";
 import { connect } from "react-redux";
 import { showAlert } from "../../actions/alert";
 import { LoadingButton } from "@mui/lab";
 import ViewUserPage from "../../pages/ViewUserPage";
+import { searchFiltercolor } from "../../constants";
 
 const UserMappingList = ({ showAlert }) => {
   useEffect(() => {}, []);
@@ -49,39 +51,53 @@ const UserMappingList = ({ showAlert }) => {
     return <CheckBox />;
   };
 
+  const getMuiTheme = () =>
+    createTheme({
+      components: {
+        MUIDataTableHeadCell: {
+          styleOverrides: {
+            root: {
+              backgroundColor: searchFiltercolor,
+            },
+          },
+        },
+      },
+    });
+
   return (
     <Card elevation={1}>
       <Stack>
         <Divider />
-
-        <MUIDataTable
-          title=""
-          columns={columns}
-          data={[
-            [
-              renderCheckBox(),
-              "IAX1916410",
-              "SAMEEULLA SYED",
-              "user123@gmail.com",
-              "912345678",
-            ],
-            [
-              renderCheckBox(),
-              "IAX1916378",
-              "ZEENAT SYED ",
-              "user123@gmail.com",
-              "912345678",
-            ],
-            [
-              renderCheckBox(),
-              "IAX1897867",
-              "SEEMA S",
-              "user123@gmail.com",
-              "912345678",
-            ],
-          ]}
-          options={options}
-        />
+        <ThemeProvider theme={getMuiTheme()}>
+          <MUIDataTable
+            title=""
+            columns={columns}
+            data={[
+              [
+                renderCheckBox(),
+                "IAX1916410",
+                "SAMEEULLA SYED",
+                "user123@gmail.com",
+                "912345678",
+              ],
+              [
+                renderCheckBox(),
+                "IAX1916378",
+                "ZEENAT SYED ",
+                "user123@gmail.com",
+                "912345678",
+              ],
+              [
+                renderCheckBox(),
+                "IAX1897867",
+                "SEEMA S",
+                "user123@gmail.com",
+                "912345678",
+              ],
+            ]}
+            options={options}
+          />
+        </ThemeProvider>
       </Stack>
     </Card>
   );

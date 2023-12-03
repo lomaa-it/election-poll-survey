@@ -1,4 +1,12 @@
-import { Grid, Container, Typography, Box, TextField, Card, MenuItem } from "@mui/material";
+import {
+  Grid,
+  Container,
+  Typography,
+  Box,
+  TextField,
+  Card,
+  MenuItem,
+} from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -11,6 +19,7 @@ import { getAllVotersRoute } from "../utils/apis";
 import instance from "../utils/axios";
 import { ageDropdown } from "../utils/dropdownconstants";
 import SearchByFilter from "../sections/common/SearchByFilter";
+import { searchFiltercolor } from "../constants";
 
 const ViewVoterPage = ({ dashboard }) => {
   const [votersData, setVotersData] = useState([]);
@@ -28,7 +37,16 @@ const ViewVoterPage = ({ dashboard }) => {
         console.log("data", responseData);
 
         const filterData = responseData.map((item) => {
-          return [item.voter_id, " ", item.voter_name, item.guardian_name, "Male", item.is_resident != null ? "Yes" : "No", item.phone_no, item.age];
+          return [
+            item.voter_id,
+            " ",
+            item.voter_name,
+            item.guardian_name,
+            "Male",
+            item.is_resident != null ? "Yes" : "No",
+            item.phone_no,
+            item.age,
+          ];
         });
         setVotersData(filterData);
         setIsLoading(false);
@@ -46,28 +64,24 @@ const ViewVoterPage = ({ dashboard }) => {
           Voter List
         </Typography>
 
-        <Card sx={{ p: 3 }}>
+        <Card sx={{ p: 3, backgroundColor: searchFiltercolor }}>
           <Typography sx={{ pb: 2 }}>Search by filter</Typography>
 
           <Grid container spacing={2} alignItems="center">
-          <SearchByFilter />
+            <SearchByFilter />
 
             <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Age Group" fullWidth select>
-                {ageDropdown.map((item, index) => (
-                  <MenuItem key={index} value={item.label}>
-                    {item.label}
-                  </MenuItem>
-                ))}
-              </TextField>
+              <TextField label="Part SLNO" fullWidth select   sx={{
+                  backgroundColor: "#fff",
+                  borderRadius: "5px",
+                }}/>
             </Grid>
 
             <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Part SLNO" fullWidth select />
-            </Grid>
-
-            <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Voter ID" fullWidth select />
+              <TextField label="Voter ID" fullWidth select  sx={{
+                  backgroundColor: "#fff",
+                  borderRadius: "5px",
+                }}/>
             </Grid>
 
             <Grid item xs={12} md={6} lg={2}>

@@ -18,6 +18,8 @@ import { showAlert } from "../../actions/alert";
 import { LoadingButton } from "@mui/lab";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { searchFiltercolor } from "../../constants";
 
 const ViewTicketsList = ({ showAlert }) => {
   useEffect(() => {}, []);
@@ -79,6 +81,19 @@ const ViewTicketsList = ({ showAlert }) => {
     );
   };
 
+  const getMuiTheme = () =>
+    createTheme({
+      components: {
+        MUIDataTableHeadCell: {
+          styleOverrides: {
+            root: {
+              backgroundColor: searchFiltercolor,
+            },
+          },
+        },
+      },
+    });
+
   return (
     <Card elevation={1}>
       <Stack>
@@ -132,61 +147,63 @@ const ViewTicketsList = ({ showAlert }) => {
                 marginLeft: "10px",
               }}
             >
-             Escalate 
+              Escalate
             </LoadingButton>
           </Grid>
         </Grid>
-        <MUIDataTable
-          title="Tickets List"
-          columns={columns}
-          data={[
-            [
-              renderCheckBox(),
-              "5454",
-              "Volunteer 1",
-              "123154",
-              "Voter 1",
-              "912345678",
+        <ThemeProvider theme={getMuiTheme()}>
+          <MUIDataTable
+            title="Tickets List"
+            columns={columns}
+            data={[
+              [
+                renderCheckBox(),
+                "5454",
+                "Volunteer 1",
+                "123154",
+                "Voter 1",
+                "912345678",
 
-              "Arogyasri",
-              "Open",
-            ],
-            [
-              renderCheckBox(),
-              "5454",
-              "Volunteer 1",
-              "123154",
-              "Voter 1",
-              "912345678",
+                "Arogyasri",
+                "Open",
+              ],
+              [
+                renderCheckBox(),
+                "5454",
+                "Volunteer 1",
+                "123154",
+                "Voter 1",
+                "912345678",
 
-              "Arogyasri",
-              "Open",
-            ],
-            [
-              renderCheckBox(),
-              "5454",
-              "Volunteer 1",
-              "123154",
-              "Voter 1",
-              "912345678",
+                "Arogyasri",
+                "Open",
+              ],
+              [
+                renderCheckBox(),
+                "5454",
+                "Volunteer 1",
+                "123154",
+                "Voter 1",
+                "912345678",
 
-              "Arogyasri",
-              "Open",
-            ],
-            [
-              renderCheckBox(),
-              "5454",
-              "Volunteer 1",
-              "123154",
-              "Voter 1",
-              "912345678",
+                "Arogyasri",
+                "Open",
+              ],
+              [
+                renderCheckBox(),
+                "5454",
+                "Volunteer 1",
+                "123154",
+                "Voter 1",
+                "912345678",
 
-              "Arogyasri",
-              "Open",
-            ],
-          ]}
-          options={options}
-        />
+                "Arogyasri",
+                "Open",
+              ],
+            ]}
+            options={options}
+          />
+        </ThemeProvider>
       </Stack>
     </Card>
   );

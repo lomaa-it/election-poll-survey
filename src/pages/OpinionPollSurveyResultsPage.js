@@ -10,6 +10,7 @@ import SearchByFilter from "../sections/common/SearchByFilter";
 import { getOpinionResults, clearDashboardReducer } from "../actions/dashboard";
 import { BarChartWidget } from "../sections/common";
 import { BJPColor, CONGRESSColor, JSPColor, NETURALColor, OTHERColor, TDPColor, YSRCPColor } from "../utils/constants";
+import { searchFiltercolor } from "../constants";
 
 const OpinionPollSurveyResultsPage = ({ dashboard, getOpinionResults, clearDashboardReducer }) => {
   const [filterValues, setFilterValues] = useState(null);
@@ -33,7 +34,7 @@ const OpinionPollSurveyResultsPage = ({ dashboard, getOpinionResults, clearDashb
         <Typography variant="h4" sx={{ mb: 1 }}>
           Opinion Results
         </Typography>
-        <Card sx={{ p: 3 }}>
+        <Card sx={{ p: 3, backgroundColor: searchFiltercolor }}>
           <Typography sx={{ pb: 2 }}>Search by filter</Typography>
 
           <Grid container spacing={2} alignItems="center">

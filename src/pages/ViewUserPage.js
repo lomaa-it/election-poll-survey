@@ -1,4 +1,11 @@
-import { Grid, Container, Typography, Box, TextField, Card } from "@mui/material";
+import {
+  Grid,
+  Container,
+  Typography,
+  Box,
+  TextField,
+  Card,
+} from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -9,6 +16,7 @@ import { useEffect, useState } from "react";
 import instance from "../utils/axios";
 import { getAllUsersRoute } from "../utils/apis";
 import SearchByFilter from "../sections/common/SearchByFilter";
+import { searchFiltercolor } from "../constants";
 
 const ViewUserPage = ({ dashboard }) => {
   const [usersData, setUsersData] = useState([]);
@@ -26,7 +34,14 @@ const ViewUserPage = ({ dashboard }) => {
         console.log("dsdasda", responseData);
 
         const filterData = responseData.map((item) => {
-          return [item.consistency_id || "constituency_id", item.username, item.user_displayname, item.mandal_id || "mandal_id", item.phone_no, item.email || "No Email"];
+          return [
+            item.consistency_id || "constituency_id",
+            item.username,
+            item.user_displayname,
+            item.mandal_id || "mandal_id",
+            item.phone_no,
+            item.email || "No Email",
+          ];
         });
         console.log("filterData", filterData);
         setUsersData(filterData);
@@ -45,22 +60,46 @@ const ViewUserPage = ({ dashboard }) => {
           User List
         </Typography>
 
-        <Card sx={{ p: 3 }}>
+        <Card sx={{ p: 3, backgroundColor: searchFiltercolor }}>
           <Typography sx={{ pb: 2 }}>Search by filter</Typography>
 
           <Grid container spacing={2} alignItems="center">
-          <SearchByFilter />
+            <SearchByFilter />
 
             <Grid item xs={12} md={6} lg={2}>
-              <TextField label="User Type" fullWidth select />
+              <TextField
+                label="User Type"
+                fullWidth
+                select
+                sx={{
+                  backgroundColor: "#fff",
+                  borderRadius: "5px",
+                }}
+              />
             </Grid>
 
             <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Voter ID" fullWidth select />
+              <TextField
+                label="Voter ID"
+                fullWidth
+                select
+                sx={{
+                  backgroundColor: "#fff",
+                  borderRadius: "5px",
+                }}
+              />
             </Grid>
 
             <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Voter Name" fullWidth select />
+              <TextField
+                label="Voter Name"
+                fullWidth
+                select
+                sx={{
+                  backgroundColor: "#fff",
+                  borderRadius: "5px",
+                }}
+              />
             </Grid>
 
             <Grid item xs={12} md={6} lg={2}>

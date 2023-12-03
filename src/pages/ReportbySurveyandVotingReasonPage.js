@@ -15,6 +15,8 @@ import ViewUsersList from "../sections/reports/ViewUsersList";
 import Button from "@mui/material/Button";
 import ReportbySurveyandVotingReasonList from "../sections/reports/ReportbySurveyandVotingReasonList";
 import SearchByFilter from "../sections/common/SearchByFilter";
+import { searchFiltercolor } from "../constants";
+
 
 const ReportbySurveyandVotingReasonPage = ({ dashboard }) => {
   return (
@@ -24,19 +26,35 @@ const ReportbySurveyandVotingReasonPage = ({ dashboard }) => {
           Report by Survey and Voting Reason
         </Typography>
 
-        <Card sx={{ p: 3 }}>
+        <Card sx={{ p: 3, backgroundColor: searchFiltercolor }}>
           <Typography sx={{ pb: 2 }}>Search by filter</Typography>
 
           <Grid container spacing={2} alignItems="center">
             <SearchByFilter />
             <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Poll Reason" fullWidth select>
+              <TextField
+                label="Poll Reason"
+                fullWidth
+                select
+                sx={{
+                  backgroundColor: "#fff",
+                  borderRadius: "5px",
+                }}
+              >
                 <MenuItem value="yes">Yes</MenuItem>
                 <MenuItem value="no">No</MenuItem>
               </TextField>
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Voting Reason" fullWidth select>
+              <TextField
+                label="Voting Reason"
+                fullWidth
+                select
+                sx={{
+                  backgroundColor: "#fff",
+                  borderRadius: "5px",
+                }}
+              >
                 <MenuItem value="yes">Yes</MenuItem>
                 <MenuItem value="no">No</MenuItem>
               </TextField>

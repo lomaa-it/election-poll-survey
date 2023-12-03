@@ -1,9 +1,23 @@
 import { useEffect, useState } from "react";
-import { Typography, Card, Box, CircularProgress, TableRow, TableCell, TableContainer, Table, TableHead, TableBody, Paper } from "@mui/material";
+import {
+  Typography,
+  Card,
+  Box,
+  CircularProgress,
+  TableRow,
+  TableCell,
+  TableContainer,
+  Table,
+  TableHead,
+  TableBody,
+  Paper,
+} from "@mui/material";
 import MUIDataTable from "mui-datatables";
 import { connect } from "react-redux";
 import { showAlert } from "../../actions/alert";
 import KeyboardDoubleArrowUpIcon from "@mui/icons-material/KeyboardDoubleArrowUp";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { searchFiltercolor } from "../../constants";
 
 const OpinionPollSurveyResultsList = ({ dashboard, showAlert }) => {
   useEffect(() => {}, []);
@@ -90,10 +104,37 @@ const OpinionPollSurveyResultsList = ({ dashboard, showAlert }) => {
     );
   };
 
+  const getMuiTheme = () =>
+    createTheme({
+      components: {
+        MUIDataTableHeadCell: {
+          styleOverrides: {
+            root: {
+              backgroundColor: searchFiltercolor,
+            },
+          },
+        },
+      },
+    });
+
   return (
     <>
       <TableContainer component={Paper} elevation={1}>
-        <Table sx={{ "& .MuiTableCell-head": { fontSize: "1.2rem", fontWeight: "bold", textAlign: "center" }, "& .MuiTableCell-body": { fontSize: "1.2rem", fontWeight: "bold", textAlign: "center", color: "blue" } }}>
+        <Table
+          sx={{
+            "& .MuiTableCell-head": {
+              fontSize: "1.2rem",
+              fontWeight: "bold",
+              textAlign: "center",
+            },
+            "& .MuiTableCell-body": {
+              fontSize: "1.2rem",
+              fontWeight: "bold",
+              textAlign: "center",
+              color: "blue",
+            },
+          }}
+        >
           <TableHead>
             <TableRow>
               <TableCell>Constituency Votes</TableCell>
@@ -108,14 +149,45 @@ const OpinionPollSurveyResultsList = ({ dashboard, showAlert }) => {
           </TableHead>
           <TableBody>
             <TableRow>
-              <TableCell>{dashboard.opinionResults.reduce((sum, e) => sum + e.totalvoters, 0)}</TableCell>
-              <TableCell>{dashboard.opinionResults.reduce((sum, e) => sum + e.neutral, 0)}</TableCell>
-              <TableCell>{dashboard.opinionResults.reduce((sum, e) => sum + e.ysrcp, 0)}</TableCell>
-              <TableCell>{dashboard.opinionResults.reduce((sum, e) => sum + e.tdp, 0)}</TableCell>
-              <TableCell>{dashboard.opinionResults.reduce((sum, e) => sum + e.janasena, 0)}</TableCell>
-              <TableCell>{dashboard.opinionResults.reduce((sum, e) => sum + e.congress, 0)}</TableCell>
-              <TableCell>{dashboard.opinionResults.reduce((sum, e) => sum + e.bjp, 0)}</TableCell>
-              <TableCell>{dashboard.opinionResults.reduce((sum, e) => sum + e.otherss, 0)}</TableCell>
+              <TableCell>
+                {dashboard.opinionResults.reduce(
+                  (sum, e) => sum + e.totalvoters,
+                  0
+                )}
+              </TableCell>
+              <TableCell>
+                {dashboard.opinionResults.reduce(
+                  (sum, e) => sum + e.neutral,
+                  0
+                )}
+              </TableCell>
+              <TableCell>
+                {dashboard.opinionResults.reduce((sum, e) => sum + e.ysrcp, 0)}
+              </TableCell>
+              <TableCell>
+                {dashboard.opinionResults.reduce((sum, e) => sum + e.tdp, 0)}
+              </TableCell>
+              <TableCell>
+                {dashboard.opinionResults.reduce(
+                  (sum, e) => sum + e.janasena,
+                  0
+                )}
+              </TableCell>
+              <TableCell>
+                {dashboard.opinionResults.reduce(
+                  (sum, e) => sum + e.congress,
+                  0
+                )}
+              </TableCell>
+              <TableCell>
+                {dashboard.opinionResults.reduce((sum, e) => sum + e.bjp, 0)}
+              </TableCell>
+              <TableCell>
+                {dashboard.opinionResults.reduce(
+                  (sum, e) => sum + e.otherss,
+                  0
+                )}
+              </TableCell>
             </TableRow>
           </TableBody>
         </Table>
@@ -125,12 +197,26 @@ const OpinionPollSurveyResultsList = ({ dashboard, showAlert }) => {
 
       <Card elevation={1}>
         {dashboard.isLoading && (
-          <Box minHeight={200} display="flex" justifyContent="center" alignItems="center">
+          <Box
+            minHeight={200}
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+          >
             <CircularProgress />
           </Box>
         )}
 
-        {!dashboard.isLoading && <MUIDataTable title="Opinion Results" columns={columns} data={dashboard.opinionResults} options={options} />}
+        {!dashboard.isLoading && (
+          <ThemeProvider theme={getMuiTheme()}>
+            <MUIDataTable
+              title="Opinion Results"
+              columns={columns}
+              data={dashboard.opinionResults}
+              options={options}
+            />
+          </ThemeProvider>
+        )}
       </Card>
     </>
   );

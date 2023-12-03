@@ -14,6 +14,7 @@ import UserMappingList from "../sections/reports/UserMappingList";
 import Button from "@mui/material/Button";
 import VoterAndVolunteerMappingList from "../sections/reports/VoterAndVolunteerMappingList";
 import SearchByFilter from "../sections/common/SearchByFilter";
+import { searchFiltercolor } from "../constants";
 
 const UserMappingPage = ({ dashboard }) => {
   return (
@@ -23,7 +24,7 @@ const UserMappingPage = ({ dashboard }) => {
           User Mapping
         </Typography>
 
-        <Card sx={{ p: 3 }}>
+        <Card sx={{ p: 3, backgroundColor: searchFiltercolor }}>
           <Typography sx={{ pb: 2 }}>Search by filter</Typography>
 
           <Grid container spacing={2} alignItems="center">

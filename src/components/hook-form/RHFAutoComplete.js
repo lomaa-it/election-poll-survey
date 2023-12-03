@@ -1,7 +1,15 @@
 import React from "react";
 import { Autocomplete, CircularProgress, TextField } from "@mui/material";
 
-export default function RHFAutoComplete({ name, value, options, getOptionLabel, onChange, loading, ...other }) {
+export default function RHFAutoComplete({
+  name,
+  value,
+  options,
+  getOptionLabel,
+  onChange,
+  loading,
+  ...other
+}) {
   return (
     <Autocomplete
       fullWidth
@@ -9,14 +17,20 @@ export default function RHFAutoComplete({ name, value, options, getOptionLabel, 
       value={value}
       options={options ?? []}
       getOptionLabel={getOptionLabel}
+      sx={{
+        backgroundColor: "#fff",
+        borderRadius: "5px",
+      }}
       renderInput={(params) => (
-        <TextField
+        <TextField 
           {...params}
           InputProps={{
             ...params.InputProps,
             endAdornment: (
               <React.Fragment>
-                {loading ? <CircularProgress color="inherit" size={20} /> : null}
+                {loading ? (
+                  <CircularProgress color="inherit" size={20} />
+                ) : null}
                 {params.InputProps.endAdornment}
               </React.Fragment>
             ),

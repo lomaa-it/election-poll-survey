@@ -1,5 +1,15 @@
 import { useEffect, useState } from "react";
-import { Typography, Card, Stack, Grid, Switch, Divider, Box, Chip, TextField } from "@mui/material";
+import {
+  Typography,
+  Card,
+  Stack,
+  Grid,
+  Switch,
+  Divider,
+  Box,
+  Chip,
+  TextField,
+} from "@mui/material";
 import { CheckBox } from "@mui/icons-material";
 import MUIDataTable from "mui-datatables";
 import { connect } from "react-redux";
@@ -7,6 +17,8 @@ import { showAlert } from "../../actions/alert";
 import { LoadingButton } from "@mui/lab";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { searchFiltercolor } from "../../constants";
 
 const ViewVotersList = ({ showAlert, votersData }) => {
   useEffect(() => {}, []);
@@ -72,12 +84,31 @@ const ViewVotersList = ({ showAlert, votersData }) => {
     return [...item, renderEditAndDelete()];
   });
 
+  const getMuiTheme = () =>
+    createTheme({
+      components: {
+        MUIDataTableHeadCell: {
+          styleOverrides: {
+            root: {
+              backgroundColor: searchFiltercolor,
+            },
+          },
+        },
+      },
+    });
+
   return (
     <Card elevation={1}>
       <Stack>
         <Divider />
-
-        <MUIDataTable title="Voter List" columns={columns} data={filterChartData} options={options} />
+        <ThemeProvider theme={getMuiTheme()}>
+          <MUIDataTable
+            title="Voter List"
+            columns={columns}
+            data={filterChartData}
+            options={options}
+          />
+        </ThemeProvider>
       </Stack>
     </Card>
   );

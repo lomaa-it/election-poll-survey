@@ -1,4 +1,12 @@
-import { Grid, Container, Typography, Box, TextField, Card, FormControlLabel } from "@mui/material";
+import {
+  Grid,
+  Container,
+  Typography,
+  Box,
+  TextField,
+  Card,
+  FormControlLabel,
+} from "@mui/material";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControl from "@mui/material/FormControl";
@@ -18,82 +26,7 @@ const VoterRegistrationPage = ({ dashboard }) => {
         <Typography variant="h4" sx={{ mb: 1 }}>
           Add Voter
         </Typography>
-
-        <Card sx={{ p: 3 }}>
-          <Typography sx={{ pb: 2 }}>Basic Info</Typography>
-
-          <Grid container spacing={2} alignItems="center">
-            <Grid item xs={12} md={6} lg={3}>
-              <Box px={2}>
-                <FormControlLabel control={<CheckBox />} label={<Typography style={{ marginLeft: "10px" }}>Is New Voter?</Typography>} />
-              </Box>
-            </Grid>
-            <Grid item xs={12} md={6} lg={3}>
-              <TextField
-                type="file"
-                label="Upload Proof"
-                fullWidth
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
-            </Grid>
-            <Grid item xs={12} md={6} lg={6}></Grid>
-            <Grid item xs={12} md={6} lg={3}>
-              <TextField label="Voter Name *" fullWidth />
-            </Grid>
-            <Grid item xs={12} md={6} lg={3}>
-              <FormControl>
-                <FormLabel id="demo-radio-buttons-group-label">Guardian:</FormLabel>
-                <RadioGroup aria-labelledby="demo-radio-buttons-group-label" defaultValue="father" name="radio-buttons-group" row>
-                  <FormControlLabel value="father" control={<Radio />} label="Father" />
-                  <FormControlLabel value="mother" control={<Radio />} label="Mother" />
-                  <FormControlLabel value="husband" control={<Radio />} label="Husband" />
-                </RadioGroup>
-              </FormControl>
-            </Grid>
-            <Grid item xs={12} md={6} lg={3}>
-              <TextField label="Guardian Name *" fullWidth />
-            </Grid>
-            <Grid item xs={12} md={6} lg={3}>
-              <TextField label="Voter ID *" fullWidth />
-            </Grid>
-            <Grid item xs={12} md={6} lg={3}>
-              <TextField label="Gender" fullWidth select />
-            </Grid>
-            <Grid item xs={12} md={6} lg={3}>
-              <TextField label="Age *" fullWidth />
-            </Grid>
-            <Grid item xs={12} md={6} lg={3}>
-              <TextField label="Volunteer ID *" fullWidth select />
-            </Grid>
-            <Grid item xs={12} md={6} lg={3}>
-              <TextField label="Gruhasaradhi ID *" fullWidth select />
-            </Grid>
-            <Grid item xs={12} md={6} lg={3}>
-              <TextField label="Phone Number *" fullWidth select />
-            </Grid>
-            <Grid
-              item
-              xs={12}
-              md={6}
-              lg={3}
-              sx={{
-                marginLeft: "14px",
-              }}
-            >
-              <FormControlLabel control={<CheckBox />} label={<Typography style={{ marginLeft: "10px" }}>Resident</Typography>} />
-            </Grid>
-            <Grid item xs={12} md={6} lg={6}>
-              <TextField label="Permenent Address 1 *" fullWidth multiline rows={4} rowsMax={8} />
-            </Grid>
-            <Grid item xs={12} md={6} lg={6}>
-              <TextField label="Current Address 1 *" fullWidth multiline rows={4} rowsMax={8} />
-            </Grid>
-          </Grid>
-        </Card>
-
-        <Card sx={{ p: 3, mt: 1 }}>
+        <Card sx={{ p: 3, mt: 1, mb:2}}>
           <Typography sx={{ pb: 2 }}>Assign Authority</Typography>
 
           <Grid container spacing={2} alignItems="center">
@@ -149,8 +82,125 @@ const VoterRegistrationPage = ({ dashboard }) => {
               </LoadingButton>
             </Grid>
           </Grid>
-        </Card>
+        </Card>{" "}
+        <Card sx={{ p: 3 }}>
+          <Typography sx={{ pb: 2 }}>Basic Info</Typography>
 
+          <Grid container spacing={2} alignItems="center">
+            <Grid item xs={12} md={6} lg={3}>
+              <Box px={2}>
+                <FormControlLabel
+                  control={<CheckBox />}
+                  label={
+                    <Typography style={{ marginLeft: "10px" }}>
+                      Is New Voter?
+                    </Typography>
+                  }
+                />
+              </Box>
+            </Grid>
+            <Grid item xs={12} md={6} lg={3}>
+              <TextField
+                type="file"
+                label="Upload Proof"
+                fullWidth
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            </Grid>
+            <Grid item xs={12} md={6} lg={6}></Grid>
+            <Grid item xs={12} md={6} lg={3}>
+              <TextField label="Voter Name *" fullWidth />
+            </Grid>
+            <Grid item xs={12} md={6} lg={3}>
+              <FormControl>
+                <FormLabel id="demo-radio-buttons-group-label">
+                  Guardian:
+                </FormLabel>
+                <RadioGroup
+                  aria-labelledby="demo-radio-buttons-group-label"
+                  defaultValue="father"
+                  name="radio-buttons-group"
+                  row
+                >
+                  <FormControlLabel
+                    value="father"
+                    control={<Radio />}
+                    label="Father"
+                  />
+                  <FormControlLabel
+                    value="mother"
+                    control={<Radio />}
+                    label="Mother"
+                  />
+                  <FormControlLabel
+                    value="husband"
+                    control={<Radio />}
+                    label="Husband"
+                  />
+                </RadioGroup>
+              </FormControl>
+            </Grid>
+            <Grid item xs={12} md={6} lg={3}>
+              <TextField label="Guardian Name *" fullWidth />
+            </Grid>
+            <Grid item xs={12} md={6} lg={3}>
+              <TextField label="Voter ID *" fullWidth />
+            </Grid>
+            <Grid item xs={12} md={6} lg={3}>
+              <TextField label="Gender" fullWidth select />
+            </Grid>
+            <Grid item xs={12} md={6} lg={3}>
+              <TextField label="Age *" fullWidth />
+            </Grid>
+            <Grid item xs={12} md={6} lg={3}>
+              <TextField label="Volunteer ID *" fullWidth select />
+            </Grid>
+            <Grid item xs={12} md={6} lg={3}>
+              <TextField label="Gruhasaradhi ID *" fullWidth select />
+            </Grid>
+            <Grid item xs={12} md={6} lg={3}>
+              <TextField label="Phone Number *" fullWidth select />
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              md={6}
+              lg={3}
+              sx={{
+                marginLeft: "14px",
+              }}
+            >
+              <FormControlLabel
+                control={<CheckBox />}
+                label={
+                  <Typography style={{ marginLeft: "10px" }}>
+                    Resident
+                  </Typography>
+                }
+              />
+            </Grid>
+            <Grid item xs={12} md={6} lg={6}>
+              <TextField
+                label="Permenent Address 1 *"
+                fullWidth
+                multiline
+                rows={4}
+                rowsMax={8}
+              />
+            </Grid>
+            <Grid item xs={12} md={6} lg={6}>
+              <TextField
+                label="Current Address 1 *"
+                fullWidth
+                multiline
+                rows={4}
+                rowsMax={8}
+              />
+            </Grid>
+          </Grid>
+        </Card>
         <Box p={1} />
       </Container>
     </Page>

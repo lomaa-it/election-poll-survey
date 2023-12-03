@@ -10,11 +10,13 @@ import {
   Chip,
   TextField,
 } from "@mui/material";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 import MUIDataTable from "mui-datatables";
 import { connect } from "react-redux";
 import { showAlert } from "../../actions/alert";
 import { LoadingButton } from "@mui/lab";
+import { searchFiltercolor } from "../../constants";
 
 const ReportbySurveyandVotingReasonList = ({ showAlert }) => {
   useEffect(() => {}, []);
@@ -51,68 +53,82 @@ const ReportbySurveyandVotingReasonList = ({ showAlert }) => {
     responsive: "standard",
   };
 
+  const getMuiTheme = () =>
+    createTheme({
+      components: {
+        MUIDataTableHeadCell: {
+          styleOverrides: {
+            root: {
+              backgroundColor: searchFiltercolor,
+            },
+          },
+        },
+      },
+    });
+
   return (
     <Card elevation={1}>
       <Stack>
         <Divider />
-
-        <MUIDataTable
-          title=""
-          columns={columns}
-          data={[
-            [
-              "Constituency 1",
-              "Mandal 1",
-              "Panchayat 1",
-              "Village 1",
-              "Voter 1",
-              "Phone 1",
-              "Poll Reason 1",
-              "Voting Reason 1",
-            ],
-            [
-              "Constituency 1",
-              "Mandal 1",
-              "Panchayat 1",
-              "Village 1",
-              "Voter 1",
-              "Phone 1",
-              "Poll Reason 1",
-              "Voting Reason 1",
-            ],
-            [
-              "Constituency 1",
-              "Mandal 1",
-              "Panchayat 1",
-              "Village 1",
-              "Voter 1",
-              "Phone 1",
-              "Poll Reason 1",
-              "Voting Reason 1",
-            ],
-            [
-              "Constituency 1",
-              "Mandal 1",
-              "Panchayat 1",
-              "Village 1",
-              "Voter 1",
-              "Phone 1",
-              "Poll Reason 1",
-              "Voting Reason 1",
-            ],
-            [
-              "Constituency 1",
-              "Mandal 1",
-              "Panchayat 1",
-              "Village 1",
-              "Voter 1",
-              "Phone 1",
-              "Poll Reason 1",
-              "Voting Reason 1",
-            ],
-          ]}
-          options={options}
-        />
+        <ThemeProvider theme={getMuiTheme()}>
+          <MUIDataTable
+            title=""
+            columns={columns}
+            data={[
+              [
+                "Constituency 1",
+                "Mandal 1",
+                "Panchayat 1",
+                "Village 1",
+                "Voter 1",
+                "Phone 1",
+                "Poll Reason 1",
+                "Voting Reason 1",
+              ],
+              [
+                "Constituency 1",
+                "Mandal 1",
+                "Panchayat 1",
+                "Village 1",
+                "Voter 1",
+                "Phone 1",
+                "Poll Reason 1",
+                "Voting Reason 1",
+              ],
+              [
+                "Constituency 1",
+                "Mandal 1",
+                "Panchayat 1",
+                "Village 1",
+                "Voter 1",
+                "Phone 1",
+                "Poll Reason 1",
+                "Voting Reason 1",
+              ],
+              [
+                "Constituency 1",
+                "Mandal 1",
+                "Panchayat 1",
+                "Village 1",
+                "Voter 1",
+                "Phone 1",
+                "Poll Reason 1",
+                "Voting Reason 1",
+              ],
+              [
+                "Constituency 1",
+                "Mandal 1",
+                "Panchayat 1",
+                "Village 1",
+                "Voter 1",
+                "Phone 1",
+                "Poll Reason 1",
+                "Voting Reason 1",
+              ],
+            ]}
+            options={options}
+          />
+        </ThemeProvider>
       </Stack>
     </Card>
   );
