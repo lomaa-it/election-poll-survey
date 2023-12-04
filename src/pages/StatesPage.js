@@ -83,6 +83,7 @@ const StatesPage = ({ dashboard }) => {
               <TextField
                 label="State Name"
                 fullWidth
+                value={stateName}
                 onChange={handleStateNameChange}
               />
               <LoadingButton

@@ -61,12 +61,13 @@ const DistrictsPage = ({ dashboard }) => {
       district_name: districtName,
       state_id: stateId,
     });
-    fetchDistricts();
 
     console.log(response.data);
     if (response.data.status === "success") {
       showAlert("success", "District added successfully");
     }
+    setDistrictName("");
+    fetchDistricts();
   };
 
   return (
@@ -107,6 +108,7 @@ const DistrictsPage = ({ dashboard }) => {
               <TextField
                 label="District Name"
                 fullWidth
+                value={districtName}
                 onChange={(event) => {
                   setDistrictName(event.target.value);
                 }}

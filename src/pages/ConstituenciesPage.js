@@ -151,6 +151,7 @@ const ConstituenciesPage = ({ dashboard }) => {
               <TextField
                 label="Consituency Name"
                 fullWidth
+                value={consituencyName}
                 onChange={(event) => {
                   setConsituencyName(event.target.value);
                 }}
