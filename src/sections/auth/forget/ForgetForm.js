@@ -72,7 +72,7 @@ const ForgetForm = ({ showAlert }) => {
           Enter the OTP sent to +91 - 1234567890
         </Typography>
 
-        <TextField name="otp" label="OTP" fullWidth error={!!otpError} helperText={otpError} onChange={(e) => setOtp(e.target.value)} />
+        <TextField size="small" name="otp" label="OTP" fullWidth error={!!otpError} helperText={otpError} onChange={(e) => setOtp(e.target.value)} />
 
         <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isLoading} onClick={onOtpSubmit}>
           Verify

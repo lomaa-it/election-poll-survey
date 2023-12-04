@@ -1,11 +1,4 @@
-import {
-  Grid,
-  Container,
-  Typography,
-  Box,
-  TextField,
-  Card,
-} from "@mui/material";
+import { Grid, Container, Typography, Box, TextField, Card } from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -14,12 +7,7 @@ import ViewUsersList from "../sections/reports/ViewUsersList";
 import Button from "@mui/material/Button";
 import ConstituenciesList from "../sections/reports/ConstituenciesList";
 import { useEffect, useState } from "react";
-import {
-  getAllStatesRoute,
-  getAllConstituenciesWithJoinRoute,
-  createConstituenciesRoute,
-  getAllDistrictsRoute,
-} from "../utils/apis";
+import { getAllStatesRoute, getAllConstituenciesWithJoinRoute, createConstituenciesRoute, getAllDistrictsRoute } from "../utils/apis";
 import instance from "../utils/axios";
 import { showAlert } from "../actions/alert";
 import { set } from "date-fns";
@@ -107,10 +95,7 @@ const ConstituenciesPage = ({ dashboard }) => {
         <Card sx={{ p: 3 }}>
           <Grid container spacing={2} alignItems="center">
             <Grid item xs={12} md={6} lg={9}>
-              <ConstituenciesList
-                constituenciesList={constituenciesList}
-                setConstituenciesList={setConstituenciesList}
-              />
+              <ConstituenciesList constituenciesList={constituenciesList} setConstituenciesList={setConstituenciesList} />
             </Grid>
             <Grid
               item
@@ -126,9 +111,7 @@ const ConstituenciesPage = ({ dashboard }) => {
               {" "}
               <Autocomplete
                 options={stateOptions}
-                renderInput={(params) => (
-                  <TextField {...params} label="Select State" fullWidth />
-                )}
+                renderInput={(params) => <TextField size="small" {...params} label="Select State" fullWidth />}
                 onChange={(event, value) => {
                   console.log("value", value);
                   if (value) {
@@ -138,9 +121,7 @@ const ConstituenciesPage = ({ dashboard }) => {
               />
               <Autocomplete
                 options={districtOptions}
-                renderInput={(params) => (
-                  <TextField {...params} label="Select District" fullWidth />
-                )}
+                renderInput={(params) => <TextField size="small" {...params} label="Select District" fullWidth />}
                 onChange={(event, value) => {
                   console.log("value", value);
                   if (value) {
@@ -149,6 +130,7 @@ const ConstituenciesPage = ({ dashboard }) => {
                 }}
               />
               <TextField
+                size="small"
                 label="Consituency Name"
                 fullWidth
                 value={consituencyName}

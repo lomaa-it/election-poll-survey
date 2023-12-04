@@ -21,28 +21,28 @@ const VillagesPage = ({ dashboard }) => {
 
           <Grid container spacing={2} alignItems="center">
             <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Select State" fullWidth select />
+              <TextField size="small" label="Select State" fullWidth select />
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Select District" fullWidth select />
+              <TextField size="small" label="Select District" fullWidth select />
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Select Constituency" fullWidth select />
+              <TextField size="small" label="Select Constituency" fullWidth select />
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Select Mandal" fullWidth select />
+              <TextField size="small" label="Select Mandal" fullWidth select />
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Select Division" fullWidth select />
+              <TextField size="small" label="Select Division" fullWidth select />
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Select Sachivalayam" fullWidth select />
+              <TextField size="small" label="Select Sachivalayam" fullWidth select />
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Select Part" fullWidth select />
+              <TextField size="small" label="Select Part" fullWidth select />
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Village Name" fullWidth />
+              <TextField size="small" label="Village Name" fullWidth />
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
               <LoadingButton variant="contained">Add</LoadingButton>

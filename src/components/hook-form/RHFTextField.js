@@ -12,6 +12,7 @@ export default function RHFTextField({ name, onChange, ...other }) {
         <TextField
           {...field}
           fullWidth
+          size="small"
           value={typeof field.value === "number" && field.value === 0 ? "" : field.value}
           onChange={(e) => {
             field.onChange(e.target.value);

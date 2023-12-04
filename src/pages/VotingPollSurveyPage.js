@@ -1,12 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  Grid,
-  Container,
-  Typography,
-  Box,
-  TextField,
-  Card,
-} from "@mui/material";
+import { Grid, Container, Typography, Box, TextField, Card } from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -62,6 +55,7 @@ const VotingPollSurveyPage = ({ dashboard }) => {
 
             <Grid item xs={12} md={6} lg={2}>
               <TextField
+                size="small"
                 label="Voter ID"
                 fullWidth
                 select
@@ -73,6 +67,7 @@ const VotingPollSurveyPage = ({ dashboard }) => {
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
               <TextField
+                size="small"
                 label="Voter Name"
                 fullWidth
                 select
@@ -84,6 +79,7 @@ const VotingPollSurveyPage = ({ dashboard }) => {
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
               <TextField
+                size="small"
                 label="Phone Number"
                 fullWidth
                 select
@@ -95,6 +91,7 @@ const VotingPollSurveyPage = ({ dashboard }) => {
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
               <TextField
+                size="small"
                 label="Select User"
                 fullWidth
                 select
@@ -106,6 +103,7 @@ const VotingPollSurveyPage = ({ dashboard }) => {
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
               <TextField
+                size="small"
                 label="Select Next Level User"
                 fullWidth
                 select
@@ -137,16 +135,10 @@ const VotingPollSurveyPage = ({ dashboard }) => {
                       >
                         Total Voters
                       </TableCell>
-                      <TableCell
-                        align="center"
-                        sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
-                      >
+                      <TableCell align="center" sx={{ fontSize: "1.2rem", fontWeight: "bold" }}>
                         Survey Completed
                       </TableCell>
-                      <TableCell
-                        align="center"
-                        sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
-                      >
+                      <TableCell align="center" sx={{ fontSize: "1.2rem", fontWeight: "bold" }}>
                         Pending
                       </TableCell>
                     </TableRow>

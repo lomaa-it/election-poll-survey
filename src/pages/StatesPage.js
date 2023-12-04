@@ -1,11 +1,4 @@
-import {
-  Grid,
-  Container,
-  Typography,
-  Box,
-  TextField,
-  Card,
-} from "@mui/material";
+import { Grid, Container, Typography, Box, TextField, Card } from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -43,7 +36,7 @@ const StatesPage = ({ dashboard }) => {
       .post(createStatesRoute, data)
       .then((response) => {
         const responseData = response.data.message;
-        console.log(responseData);  
+        console.log(responseData);
         setStateList([...stateList, responseData]);
         setStateName("");
       })
@@ -53,7 +46,6 @@ const StatesPage = ({ dashboard }) => {
   };
 
   const handleStateNameChange = (e) => {
-  
     setStateName(e.target.value);
   };
 
@@ -67,7 +59,7 @@ const StatesPage = ({ dashboard }) => {
         <Card sx={{ p: 3 }}>
           <Grid container spacing={2} alignItems="center">
             <Grid item xs={12} md={6} lg={9}>
-              <StatesList stateList={stateList} setStateList={setStateList}/>
+              <StatesList stateList={stateList} setStateList={setStateList} />
             </Grid>
             <Grid
               item
@@ -80,12 +72,7 @@ const StatesPage = ({ dashboard }) => {
                 gap: "15px",
               }}
             >
-              <TextField
-                label="State Name"
-                fullWidth
-                value={stateName}
-                onChange={handleStateNameChange}
-              />
+              <TextField size="small" label="State Name" fullWidth value={stateName} onChange={handleStateNameChange} />
               <LoadingButton
                 variant="contained"
                 sx={{

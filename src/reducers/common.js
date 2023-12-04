@@ -39,6 +39,18 @@ export default function commonReducer(state = initialState, action) {
         errorMessage: payload,
       };
 
+    case "COMMON_CLEAR_SUCCESS":
+      return {
+        isLoading: false,
+        mandals: [],
+        divisions: [],
+        sachivalayams: [],
+        parts: [],
+        villages: [],
+        navaratnalu: [],
+        errorMessage: null,
+      };
+
     default:
       return state;
   }

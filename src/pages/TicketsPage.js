@@ -49,19 +49,31 @@ const TicketsPage = ({ dashboard }) => {
           <Typography sx={{ pb: 2 }}>Search by filter</Typography>
 
           <Grid container spacing={2} alignItems="center">
-          <SearchByFilter />
+            <SearchByFilter />
             <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Select Navaratnalu" fullWidth select  sx={{
+              <TextField
+                size="small"
+                label="Select Navaratnalu"
+                fullWidth
+                select
+                sx={{
                   backgroundColor: "#fff",
                   borderRadius: "5px",
-                }}/>
+                }}
+              />
             </Grid>
 
             <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Ticket Status" fullWidth select  sx={{
+              <TextField
+                size="small"
+                label="Ticket Status"
+                fullWidth
+                select
+                sx={{
                   backgroundColor: "#fff",
                   borderRadius: "5px",
-                }}/>
+                }}
+              />
             </Grid>
 
             <Grid item xs={12} md={6} lg={2}>

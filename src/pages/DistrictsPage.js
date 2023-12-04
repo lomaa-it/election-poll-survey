@@ -1,11 +1,4 @@
-import {
-  Grid,
-  Container,
-  Typography,
-  Box,
-  TextField,
-  Card,
-} from "@mui/material";
+import { Grid, Container, Typography, Box, TextField, Card } from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -15,11 +8,7 @@ import ViewUsersList from "../sections/reports/ViewUsersList";
 import Button from "@mui/material/Button";
 import DistrictsList from "../sections/reports/DistrictsList";
 import { useEffect, useState } from "react";
-import {
-  getAllDistrictsWithJoinRoute,
-  getAllStatesRoute,
-  createDistrictsRoute,
-} from "../utils/apis";
+import { getAllDistrictsWithJoinRoute, getAllStatesRoute, createDistrictsRoute } from "../utils/apis";
 import instance from "../utils/axios";
 import { showAlert } from "../actions/alert";
 
@@ -95,9 +84,7 @@ const DistrictsPage = ({ dashboard }) => {
             >
               <Autocomplete
                 options={stateOptions}
-                renderInput={(params) => (
-                  <TextField {...params} label="Select State" fullWidth />
-                )}
+                renderInput={(params) => <TextField size="small" {...params} label="Select State" fullWidth />}
                 onChange={(event, value) => {
                   console.log(value);
                   if (value) {
@@ -106,6 +93,7 @@ const DistrictsPage = ({ dashboard }) => {
                 }}
               />
               <TextField
+                size="small"
                 label="District Name"
                 fullWidth
                 value={districtName}

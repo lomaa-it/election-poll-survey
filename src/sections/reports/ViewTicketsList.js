@@ -1,15 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  Typography,
-  Card,
-  Stack,
-  Grid,
-  Switch,
-  Divider,
-  Box,
-  Chip,
-  TextField,
-} from "@mui/material";
+import { Typography, Card, Stack, Grid, Switch, Divider, Box, Chip, TextField } from "@mui/material";
 import { CheckBox } from "@mui/icons-material";
 import Button from "@mui/material/Button";
 import MUIDataTable from "mui-datatables";
@@ -67,6 +57,7 @@ const ViewTicketsList = ({ showAlert }) => {
   const renderStatusButton = () => {
     return (
       <TextField
+        size="small"
         sx={{
           border: "none",
         }}
@@ -117,7 +108,7 @@ const ViewTicketsList = ({ showAlert }) => {
               alignItems: "center",
             }}
           >
-            <TextField label="Ticket Status" fullWidth select />{" "}
+            <TextField size="small" label="Ticket Status" fullWidth select />{" "}
             <LoadingButton
               variant="contained"
               sx={{
@@ -140,7 +131,7 @@ const ViewTicketsList = ({ showAlert }) => {
               marginRight: "50px",
             }}
           >
-            <TextField label="Next Level User" fullWidth select />{" "}
+            <TextField size="small" label="Next Level User" fullWidth select />{" "}
             <LoadingButton
               variant="contained"
               sx={{
@@ -156,50 +147,10 @@ const ViewTicketsList = ({ showAlert }) => {
             title="Tickets List"
             columns={columns}
             data={[
-              [
-                renderCheckBox(),
-                "5454",
-                "Volunteer 1",
-                "123154",
-                "Voter 1",
-                "912345678",
-
-                "Arogyasri",
-                "Open",
-              ],
-              [
-                renderCheckBox(),
-                "5454",
-                "Volunteer 1",
-                "123154",
-                "Voter 1",
-                "912345678",
-
-                "Arogyasri",
-                "Open",
-              ],
-              [
-                renderCheckBox(),
-                "5454",
-                "Volunteer 1",
-                "123154",
-                "Voter 1",
-                "912345678",
-
-                "Arogyasri",
-                "Open",
-              ],
-              [
-                renderCheckBox(),
-                "5454",
-                "Volunteer 1",
-                "123154",
-                "Voter 1",
-                "912345678",
-
-                "Arogyasri",
-                "Open",
-              ],
+              [renderCheckBox(), "5454", "Volunteer 1", "123154", "Voter 1", "912345678", "Arogyasri", "Open"],
+              [renderCheckBox(), "5454", "Volunteer 1", "123154", "Voter 1", "912345678", "Arogyasri", "Open"],
+              [renderCheckBox(), "5454", "Volunteer 1", "123154", "Voter 1", "912345678", "Arogyasri", "Open"],
+              [renderCheckBox(), "5454", "Volunteer 1", "123154", "Voter 1", "912345678", "Arogyasri", "Open"],
             ]}
             options={options}
           />

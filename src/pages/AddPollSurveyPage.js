@@ -23,19 +23,19 @@ const AddPollSurveyPage = ({ dashboard }) => {
 
           <Grid container spacing={2} alignItems="center">
             <Grid item xs={12} md={6} lg={3}>
-              <TextField label="Volunteer Name" fullWidth />
+              <TextField size="small" label="Volunteer Name" fullWidth />
             </Grid>
 
             <Grid item xs={12} md={6} lg={3}>
-              <TextField label="Voter List *" fullWidth select />
+              <TextField size="small" label="Voter List *" fullWidth select />
             </Grid>
 
             <Grid item xs={12} md={6} lg={3}>
-              <TextField label="Interested Party" fullWidth select />
+              <TextField size="small" label="Interested Party" fullWidth select />
             </Grid>
 
             <Grid item xs={12} md={6} lg={3}>
-              <TextField label="Voted Party" fullWidth select />
+              <TextField size="small" label="Voted Party" fullWidth select />
             </Grid>
 
             <Grid

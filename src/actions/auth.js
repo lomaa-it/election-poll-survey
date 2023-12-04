@@ -16,4 +16,8 @@ export const authLogout = () => async (dispatch) => {
   dispatch({
     type: "LOGOUT",
   });
+
+  dispatch({
+    type: "COMMON_CLEAR_SUCCESS",
+  });
 };

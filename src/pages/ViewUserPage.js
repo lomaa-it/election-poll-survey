@@ -1,11 +1,4 @@
-import {
-  Grid,
-  Container,
-  Typography,
-  Box,
-  TextField,
-  Card,
-} from "@mui/material";
+import { Grid, Container, Typography, Box, TextField, Card } from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -34,14 +27,7 @@ const ViewUserPage = ({ dashboard }) => {
         console.log("dsdasda", responseData);
 
         const filterData = responseData.map((item) => {
-          return [
-            item.consistency_id || "constituency_id",
-            item.username,
-            item.user_displayname,
-            item.mandal_id || "mandal_id",
-            item.phone_no,
-            item.email || "No Email",
-          ];
+          return [item.username, item.user_pk || "constituency_id", item.user_displayname, item.designation_id, item.mandal_id || "-", item.division_id || "-", item.sachivalayam_id || "-", item.part_id || "-", item.village_id || "-", item.phone_no];
         });
         console.log("filterData", filterData);
         setUsersData(filterData);
@@ -68,6 +54,7 @@ const ViewUserPage = ({ dashboard }) => {
 
             <Grid item xs={12} md={6} lg={2}>
               <TextField
+                size="small"
                 label="User Type"
                 fullWidth
                 select
@@ -80,6 +67,7 @@ const ViewUserPage = ({ dashboard }) => {
 
             <Grid item xs={12} md={6} lg={2}>
               <TextField
+                size="small"
                 label="Voter ID"
                 fullWidth
                 select
@@ -92,6 +80,7 @@ const ViewUserPage = ({ dashboard }) => {
 
             <Grid item xs={12} md={6} lg={2}>
               <TextField
+                size="small"
                 label="Voter Name"
                 fullWidth
                 select

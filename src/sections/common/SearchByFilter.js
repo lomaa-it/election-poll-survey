@@ -22,6 +22,28 @@ const SearchByFilter = ({ account, common, getAllCommonData, onChanged }) => {
     }
   }, []);
 
+  useEffect(() => {
+    if (common.mandals.length > 0 && account.user.mandal_pk != null) {
+      setFormValues((state) => ({ ...state, mandal: common.mandals[0] }));
+    }
+
+    if (common.divisions.length > 0 && account.user.division_pk != null) {
+      setFormValues((state) => ({ ...state, division: common.divisions[0] }));
+    }
+
+    if (common.sachivalayams.length > 0 && account.user.sachivalayam_pk != null) {
+      setFormValues((state) => ({ ...state, sachivalayam: common.sachivalayams[0] }));
+    }
+
+    if (common.parts.length > 0 && account.user.part_no != null) {
+      setFormValues((state) => ({ ...state, partno: common.parts[0] }));
+    }
+
+    if (common.villages.length > 0 && account.user.village_pk != null) {
+      setFormValues((state) => ({ ...state, village: common.villages[0] }));
+    }
+  }, [common]);
+
   const handleChange = (name, value) => {
     const values = {};
 
@@ -59,7 +81,16 @@ const SearchByFilter = ({ account, common, getAllCommonData, onChanged }) => {
   return (
     <>
       <Grid item xs={12} md={6} lg={2}>
-        <RHFAutoComplete name="mandal" label="Select Mandal" value={formValues.mandal} options={common.mandals} getOptionLabel={(option) => option.mandal_name} onChange={handleChange} loading={common.isLoading} />
+        <RHFAutoComplete
+          name="mandal"
+          label="Select Mandal"
+          value={formValues.mandal}
+          options={common.mandals}
+          getOptionLabel={(option) => option.mandal_name}
+          onChange={handleChange}
+          loading={common.isLoading}
+          disabled={account.user.mandal_pk != null}
+        />
       </Grid>
       <Grid item xs={12} md={6} lg={2}>
         <RHFAutoComplete
@@ -69,6 +100,7 @@ const SearchByFilter = ({ account, common, getAllCommonData, onChanged }) => {
           options={common.divisions.filter((e) => e.mandal_id == formValues?.mandal?.mandal_pk)}
           getOptionLabel={(option) => option.division_name}
           onChange={handleChange}
+          disabled={account.user.division_pk != null}
         />
       </Grid>
       <Grid item xs={12} md={6} lg={2}>
@@ -79,6 +111,7 @@ const SearchByFilter = ({ account, common, getAllCommonData, onChanged }) => {
           options={common.sachivalayams.filter((e) => e.division_pk == formValues?.division?.division_pk)}
           getOptionLabel={(option) => option.sachivalayam_name}
           onChange={handleChange}
+          disabled={account.user.sachivalayam_pk != null}
         />
       </Grid>
       <Grid item xs={12} md={6} lg={2}>
@@ -89,10 +122,19 @@ const SearchByFilter = ({ account, common, getAllCommonData, onChanged }) => {
           options={common.parts.filter((e) => e.sachivalayam_id == formValues?.sachivalayam?.sachivalayam_pk)}
           getOptionLabel={(option) => String(option.part_no)}
           onChange={handleChange}
+          disabled={account.user.part_no != null}
         />
       </Grid>
       <Grid item xs={12} md={6} lg={2}>
-        <RHFAutoComplete name="village" label="Select Village" value={formValues.village} options={common.villages.filter((e) => e.part_no == formValues?.partno?.part_no)} getOptionLabel={(option) => option.village_name} onChange={handleChange} />
+        <RHFAutoComplete
+          name="village"
+          label="Select Village"
+          value={formValues.village}
+          options={common.villages.filter((e) => e.part_no == formValues?.partno?.part_no)}
+          getOptionLabel={(option) => option.village_name}
+          onChange={handleChange}
+          disabled={account.user.village_pk != null}
+        />
       </Grid>
       <Grid item xs={12} md={6} lg={2}>
         <RHFAutoComplete

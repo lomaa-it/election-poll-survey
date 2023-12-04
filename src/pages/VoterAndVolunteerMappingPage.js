@@ -9,7 +9,6 @@ import VoterAndVolunteerMappingList from "../sections/reports/VoterAndVolunteerM
 import SearchByFilter from "../sections/common/SearchByFilter";
 import { searchFiltercolor } from "../constants";
 
-
 const VoterAndVolunteerMappingPage = ({ dashboard }) => {
   return (
     <Page title="View User">
@@ -22,7 +21,7 @@ const VoterAndVolunteerMappingPage = ({ dashboard }) => {
           <Typography sx={{ pb: 2 }}>Search by filter</Typography>
 
           <Grid container spacing={2} alignItems="center">
-          <SearchByFilter />
+            <SearchByFilter />
 
             <Grid item xs={12} md={6} lg={2}>
               <LoadingButton variant="contained">Search</LoadingButton>
@@ -33,7 +32,7 @@ const VoterAndVolunteerMappingPage = ({ dashboard }) => {
         <Card sx={{ p: 3, marginTop: 1 }}>
           <Grid container spacing={2} alignItems="center">
             <Grid item xs={12} md={6} lg={3}>
-              <TextField label="Select Volunteer" fullWidth select />
+              <TextField size="small" label="Select Volunteer" fullWidth select />
             </Grid>
             <Grid item xs={12} md={6} lg={3}>
               <Button
@@ -46,7 +45,7 @@ const VoterAndVolunteerMappingPage = ({ dashboard }) => {
               </Button>
             </Grid>
             <Grid item xs={12} md={6} lg={3}>
-              <TextField label="Select Gruhasarathulu" fullWidth select />
+              <TextField size="small" label="Select Gruhasarathulu" fullWidth select />
             </Grid>
             <Grid item xs={12} md={6} lg={3}>
               <Button

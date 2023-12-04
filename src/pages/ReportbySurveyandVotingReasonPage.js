@@ -1,12 +1,4 @@
-import {
-  Grid,
-  Container,
-  Typography,
-  Box,
-  TextField,
-  Card,
-  MenuItem,
-} from "@mui/material";
+import { Grid, Container, Typography, Box, TextField, Card, MenuItem } from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -16,7 +8,6 @@ import Button from "@mui/material/Button";
 import ReportbySurveyandVotingReasonList from "../sections/reports/ReportbySurveyandVotingReasonList";
 import SearchByFilter from "../sections/common/SearchByFilter";
 import { searchFiltercolor } from "../constants";
-
 
 const ReportbySurveyandVotingReasonPage = ({ dashboard }) => {
   return (
@@ -33,6 +24,7 @@ const ReportbySurveyandVotingReasonPage = ({ dashboard }) => {
             <SearchByFilter />
             <Grid item xs={12} md={6} lg={2}>
               <TextField
+                size="small"
                 label="Poll Reason"
                 fullWidth
                 select
@@ -47,6 +39,7 @@ const ReportbySurveyandVotingReasonPage = ({ dashboard }) => {
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
               <TextField
+                size="small"
                 label="Voting Reason"
                 fullWidth
                 select
@@ -78,7 +71,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  null
-)(ReportbySurveyandVotingReasonPage);
+export default connect(mapStateToProps, null)(ReportbySurveyandVotingReasonPage);

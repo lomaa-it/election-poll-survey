@@ -1,18 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "@fontsource/inter";
-import {
-  Typography,
-  Card,
-  Stack,
-  Grid,
-  Switch,
-  Divider,
-  Box,
-  Chip,
-  Radio,
-  TextField,
-} from "@mui/material";
+import { Typography, Card, Stack, Grid, Switch, Divider, Box, Chip, Radio, TextField } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { styled } from "@mui/system";
 import { CheckBox } from "@mui/icons-material";
@@ -92,6 +81,7 @@ const VotingPollSurveyList = ({ showAlert }) => {
   const renderStatusButton = () => {
     return (
       <TextField
+        size="small"
         sx={{
           border: "none",
         }}
@@ -210,74 +200,10 @@ const VotingPollSurveyList = ({ showAlert }) => {
             title=""
             columns={columns}
             data={[
-              [
-                "5454",
-                "1",
-                "Rama Rao",
-                "23",
-                "912345678",
-                "RailWay New Colony",
-                "YES",
-                renderNeutralRadio(),
-                renderYCPRadio(),
-                renderTDPRadio(),
-                renderJSPRadio(),
-                renderBJPRadio(),
-                renderCongressRadio(),
-                renderOthersRadio(),
-                renderEditButton(),
-              ],
-              [
-                "5454",
-                "2",
-                "Srinivas",
-                "23",
-                "912345678",
-                "RailWay New Colony",
-                "NO",
-                renderNeutralRadio(),
-                renderYCPRadio(),
-                renderTDPRadio(),
-                renderJSPRadio(),
-                renderBJPRadio(),
-                renderCongressRadio(),
-                renderOthersRadio(),
-                renderEditButton(),
-              ],
-              [
-                "5454",
-                "3",
-                "Varun",
-                "23",
-                "912345678",
-                "RailWay New Colony",
-                "YES",
-                renderNeutralRadio(),
-                renderYCPRadio(),
-                renderTDPRadio(),
-                renderJSPRadio(),
-                renderBJPRadio(),
-                renderCongressRadio(),
-                renderOthersRadio(),
-                renderEditButton(),
-              ],
-              [
-                "5454",
-                "4",
-                "Chandu",
-                "23",
-                "912345678",
-                "RailWay New Colony",
-                "NO",
-                renderNeutralRadio(),
-                renderYCPRadio(),
-                renderTDPRadio(),
-                renderJSPRadio(),
-                renderBJPRadio(),
-                renderCongressRadio(),
-                renderOthersRadio(),
-                renderEditButton(),
-              ],
+              ["5454", "1", "Rama Rao", "23", "912345678", "RailWay New Colony", "YES", renderNeutralRadio(), renderYCPRadio(), renderTDPRadio(), renderJSPRadio(), renderBJPRadio(), renderCongressRadio(), renderOthersRadio(), renderEditButton()],
+              ["5454", "2", "Srinivas", "23", "912345678", "RailWay New Colony", "NO", renderNeutralRadio(), renderYCPRadio(), renderTDPRadio(), renderJSPRadio(), renderBJPRadio(), renderCongressRadio(), renderOthersRadio(), renderEditButton()],
+              ["5454", "3", "Varun", "23", "912345678", "RailWay New Colony", "YES", renderNeutralRadio(), renderYCPRadio(), renderTDPRadio(), renderJSPRadio(), renderBJPRadio(), renderCongressRadio(), renderOthersRadio(), renderEditButton()],
+              ["5454", "4", "Chandu", "23", "912345678", "RailWay New Colony", "NO", renderNeutralRadio(), renderYCPRadio(), renderTDPRadio(), renderJSPRadio(), renderBJPRadio(), renderCongressRadio(), renderOthersRadio(), renderEditButton()],
             ]}
             options={options}
           />

@@ -1,12 +1,4 @@
-import {
-  Grid,
-  Container,
-  Typography,
-  Box,
-  TextField,
-  Card,
-  MenuItem,
-} from "@mui/material";
+import { Grid, Container, Typography, Box, TextField, Card, MenuItem } from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -37,16 +29,7 @@ const ViewVoterPage = ({ dashboard }) => {
         console.log("data", responseData);
 
         const filterData = responseData.map((item) => {
-          return [
-            item.voter_id,
-            " ",
-            item.voter_name,
-            item.guardian_name,
-            "Male",
-            item.is_resident != null ? "Yes" : "No",
-            item.phone_no,
-            item.age,
-          ];
+          return [item.voter_id, " ", item.voter_name, item.guardian_name, "Male", item.is_resident != null ? "Yes" : "No", item.phone_no, item.age];
         });
         setVotersData(filterData);
         setIsLoading(false);
@@ -71,17 +54,29 @@ const ViewVoterPage = ({ dashboard }) => {
             <SearchByFilter />
 
             <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Part SLNO" fullWidth select   sx={{
+              <TextField
+                size="small"
+                label="Part SLNO"
+                fullWidth
+                select
+                sx={{
                   backgroundColor: "#fff",
                   borderRadius: "5px",
-                }}/>
+                }}
+              />
             </Grid>
 
             <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Voter ID" fullWidth select  sx={{
+              <TextField
+                size="small"
+                label="Voter ID"
+                fullWidth
+                select
+                sx={{
                   backgroundColor: "#fff",
                   borderRadius: "5px",
-                }}/>
+                }}
+              />
             </Grid>
 
             <Grid item xs={12} md={6} lg={2}>

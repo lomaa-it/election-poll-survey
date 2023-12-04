@@ -31,7 +31,7 @@ const DesignationPage = ({ dashboard }) => {
                 gap: "15px",
               }}
             >
-              <TextField label="Designation Name" fullWidth />
+              <TextField size="small" label="Designation Name" fullWidth />
               <LoadingButton
                 variant="contained"
                 sx={{

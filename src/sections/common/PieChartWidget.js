@@ -4,12 +4,12 @@ import { Card, CardHeader } from "@mui/material";
 import { useChart } from "../../components/chart";
 import { fNumber } from "../../utils/formatNumber";
 
-const CHART_HEIGHT = 372;
+const CHART_HEIGHT = 352;
 const LEGEND_HEIGHT = 72;
 
 const StyledChartWrapper = styled("div")(({ theme }) => ({
   height: CHART_HEIGHT,
-  marginTop: theme.spacing(5),
+  marginTop: theme.spacing(2),
   "& .apexcharts-canvas svg": { height: CHART_HEIGHT },
   "& .apexcharts-canvas svg,.apexcharts-canvas foreignObject": {
     overflow: "visible",

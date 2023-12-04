@@ -2,17 +2,7 @@ import * as Yup from "yup";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import {
-  Grid,
-  Container,
-  Typography,
-  Box,
-  TextField,
-  Card,
-  InputAdornment,
-  IconButton,
-  MenuItem,
-} from "@mui/material";
+import { Grid, Container, Typography, Box, TextField, Card, InputAdornment, IconButton, MenuItem } from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -63,10 +53,7 @@ const AddTicketPage = ({ common, voter, showAlert }) => {
     <Page title="Add Ticket">
       <Container maxWidth="xl">
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-          <Typography
-            variant="h4"
-            sx={{ mb: 1, display: "flex", alignItems: "center" }}
-          >
+          <Typography variant="h4" sx={{ mb: 1, display: "flex", alignItems: "center" }}>
             <IconButton onClick={() => navigate(-1)}>
               <ArrowBackIcon />
             </IconButton>
@@ -82,11 +69,7 @@ const AddTicketPage = ({ common, voter, showAlert }) => {
 
             <Grid container spacing={2} alignItems="start">
               <Grid item xs={12} md={6} lg={3}>
-                <RHFTextField
-                  name="navaratnalu_id"
-                  label="Navaratnalu ID"
-                  select
-                >
+                <RHFTextField name="navaratnalu_id" label="Navaratnalu ID" select>
                   {common.navaratnalu.map((item, index) => (
                     <MenuItem key={index} value={item.navaratnalu_pk}>
                       {item.navaratnalu_name}
@@ -96,13 +79,7 @@ const AddTicketPage = ({ common, voter, showAlert }) => {
               </Grid>
 
               <Grid item xs={12} md={6} lg={9}>
-                <RHFTextField
-                  name="reason"
-                  label="Write Reason..."
-                  fullWidth
-                  multiline
-                  rows={4}
-                />
+                <RHFTextField name="reason" label="Write Reason..." fullWidth multiline rows={4} />
               </Grid>
             </Grid>
           </Card>
@@ -115,6 +92,7 @@ const AddTicketPage = ({ common, voter, showAlert }) => {
             <Grid container spacing={2} alignItems="center">
               <Grid item xs={12} md={6} lg={3}>
                 <TextField
+                  size="small"
                   label="Select Attachment *"
                   fullWidth
                   InputProps={{
@@ -127,10 +105,10 @@ const AddTicketPage = ({ common, voter, showAlert }) => {
                 />
               </Grid>
               <Grid item xs={12} md={6} lg={3}>
-                <TextField label="Attachment Type *" fullWidth select />
+                <TextField size="small" label="Attachment Type *" fullWidth select />
               </Grid>
               <Grid item xs={12} md={6} lg={3}>
-                <TextField label="Attachment URL" fullWidth />
+                <TextField size="small" label="Attachment URL" fullWidth />
               </Grid>
 
               <Grid item xs={12} md={6} lg={3}>
@@ -143,12 +121,7 @@ const AddTicketPage = ({ common, voter, showAlert }) => {
                 />
               </Grid>
               <Grid item xs={12} md={6} lg={9}>
-                <TextField
-                  label="Attachements Description..."
-                  fullWidth
-                  multiline
-                  rows={4}
-                />
+                <TextField size="small" label="Attachements Description..." fullWidth multiline rows={4} />
               </Grid>
               <Grid
                 item
@@ -160,11 +133,7 @@ const AddTicketPage = ({ common, voter, showAlert }) => {
                   mt: "55px",
                 }}
               >
-                <LoadingButton
-                  type="submit"
-                  loading={isLoading}
-                  variant="contained"
-                >
+                <LoadingButton type="submit" loading={isLoading} variant="contained">
                   Submit
                 </LoadingButton>
               </Grid>

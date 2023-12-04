@@ -18,31 +18,31 @@ const UserRegistrationPage = ({ dashboard }) => {
 
           <Grid container spacing={2} alignItems="center">
             <Grid item xs={12} md={6} lg={3}>
-              <TextField label="User Display Name*" fullWidth />
+              <TextField size="small" label="User Display Name*" fullWidth />
             </Grid>
 
             <Grid item xs={12} md={6} lg={3}>
-              <TextField label="User Name *" fullWidth />
+              <TextField size="small" label="User Name *" fullWidth />
             </Grid>
 
             <Grid item xs={12} md={6} lg={3}>
-              <TextField label="Password *" fullWidth />
+              <TextField size="small" label="Password *" fullWidth />
             </Grid>
 
             <Grid item xs={12} md={6} lg={3}>
-              <TextField label="Phone Number" fullWidth />
+              <TextField size="small" label="Phone Number" fullWidth />
             </Grid>
 
             <Grid item xs={12} md={6} lg={3}>
-              <TextField label="Office Phone Number" fullWidth />
+              <TextField size="small" label="Office Phone Number" fullWidth />
             </Grid>
 
             <Grid item xs={12} md={6} lg={3}>
-              <TextField label="Age *" fullWidth />
+              <TextField size="small" label="Age *" fullWidth />
             </Grid>
 
             <Grid item xs={12} md={6} lg={3}>
-              <TextField label="Email" fullWidth />
+              <TextField size="small" label="Email" fullWidth />
             </Grid>
           </Grid>
         </Card>
@@ -52,39 +52,39 @@ const UserRegistrationPage = ({ dashboard }) => {
 
           <Grid container spacing={2} alignItems="center">
             <Grid item xs={12} md={6} lg={3}>
-              <TextField label="Designation ID *" fullWidth select />
+              <TextField size="small" label="Designation ID *" fullWidth select />
             </Grid>
 
             <Grid item xs={12} md={6} lg={3}>
-              <TextField label="State ID*" fullWidth select />
+              <TextField size="small" label="State ID*" fullWidth select />
             </Grid>
 
             <Grid item xs={12} md={6} lg={3}>
-              <TextField label="Consistency ID *" fullWidth select />
+              <TextField size="small" label="Consistency ID *" fullWidth select />
             </Grid>
 
             <Grid item xs={12} md={6} lg={3}>
-              <TextField label="Mandal ID*" fullWidth select />
+              <TextField size="small" label="Mandal ID*" fullWidth select />
             </Grid>
 
             <Grid item xs={12} md={6} lg={3}>
-              <TextField label="Division ID *" fullWidth select />
+              <TextField size="small" label="Division ID *" fullWidth select />
             </Grid>
 
             <Grid item xs={12} md={6} lg={3}>
-              <TextField label="Sachivalayam ID *" fullWidth select />
+              <TextField size="small" label="Sachivalayam ID *" fullWidth select />
             </Grid>
 
             <Grid item xs={12} md={6} lg={3}>
-              <TextField label="Booth ID *" fullWidth select />
+              <TextField size="small" label="Booth ID *" fullWidth select />
             </Grid>
 
             <Grid item xs={12} md={6} lg={3}>
-              <TextField label="Village ID *" fullWidth select />
+              <TextField size="small" label="Village ID *" fullWidth select />
             </Grid>
 
             <Grid item xs={12} md={6} lg={3}>
-              <TextField label="Reporting Manager" fullWidth select />
+              <TextField size="small" label="Reporting Manager" fullWidth select />
             </Grid>
 
             <Grid item xs={12} md={6} lg={3}>

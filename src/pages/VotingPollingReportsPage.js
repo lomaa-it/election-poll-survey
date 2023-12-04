@@ -21,19 +21,19 @@ const VotingPollingReportsPage = ({ dashboard }) => {
 
           <Grid container spacing={2} alignItems="center">
             <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Select Mandal" fullWidth select />
+              <TextField size="small" label="Select Mandal" fullWidth select />
             </Grid>
 
             <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Select Division" fullWidth select />
+              <TextField size="small" label="Select Division" fullWidth select />
             </Grid>
 
             <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Select Sachivalayam" fullWidth select />
+              <TextField size="small" label="Select Sachivalayam" fullWidth select />
             </Grid>
 
             <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Select Part/Booth No" fullWidth select />
+              <TextField size="small" label="Select Part/Booth No" fullWidth select />
             </Grid>
 
             <Grid

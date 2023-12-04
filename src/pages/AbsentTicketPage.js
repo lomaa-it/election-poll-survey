@@ -25,7 +25,7 @@ const AbsentTicketPage = ({ dashboard }) => {
 
           <Grid container spacing={2} alignItems="center">
             <Grid item xs={12} md={6} lg={12}>
-              <TextField label="Write Reason..." fullWidth multiline rows={4} rowsMax={8} />
+              <TextField size="small" label="Write Reason..." fullWidth multiline rows={4} rowsMax={8} />
             </Grid>{" "}
             <Grid
               item

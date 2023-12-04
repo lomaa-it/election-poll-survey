@@ -1,11 +1,4 @@
-import {
-  Grid,
-  Container,
-  Typography,
-  Box,
-  TextField,
-  Card,
-} from "@mui/material";
+import { Grid, Container, Typography, Box, TextField, Card } from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -15,11 +8,7 @@ import Button from "@mui/material/Button";
 import MandalsList from "../sections/reports/MandalsList";
 import { useEffect, useState } from "react";
 import instance from "../utils/axios";
-import {
-  getAllMandalRoute,
-  getAllStatesRoute,
-  getAllDistrictsRoute,
-} from "../utils/apis";
+import { getAllMandalRoute, getAllStatesRoute, getAllDistrictsRoute } from "../utils/apis";
 
 const MandalPage = ({ dashboard }) => {
   const [mandalsList, setMandalsList] = useState([]);
@@ -93,9 +82,7 @@ const MandalPage = ({ dashboard }) => {
               {" "}
               <Autocomplete
                 options={stateList || []}
-                renderInput={(params) => (
-                  <TextField {...params} label="Select State" fullWidth />
-                )}
+                renderInput={(params) => <TextField size="small" {...params} label="Select State" fullWidth />}
                 onChange={(event, value) => {
                   console.log("value", value);
                   if (value) {
@@ -103,10 +90,10 @@ const MandalPage = ({ dashboard }) => {
                   }
                 }}
               />
-              <TextField label="Select State" fullWidth select />
-              <TextField label="Select District" fullWidth select />
-              <TextField label="Select Constituency" fullWidth select />
-              <TextField label="Mandal Name" fullWidth />
+              <TextField size="small" label="Select State" fullWidth select />
+              <TextField size="small" label="Select District" fullWidth select />
+              <TextField size="small" label="Select Constituency" fullWidth select />
+              <TextField size="small" label="Mandal Name" fullWidth />
               <LoadingButton
                 variant="contained"
                 sx={{

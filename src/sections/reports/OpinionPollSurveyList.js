@@ -1,74 +1,20 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  Card,
-  Grid,
-  TextField,
-  Box,
-  CircularProgress,
-  IconButton,
-  TableRow,
-  TableCell,
-  TableContainer,
-  Table,
-  TableHead,
-  TableBody,
-  Paper,
-  Typography,
-  MenuItem,
-} from "@mui/material";
+import { Card, Grid, Stack, Box, CircularProgress, IconButton, TableRow, TableCell, TableContainer, Table, TableHead, TableBody, Paper, Typography, MenuItem } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import FormGroup from "@mui/material/FormGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import DynamicFeedIcon from "@mui/icons-material/DynamicFeed";
+
 import MUIDataTable from "mui-datatables";
 import { connect } from "react-redux";
 import { showAlert } from "../../actions/alert";
-import Button from "@mui/material/Button";
-import { LoadingButton } from "@mui/lab";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import EditNoteIcon from "@mui/icons-material/EditNote";
-import {
-  PARTY_ID,
-  casteList,
-  religionList,
-  searchFiltercolor,
-} from "../../constants";
-import { changeOpinionPoll } from "../../actions/voter";
-import {
-  BJPRadio,
-  CongressRadio,
-  JSPRadio,
-  NeutralRadio,
-  OthersRadio,
-  TDPRadio,
-  YCPRadio,
-} from "../common/PartyRadioButtons";
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
 
-import FormControl from "@mui/material/FormControl";
-import FormLabel from "@mui/material/FormLabel";
+import EditNoteIcon from "@mui/icons-material/EditNote";
+import { PARTY_ID, casteList, religionList, searchFiltercolor } from "../../constants";
+import { changeOpinionPoll } from "../../actions/voter";
+import { BJPRadio, CongressRadio, JSPRadio, NeutralRadio, OthersRadio, TDPRadio, YCPRadio } from "../common/PartyRadioButtons";
+import UpdateVoterDialog from "../common/UpdateVoterDialog";
 
 const OpinionPollSurveyList = ({ voter, showAlert, changeOpinionPoll }) => {
-  const [isLoading, setLoading] = useState(false);
-  const [selectedParties, setSelectedParties] = useState({});
-  const [isResidential, setIsResidential] = useState(true);
-
   const navigate = useNavigate();
-  const [open, setOpen] = useState(false);
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
 
   const columns = [
     {
@@ -104,168 +50,10 @@ const OpinionPollSurveyList = ({ voter, showAlert, changeOpinionPoll }) => {
       options: {
         customBodyRender: (value, tableMeta, updateValue) => {
           return (
-            <Typography
-              sx={{
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              {value}{" "}
-              <>
-                <Button
-                  onClick={handleClickOpen}
-                  sx={{
-                    padding: "0px",
-                  }}
-                >
-                  {" "}
-                  <DynamicFeedIcon
-                    sx={{
-                      margin: "0px",
-                    }}
-                  />
-                </Button>
-                <Dialog
-                  open={open}
-                  onClose={handleClose}
-                  // sx={{
-                  //   opacity: 0.2,
-                  // }}
-                >
-                  <DialogTitle>Update Details</DialogTitle>
-                  <DialogContent>
-                    {/* <DialogContentText>
-                      To subscribe to this website, please enter your email
-                      address here. We will send updates occasionally.
-                    </DialogContentText> */}
-                    <Grid
-                      container
-                      spacing={2}
-                      alignItems="center"
-                      sx={{
-                        opacity: 2,
-                        marginTop: "10px",
-                      }}
-                    >
-                      <Grid item xs={12} md={12} lg={12}>
-                        <TextField label="Phone Number" fullWidth />
-                      </Grid>
-                      <Grid item xs={12} md={12} lg={12}>
-                        <FormGroup>
-                          <FormControl>
-                            <RadioGroup
-                              row
-                              aria-labelledby="demo-radio-buttons-group-label"
-                              defaultValue="isResidential"
-                              name="radio-buttons-group"
-                              onChange={(e) => {
-                                console.log("e.target.value", e.target.value);
-                                if (e.target.value == "isResidential") {
-                                  setIsResidential(true);
-                                } else {
-                                  setIsResidential(false);
-                                }
-                              }}
-                            >
-                              <FormControlLabel
-                                value="isResidential"
-                                control={<Radio />}
-                                label="Is Residential"
-                              />
-                              <FormControlLabel
-                                value="non-residential"
-                                control={<Radio />}
-                                label="Non-Residential"
-                              />
-                            </RadioGroup>
-                          </FormControl>
-                        </FormGroup>
-                      </Grid>
-                      {isResidential ? (
-                        <>
-                          <Grid item xs={12} md={12} lg={12}>
-                            <TextField label="Current Address" fullWidth />
-                          </Grid>{" "}
-                          <Grid item xs={12} md={12} lg={12}>
-                            <TextField label="Permanent Address" fullWidth />
-                          </Grid>
-                        </>
-                      ) : (
-                        <Grid item xs={12} md={12} lg={12}>
-                          <TextField label="Current Address" fullWidth />
-                        </Grid>
-                      )}
-                      <Grid item xs={12} md={6} lg={6}>
-                        <TextField label="Religion" fullWidth select>
-                          {religionList.map((item, index) => (
-                            <MenuItem key={index} value={item.label}>
-                              {item.label}
-                            </MenuItem>
-                          ))}
-                        </TextField>
-                      </Grid>{" "}
-                      <Grid item xs={12} md={6} lg={6}>
-                        <TextField label="Caste" fullWidth select>
-                          {casteList.map((item, index) => (
-                            <MenuItem key={index} value={item.label}>
-                              {item.label}
-                            </MenuItem>
-                          ))}
-                        </TextField>
-                      </Grid>
-                      <Grid item xs={12} md={6} lg={6}>
-                        <TextField
-                          label="Disability (40% or above)"
-                          fullWidth
-                          select
-                        >
-                          <MenuItem value="YES">YES</MenuItem>
-                          <MenuItem value="NO">NO</MenuItem>
-                        </TextField>
-                      </Grid>
-                      <Grid item xs={12} md={6} lg={6}>
-                        <TextField label="Govt Employee" fullWidth select>
-                          <MenuItem value="YES">YES</MenuItem>
-                          <MenuItem value="NO">NO</MenuItem>
-                        </TextField>
-                      </Grid>
-                      <Grid item xs={12} md={6} lg={6}>
-                        <TextField label="Select Party" fullWidth select>
-                          <MenuItem value="Neutral">Neutral</MenuItem>
-                          <MenuItem value="YCP">YCP</MenuItem>
-                          <MenuItem value="TDP">TDP</MenuItem>
-                          <MenuItem value="JSP">JSP</MenuItem>
-                          <MenuItem value="BJP">BJP</MenuItem>
-                          <MenuItem value="JSP">JSP</MenuItem>
-                          <MenuItem value="BJP">BJP</MenuItem>
-                          <MenuItem value="CONGRESS">CONGRESS</MenuItem>
-                          <MenuItem value="Others">Others</MenuItem>
-                        </TextField>
-                      </Grid>
-                      <Grid item xs={12} md={12} lg={12}>
-                        <LoadingButton
-                          onClick={handleClose}
-                          loading={isLoading}
-                          variant="contained"
-                        >
-                          Submit
-                        </LoadingButton>{" "}
-                        <LoadingButton
-                          onClick={handleClose}
-                          loading={isLoading}
-                          variant="contained"
-                          sx={{
-                            backgroundColor: "red",
-                          }}
-                        >
-                          Cancel
-                        </LoadingButton>
-                      </Grid>
-                    </Grid>
-                  </DialogContent>
-                </Dialog>
-              </>
-            </Typography>
+            <Stack direction="row" alignItems="center">
+              <Typography>{value}</Typography>
+              <UpdateVoterDialog />
+            </Stack>
           );
         },
       },
@@ -294,14 +82,10 @@ const OpinionPollSurveyList = ({ voter, showAlert, changeOpinionPoll }) => {
                   handleChange(data[0], partyId);
                 }}
               />
-            ); // Return null to hide the button
+            );
           }
           return (
-            <Box
-              sx={{
-                display: "flex",
-              }}
-            >
+            <Stack direction="row" alignItems="center">
               <NeutralRadio
                 checked={value == partyId}
                 onChange={() => {
@@ -309,10 +93,11 @@ const OpinionPollSurveyList = ({ voter, showAlert, changeOpinionPoll }) => {
                   handleChange(data[0], partyId);
                 }}
               />
+
               <IconButton onClick={() => handleEdit(data)}>
                 <EditNoteIcon />
               </IconButton>
-            </Box>
+            </Stack>
           );
         },
       },
@@ -325,12 +110,7 @@ const OpinionPollSurveyList = ({ voter, showAlert, changeOpinionPoll }) => {
           var data = tableMeta.rowData;
           var partyId = PARTY_ID.YSRCP;
 
-          return (
-            <YCPRadio
-              checked={value == partyId}
-              onChange={() => handleChange(data[0], partyId)}
-            />
-          );
+          return <YCPRadio checked={value == partyId} onChange={() => handleChange(data[0], partyId)} />;
         },
       },
     },
@@ -342,12 +122,7 @@ const OpinionPollSurveyList = ({ voter, showAlert, changeOpinionPoll }) => {
         customBodyRender: (value, tableMeta, updateValue) => {
           var data = tableMeta.rowData;
           var partyId = PARTY_ID.TDP;
-          return (
-            <TDPRadio
-              checked={value == partyId}
-              onChange={() => handleChange(data[0], partyId)}
-            />
-          );
+          return <TDPRadio checked={value == partyId} onChange={() => handleChange(data[0], partyId)} />;
         },
       },
     },
@@ -358,12 +133,7 @@ const OpinionPollSurveyList = ({ voter, showAlert, changeOpinionPoll }) => {
         customBodyRender: (value, tableMeta, updateValue) => {
           var data = tableMeta.rowData;
           var partyId = PARTY_ID.JANASENA;
-          return (
-            <JSPRadio
-              checked={value == partyId}
-              onChange={() => handleChange(data[0], partyId)}
-            />
-          );
+          return <JSPRadio checked={value == partyId} onChange={() => handleChange(data[0], partyId)} />;
         },
       },
     },
@@ -374,12 +144,7 @@ const OpinionPollSurveyList = ({ voter, showAlert, changeOpinionPoll }) => {
         customBodyRender: (value, tableMeta, updateValue) => {
           var data = tableMeta.rowData;
           var partyId = PARTY_ID.BJP;
-          return (
-            <BJPRadio
-              checked={value == partyId}
-              onChange={() => handleChange(data[0], partyId)}
-            />
-          );
+          return <BJPRadio checked={value == partyId} onChange={() => handleChange(data[0], partyId)} />;
         },
       },
     },
@@ -390,12 +155,7 @@ const OpinionPollSurveyList = ({ voter, showAlert, changeOpinionPoll }) => {
         customBodyRender: (value, tableMeta, updateValue) => {
           var data = tableMeta.rowData;
           var partyId = PARTY_ID.CONGRESS;
-          return (
-            <CongressRadio
-              checked={value == partyId}
-              onChange={() => handleChange(data[0], partyId)}
-            />
-          );
+          return <CongressRadio checked={value == partyId} onChange={() => handleChange(data[0], partyId)} />;
         },
       },
     },
@@ -407,12 +167,7 @@ const OpinionPollSurveyList = ({ voter, showAlert, changeOpinionPoll }) => {
           var data = tableMeta.rowData;
           var partyId = PARTY_ID.OTHERS;
 
-          return (
-            <OthersRadio
-              checked={value == partyId}
-              onChange={() => handleChange(data[0], partyId)}
-            />
-          );
+          return <OthersRadio checked={value == partyId} onChange={() => handleChange(data[0], partyId)} />;
         },
       },
     },
@@ -489,10 +244,6 @@ const OpinionPollSurveyList = ({ voter, showAlert, changeOpinionPoll }) => {
     var result = await changeOpinionPoll(id, value);
     if (result) {
       showAlert({ text: "Opinion Submitted", color: "success" });
-      setSelectedParties((prevSelectedParties) => ({
-        ...prevSelectedParties,
-        [id]: value,
-      }));
     }
   };
 
@@ -553,12 +304,8 @@ const OpinionPollSurveyList = ({ voter, showAlert, changeOpinionPoll }) => {
           <TableBody>
             <TableRow>
               <TableCell>{voter.data.length}</TableCell>
-              <TableCell>
-                {voter.data.filter((e) => e.intrested_party != null).length}
-              </TableCell>
-              <TableCell>
-                {voter.data.filter((e) => e.intrested_party == null).length}
-              </TableCell>
+              <TableCell>{voter.data.filter((e) => e.intrested_party != null).length}</TableCell>
+              <TableCell>{voter.data.filter((e) => e.intrested_party == null).length}</TableCell>
             </TableRow>
           </TableBody>
         </Table>
@@ -568,12 +315,7 @@ const OpinionPollSurveyList = ({ voter, showAlert, changeOpinionPoll }) => {
 
       <Card elevation={1}>
         {voter.isLoading && (
-          <Box
-            minHeight={200}
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-          >
+          <Box minHeight={200} display="flex" justifyContent="center" alignItems="center">
             <CircularProgress />
           </Box>
         )}
@@ -604,6 +346,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { showAlert, changeOpinionPoll })(
-  OpinionPollSurveyList
-);
+export default connect(mapStateToProps, { showAlert, changeOpinionPoll })(OpinionPollSurveyList);

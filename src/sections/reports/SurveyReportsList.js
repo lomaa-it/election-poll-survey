@@ -152,19 +152,17 @@ const SurveyReportsList = ({ dashboard, getOpinionResults, clearDashboardReducer
   };
 
   const getMuiTheme = () =>
-  createTheme({
-    components: {
-      MUIDataTableHeadCell: {
-        styleOverrides: {
-          root: {
-            backgroundColor: searchFiltercolor,
+    createTheme({
+      components: {
+        MUIDataTableHeadCell: {
+          styleOverrides: {
+            root: {
+              backgroundColor: searchFiltercolor,
+            },
           },
         },
       },
-    },
-  });
-
-
+    });
 
   return (
     <>
@@ -175,17 +173,30 @@ const SurveyReportsList = ({ dashboard, getOpinionResults, clearDashboardReducer
           <SearchByFilter onChanged={(value) => setFilterValues(value)} />
 
           <Grid item xs={12} md={6} lg={2}>
-            <TextField label="Select User" fullWidth select  sx={{
-                  backgroundColor: "#fff",
-                  borderRadius: "5px",
-                }}/>
+            <TextField
+              size="small"
+              size="small"
+              label="Select User"
+              fullWidth
+              select
+              sx={{
+                backgroundColor: "#fff",
+                borderRadius: "5px",
+              }}
+            />
           </Grid>
 
           <Grid item xs={12} md={6} lg={2}>
-            <TextField label="Select Next Level User" fullWidth select  sx={{
-                  backgroundColor: "#fff",
-                  borderRadius: "5px",
-                }}/>
+            <TextField
+              size="small"
+              label="Select Next Level User"
+              fullWidth
+              select
+              sx={{
+                backgroundColor: "#fff",
+                borderRadius: "5px",
+              }}
+            />
           </Grid>
 
           <Grid item xs={12} md={6} lg={2}>
@@ -231,8 +242,8 @@ const SurveyReportsList = ({ dashboard, getOpinionResults, clearDashboardReducer
             </Box>
 
             <Divider />
-            <ThemeProvider  theme={getMuiTheme()}>
-            <MUIDataTable title="Opinion Reports" columns={columns} data={dashboard.opinionResults} options={options} />
+            <ThemeProvider theme={getMuiTheme()}>
+              <MUIDataTable title="Opinion Reports" columns={columns} data={dashboard.opinionResults} options={options} />
             </ThemeProvider>
           </>
         )}

@@ -31,7 +31,7 @@ const PartiesPage = ({ dashboard }) => {
                 gap: "15px",
               }}
             >
-              <TextField label="Sequence Number" fullWidth /> <TextField label="Party Name" fullWidth />
+              <TextField size="small" label="Sequence Number" fullWidth /> <TextField size="small" label="Party Name" fullWidth />
               <LoadingButton
                 variant="contained"
                 sx={{

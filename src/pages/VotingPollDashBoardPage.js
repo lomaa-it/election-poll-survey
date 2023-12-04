@@ -1,13 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  Grid,
-  Container,
-  Typography,
-  Box,
-  TextField,
-  Card,
-  MenuItem,
-} from "@mui/material";
+import { Grid, Container, Typography, Box, TextField, Card, MenuItem } from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -69,14 +61,7 @@ const VotingPollDashBoardPage = ({ common, getAllCommonData }) => {
 
           <Grid container spacing={3}>
             {exitPollItems.map((item, index) => (
-              <Grid
-                key={index}
-                item
-                xs={12}
-                md={6}
-                lg={2}
-                sx={{ textAlign: "center" }}
-              >
+              <Grid key={index} item xs={12} md={6} lg={2} sx={{ textAlign: "center" }}>
                 <Typography variant="subtitle1">{item.name}</Typography>
 
                 <Typography variant="h6">{item.value}</Typography>
@@ -95,6 +80,7 @@ const VotingPollDashBoardPage = ({ common, getAllCommonData }) => {
 
             <Grid item xs={12} md={6} lg={2}>
               <TextField
+                size="small"
                 label="Select User"
                 fullWidth
                 select
@@ -106,18 +92,20 @@ const VotingPollDashBoardPage = ({ common, getAllCommonData }) => {
             </Grid>
 
             <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Select Next Level User" fullWidth select   sx={{
+              <TextField
+                size="small"
+                label="Select Next Level User"
+                fullWidth
+                select
+                sx={{
                   backgroundColor: "#fff",
                   borderRadius: "5px",
-                }}/>
+                }}
+              />
             </Grid>
 
             <Grid item xs={12} md={6} lg={2}>
-              <LoadingButton
-                type="submit"
-                variant="contained"
-                onClick={onSubmit}
-              >
+              <LoadingButton type="submit" variant="contained" onClick={onSubmit}>
                 Search
               </LoadingButton>
             </Grid>
@@ -150,15 +138,7 @@ const VotingPollDashBoardPage = ({ common, getAllCommonData }) => {
                 { label: "BJP", value: 1443 },
                 { label: "CONGRESS", value: 1443 },
               ]}
-              chartColors={[
-                YSRCPColor,
-                NETURALColor,
-                TDPColor,
-                JSPColor,
-                BJPColor,
-                CONGRESSColor,
-                OTHERColor,
-              ]}
+              chartColors={[YSRCPColor, NETURALColor, TDPColor, JSPColor, BJPColor, CONGRESSColor, OTHERColor]}
             />
           </Grid>
 
@@ -183,12 +163,7 @@ const VotingPollDashBoardPage = ({ common, getAllCommonData }) => {
                 { label: "Cancel", value: 876 },
                 { label: "Escalated", value: 2542 },
               ]}
-              chartColors={[
-                OpenColor,
-                ResolvedColor,
-                CancelColor,
-                EscalatedColor,
-              ]}
+              chartColors={[OpenColor, ResolvedColor, CancelColor, EscalatedColor]}
             />
           </Grid>
 
@@ -196,14 +171,7 @@ const VotingPollDashBoardPage = ({ common, getAllCommonData }) => {
             <BarChartWidget
               title="Ticktes"
               sx={{ height: "100%" }}
-              chartLabels={[
-                "Pakala",
-                "Ramchandrapuram",
-                "Chinnagottigallu",
-                "Chandragiri",
-                "Yerravanipalem",
-                "Tirupathi (Rural)",
-              ]}
+              chartLabels={["Pakala", "Ramchandrapuram", "Chinnagottigallu", "Chandragiri", "Yerravanipalem", "Tirupathi (Rural)"]}
               chartColors={[completedColor, pendingColor]}
               chartData={[
                 {
@@ -229,14 +197,7 @@ const VotingPollDashBoardPage = ({ common, getAllCommonData }) => {
                 { label: "55-65", value: 2415 },
                 { label: "65+", value: 1443 },
               ]}
-              chartColors={[
-                Age1Color,
-                Age2Color,
-                Age3Color,
-                Age4Color,
-                Age5Color,
-                Age6Color,
-              ]}
+              chartColors={[Age1Color, Age2Color, Age3Color, Age4Color, Age5Color, Age6Color]}
             />
           </Grid>
 
@@ -272,6 +233,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { getAllCommonData })(
-  VotingPollDashBoardPage
-);
+export default connect(mapStateToProps, { getAllCommonData })(VotingPollDashBoardPage);

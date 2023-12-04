@@ -33,10 +33,10 @@ const DivisionPage = ({ dashboard }) => {
               }}
             >
               {" "}
-              <TextField label="Select State" fullWidth select />
-              <TextField label="Select District" fullWidth select /> <TextField label="Select Constituency" fullWidth select />
-              <TextField label="Select Mandal" fullWidth select />
-              <TextField label="Division Name" fullWidth />
+              <TextField size="small" label="Select State" fullWidth select />
+              <TextField size="small" label="Select District" fullWidth select /> <TextField size="small" label="Select Constituency" fullWidth select />
+              <TextField size="small" label="Select Mandal" fullWidth select />
+              <TextField size="small" label="Division Name" fullWidth />
               <LoadingButton
                 variant="contained"
                 sx={{

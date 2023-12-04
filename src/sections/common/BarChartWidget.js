@@ -23,7 +23,7 @@ export default function BarChartWidget({ title, subheader, chartLabels, chartDat
     },
   });
 
-  const chartComponent = <ReactApexChart type="bar" series={chartData} options={chartOptions} height={364} />;
+  const chartComponent = <ReactApexChart type="bar" series={chartData} options={chartOptions} height={352} />;
 
   if (withCard)
     return (

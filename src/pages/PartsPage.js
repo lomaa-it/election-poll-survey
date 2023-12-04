@@ -21,40 +21,40 @@ const PartsPage = ({ dashboard }) => {
 
           <Grid container spacing={2} alignItems="center">
             <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Select State" fullWidth select />
+              <TextField size="small" label="Select State" fullWidth select />
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Select District" fullWidth select />
+              <TextField size="small" label="Select District" fullWidth select />
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Select Constituency" fullWidth select />
+              <TextField size="small" label="Select Constituency" fullWidth select />
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Select Mandal" fullWidth select />
+              <TextField size="small" label="Select Mandal" fullWidth select />
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Select Division" fullWidth select />
+              <TextField size="small" label="Select Division" fullWidth select />
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Select Sachivalayam " fullWidth select />
+              <TextField size="small" label="Select Sachivalayam " fullWidth select />
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Part Number " fullWidth />
+              <TextField size="small" label="Part Number " fullWidth />
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Part Name " fullWidth />
+              <TextField size="small" label="Part Name " fullWidth />
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Male Votes " fullWidth />
+              <TextField size="small" label="Male Votes " fullWidth />
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Female Votes" fullWidth />
+              <TextField size="small" label="Female Votes" fullWidth />
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Tg Votes" fullWidth />
+              <TextField size="small" label="Tg Votes" fullWidth />
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Totals Votes" fullWidth />
+              <TextField size="small" label="Totals Votes" fullWidth />
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
               <LoadingButton variant="contained">Add</LoadingButton>

@@ -30,7 +30,7 @@ const OpinionPollSurveyPage = ({ getAllVotersSurvey, clearVoterReducer }) => {
     <Page title="Opinion Survey">
       <Container maxWidth="xl">
         <Typography variant="h4" sx={{ mb: 1 }}>
-          Opinion Survey  
+          Opinion Survey
         </Typography>
 
         <Card sx={{ p: 3, backgroundColor: searchFiltercolor }}>
@@ -40,34 +40,64 @@ const OpinionPollSurveyPage = ({ getAllVotersSurvey, clearVoterReducer }) => {
             <SearchByFilter onChanged={(value) => setFilterValues(value)} />
 
             <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Voter ID" fullWidth select  sx={{
+              <TextField
+                size="small"
+                label="Voter ID"
+                fullWidth
+                select
+                sx={{
                   backgroundColor: "#fff",
                   borderRadius: "5px",
-                }}/>
+                }}
+              />
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Voter Name" fullWidth select   sx={{
+              <TextField
+                size="small"
+                label="Voter Name"
+                fullWidth
+                select
+                sx={{
                   backgroundColor: "#fff",
                   borderRadius: "5px",
-                }}/>
+                }}
+              />
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Phone Number" fullWidth select  sx={{
+              <TextField
+                size="small"
+                label="Phone Number"
+                fullWidth
+                select
+                sx={{
                   backgroundColor: "#fff",
                   borderRadius: "5px",
-                }} />
+                }}
+              />
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Select User" fullWidth select   sx={{
+              <TextField
+                size="small"
+                label="Select User"
+                fullWidth
+                select
+                sx={{
                   backgroundColor: "#fff",
                   borderRadius: "5px",
-                }}/>
+                }}
+              />
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
-              <TextField label="Select Next Level User" fullWidth select   sx={{
+              <TextField
+                size="small"
+                label="Select Next Level User"
+                fullWidth
+                select
+                sx={{
                   backgroundColor: "#fff",
                   borderRadius: "5px",
-                }}/>
+                }}
+              />
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
               <LoadingButton loading={isLoading} variant="contained" onClick={onSubmit}>

@@ -1,15 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  Typography,
-  Card,
-  Stack,
-  Grid,
-  Switch,
-  Divider,
-  Box,
-  Chip,
-  TextField,
-} from "@mui/material";
+import { Typography, Card, Stack, Grid, Switch, Divider, Box, Chip, TextField } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { CheckBox } from "@mui/icons-material";
 import MUIDataTable from "mui-datatables";
@@ -29,24 +19,36 @@ const ViewUsersList = ({ showAlert, usersData }) => {
     {
       label: "Select",
     },
-    {
-      label: "Constituency Name",
-    },
+
     {
       label: "User Name",
+    },
+    {
+      label: "User Id",
     },
     {
       label: "User Login Name",
     },
     {
+      label: "Designation",
+    },
+    {
       label: "Mandal Name",
     },
     {
-      label: "Cell",
+      label: "Division Name",
     },
-
     {
-      label: "Email",
+      label: "Sachivalyam Name",
+    },
+    {
+      label: "Part/Booth No",
+    },
+    {
+      label: "Village",
+    },
+    {
+      label: "Phone",
     },
     {
       label: "Edit/Delete",
@@ -102,13 +104,8 @@ const ViewUsersList = ({ showAlert, usersData }) => {
       <Stack>
         <Divider />
         <ThemeProvider theme={getMuiTheme()}>
-          <MUIDataTable
-            title="Users List Table"
-            columns={columns}
-            data={filterChartData}
-            options={options}
-          />
-        </ThemeProvider>  
+          <MUIDataTable title="Users List Table" columns={columns} data={filterChartData} options={options} />
+        </ThemeProvider>
       </Stack>
     </Card>
   );
