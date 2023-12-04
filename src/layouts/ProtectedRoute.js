@@ -3,8 +3,7 @@ import { connect } from "react-redux";
 import { Navigate, Outlet } from "react-router-dom";
 
 const ProtectedRoute = ({ type, auth }) => {
-  return <Outlet />;
-  // return auth.isAuthenticated ? <Outlet /> : <Navigate to="/404" replace />;
+  return auth.isAuthenticated ? <Outlet /> : <Navigate to="/404" replace />;
 };
 
 const mapStateToProps = (state) => {

@@ -3,8 +3,8 @@ import LsService from "../services/localstorage";
 let user = LsService.getCurrentUser();
 
 const initialState = {
-  user: user && user.admin_fullname ? user : null,
-  isAuthenticated: user && user.admin_fullname ? true : false,
+  user: user && user.user_displayname ? user : null,
+  isAuthenticated: user && user.user_displayname ? true : false,
   isLoading: false,
   errorMessage: null,
   data: {},

@@ -48,10 +48,10 @@ const AccountPopover = ({ account, authLogout }) => {
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle2" noWrap>
-            {"Admin"}
+            {account.user?.user_displayname}
           </Typography>
           <Typography variant="body2" sx={{ color: "text.secondary" }} noWrap>
-            {"Admin"}
+            {account.user?.desgination_name}
           </Typography>
         </Box>
 

@@ -32,9 +32,11 @@ const Nav = ({ account, openNav, onCloseNav }) => {
   }, [pathname]);
 
   const renderContent = (
-    <Scrollbar sx={{
-      backgroundImage: 'linear-gradient(to bottom, #013157,#013157, #006D4D)'
-    }}>
+    <Scrollbar
+      sx={{
+        backgroundImage: "linear-gradient(to bottom, #013157,#013157, #006D4D)",
+      }}
+    >
       <Box sx={{ px: 2.5, py: 3, display: "flex", justifyContent: "center", alignItems: "center" }}>
         <Box component="img" src={PUBLIC_URL + "/static/logo.png"} sx={{ width: "60px", height: "60px" }} />
 
@@ -48,13 +50,13 @@ const Nav = ({ account, openNav, onCloseNav }) => {
           <StyledAccount>
             <Avatar>A</Avatar>
 
-            <Box sx={{ ml: 2 }}>
+            <Box sx={{ ml: 2, width: "100%" }}>
               <Typography variant="subtitle2" sx={{ color: "text.white" }}>
-                {"Admin"}
+                {account.user?.user_displayname}
               </Typography>
 
-              <Typography variant="body2" sx={{ color: "text.white" }}>
-                {"Admin"}
+              <Typography variant="body2" sx={{ color: "text.white", fontSize: 10 }}>
+                {account.user?.desgination_name}
               </Typography>
             </Box>
           </StyledAccount>

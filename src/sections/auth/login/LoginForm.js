@@ -11,23 +11,25 @@ import { FormProvider, RHFTextField } from "../../../components/hook-form";
 import { connect } from "react-redux";
 import { authSuccess } from "../../../actions/auth";
 import { showAlert } from "../../../actions/alert";
+import { phoneRegExp } from "../../../constants";
+import instance from "../../../utils/axios";
+import { loginRoute } from "../../../utils/apis";
 
 const LoginForm = ({ showAlert, authSuccess }) => {
   const navigate = useNavigate();
-  // const [filersData, setFiltersData] = useState([]);
 
   const [isLoading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [userDetails, setUserDetails] = useState({});
 
   const LoginSchema = Yup.object().shape({
-    username: Yup.string().required("Username is required"),
-    password: Yup.string().required("Password is required").min(8, "Password must be at least 8 characters"),
+    phone_no: Yup.string().matches(phoneRegExp, "Phone number is not valid").required("Phone number is required"),
+    password: Yup.string().required("Password is required").min(4, "Password must be at least 4 characters"),
   });
 
   const defaultValues = {
-    username: "",
+    phone_no: "",
     password: "",
+    captcha: "",
   };
 
   const methods = useForm({
@@ -38,45 +40,49 @@ const LoginForm = ({ showAlert, authSuccess }) => {
   const { handleSubmit } = methods;
 
   const onSubmit = async (data) => {
-    alert("New user? Secure your account by resetting your password.");
-    showAlert({
-      text: "New user? Secure your account by resetting your password.",
-      color: "success",
-    });
+    setLoading(true);
+    try {
+      const response = await instance.post(loginRoute, data);
+      const responseData = response.data?.message ?? [];
+      console.log(responseData);
+      setLoading(false);
 
-    if (data.username === "admin" && data.password === "admin123") {
-      setLoading(true);
-
-      navigate("/dashboard");
-      return;
+      if (responseData.length == 1) {
+        authSuccess(responseData[0]);
+        navigate("/dashboard");
+        return;
+      } else {
+        showAlert({ text: "Invalid Credientials" });
+      }
+    } catch (error) {
+      console.error(error);
+      showAlert({ text: "Something went wrong" });
+      setLoading(false);
     }
+    // alert("New user? Secure your account by resetting your password.");
+    // showAlert({
+    //   text: "New user? Secure your account by resetting your password.",
+    //   color: "success",
+    // });
 
-    navigate("/reset-password");
+    // if (data.username === "admin" && data.password === "admin123") {
+    //   setLoading(true);
+
+    //   navigate("/dashboard");
+    //   return;
+    // }
+
+    // navigate("/reset-password");
   };
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Stack spacing={2}>
-        <RHFTextField
-          name="username"
-          label="Mobile number"
-          onChange={() => {
-            setUserDetails({
-              ...userDetails,
-              username: methods.getValues("username"),
-            });
-          }}
-        />
+        <RHFTextField name="phone_no" label="Phone number" />
 
         <RHFTextField
           name="password"
           label="Password"
-          onChange={() => {
-            setUserDetails({
-              ...userDetails,
-              password: methods.getValues("password"),
-            });
-          }}
           type={showPassword ? "text" : "password"}
           InputProps={{
             endAdornment: (
@@ -99,14 +105,6 @@ const LoginForm = ({ showAlert, authSuccess }) => {
           Forgot password?
         </Link>
       </Stack>
-      {/* {!isLoading && (
-        <CircularProgress
-          color="inherit"
-          sx={{ position: "absolute", top: "50%", left: "50%" }}
-        />
-      )} */}
-
-      {isLoading && <CircularProgress color="inherit" sx={{ position: "absolute", top: "50%", left: "50%" }} />}
 
       <LoadingButton fullWidth loading={isLoading} size="large" type="submit" variant="contained">
         Login

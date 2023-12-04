@@ -4,6 +4,8 @@ export const baseServerUrl = "https://poll-7ks0.onrender.com";
 
 // Voter Api
 
+export const loginRoute = "/users-login";
+
 // GET ALL DATA
 export const getAllVotersRoute = "/voters/getall";
 export const getAllUsersRoute = "/users/getall";
@@ -15,7 +17,7 @@ export const getAllSachivalayamRoute = "/sachivalayam/getall";
 export const getAllPartsRoute = "/parts/getall";
 export const getAllVillageRoute = "/villages/getall";
 export const getAllDistrictsWithJoinRoute = "/getalldistrictswithjoin";
-export const getAllConstituenciesWithJoinRoute = "/getallconstituencieswithjoin"
+export const getAllConstituenciesWithJoinRoute = "/getallconstituencieswithjoin";
 
 export const getOpinionDashboardRoute = "/getopinionpolldashboard";
 export const getOpinionResultRoute = "/getopinionreports";
