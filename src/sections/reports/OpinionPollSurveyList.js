@@ -33,7 +33,12 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import EditNoteIcon from "@mui/icons-material/EditNote";
-import { PARTY_ID, casteList, religionList, searchFiltercolor } from "../../constants";
+import {
+  PARTY_ID,
+  casteList,
+  religionList,
+  searchFiltercolor,
+} from "../../constants";
 import { changeOpinionPoll } from "../../actions/voter";
 import {
   BJPRadio,
@@ -44,10 +49,16 @@ import {
   TDPRadio,
   YCPRadio,
 } from "../common/PartyRadioButtons";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+
+import FormControl from "@mui/material/FormControl";
+import FormLabel from "@mui/material/FormLabel";
 
 const OpinionPollSurveyList = ({ voter, showAlert, changeOpinionPoll }) => {
   const [isLoading, setLoading] = useState(false);
   const [selectedParties, setSelectedParties] = useState({});
+  const [isResidential, setIsResidential] = useState(true);
 
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
@@ -117,9 +128,9 @@ const OpinionPollSurveyList = ({ voter, showAlert, changeOpinionPoll }) => {
                 <Dialog
                   open={open}
                   onClose={handleClose}
-                  sx={{
-                    opacity: 0.2,
-                  }}
+                  // sx={{
+                  //   opacity: 0.2,
+                  // }}
                 >
                   <DialogTitle>Update Details</DialogTitle>
                   <DialogContent>
@@ -141,18 +152,49 @@ const OpinionPollSurveyList = ({ voter, showAlert, changeOpinionPoll }) => {
                       </Grid>
                       <Grid item xs={12} md={12} lg={12}>
                         <FormGroup>
-                          <FormControlLabel
-                            control={<Checkbox defaultChecked />}
-                            label="Is Residential"
-                          />
+                          <FormControl>
+                            <RadioGroup
+                              row
+                              aria-labelledby="demo-radio-buttons-group-label"
+                              defaultValue="isResidential"
+                              name="radio-buttons-group"
+                              onChange={(e) => {
+                                console.log("e.target.value", e.target.value);
+                                if (e.target.value == "isResidential") {
+                                  setIsResidential(true);
+                                } else {
+                                  setIsResidential(false);
+                                }
+                              }}
+                            >
+                              <FormControlLabel
+                                value="isResidential"
+                                control={<Radio />}
+                                label="Is Residential"
+                              />
+                              <FormControlLabel
+                                value="non-residential"
+                                control={<Radio />}
+                                label="Non-Residential"
+                              />
+                            </RadioGroup>
+                          </FormControl>
                         </FormGroup>
                       </Grid>
-                      <Grid item xs={12} md={12} lg={12}>
-                        <TextField label="Current Address" fullWidth />
-                      </Grid>
-                      <Grid item xs={12} md={12} lg={12}>
-                        <TextField label="Permanent Address" fullWidth />
-                      </Grid>
+                      {isResidential ? (
+                        <>
+                          <Grid item xs={12} md={12} lg={12}>
+                            <TextField label="Current Address" fullWidth />
+                          </Grid>{" "}
+                          <Grid item xs={12} md={12} lg={12}>
+                            <TextField label="Permanent Address" fullWidth />
+                          </Grid>
+                        </>
+                      ) : (
+                        <Grid item xs={12} md={12} lg={12}>
+                          <TextField label="Current Address" fullWidth />
+                        </Grid>
+                      )}
                       <Grid item xs={12} md={6} lg={6}>
                         <TextField label="Religion" fullWidth select>
                           {religionList.map((item, index) => (
@@ -172,20 +214,13 @@ const OpinionPollSurveyList = ({ voter, showAlert, changeOpinionPoll }) => {
                         </TextField>
                       </Grid>
                       <Grid item xs={12} md={6} lg={6}>
-                        <TextField label="Disable" fullWidth select>
+                        <TextField
+                          label="Disability (40% or above)"
+                          fullWidth
+                          select
+                        >
                           <MenuItem value="YES">YES</MenuItem>
                           <MenuItem value="NO">NO</MenuItem>
-                        </TextField>
-                      </Grid>
-                      <Grid item xs={12} md={6} lg={6}>
-                        <TextField label="Disability(%)" fullWidth select>
-                          <MenuItem value="40">40%</MenuItem>
-                          <MenuItem value="50">50%</MenuItem>
-                          <MenuItem value="60">60%</MenuItem>
-                          <MenuItem value="70">70%</MenuItem>
-                          <MenuItem value="80">80%</MenuItem>
-                          <MenuItem value="90">90%</MenuItem>
-                          <MenuItem value="100">100%</MenuItem>
                         </TextField>
                       </Grid>
                       <Grid item xs={12} md={6} lg={6}>
@@ -235,30 +270,7 @@ const OpinionPollSurveyList = ({ voter, showAlert, changeOpinionPoll }) => {
         },
       },
     },
-    {
-      name: "religion",
-      label: "Religion",
-    },
-    {
-      name: "caste",
-      label: "Caste",
-    },
-    {
-      name: "disable",
-      label: "Disable%",
-    },
-    {
-      name: "govtemp",
-      label: "Govt Employee",
-    },
-    {
-      name: "residentialFlag",
-      label: "Residential Flag",
-    },
-    {
-      name: "current_address",
-      label: "Address",
-    },
+
     {
       name: "intrested_party",
       label: "Neutral",
@@ -272,14 +284,35 @@ const OpinionPollSurveyList = ({ voter, showAlert, changeOpinionPoll }) => {
           //     [data[0]]: value,
           //   }));
           // }
+
+          if (value !== PARTY_ID.NEUTRAL) {
+            return (
+              <NeutralRadio
+                checked={value == partyId}
+                onChange={() => {
+                  console.log("data555", data[0], partyId);
+                  handleChange(data[0], partyId);
+                }}
+              />
+            ); // Return null to hide the button
+          }
           return (
-            <NeutralRadio
-              checked={value == partyId}
-              onChange={() => {
-                console.log("data555", data[0], partyId);
-                handleChange(data[0], partyId);
+            <Box
+              sx={{
+                display: "flex",
               }}
-            />
+            >
+              <NeutralRadio
+                checked={value == partyId}
+                onChange={() => {
+                  console.log("data555", data[0], partyId);
+                  handleChange(data[0], partyId);
+                }}
+              />
+              <IconButton onClick={() => handleEdit(data)}>
+                <EditNoteIcon />
+              </IconButton>
+            </Box>
           );
         },
       },
@@ -384,42 +417,66 @@ const OpinionPollSurveyList = ({ voter, showAlert, changeOpinionPoll }) => {
       },
     },
     {
-      name: "intrested_party",
-      label: "Reason",
-      options: {
-        customBodyRender: (value, tableMeta, updateValue) => {
-          var data = tableMeta.rowData;
-
-          //  Check if the selected party is "Neutral"
-          if (value !== PARTY_ID.NEUTRAL) {
-            return null; // Return null to hide the button
-          }
-          return (
-            <IconButton onClick={() => handleEdit(data)}>
-              <EditNoteIcon />
-            </IconButton>
-          );
-        },
-      },
-      // options: {
-      //   customBodyRender: (value, tableMeta, updateValue) => {
-      //     var data = tableMeta.rowData;
-
-      //     const selectedParty = selectedParties[data[0]];
-
-      //     // Check if the selected party is "Neutral"
-      //     if (selectedParty !== PARTY_ID.NEUTRAL) {
-      //       return null; // Return null to hide the button
-      //     }
-
-      //     return (
-      //       <IconButton onClick={() => handleEdit(data)}>
-      //         <EditNoteIcon />
-      //       </IconButton>
-      //     );
-      //   },
-      // },
+      name: "religion",
+      label: "Religion",
     },
+    {
+      name: "caste",
+      label: "Caste",
+    },
+    {
+      name: "disable",
+      label: "Disable%",
+    },
+    {
+      name: "govtemp",
+      label: "Govt Employee",
+    },
+    {
+      name: "residentialFlag",
+      label: "Residential Flag",
+    },
+    {
+      name: "current_address",
+      label: "Address",
+    },
+    // {
+    //   name: "intrested_party",
+    //   label: "Reason",
+    //   options: {
+    //     customBodyRender: (value, tableMeta, updateValue) => {
+    //       var data = tableMeta.rowData;
+
+    //       //  Check if the selected party is "Neutral"
+    //       if (value !== PARTY_ID.NEUTRAL) {
+    //         return null; // Return null to hide the button
+    //       }
+    //       return (
+    //         <IconButton onClick={() => handleEdit(data)}>
+    //           <EditNoteIcon />
+    //         </IconButton>
+    //       );
+    //     },
+    //   },
+    //   // options: {
+    //   //   customBodyRender: (value, tableMeta, updateValue) => {
+    //   //     var data = tableMeta.rowData;
+
+    //   //     const selectedParty = selectedParties[data[0]];
+
+    //   //     // Check if the selected party is "Neutral"
+    //   //     if (selectedParty !== PARTY_ID.NEUTRAL) {
+    //   //       return null; // Return null to hide the button
+    //   //     }
+
+    //   //     return (
+    //   //       <IconButton onClick={() => handleEdit(data)}>
+    //   //         <EditNoteIcon />
+    //   //       </IconButton>
+    //   //     );
+    //   //   },
+    //   // },
+    // },
   ];
 
   const options = {
@@ -522,19 +579,19 @@ const OpinionPollSurveyList = ({ voter, showAlert, changeOpinionPoll }) => {
         )}
 
         {!voter.isLoading && (
-          <ThemeProvider  theme={getMuiTheme()}>
-          <MUIDataTable
-            // sx={{
-            //   "& .MuiTableCell-head": {
-            //     backgroundColor: "red !important",
-            //   },
-            // }}
-            title="Opinion Poll"
-            columns={columns}
-            data={formatData}
-            options={options}
-          />
-           </ThemeProvider>
+          <ThemeProvider theme={getMuiTheme()}>
+            <MUIDataTable
+              // sx={{
+              //   "& .MuiTableCell-head": {
+              //     backgroundColor: "red !important",
+              //   },
+              // }}
+              title="Opinion Poll"
+              columns={columns}
+              data={formatData}
+              options={options}
+            />
+          </ThemeProvider>
         )}
       </Card>
     </>

@@ -156,7 +156,7 @@ const SearchByFilter = ({ common, getAllCommonData, onChanged }) => {
       <Grid item xs={12} md={6} lg={2}>
         <RHFAutoComplete
           name="Disable"
-          label="Disable"
+          label="Disability (40% or above)"
           options={[
             {
               label: "Yes",
@@ -165,18 +165,8 @@ const SearchByFilter = ({ common, getAllCommonData, onChanged }) => {
               label: "No",
             },
           ]}
+          onChange={handleChange} // Add this line
         />
-      </Grid>
-      <Grid item xs={12} md={6} lg={2}>
-        <RHFAutoComplete label="Disability (%)" fullWidth select>
-          <MenuItem value="40">40%</MenuItem>
-          <MenuItem value="50">50%</MenuItem>
-          <MenuItem value="60">60%</MenuItem>
-          <MenuItem value="70">70%</MenuItem>
-          <MenuItem value="80">80%</MenuItem>
-          <MenuItem value="90">90%</MenuItem>
-          <MenuItem value="100">100%</MenuItem>
-        </RHFAutoComplete>
       </Grid>
       <Grid item xs={12} md={6} lg={2}>
         <RHFAutoComplete
