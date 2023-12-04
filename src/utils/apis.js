@@ -8,7 +8,7 @@ export const loginRoute = "/users-login";
 
 // GET ALL DATA
 export const getAllVotersRoute = "/voters/getall";
-export const getAllUsersRoute = "/users/getall";
+export const getAllUsersRoute = "/getalluserswithjoin";
 export const getAllStatesRoute = "/states/getall";
 export const getAllDistrictsRoute = "/districts/getall";
 export const getAllMandalRoute = "/mandals/getall";
@@ -17,8 +17,7 @@ export const getAllSachivalayamRoute = "/sachivalayam/getall";
 export const getAllPartsRoute = "/parts/getall";
 export const getAllVillageRoute = "/villages/getall";
 export const getAllDistrictsWithJoinRoute = "/getalldistrictswithjoin";
-export const getAllConstituenciesWithJoinRoute =
-  "/getallconstituencieswithjoin";
+export const getAllConstituenciesWithJoinRoute = "/getallconstituencieswithjoin";
 export const getAllMandalsWithJoinRoute = "/getallmandalswithjoin";
 
 export const getOpinionDashboardRoute = "/getopinionpolldashboard";

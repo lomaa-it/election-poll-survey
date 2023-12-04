@@ -27,7 +27,18 @@ const ViewUserPage = ({ dashboard }) => {
         console.log("dsdasda", responseData);
 
         const filterData = responseData.map((item) => {
-          return [item.username, item.user_pk || "constituency_id", item.user_displayname, item.designation_id, item.mandal_id || "-", item.division_id || "-", item.sachivalayam_id || "-", item.part_id || "-", item.village_id || "-", item.phone_no];
+          return [
+            item.username,
+            item.user_pk || "constituency_id",
+            item.user_displayname,
+            item.lookup_valuename,
+            item.mandal_name || "-",
+            item.division_name || "-",
+            item.sachivalayam_name || "-",
+            item.part_no || "-",
+            item.village_name || "-",
+            item.phone_no,
+          ];
         });
         console.log("filterData", filterData);
         setUsersData(filterData);
