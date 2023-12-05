@@ -506,7 +506,7 @@ const UpdateVoterDialog = ({ data }) => {
             Cancel
           </Button>
 
-          <LoadingButton onClick={handleSubmit} variant="contained">
+          <LoadingButton loading={isLoading} onClick={handleSubmit} variant="contained">
             Submit
           </LoadingButton>
         </DialogActions>
