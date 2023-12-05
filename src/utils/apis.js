@@ -17,7 +17,8 @@ export const getAllSachivalayamRoute = "/sachivalayam/getall";
 export const getAllPartsRoute = "/parts/getall";
 export const getAllVillageRoute = "/villages/getall";
 export const getAllDistrictsWithJoinRoute = "/getalldistrictswithjoin";
-export const getAllConstituenciesWithJoinRoute = "/getallconstituencieswithjoin";
+export const getAllConstituenciesWithJoinRoute =
+  "/getallconstituencieswithjoin";
 export const getAllMandalsWithJoinRoute = "/getallmandalswithjoin";
 
 export const getOpinionDashboardRoute = "/getopinionpolldashboard";
@@ -28,6 +29,10 @@ export const changeOpinionPollRoute = "/poll_survey";
 
 export const getAllNavaratnaluRoute = "/navaratnalu/getall";
 
+export const getAllCastesRoute = "/getAllCastes";
+export const getAllReligionRoute = "/getAllReligion";
+
+//////////////////
 // GET BY ID
 export const getDistrictById = "/districts/";
 export const getDivisionsById = "/divisions-get-by-id/";
@@ -47,3 +52,5 @@ export const deleteStatesByIdRoute = "/states/";
 
 // Update By Id
 export const updateStatesByIdRoute = "/states/";
+export const saveOrupdatedSurvey = "/save_or_updated_survey";
+

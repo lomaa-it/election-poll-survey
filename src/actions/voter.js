@@ -27,7 +27,7 @@ export const getAllVotersSurvey = (data) => async (dispatch) => {
     const response = await instance.post(getAllVotorsSurveyRoute, jsonData);
     const responseData = response.data?.message ?? [];
 
-    console.log(responseData);
+    // console.log(responseData);
 
     dispatch({
       type: "VOTER_LOAD_SUCCESS",
