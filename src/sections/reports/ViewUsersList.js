@@ -24,7 +24,7 @@ import EditNoteIcon from "@mui/icons-material/EditNote";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { searchFiltercolor } from "../../constants";
 
-const ViewUsersList = ({ showAlert, usersData }) => {
+const ViewUsersList = ({ showAlert, usersData, unFilteredData }) => {
   useEffect(() => {}, []);
 
   const columns = [
@@ -79,13 +79,15 @@ const ViewUsersList = ({ showAlert, usersData }) => {
   const navigate = useNavigate();
 
   const renderEditAndDelete = (userData) => {
-    console.log("renderEditAndDelete", userData);
+    // console.log("renderEditAndDelete", userData);
 
     const onClickEdit = () => {
-      console.log("onClickEdit", userData);
+      // console.log("onClickEdit", userData);
       showAlert({ text: "Edit Details", color: "success" });
       //Redirect to this route /user-registration and pass the user data using react-router-dom
-      navigate("/user-management/user-registration", { state: { userData } });
+      navigate("/user-management/user-registration", {
+        state: { userData, unFilteredData },
+      });
     };
 
     return (

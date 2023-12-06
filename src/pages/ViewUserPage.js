@@ -1,4 +1,11 @@
-import { Grid, Container, Typography, Box, TextField, Card } from "@mui/material";
+import {
+  Grid,
+  Container,
+  Typography,
+  Box,
+  TextField,
+  Card,
+} from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -14,6 +21,7 @@ import { searchFiltercolor } from "../constants";
 const ViewUserPage = ({ dashboard }) => {
   const [usersData, setUsersData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [unFilteredData, setUnFilteredData] = useState([]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -24,7 +32,7 @@ const ViewUserPage = ({ dashboard }) => {
         const response = await instance.get(getAllUsersRoute);
         const responseData = response.data.message;
 
-        console.log("dsdasda", responseData);
+        // console.log("dsdasda", responseData);
 
         const filterData = responseData.map((item) => {
           return [
@@ -40,8 +48,9 @@ const ViewUserPage = ({ dashboard }) => {
             item.phone_no,
           ];
         });
-        console.log("filterData", filterData);
+        // console.log("filterData", filterData);
         setUsersData(filterData);
+        setUnFilteredData(responseData);
         setIsLoading(false);
       } catch (error) {
         console.log("error", error);
@@ -121,7 +130,10 @@ const ViewUserPage = ({ dashboard }) => {
             <CircularProgress />
           </Box>
         ) : (
-          <ViewUsersList usersData={usersData} />
+          <ViewUsersList
+            usersData={usersData}
+            unFilteredData={unFilteredData}
+          />
         )}
 
         <Card sx={{ p: 3, marginTop: "10px" }}>

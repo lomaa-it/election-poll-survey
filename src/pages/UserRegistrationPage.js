@@ -33,9 +33,19 @@ import { showAlert } from "../actions/alert";
 const UserRegistrationPage = ({ dashboard }) => {
   const location = useLocation();
   const userData = location.state ? location.state.userData : null;
+  const unFilteredData = location.state ? location.state.unFilteredData : null;
   const editUser = userData === null ? [] : userData;
+  const pageName = userData === null ? "User Registration" : "Edit User";
 
-  console.log("userData", userData);
+  // console.log("userData", userData);
+  console.log("unFilteredData", unFilteredData);
+  const findEditUser = unFilteredData
+    ? unFilteredData.filter((item) => {
+        return item.user_pk === editUser[1];
+      })
+    : [];
+  console.log("findEditUser", findEditUser);
+
   const [isLoading, setIsLoading] = useState(false);
   const [fetchAssignAuthority, setFetchAssignAuthority] = useState({
     designation: [{}],
@@ -50,11 +60,9 @@ const UserRegistrationPage = ({ dashboard }) => {
     reporting_manager: [{}],
   });
 
-console.log(editUser[0])
-
   const [basicInfo, setBasicInfo] = useState({
     user_displayname: "",
-    username: editUser[0] || "",
+    username: "",
     password: "",
     phone_no: "",
     office_phone_no: "",
@@ -139,6 +147,19 @@ console.log(editUser[0])
       });
     };
     fetchAssignAuthorityData();
+    if (filterValues.state_id === "") {
+      setFilterValues({
+        ...filterValues,
+        state_id: findEditUser[0] && findEditUser[0].state_id,
+        district_id: findEditUser[0] && findEditUser[0].district_id,
+        consistency_id: findEditUser[0] && findEditUser[0].consistency_id,
+        mandal_id: findEditUser[0] && findEditUser[0].mandal_id,
+        division_id: findEditUser[0] && findEditUser[0].division_id,
+        sachivalayam_id: findEditUser[0] && findEditUser[0].sachivalayam_id,
+        part_no: findEditUser[0] && findEditUser[0].part_no,
+        village_id: findEditUser[0] && findEditUser[0].village_id,
+      });
+    }
   }, []);
   // console.log("basicInfo", basicInfo);
 
@@ -185,11 +206,14 @@ console.log(editUser[0])
 
     setIsLoading(false);
   };
+
+  console.log("filterValues", filterValues);
+
   return (
-    <Page title="User Registration - New">
+    <Page title={pageName}>
       <Container maxWidth="xl">
         <Typography variant="h4" sx={{ mb: 1 }}>
-          User Registration
+          {pageName}
         </Typography>
 
         <Card sx={{ p: 3 }}>
@@ -201,7 +225,10 @@ console.log(editUser[0])
                 size="small"
                 label="User Display Name*"
                 fullWidth
-                value={basicInfo.user_displayname}
+                value={
+                  basicInfo.user_displayname ||
+                  (findEditUser[0] && findEditUser[0].user_displayname)
+                }
                 onChange={(e) => {
                   setBasicInfo({
                     ...basicInfo,
@@ -217,7 +244,10 @@ console.log(editUser[0])
                 size="small"
                 label="User Name"
                 fullWidth
-                value={basicInfo.username}
+                value={
+                  basicInfo.username ||
+                  (findEditUser[0] && findEditUser[0].username)
+                }
                 onChange={(e) => {
                   setBasicInfo({
                     ...basicInfo,
@@ -233,7 +263,10 @@ console.log(editUser[0])
                 size="small"
                 label="Password"
                 fullWidth
-                value={basicInfo.password}
+                value={
+                  basicInfo.password ||
+                  (findEditUser[0] && findEditUser[0].password)
+                }
                 onChange={(e) => {
                   setBasicInfo({
                     ...basicInfo,
@@ -248,8 +281,12 @@ console.log(editUser[0])
               <TextField
                 size="small"
                 label="Phone Number"
+                type="number"
                 fullWidth
-                value={basicInfo.phone_no}
+                value={
+                  basicInfo.phone_no ||
+                  (findEditUser[0] && findEditUser[0].phone_no)
+                }
                 onChange={(e) => {
                   setBasicInfo({
                     ...basicInfo,
@@ -265,7 +302,11 @@ console.log(editUser[0])
                 size="small"
                 label="Office Phone Number"
                 fullWidth
-                value={basicInfo.office_phone_no}
+                type="number"
+                value={
+                  basicInfo.office_phone_no ||
+                  (findEditUser[0] && findEditUser[0].office_phone_no)
+                }
                 onChange={(e) => {
                   setBasicInfo({
                     ...basicInfo,
@@ -280,7 +321,9 @@ console.log(editUser[0])
                 size="small"
                 label="Age"
                 fullWidth
-                value={basicInfo.age}
+                value={
+                  basicInfo.age || (findEditUser[0] && findEditUser[0].age)
+                }
                 onChange={(e) => {
                   setBasicInfo({
                     ...basicInfo,
@@ -297,7 +340,9 @@ console.log(editUser[0])
                 size="small"
                 label="Email"
                 fullWidth
-                value={basicInfo.email}
+                value={
+                  basicInfo.email || (findEditUser[0] && findEditUser[0].email)
+                }
                 onChange={(e) => {
                   setBasicInfo({
                     ...basicInfo,
@@ -319,7 +364,10 @@ console.log(editUser[0])
                 label="Select Designation*"
                 fullWidth
                 select
-                value={filterValues.designation_id}
+                value={
+                  filterValues.designation_id ||
+                  (findEditUser[0] && findEditUser[0].designation_id)
+                }
                 onChange={(event) => {
                   setFilterValues({
                     ...filterValues,
@@ -344,7 +392,11 @@ console.log(editUser[0])
                 label="Select State*"
                 fullWidth
                 select
-                value={filterValues.state_id}
+                value={
+                  filterValues.state_id === ""
+                    ? findEditUser[0] && findEditUser[0].state_id
+                    : filterValues.state_id
+                }
                 onChange={(event) => {
                   setFilterValues({
                     ...filterValues,
@@ -365,7 +417,11 @@ console.log(editUser[0])
                 label="Select District*"
                 fullWidth
                 select
-                value={filterValues.district_id}
+                value={
+                  filterValues.district_id === ""
+                    ? findEditUser[0] && findEditUser[0].district_pk
+                    : filterValues.district_id
+                }
                 onChange={(event) => {
                   setFilterValues({
                     ...filterValues,
@@ -395,7 +451,11 @@ console.log(editUser[0])
                 label="Select Constistency*"
                 fullWidth
                 select
-                value={filterValues.consistency_id}
+                value={
+                  filterValues.consistency_id === ""
+                    ? findEditUser[0] && findEditUser[0].consistency_pk
+                    : filterValues.consistency_id
+                }
                 onChange={(event) => {
                   setFilterValues({
                     ...filterValues,
