@@ -9,8 +9,10 @@ export const loginRoute = "/users-login";
 // GET ALL DATA
 export const getAllVotersRoute = "/voters/getall";
 export const getAllUsersRoute = "/getalluserswithjoin";
+export const getAllDesignationsRoute = "/getalldesignations";
 export const getAllStatesRoute = "/states/getall";
 export const getAllDistrictsRoute = "/districts/getall";
+export const getAllConstituenciesRoute = "/constituencies/getall";
 export const getAllMandalRoute = "/mandals/getall";
 export const getAllDivisionRoute = "/divisions/getall";
 export const getAllSachivalayamRoute = "/sachivalayam/getall";
@@ -41,7 +43,7 @@ export const getPartsById = "/parts-get-by-id/";
 export const getVillageById = "/villages-get-by-id/";
 
 // Create
-
+export const createUsersRoute = "/users/";
 export const createStatesRoute = "/states/";
 export const createDistrictsRoute = "/districts/";
 export const createConstituenciesRoute = "/constituencies/";
@@ -53,4 +55,3 @@ export const deleteStatesByIdRoute = "/states/";
 // Update By Id
 export const updateStatesByIdRoute = "/states/";
 export const saveOrupdatedSurvey = "/save_or_updated_survey";
-
