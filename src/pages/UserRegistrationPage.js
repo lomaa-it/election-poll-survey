@@ -11,7 +11,7 @@ import {
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
-
+import { useLocation } from "react-router-dom";
 import { CheckBox } from "@mui/icons-material";
 import {
   getAllDesignationsRoute,
@@ -31,6 +31,11 @@ import { set } from "date-fns";
 import { showAlert } from "../actions/alert";
 
 const UserRegistrationPage = ({ dashboard }) => {
+  const location = useLocation();
+  const userData = location.state ? location.state.userData : null;
+  const editUser = userData === null ? [] : userData;
+
+  console.log("userData", userData);
   const [isLoading, setIsLoading] = useState(false);
   const [fetchAssignAuthority, setFetchAssignAuthority] = useState({
     designation: [{}],
@@ -45,9 +50,11 @@ const UserRegistrationPage = ({ dashboard }) => {
     reporting_manager: [{}],
   });
 
+console.log(editUser[0])
+
   const [basicInfo, setBasicInfo] = useState({
     user_displayname: "",
-    username: "",
+    username: editUser[0] || "",
     password: "",
     phone_no: "",
     office_phone_no: "",
@@ -144,10 +151,11 @@ const UserRegistrationPage = ({ dashboard }) => {
     console.log("requestBody", requestBody);
 
     const response = instance.post(createUsersRoute, requestBody);
-    console.log("response", response.data.message);
-    showAlert("success", response.data.message);
-  
+    console.log("response", response.data);
 
+    showAlert({ text: "User Created Successfully", color: "success" });
+
+    setIsLoading(false);
     setBasicInfo({
       user_displayname: "",
       username: "",
@@ -170,10 +178,13 @@ const UserRegistrationPage = ({ dashboard }) => {
       village_id: "",
       reporting_manager: null,
     });
+  };
+
+  const handleEditComplete = () => {
+    setIsLoading(true);
 
     setIsLoading(false);
   };
-
   return (
     <Page title="User Registration - New">
       <Container maxWidth="xl">
@@ -308,17 +319,18 @@ const UserRegistrationPage = ({ dashboard }) => {
                 label="Select Designation*"
                 fullWidth
                 select
+                value={filterValues.designation_id}
+                onChange={(event) => {
+                  setFilterValues({
+                    ...filterValues,
+                    designation_id: event.target.value,
+                  });
+                }}
               >
                 {fetchAssignAuthority.designation.map((designation) => (
                   <MenuItem
                     key={designation.lookup_pk}
-                    value={filterValues.designation_id}
-                    onClick={() => {
-                      setFilterValues({
-                        ...filterValues,
-                        designation_id: designation.lookup_pk,
-                      });
-                    }}
+                    value={designation.lookup_pk}
                   >
                     {designation.designation_name}
                   </MenuItem>
@@ -327,33 +339,40 @@ const UserRegistrationPage = ({ dashboard }) => {
             </Grid>
 
             <Grid item xs={12} md={6} lg={3}>
-              <TextField size="small" label="Select State*" fullWidth select>
+              <TextField
+                size="small"
+                label="Select State*"
+                fullWidth
+                select
+                value={filterValues.state_id}
+                onChange={(event) => {
+                  setFilterValues({
+                    ...filterValues,
+                    state_id: event.target.value,
+                  });
+                }}
+              >
                 {fetchAssignAuthority.state.map((state) => (
-                  <MenuItem
-                    key={state.state_pk}
-                    value={filterValues.state_id}
-                    onClick={() => {
-                      setFilterValues({
-                        ...filterValues,
-                        state_id: state.state_pk,
-                        district_id: "",
-                        consistency_id: "",
-                        mandal_id: "",
-                        division_id: "",
-                        sachivalayam_id: "",
-                        part_no: "",
-                        village_id: "",
-                        reporting_manager: "",
-                      });
-                    }}
-                  >
+                  <MenuItem key={state.state_pk} value={state.state_pk}>
                     {state.state_name}
                   </MenuItem>
                 ))}
               </TextField>
             </Grid>
             <Grid item xs={12} md={6} lg={3}>
-              <TextField size="small" label="Select District*" fullWidth select>
+              <TextField
+                size="small"
+                label="Select District*"
+                fullWidth
+                select
+                value={filterValues.district_id}
+                onChange={(event) => {
+                  setFilterValues({
+                    ...filterValues,
+                    district_id: event.target.value,
+                  });
+                }}
+              >
                 {/*filter districts by state_id  */}
                 {fetchAssignAuthority.district
                   .filter((district) => {
@@ -362,20 +381,7 @@ const UserRegistrationPage = ({ dashboard }) => {
                   .map((district) => (
                     <MenuItem
                       key={district.district_pk}
-                      value={filterValues.district_id}
-                      onClick={() => {
-                        setFilterValues({
-                          ...filterValues,
-                          district_id: district.district_pk,
-                          consistency_id: "",
-                          mandal_id: "",
-                          division_id: "",
-                          sachivalayam_id: "",
-                          part_no: "",
-                          village_id: "",
-                          reporting_manager: "",
-                        });
-                      }}
+                      value={district.district_pk}
                     >
                       {district.district_name}
                     </MenuItem>
@@ -389,6 +395,13 @@ const UserRegistrationPage = ({ dashboard }) => {
                 label="Select Constistency*"
                 fullWidth
                 select
+                value={filterValues.consistency_id}
+                onChange={(event) => {
+                  setFilterValues({
+                    ...filterValues,
+                    consistency_id: event.target.value,
+                  });
+                }}
               >
                 {/*filter constituencies by district_id  */}
                 {fetchAssignAuthority.constituency
@@ -400,19 +413,7 @@ const UserRegistrationPage = ({ dashboard }) => {
                   .map((constituency) => (
                     <MenuItem
                       key={constituency.consistency_pk}
-                      value={filterValues.consistency_id}
-                      onClick={() => {
-                        setFilterValues({
-                          ...filterValues,
-                          consistency_id: constituency.consistency_pk,
-                          mandal_id: "",
-                          division_id: "",
-                          sachivalayam_id: "",
-                          part_no: "",
-                          village_id: "",
-                          reporting_manager: "",
-                        });
-                      }}
+                      value={constituency.consistency_pk}
                     >
                       {constituency.consistency_name}
                     </MenuItem>
@@ -421,7 +422,19 @@ const UserRegistrationPage = ({ dashboard }) => {
             </Grid>
 
             <Grid item xs={12} md={6} lg={3}>
-              <TextField size="small" label="Select Mandal*" fullWidth select>
+              <TextField
+                size="small"
+                label="Select Mandal*"
+                fullWidth
+                select
+                value={filterValues.mandal_id}
+                onChange={(event) => {
+                  setFilterValues({
+                    ...filterValues,
+                    mandal_id: event.target.value,
+                  });
+                }}
+              >
                 {/*filter mandals by consistency_id  */}
 
                 {fetchAssignAuthority.mandal
@@ -431,21 +444,7 @@ const UserRegistrationPage = ({ dashboard }) => {
                     );
                   })
                   .map((mandal) => (
-                    <MenuItem
-                      key={mandal.mandal_pk}
-                      value={filterValues.mandal_id}
-                      onClick={() => {
-                        setFilterValues({
-                          ...filterValues,
-                          mandal_id: mandal.mandal_pk,
-                          division_id: "",
-                          sachivalayam_id: "",
-                          part_no: "",
-                          village_id: "",
-                          reporting_manager: "",
-                        });
-                      }}
-                    >
+                    <MenuItem key={mandal.mandal_pk} value={mandal.mandal_pk}>
                       {mandal.mandal_name}
                     </MenuItem>
                   ))}
@@ -453,7 +452,19 @@ const UserRegistrationPage = ({ dashboard }) => {
             </Grid>
 
             <Grid item xs={12} md={6} lg={3}>
-              <TextField size="small" label="Select Division*" fullWidth select>
+              <TextField
+                size="small"
+                label="Select Division*"
+                fullWidth
+                select
+                value={filterValues.division_id}
+                onChange={(event) => {
+                  setFilterValues({
+                    ...filterValues,
+                    division_id: event.target.value,
+                  });
+                }}
+              >
                 {/*filter divisions by mandal_id  */}
                 {fetchAssignAuthority.division
                   .filter((division) => {
@@ -462,17 +473,7 @@ const UserRegistrationPage = ({ dashboard }) => {
                   .map((division) => (
                     <MenuItem
                       key={division.division_pk}
-                      value={filterValues.division_id}
-                      onClick={() => {
-                        setFilterValues({
-                          ...filterValues,
-                          division_id: division.division_pk,
-                          sachivalayam_id: "",
-                          part_no: "",
-                          village_id: "",
-                          reporting_manager: "",
-                        });
-                      }}
+                      value={division.division_pk}
                     >
                       {division.division_name}
                     </MenuItem>
@@ -486,6 +487,14 @@ const UserRegistrationPage = ({ dashboard }) => {
                 label="Select Sachivalayam*"
                 fullWidth
                 select
+                value={filterValues.sachivalayam_id}
+                onChange={(event) => {
+                  setFilterValues({
+                    ...filterValues,
+
+                    sachivalayam_id: event.target.value,
+                  });
+                }}
               >
                 {/*filter sachivalayam by division_id  */}
                 {fetchAssignAuthority.sachivalayam
@@ -498,15 +507,6 @@ const UserRegistrationPage = ({ dashboard }) => {
                     <MenuItem
                       key={sachivalayam.sachivalayam_pk}
                       value={sachivalayam.sachivalayam_pk}
-                      onClick={() => {
-                        setFilterValues({
-                          ...filterValues,
-                          sachivalayam_id: sachivalayam.sachivalayam_pk,
-                          part_no: "",
-                          village_id: "",
-                          reporting_manager: "",
-                        });
-                      }}
                     >
                       {sachivalayam.sachivalayam_name}
                     </MenuItem>
@@ -515,7 +515,19 @@ const UserRegistrationPage = ({ dashboard }) => {
             </Grid>
 
             <Grid item xs={12} md={6} lg={3}>
-              <TextField size="small" label="Part No*" fullWidth select>
+              <TextField
+                size="small"
+                label="Part No*"
+                fullWidth
+                select
+                value={filterValues.part_no}
+                onChange={(event) => {
+                  setFilterValues({
+                    ...filterValues,
+                    part_no: event.target.value,
+                  });
+                }}
+              >
                 {/*filter parts by sachivalayam_id  */}
                 {fetchAssignAuthority.part
                   .filter((part) => {
@@ -524,18 +536,7 @@ const UserRegistrationPage = ({ dashboard }) => {
                     );
                   })
                   .map((part) => (
-                    <MenuItem
-                      key={part.part_no}
-                      value={filterValues.part_no}
-                      onClick={() => {
-                        setFilterValues({
-                          ...filterValues,
-                          part_no: part.part_no,
-                          village_id: "",
-                          reporting_manager: "",
-                        });
-                      }}
-                    >
+                    <MenuItem key={part.part_no} value={part.part_no}>
                       {part.part_no}
                     </MenuItem>
                   ))}
@@ -543,7 +544,19 @@ const UserRegistrationPage = ({ dashboard }) => {
             </Grid>
 
             <Grid item xs={12} md={6} lg={3}>
-              <TextField size="small" label="Select Village*" fullWidth select>
+              <TextField
+                size="small"
+                label="Select Village*"
+                fullWidth
+                select
+                value={filterValues.village_id}
+                onChange={(event) => {
+                  setFilterValues({
+                    ...filterValues,
+                    village_id: event.target.value,
+                  });
+                }}
+              >
                 {/*filter village by part_no  */}
                 {fetchAssignAuthority.village
                   .filter((village) => {
@@ -552,14 +565,7 @@ const UserRegistrationPage = ({ dashboard }) => {
                   .map((village) => (
                     <MenuItem
                       key={village.village_pk}
-                      value={filterValues.village_id}
-                      onClick={() => {
-                        setFilterValues({
-                          ...filterValues,
-                          village_id: village.village_pk,
-                          reporting_manager: "",
-                        });
-                      }}
+                      value={village.village_pk}
                     >
                       {village.village_name}
                     </MenuItem>
@@ -607,16 +613,28 @@ const UserRegistrationPage = ({ dashboard }) => {
                 marginLeft: "auto",
               }}
             >
-              <LoadingButton
-                loading={isLoading}
-                onClick={handleSubmit}
-                variant="contained"
-                sx={{
-                  padding: "15px 40px",
-                }}
-              >
-                Submit
-              </LoadingButton>
+              {userData === null ? (
+                <LoadingButton
+                  loading={isLoading}
+                  onClick={handleSubmit}
+                  variant="contained"
+                  sx={{
+                    padding: "15px 40px",
+                  }}
+                >
+                  Submit
+                </LoadingButton>
+              ) : (
+                <LoadingButton
+                  onClick={handleEditComplete}
+                  variant="contained"
+                  sx={{
+                    padding: "15px 20px",
+                  }}
+                >
+                  Update Details
+                </LoadingButton>
+              )}
             </Grid>
           </Grid>
         </Card>

@@ -1,5 +1,17 @@
 import { useEffect, useState } from "react";
-import { Typography, Card, Stack, Grid, Switch, Divider, Box, Chip, TextField } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import {
+  Typography,
+  Card,
+  Stack,
+  Grid,
+  Switch,
+  Divider,
+  Box,
+  Chip,
+  TextField,
+  Button,
+} from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { CheckBox } from "@mui/icons-material";
 import MUIDataTable from "mui-datatables";
@@ -51,7 +63,7 @@ const ViewUsersList = ({ showAlert, usersData }) => {
       label: "Phone",
     },
     {
-      label: "Edit/Delete",
+      label: "Edit",
     },
   ];
 
@@ -64,27 +76,48 @@ const ViewUsersList = ({ showAlert, usersData }) => {
   const renderCheckBox = () => {
     return <CheckBox />;
   };
+  const navigate = useNavigate();
 
-  const renderEditAndDelete = () => {
+  const renderEditAndDelete = (userData) => {
+    console.log("renderEditAndDelete", userData);
+
+    const onClickEdit = () => {
+      console.log("onClickEdit", userData);
+      showAlert({ text: "Edit Details", color: "success" });
+      //Redirect to this route /user-registration and pass the user data using react-router-dom
+      navigate("/user-management/user-registration", { state: { userData } });
+    };
+
     return (
       <Box>
-        <EditNoteIcon
+        <Button
+          onClick={onClickEdit}
+          variant="contained"
           sx={{
-            color: "#1976d2",
+            backgroundColor: "#013157",
+
+            borderRadius: "20px",
           }}
-        />
-        <DeleteForeverIcon
+        >
+          <EditNoteIcon
+          // sx={{
+          //   color: "#1976d2",
+          // }}
+          />
+        </Button>
+
+        {/* <DeleteForeverIcon
           sx={{
             color: "#f44336",
             marginLeft: "10px",
           }}
-        />
+        /> */}
       </Box>
     );
   };
 
   const filterChartData = usersData.map((item) => {
-    return [renderCheckBox(), ...item, renderEditAndDelete()];
+    return [renderCheckBox(), ...item, renderEditAndDelete(item)];
   });
 
   const getMuiTheme = () =>
@@ -104,7 +137,12 @@ const ViewUsersList = ({ showAlert, usersData }) => {
       <Stack>
         <Divider />
         <ThemeProvider theme={getMuiTheme()}>
-          <MUIDataTable title="Users List Table" columns={columns} data={filterChartData} options={options} />
+          <MUIDataTable
+            title="Users List Table"
+            columns={columns}
+            data={filterChartData}
+            options={options}
+          />
         </ThemeProvider>
       </Stack>
     </Card>
