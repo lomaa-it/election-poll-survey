@@ -50,7 +50,7 @@ const UpdateVoterDialog = ({ data }) => {
   const [fillerValues, setFilterValues] = useState({
     phone_no: data[10],
     voter_pk: data[0],
-    volunteer_id: data[1],
+    volunteer_id: data[1] === null ? 1 : data[1],
     residential: true,
     religion_id: data[24],
     religion: data[18],
@@ -506,7 +506,11 @@ const UpdateVoterDialog = ({ data }) => {
             Cancel
           </Button>
 
-          <LoadingButton loading={isLoading} onClick={handleSubmit} variant="contained">
+          <LoadingButton
+            loading={isLoading}
+            onClick={handleSubmit}
+            variant="contained"
+          >
             Submit
           </LoadingButton>
         </DialogActions>

@@ -393,7 +393,7 @@ const UserRegistrationPage = ({ dashboard }) => {
                 fullWidth
                 select
                 value={
-                  filterValues.state_id === ""
+                  typeof filterValues.state_id === "string"
                     ? findEditUser[0] && findEditUser[0].state_id
                     : filterValues.state_id
                 }
@@ -418,7 +418,7 @@ const UserRegistrationPage = ({ dashboard }) => {
                 fullWidth
                 select
                 value={
-                  filterValues.district_id === ""
+                  typeof filterValues.district_id === "string"
                     ? findEditUser[0] && findEditUser[0].district_pk
                     : filterValues.district_id
                 }
@@ -452,7 +452,7 @@ const UserRegistrationPage = ({ dashboard }) => {
                 fullWidth
                 select
                 value={
-                  filterValues.consistency_id === ""
+                  typeof filterValues.consistency_id === "string"
                     ? findEditUser[0] && findEditUser[0].consistency_pk
                     : filterValues.consistency_id
                 }
