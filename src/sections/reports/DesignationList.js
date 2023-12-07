@@ -21,7 +21,7 @@ import Sachivalayam from "../../pages/Sachivalayam";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
-const DesignationList = ({ showAlert }) => {
+const DesignationList = ({ showAlert, designationlist }) => {
   useEffect(() => {}, []);
 
   const columns = [
@@ -57,6 +57,10 @@ const DesignationList = ({ showAlert }) => {
     );
   };
 
+  const formartedData = designationlist.map((data) => {
+    return [data.designation_name, renderEditAndDelete()];
+  });
+
   return (
     <Card elevation={1}>
       <Stack>
@@ -65,11 +69,7 @@ const DesignationList = ({ showAlert }) => {
         <MUIDataTable
           title=""
           columns={columns}
-          data={[
-            ["Admin", renderEditAndDelete()],
-            ["Volanteer", renderEditAndDelete()],
-            ["Booth Incharge", renderEditAndDelete()],
-          ]}
+          data={formartedData}
           options={options}
         />
       </Stack>

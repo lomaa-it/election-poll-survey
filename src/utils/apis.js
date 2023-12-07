@@ -44,6 +44,7 @@ export const getVillageById = "/villages-get-by-id/";
 
 // Create
 export const createUsersRoute = "/users/";
+export const createDesignationsRoute = "/lookup/"
 export const createStatesRoute = "/states/";
 export const createDistrictsRoute = "/districts/";
 export const createConstituenciesRoute = "/constituencies/";
