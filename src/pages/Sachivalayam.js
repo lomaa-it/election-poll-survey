@@ -75,12 +75,6 @@ const Sachivalayam = ({ dashboard }) => {
         const divisionsResponse = await instance.get(getAllDivisionRoute);
         // console.log("divisions", divisionsResponse.data.message);
 
-        /// get all sachivalayam
-        const sachivalayamResponse = await instance.get(
-          getAllSachivalayamRoute
-        );
-        console.log("sachivalayam", sachivalayamResponse.data.message);
-
         /// state update
         setFetchedData((prevState) => ({
           ...prevState,
@@ -89,7 +83,6 @@ const Sachivalayam = ({ dashboard }) => {
           consistency: constituenciesResponse.data.message,
           mandal: mandalsResponse.data.message,
           division: divisionsResponse.data.message,
-          sachivalayam: sachivalayamResponse.data.message,
         }));
       } catch (error) {
         console.log(error);
@@ -173,7 +166,6 @@ const Sachivalayam = ({ dashboard }) => {
                 gap: "15px",
               }}
             >
-              {" "}
               <TextField
                 size="small"
                 label="Select State"

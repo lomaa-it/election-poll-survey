@@ -21,7 +21,7 @@ import Sachivalayam from "../../pages/Sachivalayam";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
-const PartsList = ({ showAlert }) => {
+const PartsList = ({ showAlert, partsList }) => {
   useEffect(() => {}, []);
 
   const columns = [
@@ -70,6 +70,20 @@ const PartsList = ({ showAlert }) => {
     );
   };
 
+  const formartedData = partsList.map((parts) => {
+    const totalVotel =
+      parts.male_votes + parts.female_votes + parts.other_votes;
+
+    return [
+      parts.part_no || "Part No",
+      parts.male_votes || "Male Votes",
+      parts.female_votes || "Female Votes",
+      parts.other_votes || "Tg Votes",
+      totalVotel || "Total Votes",
+      renderEditAndDelete(),
+    ];
+  });
+
   return (
     <Card elevation={1}>
       <Stack>
@@ -78,32 +92,7 @@ const PartsList = ({ showAlert }) => {
         <MUIDataTable
           title=""
           columns={columns}
-          data={[
-            [
-              "123145",
-              "54545",
-              "87878",
-              "454548978",
-              "989878787897",
-              renderEditAndDelete(),
-            ],
-            [
-              "123145",
-              "54545",
-              "87878",
-              "454548978",
-              "989878787897",
-              renderEditAndDelete(),
-            ],
-            [
-              "123145",
-              "54545",
-              "87878",
-              "454548978",
-              "989878787897",
-              renderEditAndDelete(),
-            ],
-          ]}
+          data={formartedData}
           options={options}
         />
       </Stack>

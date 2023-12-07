@@ -50,6 +50,7 @@ export const createConstituenciesRoute = "/constituencies/";
 export const createMandalsRoute = "/mandals/";
 export const createDivisionsRoute = "/divisions/";
 export const createSachivalayamRoute = "/sachivalayam/";
+export const createPartsRoute = "/parts/";
 
 // Delete By Id
 export const deleteStatesByIdRoute = "/states/";
