@@ -1,6 +1,6 @@
 // export const baseServerUrl = "http://localhost:8080";
 export const baseServerUrl = "https://poll-7ks0.onrender.com";
-// export const baseServerUrl = "https://554c-123-201-170-142.ngrok-free.app";
+// export const baseServerUrl = "https://527b-123-201-170-203.ngrok-free.app";
 
 // Voter Api
 
@@ -9,7 +9,7 @@ export const loginRoute = "/users-login";
 // GET ALL DATA
 export const getAllVotersRoute = "/voters/getall";
 export const getAllUsersRoute = "/getalluserswithjoin";
-export const getAllDesignationsRoute = "/getalldesignations";
+export const getAllDesignationsRoute = "/designation/getall";
 export const getAllPartiesRoute = "/getallparties";
 export const getAllStatesRoute = "/states/getall";
 export const getAllDistrictsRoute = "/districts/getall";
@@ -20,8 +20,7 @@ export const getAllSachivalayamRoute = "/sachivalayam/getall";
 export const getAllPartsRoute = "/parts/getall";
 export const getAllVillageRoute = "/villages/getall";
 export const getAllDistrictsWithJoinRoute = "/getalldistrictswithjoin";
-export const getAllConstituenciesWithJoinRoute =
-  "/getallconstituencieswithjoin";
+export const getAllConstituenciesWithJoinRoute = "/getallconstituencieswithjoin";
 export const getAllMandalsWithJoinRoute = "/getallmandalswithjoin";
 
 export const getOpinionDashboardRoute = "/getopinionpolldashboard";
@@ -45,7 +44,7 @@ export const getVillageById = "/villages-get-by-id/";
 
 // Create
 export const createUsersRoute = "/users/";
-export const createDesignationsRoute = "/lookup/"
+export const createDesignationsRoute = "/lookup/";
 export const createStatesRoute = "/states/";
 export const createDistrictsRoute = "/districts/";
 export const createConstituenciesRoute = "/constituencies/";

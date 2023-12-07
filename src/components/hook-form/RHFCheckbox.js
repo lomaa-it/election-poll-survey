@@ -65,12 +65,13 @@ export function RHFRadio({ name, options, onChange, ...other }) {
               <FormControlLabel
                 key={index}
                 value={item.value}
-                control={<Radio />}
+                control={item.custom ? item.custom : <Radio />}
                 label={item.label}
                 onChange={(e) => {
                   field.onChange(e.target.checked);
                   onChange && onChange(e);
                 }}
+                {...other}
               />
             ))}
           </RadioGroup>

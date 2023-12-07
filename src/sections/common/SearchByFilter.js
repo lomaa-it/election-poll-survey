@@ -108,7 +108,7 @@ const SearchByFilter = ({ account, common, getAllCommonData, onChanged }) => {
           name="sachivalayam"
           label="Select Sachivalayam"
           value={formValues.sachivalayam}
-          options={common.sachivalayams.filter((e) => e.division_pk == formValues?.division?.division_pk)}
+          options={common.sachivalayams.filter((e) => e.division_id == formValues?.division?.division_pk)}
           getOptionLabel={(option) => option.sachivalayam_name}
           onChange={handleChange}
           disabled={account.user.sachivalayam_pk != null}
@@ -162,7 +162,7 @@ const SearchByFilter = ({ account, common, getAllCommonData, onChanged }) => {
       <Grid item xs={12} md={6} lg={2}>
         <RHFAutoComplete
           name="Disable"
-          label="Disability (40% or above)"
+          label="Disability"
           options={[
             {
               label: "Yes",

@@ -1,30 +1,13 @@
-import {
-  Grid,
-  Container,
-  Typography,
-  Box,
-  TextField,
-  Card,
-  FormControlLabel,
-  MenuItem,
-} from "@mui/material";
+import * as Yup from "yup";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { Grid, Container, Typography, Box, TextField, Card, FormControlLabel, MenuItem } from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
 import { useLocation } from "react-router-dom";
 import { CheckBox } from "@mui/icons-material";
-import {
-  getAllDesignationsRoute,
-  getAllStatesRoute,
-  getAllDistrictsRoute,
-  getAllConstituenciesRoute,
-  getAllMandalRoute,
-  getAllDivisionRoute,
-  getAllSachivalayamRoute,
-  getAllPartsRoute,
-  getAllVillageRoute,
-  createUsersRoute,
-} from "../utils/apis";
+import { getAllDesignationsRoute, getAllStatesRoute, getAllDistrictsRoute, getAllConstituenciesRoute, getAllMandalRoute, getAllDivisionRoute, getAllSachivalayamRoute, getAllPartsRoute, getAllVillageRoute, createUsersRoute } from "../utils/apis";
 import { useEffect, useState } from "react";
 import instance from "../utils/axios";
 import { set } from "date-fns";
@@ -36,6 +19,38 @@ const UserRegistrationPage = ({ dashboard }) => {
   const unFilteredData = location.state ? location.state.unFilteredData : null;
   const editUser = userData === null ? [] : userData;
   const pageName = userData === null ? "User Registration" : "Edit User";
+
+  const schema = Yup.object().shape({
+    residential: Yup.string(),
+    religion_id: Yup.string(),
+    caste_id: Yup.string(),
+    disability: Yup.string(),
+    govt_employee: Yup.string(),
+    current_address: Yup.string(),
+    permenent_address: Yup.string(),
+    intrested_party: Yup.string(),
+  });
+
+  const defaultValues = {
+    survey_phone_no: userData.survey_phone_no ?? "",
+    residential: userData.residential ?? "",
+    religion_id: userData.religion_id ?? "",
+    caste_id: userData.caste_id ?? "",
+    disability: userData.disability ?? "",
+    govt_employee: userData.govt_employee ?? "",
+    current_address: userData.current_address ?? "",
+    permenent_address: userData.permenent_address ?? "",
+    intrested_party: userData.intrested_party ?? "",
+  };
+
+  const methods = useForm({
+    resolver: yupResolver(schema),
+    defaultValues,
+  });
+
+  const { handleSubmit } = methods;
+
+  const onSubmit = async (data) => {};
 
   // console.log("userData", userData);
   console.log("unFilteredData", unFilteredData);
@@ -85,66 +100,59 @@ const UserRegistrationPage = ({ dashboard }) => {
 
   useEffect(() => {
     const fetchAssignAuthorityData = async () => {
-      ////// Designation
-      const designationResponse = await instance.get(getAllDesignationsRoute);
-      const designationResponseData = designationResponse.data.message;
-      // console.log("designationResponseData", designationResponseData);
-
-      //// States
-      const statesResponse = await instance.get(getAllStatesRoute);
-      const statesResponseData = statesResponse.data.message;
-      // console.log("statesResponseData", statesResponseData);
-
-      //// Districts
-      const districtsResponse = await instance.get(getAllDistrictsRoute);
-      const districtsResponseData = districtsResponse.data.message;
-      // console.log("districtsResponseData", districtsResponseData);
-
-      /// Constituencies
-      const constituenciesResponse = await instance.get(
-        getAllConstituenciesRoute
-      );
-      const constituenciesResponseData = constituenciesResponse.data.message;
-      // console.log("constituenciesResponseData", constituenciesResponseData);
-
-      // Mandals
-      const mandalsResponse = await instance.get(getAllMandalRoute);
-      const mandalsResponseData = mandalsResponse.data.message;
-      // console.log("mandalsResponseData", mandalsResponseData);
-
-      // Divisions
-      const divisionsResponse = await instance.get(getAllDivisionRoute);
-      const divisionsResponseData = divisionsResponse.data.message;
-      // console.log("divisionsResponseData", divisionsResponseData);
-
-      // Sachivalayam
-      const sachivalayamResponse = await instance.get(getAllSachivalayamRoute);
-      const sachivalayamResponseData = sachivalayamResponse.data.message;
-      // console.log("sachivalayamResponseData", sachivalayamResponseData);
-
-      // Parts
-      const partsResponse = await instance.get(getAllPartsRoute);
-      const partsResponseData = partsResponse.data.message;
-      // console.log("partsResponseData", partsResponseData);
-
-      // Village
-      const villageResponse = await instance.get(getAllVillageRoute);
-      const villageResponseData = villageResponse.data.message;
-      // console.log("villageResponseData", villageResponseData);
-
-      /// state updating
-      setFetchAssignAuthority({
-        ...fetchAssignAuthority,
-        designation: designationResponseData,
-        state: statesResponseData,
-        district: districtsResponseData,
-        constituency: constituenciesResponseData,
-        mandal: mandalsResponseData,
-        division: divisionsResponseData,
-        sachivalayam: sachivalayamResponseData,
-        part: partsResponseData,
-        village: villageResponseData,
-      });
+      // try {
+      //   ////// Designation
+      //   const designationResponse = await instance.post(getAllDesignationsRoute);
+      //   const designationResponseData = designationResponse.data.message;
+      //   console.log("designationResponseData", designationResponseData);
+      //   //// States
+      //   const statesResponse = await instance.post(getAllStatesRoute);
+      //   const statesResponseData = statesResponse.data.message;
+      //   // console.log("statesResponseData", statesResponseData);
+      //   //// Districts
+      //   const districtsResponse = await instance.post(getAllDistrictsRoute);
+      //   const districtsResponseData = districtsResponse.data.message;
+      //   // console.log("districtsResponseData", districtsResponseData);
+      //   /// Constituencies
+      //   const constituenciesResponse = await instance.post(getAllConstituenciesRoute);
+      //   const constituenciesResponseData = constituenciesResponse.data.message;
+      //   // console.log("constituenciesResponseData", constituenciesResponseData);
+      //   // Mandals
+      //   const mandalsResponse = await instance.post(getAllMandalRoute);
+      //   const mandalsResponseData = mandalsResponse.data.message;
+      //   // console.log("mandalsResponseData", mandalsResponseData);
+      //   // Divisions
+      //   const divisionsResponse = await instance.post(getAllDivisionRoute);
+      //   const divisionsResponseData = divisionsResponse.data.message;
+      //   // console.log("divisionsResponseData", divisionsResponseData);
+      //   // Sachivalayam
+      //   const sachivalayamResponse = await instance.post(getAllSachivalayamRoute);
+      //   const sachivalayamResponseData = sachivalayamResponse.data.message;
+      //   // console.log("sachivalayamResponseData", sachivalayamResponseData);
+      //   // Parts
+      //   const partsResponse = await instance.post(getAllPartsRoute);
+      //   const partsResponseData = partsResponse.data.message;
+      //   // console.log("partsResponseData", partsResponseData);
+      //   // Village
+      //   const villageResponse = await instance.post(getAllVillageRoute);
+      //   const villageResponseData = villageResponse.data.message;
+      //   // console.log("villageResponseData", villageResponseData);
+      //   /// state updating
+      //   setFetchAssignAuthority({
+      //     ...fetchAssignAuthority,
+      //     designation: designationResponseData,
+      //     state: statesResponseData,
+      //     district: districtsResponseData,
+      //     constituency: constituenciesResponseData,
+      //     mandal: mandalsResponseData,
+      //     division: divisionsResponseData,
+      //     sachivalayam: sachivalayamResponseData,
+      //     part: partsResponseData,
+      //     village: villageResponseData,
+      //   });
+      // } catch (e) {
+      //   console.log(e);
+      // }
     };
     fetchAssignAuthorityData();
     if (filterValues.state_id === "") {
@@ -163,43 +171,43 @@ const UserRegistrationPage = ({ dashboard }) => {
   }, []);
   // console.log("basicInfo", basicInfo);
 
-  const handleSubmit = () => {
-    setIsLoading(true);
-    const requestBody = {
-      ...basicInfo,
-      ...filterValues,
-    };
-    console.log("requestBody", requestBody);
+  // const handleSubmit = () => {
+  //   setIsLoading(true);
+  //   const requestBody = {
+  //     ...basicInfo,
+  //     ...filterValues,
+  //   };
+  //   console.log("requestBody", requestBody);
 
-    const response = instance.post(createUsersRoute, requestBody);
-    console.log("response", response.data);
+  //   const response = instance.post(createUsersRoute, requestBody);
+  //   console.log("response", response.data);
 
-    showAlert({ text: "User Created Successfully", color: "success" });
+  //   showAlert({ text: "User Created Successfully", color: "success" });
 
-    setIsLoading(false);
-    setBasicInfo({
-      user_displayname: "",
-      username: "",
-      password: "",
-      phone_no: "",
-      office_phone_no: "",
-      age: "",
-      email: "",
-    });
+  //   setIsLoading(false);
+  //   setBasicInfo({
+  //     user_displayname: "",
+  //     username: "",
+  //     password: "",
+  //     phone_no: "",
+  //     office_phone_no: "",
+  //     age: "",
+  //     email: "",
+  //   });
 
-    setFilterValues({
-      designation_id: "",
-      state_id: "",
-      district_id: "",
-      consistency_id: "",
-      mandal_id: "",
-      division_id: "",
-      sachivalayam_id: "",
-      part_no: "",
-      village_id: "",
-      reporting_manager: null,
-    });
-  };
+  //   setFilterValues({
+  //     designation_id: "",
+  //     state_id: "",
+  //     district_id: "",
+  //     consistency_id: "",
+  //     mandal_id: "",
+  //     division_id: "",
+  //     sachivalayam_id: "",
+  //     part_no: "",
+  //     village_id: "",
+  //     reporting_manager: null,
+  //   });
+  // };
 
   const handleEditComplete = () => {
     setIsLoading(true);
@@ -225,10 +233,7 @@ const UserRegistrationPage = ({ dashboard }) => {
                 size="small"
                 label="User Display Name*"
                 fullWidth
-                value={
-                  basicInfo.user_displayname ||
-                  (findEditUser[0] && findEditUser[0].user_displayname)
-                }
+                value={basicInfo.user_displayname || (findEditUser[0] && findEditUser[0].user_displayname)}
                 onChange={(e) => {
                   setBasicInfo({
                     ...basicInfo,
@@ -244,10 +249,7 @@ const UserRegistrationPage = ({ dashboard }) => {
                 size="small"
                 label="User Name"
                 fullWidth
-                value={
-                  basicInfo.username ||
-                  (findEditUser[0] && findEditUser[0].username)
-                }
+                value={basicInfo.username || (findEditUser[0] && findEditUser[0].username)}
                 onChange={(e) => {
                   setBasicInfo({
                     ...basicInfo,
@@ -263,10 +265,7 @@ const UserRegistrationPage = ({ dashboard }) => {
                 size="small"
                 label="Password"
                 fullWidth
-                value={
-                  basicInfo.password ||
-                  (findEditUser[0] && findEditUser[0].password)
-                }
+                value={basicInfo.password || (findEditUser[0] && findEditUser[0].password)}
                 onChange={(e) => {
                   setBasicInfo({
                     ...basicInfo,
@@ -283,10 +282,7 @@ const UserRegistrationPage = ({ dashboard }) => {
                 label="Phone Number"
                 type="number"
                 fullWidth
-                value={
-                  basicInfo.phone_no ||
-                  (findEditUser[0] && findEditUser[0].phone_no)
-                }
+                value={basicInfo.phone_no || (findEditUser[0] && findEditUser[0].phone_no)}
                 onChange={(e) => {
                   setBasicInfo({
                     ...basicInfo,
@@ -303,10 +299,7 @@ const UserRegistrationPage = ({ dashboard }) => {
                 label="Office Phone Number"
                 fullWidth
                 type="number"
-                value={
-                  basicInfo.office_phone_no ||
-                  (findEditUser[0] && findEditUser[0].office_phone_no)
-                }
+                value={basicInfo.office_phone_no || (findEditUser[0] && findEditUser[0].office_phone_no)}
                 onChange={(e) => {
                   setBasicInfo({
                     ...basicInfo,
@@ -321,9 +314,7 @@ const UserRegistrationPage = ({ dashboard }) => {
                 size="small"
                 label="Age"
                 fullWidth
-                value={
-                  basicInfo.age || (findEditUser[0] && findEditUser[0].age)
-                }
+                value={basicInfo.age || (findEditUser[0] && findEditUser[0].age)}
                 onChange={(e) => {
                   setBasicInfo({
                     ...basicInfo,
@@ -340,9 +331,7 @@ const UserRegistrationPage = ({ dashboard }) => {
                 size="small"
                 label="Email"
                 fullWidth
-                value={
-                  basicInfo.email || (findEditUser[0] && findEditUser[0].email)
-                }
+                value={basicInfo.email || (findEditUser[0] && findEditUser[0].email)}
                 onChange={(e) => {
                   setBasicInfo({
                     ...basicInfo,
@@ -364,10 +353,7 @@ const UserRegistrationPage = ({ dashboard }) => {
                 label="Select Designation*"
                 fullWidth
                 select
-                value={
-                  filterValues.designation_id ||
-                  (findEditUser[0] && findEditUser[0].designation_id)
-                }
+                value={filterValues.designation_id || (findEditUser[0] && findEditUser[0].designation_id)}
                 onChange={(event) => {
                   setFilterValues({
                     ...filterValues,
@@ -376,10 +362,7 @@ const UserRegistrationPage = ({ dashboard }) => {
                 }}
               >
                 {fetchAssignAuthority.designation.map((designation) => (
-                  <MenuItem
-                    key={designation.lookup_pk}
-                    value={designation.lookup_pk}
-                  >
+                  <MenuItem key={designation.lookup_pk} value={designation.lookup_pk}>
                     {designation.designation_name}
                   </MenuItem>
                 ))}
@@ -389,73 +372,10 @@ const UserRegistrationPage = ({ dashboard }) => {
             <Grid item xs={12} md={6} lg={3}>
               <TextField
                 size="small"
-                label="Select State*"
-                fullWidth
-                select
-                value={
-                  typeof filterValues.state_id === "string"
-                    ? findEditUser[0] && findEditUser[0].state_id
-                    : filterValues.state_id
-                }
-                onChange={(event) => {
-                  setFilterValues({
-                    ...filterValues,
-                    state_id: event.target.value,
-                  });
-                }}
-              >
-                {fetchAssignAuthority.state.map((state) => (
-                  <MenuItem key={state.state_pk} value={state.state_pk}>
-                    {state.state_name}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </Grid>
-            <Grid item xs={12} md={6} lg={3}>
-              <TextField
-                size="small"
-                label="Select District*"
-                fullWidth
-                select
-                value={
-                  typeof filterValues.district_id === "string"
-                    ? findEditUser[0] && findEditUser[0].district_pk
-                    : filterValues.district_id
-                }
-                onChange={(event) => {
-                  setFilterValues({
-                    ...filterValues,
-                    district_id: event.target.value,
-                  });
-                }}
-              >
-                {/*filter districts by state_id  */}
-                {fetchAssignAuthority.district
-                  .filter((district) => {
-                    return district.state_id === filterValues.state_id;
-                  })
-                  .map((district) => (
-                    <MenuItem
-                      key={district.district_pk}
-                      value={district.district_pk}
-                    >
-                      {district.district_name}
-                    </MenuItem>
-                  ))}
-              </TextField>
-            </Grid>
-
-            <Grid item xs={12} md={6} lg={3}>
-              <TextField
-                size="small"
                 label="Select Constistency*"
                 fullWidth
                 select
-                value={
-                  typeof filterValues.consistency_id === "string"
-                    ? findEditUser[0] && findEditUser[0].consistency_pk
-                    : filterValues.consistency_id
-                }
+                value={typeof filterValues.consistency_id === "string" ? findEditUser[0] && findEditUser[0].consistency_pk : filterValues.consistency_id}
                 onChange={(event) => {
                   setFilterValues({
                     ...filterValues,
@@ -466,15 +386,10 @@ const UserRegistrationPage = ({ dashboard }) => {
                 {/*filter constituencies by district_id  */}
                 {fetchAssignAuthority.constituency
                   .filter((constituency) => {
-                    return (
-                      constituency.district_pk === filterValues.district_id
-                    );
+                    return constituency.district_pk === filterValues.district_id;
                   })
                   .map((constituency) => (
-                    <MenuItem
-                      key={constituency.consistency_pk}
-                      value={constituency.consistency_pk}
-                    >
+                    <MenuItem key={constituency.consistency_pk} value={constituency.consistency_pk}>
                       {constituency.consistency_name}
                     </MenuItem>
                   ))}
@@ -499,9 +414,7 @@ const UserRegistrationPage = ({ dashboard }) => {
 
                 {fetchAssignAuthority.mandal
                   .filter((mandal) => {
-                    return (
-                      mandal.consistency_id === filterValues.consistency_id
-                    );
+                    return mandal.consistency_id === filterValues.consistency_id;
                   })
                   .map((mandal) => (
                     <MenuItem key={mandal.mandal_pk} value={mandal.mandal_pk}>
@@ -531,10 +444,7 @@ const UserRegistrationPage = ({ dashboard }) => {
                     return division.mandal_id === filterValues.mandal_id;
                   })
                   .map((division) => (
-                    <MenuItem
-                      key={division.division_pk}
-                      value={division.division_pk}
-                    >
+                    <MenuItem key={division.division_pk} value={division.division_pk}>
                       {division.division_name}
                     </MenuItem>
                   ))}
@@ -559,15 +469,10 @@ const UserRegistrationPage = ({ dashboard }) => {
                 {/*filter sachivalayam by division_id  */}
                 {fetchAssignAuthority.sachivalayam
                   .filter((sachivalayam) => {
-                    return (
-                      sachivalayam.division_id === filterValues.division_id
-                    );
+                    return sachivalayam.division_id === filterValues.division_id;
                   })
                   .map((sachivalayam) => (
-                    <MenuItem
-                      key={sachivalayam.sachivalayam_pk}
-                      value={sachivalayam.sachivalayam_pk}
-                    >
+                    <MenuItem key={sachivalayam.sachivalayam_pk} value={sachivalayam.sachivalayam_pk}>
                       {sachivalayam.sachivalayam_name}
                     </MenuItem>
                   ))}
@@ -591,9 +496,7 @@ const UserRegistrationPage = ({ dashboard }) => {
                 {/*filter parts by sachivalayam_id  */}
                 {fetchAssignAuthority.part
                   .filter((part) => {
-                    return (
-                      part.sachivalayam_id === filterValues.sachivalayam_id
-                    );
+                    return part.sachivalayam_id === filterValues.sachivalayam_id;
                   })
                   .map((part) => (
                     <MenuItem key={part.part_no} value={part.part_no}>
@@ -623,10 +526,7 @@ const UserRegistrationPage = ({ dashboard }) => {
                     return village.part_no === filterValues.part_no;
                   })
                   .map((village) => (
-                    <MenuItem
-                      key={village.village_pk}
-                      value={village.village_pk}
-                    >
+                    <MenuItem key={village.village_pk} value={village.village_pk}>
                       {village.village_name}
                     </MenuItem>
                   ))}
@@ -634,12 +534,7 @@ const UserRegistrationPage = ({ dashboard }) => {
             </Grid>
 
             <Grid item xs={12} md={6} lg={3}>
-              <TextField
-                size="small"
-                label="Reporting Manager"
-                fullWidth
-                select
-              />
+              <TextField size="small" label="Reporting Manager" fullWidth select />
             </Grid>
 
             <Grid item xs={12} md={6} lg={3}>
@@ -686,7 +581,7 @@ const UserRegistrationPage = ({ dashboard }) => {
                 </LoadingButton>
               ) : (
                 <LoadingButton
-                loading={isLoading}
+                  loading={isLoading}
                   onClick={handleEditComplete}
                   variant="contained"
                   sx={{

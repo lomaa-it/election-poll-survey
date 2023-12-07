@@ -6,6 +6,9 @@ const initialState = {
   parts: [],
   villages: [],
   navaratnalu: [],
+  caste: [],
+  religion: [],
+  navaratnalu: [],
   errorMessage: null,
 };
 
@@ -22,6 +25,8 @@ export default function commonReducer(state = initialState, action) {
         parts: [],
         villages: [],
         navaratnalu: [],
+        caste: [],
+        religion: [],
         errorMessage: null,
       };
 
@@ -48,6 +53,8 @@ export default function commonReducer(state = initialState, action) {
         parts: [],
         villages: [],
         navaratnalu: [],
+        caste: [],
+        religion: [],
         errorMessage: null,
       };
 

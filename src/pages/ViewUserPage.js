@@ -1,11 +1,4 @@
-import {
-  Grid,
-  Container,
-  Typography,
-  Box,
-  TextField,
-  Card,
-} from "@mui/material";
+import { Grid, Container, Typography, Box, TextField, Card } from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -29,7 +22,7 @@ const ViewUserPage = ({ dashboard }) => {
     const getUsersData = async () => {
       try {
         console.log("url", "user data");
-        const response = await instance.get(getAllUsersRoute);
+        const response = await instance.post(getAllUsersRoute);
         const responseData = response.data.message;
 
         // console.log("dsdasda", responseData);
@@ -130,10 +123,7 @@ const ViewUserPage = ({ dashboard }) => {
             <CircularProgress />
           </Box>
         ) : (
-          <ViewUsersList
-            usersData={usersData}
-            unFilteredData={unFilteredData}
-          />
+          <ViewUsersList usersData={usersData} unFilteredData={unFilteredData} />
         )}
 
         <Card sx={{ p: 3, marginTop: "10px" }}>

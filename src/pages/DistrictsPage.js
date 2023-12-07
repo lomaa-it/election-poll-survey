@@ -20,13 +20,13 @@ const DistrictsPage = ({ dashboard }) => {
 
   // fetch both states and districts
   const fetchDistricts = async () => {
-    const response = await instance.get(getAllDistrictsWithJoinRoute);
+    const response = await instance.post(getAllDistrictsWithJoinRoute);
     console.log("districts", response.data);
     setDistrictList(response.data.message);
   };
   useEffect(() => {
     const fetchStates = async () => {
-      const response = await instance.get(getAllStatesRoute);
+      const response = await instance.post(getAllStatesRoute);
       console.log("states", response.data.message);
       setStateList(response.data.message);
     };

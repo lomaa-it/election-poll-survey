@@ -21,19 +21,19 @@ const ConstituenciesPage = ({ dashboard }) => {
   const [consituencyName, setConsituencyName] = useState("");
 
   const fetchConstituencies = async () => {
-    const response = await instance.get(getAllConstituenciesWithJoinRoute);
+    const response = await instance.post(getAllConstituenciesWithJoinRoute);
     console.log("constituencies", response.data.message);
     setConstituenciesList(response.data.message);
   };
 
   const fetchStates = async () => {
-    const response = await instance.get(getAllStatesRoute);
+    const response = await instance.post(getAllStatesRoute);
     console.log("states", response.data.message);
     setStateList(response.data.message);
   };
 
   const fecthDistricts = async () => {
-    const response = await instance.get(getAllDistrictsRoute);
+    const response = await instance.post(getAllDistrictsRoute);
     console.log("districts", response.data.message);
     setDistrictList(response.data.message);
   };

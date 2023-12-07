@@ -23,7 +23,7 @@ const ViewVoterPage = ({ dashboard }) => {
     const getVotersData = async () => {
       try {
         console.log("api started");
-        const response = await instance.get(getAllVotersRoute);
+        const response = await instance.post(getAllVotersRoute);
         const responseData = response.data.message;
 
         console.log("data", responseData);

@@ -18,7 +18,7 @@ const StatesPage = ({ dashboard }) => {
 
   useEffect(() => {
     const fetchStates = async () => {
-      const response = await instance.get(getAllStatesRoute);
+      const response = await instance.post(getAllStatesRoute);
       const responseData = response.data.message;
       setStateList(responseData);
     };

@@ -1,4 +1,4 @@
-import { getAllDivisionRoute, getAllMandalRoute, getAllSachivalayamRoute, getAllPartsRoute, getAllVillageRoute, getAllNavaratnaluRoute } from "../utils/apis";
+import { getAllDivisionRoute, getAllMandalRoute, getAllSachivalayamRoute, getAllPartsRoute, getAllVillageRoute, getAllNavaratnaluRoute, getAllCastesRoute, getAllReligionRoute, getAllDesignationsRoute } from "../utils/apis";
 import instance from "../utils/axios";
 
 export const getAllCommonData = (user) => async (dispatch) => {
@@ -7,24 +7,32 @@ export const getAllCommonData = (user) => async (dispatch) => {
   });
 
   try {
-    console.log(user);
-    const mandalResponse = await instance.get(getAllMandalRoute);
+    const mandalResponse = await instance.post(getAllMandalRoute);
     const mandalsResponseData = mandalResponse.data?.message ?? [];
 
-    const divisionsResponse = await instance.get(getAllDivisionRoute);
+    const divisionsResponse = await instance.post(getAllDivisionRoute);
     const divisionsResponseData = divisionsResponse.data?.message ?? [];
 
-    const sachivalayamResponse = await instance.get(getAllSachivalayamRoute);
+    const sachivalayamResponse = await instance.post(getAllSachivalayamRoute);
     const sachivalayamResponseData = sachivalayamResponse.data?.message ?? [];
 
-    const partsResponse = await instance.get(getAllPartsRoute);
+    const partsResponse = await instance.post(getAllPartsRoute);
     const partsResponseData = partsResponse.data?.message ?? [];
 
-    const villageResponse = await instance.get(getAllVillageRoute);
+    const villageResponse = await instance.post(getAllVillageRoute);
     const villageResponseData = villageResponse.data?.message ?? [];
 
-    const navaratnaluResponse = await instance.get(getAllNavaratnaluRoute);
+    const navaratnaluResponse = await instance.post(getAllNavaratnaluRoute);
     const navaratanaluResponseData = navaratnaluResponse.data?.message ?? [];
+
+    const casteResponse = await instance.post(getAllCastesRoute);
+    const casteResponseData = casteResponse.data?.message ?? [];
+
+    const religionResponse = await instance.post(getAllReligionRoute);
+    const religionResponseData = religionResponse.data?.message ?? [];
+
+    const designationResponse = await instance.post(getAllDesignationsRoute);
+    const designationResponseData = designationResponse.data?.message ?? [];
 
     const filtersData = {
       mandals: mandalsResponseData,
@@ -33,6 +41,18 @@ export const getAllCommonData = (user) => async (dispatch) => {
       parts: partsResponseData,
       villages: villageResponseData,
       navaratnalu: navaratanaluResponseData,
+      caste: casteResponseData.map((e) => ({
+        label: e.lookup_valuename,
+        value: e.lookup_pk,
+      })),
+      religion: religionResponseData.map((e) => ({
+        label: e.lookup_valuename,
+        value: e.lookup_pk,
+      })),
+      designation: designationResponseData.map((e) => ({
+        label: e.lookup_valuename,
+        value: e.lookup_pk,
+      })),
     };
 
     if (user.mandal_pk != null) {
@@ -55,7 +75,7 @@ export const getAllCommonData = (user) => async (dispatch) => {
       filtersData["villages"] = villageResponseData.filter((e) => e.village_pk == user.village_pk);
     }
 
-    console.log(filtersData);
+    // console.log(filtersData);
 
     dispatch({
       type: "COMMON_LOAD_SUCCESS",

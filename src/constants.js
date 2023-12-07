@@ -1,3 +1,4 @@
+import { createTheme } from "@mui/material";
 import { format, isValid, formatDistanceToNow } from "date-fns";
 
 export const bgColors = ["#F79256", "#FBD1A2", "#7DCFB6", "#00B2CA", "#1D4E89"];
@@ -81,6 +82,19 @@ export function fToNow(value) {
       })
     : "";
 }
+
+export const getMuiTableTheme = () =>
+  createTheme({
+    components: {
+      MUIDataTableHeadCell: {
+        styleOverrides: {
+          root: {
+            backgroundColor: searchFiltercolor,
+          },
+        },
+      },
+    },
+  });
 
 export const PARTY_ID = {
   NEUTRAL: 22,

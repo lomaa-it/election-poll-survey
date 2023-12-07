@@ -1,4 +1,4 @@
-import { changeOpinionPollRoute, getAllNavaratnaluRoute, getAllVotorsSurveyRoute } from "../utils/apis";
+import { changeOpinionPollRoute, getAllNavaratnaluRoute, getAllVotorsSurveyRoute, saveOrupdatedSurvey } from "../utils/apis";
 import instance from "../utils/axios";
 
 export const clearVoterReducer = () => async (dispatch) => {
@@ -66,6 +66,29 @@ export const changeOpinionPoll = (id, value) => async (dispatch) => {
   }
 };
 
+export const updateVoterDetails = (id, data) => async (dispatch) => {
+  try {
+    const jsonData = {
+      volunteer_id: 1,
+      voter_pk: id,
+      ...data,
+    };
+    console.log(jsonData);
+    await instance.post(saveOrupdatedSurvey, jsonData);
+
+    dispatch({
+      type: "VOTER_UPDATE_SUCCESS",
+      payload: { id: id, value: data },
+    });
+
+    return true;
+  } catch (err) {
+    console.log(err);
+
+    return false;
+  }
+};
+
 export const addVoterTicket = async (id, data) => {
   try {
     const jsonData = {
@@ -80,7 +103,6 @@ export const addVoterTicket = async (id, data) => {
     return true;
   } catch (err) {
     console.log(err);
-
     return false;
   }
 };
