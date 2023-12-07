@@ -10,7 +10,7 @@ import PartsList from "../sections/reports/PartsList";
 
 const PartsPage = ({ dashboard }) => {
   return (
-    <Page title="View User">
+    <Page title="Part">
       <Container maxWidth="xl">
         <Typography variant="h4" sx={{ mb: 1 }}>
           Parts
@@ -39,11 +39,11 @@ const PartsPage = ({ dashboard }) => {
               <TextField size="small" label="Select Sachivalayam " fullWidth select />
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
-              <TextField size="small" label="Part Number " fullWidth />
+              <TextField size="small" label="Part No " fullWidth />
             </Grid>
-            <Grid item xs={12} md={6} lg={2}>
+            {/* <Grid item xs={12} md={6} lg={2}>
               <TextField size="small" label="Part Name " fullWidth />
-            </Grid>
+            </Grid> */}
             <Grid item xs={12} md={6} lg={2}>
               <TextField size="small" label="Male Votes " fullWidth />
             </Grid>
@@ -53,9 +53,9 @@ const PartsPage = ({ dashboard }) => {
             <Grid item xs={12} md={6} lg={2}>
               <TextField size="small" label="Tg Votes" fullWidth />
             </Grid>
-            <Grid item xs={12} md={6} lg={2}>
+            {/* <Grid item xs={12} md={6} lg={2}>
               <TextField size="small" label="Totals Votes" fullWidth />
-            </Grid>
+            </Grid> */}
             <Grid item xs={12} md={6} lg={2}>
               <LoadingButton variant="contained">Add</LoadingButton>
             </Grid>

@@ -28,6 +28,7 @@ import { showAlert } from "../actions/alert";
 
 const MandalPage = ({ dashboard }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [refresh, setRefresh] = useState(false);
   const [fetchedData, setFetchedData] = useState({
     states: [{}],
     district: [{}],
@@ -96,12 +97,11 @@ const MandalPage = ({ dashboard }) => {
         consistency_id: "",
         mandal_name: "",
       }));
-      setFetchedData((prevState) => ({
-        ...prevState,
-        mandal: [{}],
-      }));
+      setRefresh((prevState) => !prevState);
     } catch (error) {
       console.log(error);
+      setIsLoading(false);
+      setRefresh((prevState) => !prevState);
     }
   };
 

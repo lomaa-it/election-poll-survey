@@ -21,7 +21,7 @@ import Sachivalayam from "../../pages/Sachivalayam";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
-const SachivalayamList = ({ showAlert }) => {
+const SachivalayamList = ({ showAlert, sachivalayamList }) => {
   useEffect(() => {}, []);
 
   const columns = [
@@ -70,6 +70,17 @@ const SachivalayamList = ({ showAlert }) => {
     );
   };
 
+  const formartedData = sachivalayamList.map((sachivalayam) => {
+    return [
+      sachivalayam.district_name || "District",
+      sachivalayam.consitency_name || "Constituency",
+      sachivalayam.mandal_name || "Mandal",
+      sachivalayam.division_name || "Division",
+      sachivalayam.sachivalayam_name || "Sachivalayam",
+      renderEditAndDelete(),
+    ];
+  });
+
   return (
     <Card elevation={1}>
       <Stack>
@@ -78,32 +89,7 @@ const SachivalayamList = ({ showAlert }) => {
         <MUIDataTable
           title=""
           columns={columns}
-          data={[
-            [
-              "District - 1",
-              "constituency - 1",
-              "Mandal - 1",
-              "DAMALACHERUVU",
-              "Uppara Palli",
-              renderEditAndDelete(),
-            ],
-            [
-              "District - 1",
-              "constituency - 2",
-              "Mandal - 1",
-              "MOGARALA",
-              "Padiputlabailu",
-              renderEditAndDelete(),
-            ],
-            [
-              "District - 1",
-              "constituency - 3",
-              "Mandal - 1",
-              "NENDRAGUNTA",
-              "Gadanki",
-              renderEditAndDelete(),
-            ],
-          ]}
+          data={formartedData}
           options={options}
         />
       </Stack>

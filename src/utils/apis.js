@@ -48,6 +48,8 @@ export const createStatesRoute = "/states/";
 export const createDistrictsRoute = "/districts/";
 export const createConstituenciesRoute = "/constituencies/";
 export const createMandalsRoute = "/mandals/";
+export const createDivisionsRoute = "/divisions/";
+export const createSachivalayamRoute = "/sachivalayam/";
 
 // Delete By Id
 export const deleteStatesByIdRoute = "/states/";
