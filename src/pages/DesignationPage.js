@@ -37,7 +37,7 @@ const DesignationPage = ({ dashboard }) => {
   useEffect(() => {
     const fetchDesignations = async () => {
       try {
-        const response = await instance.get(getAllDesignationsRoute);
+        const response = await instance.post(getAllDesignationsRoute);
         console.log(response.data.message);
         setFetchedData({
           designation: response.data.message,
@@ -81,7 +81,10 @@ const DesignationPage = ({ dashboard }) => {
         <Card sx={{ p: 3 }}>
           <Grid container spacing={2} alignItems="center">
             <Grid item xs={12} md={6} lg={9}>
-              <DesignationList designationlist={fetchedData.designation} />
+              <DesignationList
+                designationlist={fetchedData.designation}
+                setRefresh={setRefresh}
+              />
             </Grid>
             <Grid
               item

@@ -10,6 +10,7 @@ import {
   Chip,
   TextField,
   FormControlLabel,
+  Button,
 } from "@mui/material";
 import { CheckBox } from "@mui/icons-material";
 import MUIDataTable from "mui-datatables";
@@ -21,7 +22,7 @@ import Sachivalayam from "../../pages/Sachivalayam";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
-const DesignationList = ({ showAlert, designationlist }) => {
+const DesignationList = ({ showAlert, designationlist, setRefresh }) => {
   useEffect(() => {}, []);
 
   const columns = [
@@ -39,26 +40,29 @@ const DesignationList = ({ showAlert, designationlist }) => {
     selectableRows: "none",
     responsive: "standard",
   };
-  const renderEditAndDelete = () => {
+  const renderEditAndDelete = (data) => {
+    const onShow = () => {
+      console.log(data);
+    };
+
     return (
       <Box>
-        <EditNoteIcon
-          sx={{
-            color: "#1976d2",
-          }}
-        />
-        <DeleteForeverIcon
+        <Button variant="contained" onClick={onShow}>
+          <EditNoteIcon />
+        </Button>
+
+        {/* <DeleteForeverIcon
           sx={{
             color: "#f44336",
             marginLeft: "10px",
           }}
-        />
+        /> */}
       </Box>
     );
   };
 
   const formartedData = designationlist.map((data) => {
-    return [data.designation_name, renderEditAndDelete()];
+    return [data.designation_name, renderEditAndDelete(data)];
   });
 
   return (

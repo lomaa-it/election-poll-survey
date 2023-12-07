@@ -1,4 +1,12 @@
-import { Grid, Container, Typography, Box, TextField, Card, MenuItem } from "@mui/material";
+import {
+  Grid,
+  Container,
+  Typography,
+  Box,
+  TextField,
+  Card,
+  MenuItem,
+} from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -8,7 +16,13 @@ import Button from "@mui/material/Button";
 import MandalsList from "../sections/reports/MandalsList";
 import { useEffect, useState } from "react";
 import instance from "../utils/axios";
-import { getAllMandalRoute, getAllStatesRoute, getAllDistrictsRoute, createMandalsRoute, getAllConstituenciesRoute } from "../utils/apis";
+import {
+  getAllMandalRoute,
+  getAllStatesRoute,
+  getAllDistrictsRoute,
+  createMandalsRoute,
+  getAllConstituenciesRoute,
+} from "../utils/apis";
 import { set } from "date-fns";
 import { showAlert } from "../actions/alert";
 
@@ -40,7 +54,9 @@ const MandalPage = ({ dashboard }) => {
         // console.log("districts", districtsResponse.data.message);
 
         /// get all constituencies
-        const constituenciesResponse = await instance.post(getAllConstituenciesRoute);
+        const constituenciesResponse = await instance.post(
+          getAllConstituenciesRoute
+        );
         // console.log("constituencies", constituenciesResponse.data.message);
 
         /// get all mandals
@@ -99,7 +115,16 @@ const MandalPage = ({ dashboard }) => {
         <Card sx={{ p: 3 }}>
           <Grid container spacing={2} alignItems="center">
             <Grid item xs={12} md={6} lg={9}>
-              <MandalsList mandalsList={fetchedData.mandal} />
+              <MandalsList
+                mandalsList={fetchedData.mandal}
+                fetchedData={fetchedData}
+                setFetchedData={setFetchedData}
+                selectedValues={selectedValues}
+                setSelectedValues={setSelectedValues}
+                refresh={refresh}
+                setRefresh={setRefresh}
+                
+              />
             </Grid>
             <Grid
               item
@@ -128,7 +153,11 @@ const MandalPage = ({ dashboard }) => {
                 }}
               >
                 {fetchedData.states.map((state) => {
-                  return <MenuItem value={state.state_pk}>{state.state_name}</MenuItem>;
+                  return (
+                    <MenuItem value={state.state_pk}>
+                      {state.state_name}
+                    </MenuItem>
+                  );
                 })}
               </TextField>
               <TextField
@@ -147,9 +176,15 @@ const MandalPage = ({ dashboard }) => {
               >
                 {/* filter districk based on state_id */}
                 {fetchedData.district
-                  .filter((district) => district.state_id === selectedValues.state_id)
+                  .filter(
+                    (district) => district.state_id === selectedValues.state_id
+                  )
                   .map((district) => {
-                    return <MenuItem value={district.district_pk}>{district.district_name}</MenuItem>;
+                    return (
+                      <MenuItem value={district.district_pk}>
+                        {district.district_name}
+                      </MenuItem>
+                    );
                   })}
               </TextField>
               <TextField
@@ -167,9 +202,16 @@ const MandalPage = ({ dashboard }) => {
               >
                 {/* filter constituency based on district_id */}
                 {fetchedData.consistency
-                  .filter((consistency) => consistency.district_pk === selectedValues.district_id)
+                  .filter(
+                    (consistency) =>
+                      consistency.district_pk === selectedValues.district_id
+                  )
                   .map((consistency) => {
-                    return <MenuItem value={consistency.consistency_pk}>{consistency.consistency_name}</MenuItem>;
+                    return (
+                      <MenuItem value={consistency.consistency_pk}>
+                        {consistency.consistency_name}
+                      </MenuItem>
+                    );
                   })}
               </TextField>
               <TextField
