@@ -686,6 +686,7 @@ const UserRegistrationPage = ({ dashboard }) => {
                 </LoadingButton>
               ) : (
                 <LoadingButton
+                loading={isLoading}
                   onClick={handleEditComplete}
                   variant="contained"
                   sx={{

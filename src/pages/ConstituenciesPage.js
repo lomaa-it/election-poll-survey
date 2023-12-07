@@ -73,7 +73,6 @@ const ConstituenciesPage = ({ dashboard }) => {
     const response = await instance.post(createConstituenciesRoute, {
       consistency_id: 2,
       consistency_name: consituencyName,
-
       district_pk: districtId,
     });
     setConsituencyName("");

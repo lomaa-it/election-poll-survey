@@ -1,4 +1,12 @@
-import { Grid, Container, Typography, Box, TextField, Card } from "@mui/material";
+import {
+  Grid,
+  Container,
+  Typography,
+  Box,
+  TextField,
+  Card,
+  MenuItem,
+} from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -8,53 +16,94 @@ import Button from "@mui/material/Button";
 import MandalsList from "../sections/reports/MandalsList";
 import { useEffect, useState } from "react";
 import instance from "../utils/axios";
-import { getAllMandalRoute, getAllStatesRoute, getAllDistrictsRoute } from "../utils/apis";
+import {
+  getAllMandalRoute,
+  getAllStatesRoute,
+  getAllDistrictsRoute,
+  createMandalsRoute,
+  getAllConstituenciesRoute,
+} from "../utils/apis";
+import { set } from "date-fns";
+import { showAlert } from "../actions/alert";
 
 const MandalPage = ({ dashboard }) => {
-  const [mandalsList, setMandalsList] = useState([]);
-  const [stateList, setStateList] = useState([]);
-  const [districtList, setDistrictList] = useState([]);
-  const [stateId, setStateId] = useState("");
-  const [districtId, setDistrictId] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [fetchedData, setFetchedData] = useState({
+    states: [{}],
+    district: [{}],
+    consistency: [{}],
+    mandal: [{}],
+  });
 
-  const fetchMandals = async () => {
-    const response = await instance.get(getAllMandalRoute);
-    console.log("mandal", response.data.message);
-
-    setMandalsList(response.data.message);
-  };
-  const fetchStates = async () => {
-    const response = await instance.get(getAllStatesRoute);
-    console.log("states", response.data.message);
-    const filterState = response.data.message.map((state) => {
-      return { label: state.state_name, value: state.state_pk };
-    });
-    setStateList(filterState);
-  };
-  const fetchDistrict = async () => {
-    const response = await instance.get(getAllDistrictsRoute);
-    const districtsData = response.data.message;
-    const filterDistrict = districtsData.filter((district) => {
-      return district.state_pk == stateId;
-    });
-    console.log("districts", filterDistrict);
-  };
+  const [selectedValues, setSelectedValues] = useState({
+    state_id: "",
+    district_id: "",
+    consistency_id: "",
+    mandal_name: "",
+  });
 
   useEffect(() => {
-    fetchMandals();
-    fetchStates();
-    if (stateId) {
-      fetchDistrict();
+    const fecthOptionsData = async () => {
+      try {
+        /// get all states
+        const statesResponse = await instance.get(getAllStatesRoute);
+        // console.log("states", statesResponse.data.message);
+        /// get all districts
+        const districtsResponse = await instance.get(getAllDistrictsRoute);
+        // console.log("districts", districtsResponse.data.message);
+
+        /// get all constituencies
+        const constituenciesResponse = await instance.get(
+          getAllConstituenciesRoute
+        );
+        // console.log("constituencies", constituenciesResponse.data.message);
+
+        /// get all mandals
+        const mandalsResponse = await instance.get(getAllMandalRoute);
+        // console.log("mandals", mandalsResponse.data.message);
+
+        /// state update
+        setFetchedData((prevState) => ({
+          ...prevState,
+          states: statesResponse.data.message,
+          district: districtsResponse.data.message,
+          consistency: constituenciesResponse.data.message,
+          mandal: mandalsResponse.data.message,
+        }));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fecthOptionsData();
+  }, [fetchedData.mandal]);
+
+  const handleSubmit = async () => {
+    console.log(selectedValues);
+    try {
+      setIsLoading(true);
+      const response = await instance.post(createMandalsRoute, {
+        mandal_name: selectedValues.mandal_name,
+        consistency_id: selectedValues.consistency_id,
+      });
+      showAlert({ text: "Mandal Created Successfully", color: "success" });
+
+      console.log(response.data.message);
+      setIsLoading(false);
+      setSelectedValues((prevState) => ({
+        ...prevState,
+        state_id: "",
+        district_id: "",
+        consistency_id: "",
+        mandal_name: "",
+      }));
+      setFetchedData((prevState) => ({
+        ...prevState,
+        mandal: [{}],
+      }));
+    } catch (error) {
+      console.log(error);
     }
-  }, [stateId, districtId]);
-
-  // if (stateList.length > 0) {
-  //   stateOptions = stateList.map((state) => {
-  //     return { label: state.state_name, value: state.state_pk };
-  //   });
-  // }
-
-  // // covert districts to options and filter based on state id
+  };
 
   return (
     <Page title="Mandal">
@@ -66,7 +115,7 @@ const MandalPage = ({ dashboard }) => {
         <Card sx={{ p: 3 }}>
           <Grid container spacing={2} alignItems="center">
             <Grid item xs={12} md={6} lg={9}>
-              <MandalsList mandalsList={mandalsList} />
+              <MandalsList mandalsList={fetchedData.mandal} />
             </Grid>
             <Grid
               item
@@ -79,22 +128,98 @@ const MandalPage = ({ dashboard }) => {
                 gap: "15px",
               }}
             >
-              {" "}
-              <Autocomplete
-                options={stateList || []}
-                renderInput={(params) => <TextField size="small" {...params} label="Select State" fullWidth />}
-                onChange={(event, value) => {
-                  console.log("value", value);
-                  if (value) {
-                    setStateId(value.value);
-                  }
+              <TextField
+                size="small"
+                label="Select State"
+                fullWidth
+                select
+                value={selectedValues.state_id}
+                onChange={(e) => {
+                  setSelectedValues((prevState) => ({
+                    ...prevState,
+                    state_id: e.target.value,
+                    district_id: "",
+                    consistency_id: "",
+                  }));
+                }}
+              >
+                {fetchedData.states.map((state) => {
+                  return (
+                    <MenuItem value={state.state_pk}>
+                      {state.state_name}
+                    </MenuItem>
+                  );
+                })}
+              </TextField>
+              <TextField
+                size="small"
+                label="Select District"
+                fullWidth
+                select
+                value={selectedValues.district_id}
+                onChange={(e) => {
+                  setSelectedValues((prevState) => ({
+                    ...prevState,
+                    district_id: e.target.value,
+                    consistency_id: "",
+                  }));
+                }}
+              >
+                {/* filter districk based on state_id */}
+                {fetchedData.district
+                  .filter(
+                    (district) => district.state_id === selectedValues.state_id
+                  )
+                  .map((district) => {
+                    return (
+                      <MenuItem value={district.district_pk}>
+                        {district.district_name}
+                      </MenuItem>
+                    );
+                  })}
+              </TextField>
+              <TextField
+                size="small"
+                label="Select Constituency"
+                fullWidth
+                select
+                value={selectedValues.consistency_id}
+                onChange={(e) => {
+                  setSelectedValues((prevState) => ({
+                    ...prevState,
+                    consistency_id: e.target.value,
+                  }));
+                }}
+              >
+                {/* filter constituency based on district_id */}
+                {fetchedData.consistency
+                  .filter(
+                    (consistency) =>
+                      consistency.district_pk === selectedValues.district_id
+                  )
+                  .map((consistency) => {
+                    return (
+                      <MenuItem value={consistency.consistency_pk}>
+                        {consistency.consistency_name}
+                      </MenuItem>
+                    );
+                  })}
+              </TextField>
+              <TextField
+                size="small"
+                label="Mandal Name"
+                fullWidth
+                value={selectedValues.mandal_name}
+                onChange={(e) => {
+                  setSelectedValues((prevState) => ({
+                    ...prevState,
+                    mandal_name: e.target.value,
+                  }));
                 }}
               />
-              <TextField size="small" label="Select State" fullWidth select />
-              <TextField size="small" label="Select District" fullWidth select />
-              <TextField size="small" label="Select Constituency" fullWidth select />
-              <TextField size="small" label="Mandal Name" fullWidth />
               <LoadingButton
+                loading={isLoading}
+                onClick={handleSubmit}
                 variant="contained"
                 sx={{
                   padding: "15px",
