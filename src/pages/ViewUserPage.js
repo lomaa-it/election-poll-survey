@@ -2,55 +2,28 @@ import { Grid, Container, Typography, Box, TextField, Card } from "@mui/material
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
-import CircularProgress from "@mui/material/CircularProgress";
 import ViewUsersList from "../sections/reports/ViewUsersList";
 import Button from "@mui/material/Button";
 import { useEffect, useState } from "react";
-import instance from "../utils/axios";
-import { getAllUsersRoute } from "../utils/apis";
 import SearchByFilter from "../sections/common/SearchByFilter";
 import { searchFiltercolor } from "../constants";
+import { clearUserReducer, getAllUsers } from "../actions/user";
 
-const ViewUserPage = ({ dashboard }) => {
-  const [usersData, setUsersData] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [unFilteredData, setUnFilteredData] = useState([]);
+const ViewUserPage = ({ common, clearUserReducer, getAllUsers }) => {
+  const [filterValues, setFilterValues] = useState(null);
+  const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
-    setIsLoading(true);
-
-    const getUsersData = async () => {
-      try {
-        console.log("url", "user data");
-        const response = await instance.post(getAllUsersRoute);
-        const responseData = response.data.message;
-
-        // console.log("dsdasda", responseData);
-
-        const filterData = responseData.map((item) => {
-          return [
-            item.username,
-            item.user_pk || "constituency_id",
-            item.user_displayname,
-            item.lookup_valuename,
-            item.mandal_name || "-",
-            item.division_name || "-",
-            item.sachivalayam_name || "-",
-            item.part_no || "-",
-            item.village_name || "-",
-            item.phone_no,
-          ];
-        });
-        // console.log("filterData", filterData);
-        setUsersData(filterData);
-        setUnFilteredData(responseData);
-        setIsLoading(false);
-      } catch (error) {
-        console.log("error", error);
-      }
-    };
-    getUsersData();
+    clearUserReducer();
   }, []);
+
+  const onSubmit = async () => {
+    setLoading(true);
+
+    await getAllUsers(filterValues);
+
+    setLoading(false);
+  };
 
   return (
     <Page title="View User">
@@ -63,7 +36,7 @@ const ViewUserPage = ({ dashboard }) => {
           <Typography sx={{ pb: 2 }}>Search by filter</Typography>
 
           <Grid container spacing={2} alignItems="center">
-            <SearchByFilter />
+            <SearchByFilter onChanged={(value) => setFilterValues(value)} />
 
             <Grid item xs={12} md={6} lg={2}>
               <TextField
@@ -105,28 +78,20 @@ const ViewUserPage = ({ dashboard }) => {
             </Grid>
 
             <Grid item xs={12} md={6} lg={2}>
-              <LoadingButton variant="contained">Search</LoadingButton>
+              <LoadingButton loading={isLoading} variant="contained" onClick={onSubmit}>
+                Search
+              </LoadingButton>
             </Grid>
           </Grid>
         </Card>
 
         <Box p={1} />
-        {isLoading ? (
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
 
-              height: "100vh",
-            }}
-          >
-            <CircularProgress />
-          </Box>
-        ) : (
-          <ViewUsersList usersData={usersData} unFilteredData={unFilteredData} />
-        )}
+        <ViewUsersList />
 
-        <Card sx={{ p: 3, marginTop: "10px" }}>
+        <Box p={1} />
+
+        <Card sx={{ p: 3 }}>
           <Grid container spacing={2} alignItems="center">
             <Grid item xs={12} md={6} lg={6}>
               <Button
@@ -170,8 +135,8 @@ const ViewUserPage = ({ dashboard }) => {
 
 const mapStateToProps = (state) => {
   return {
-    dashboard: state.dashboard,
+    common: state.common,
   };
 };
 
-export default connect(mapStateToProps, null)(ViewUserPage);
+export default connect(mapStateToProps, { clearUserReducer, getAllUsers })(ViewUserPage);

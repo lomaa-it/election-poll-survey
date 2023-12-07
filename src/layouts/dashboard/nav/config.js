@@ -1,6 +1,14 @@
 import Iconify from "../../../components/Iconify";
 
-const navConfig = [
+const userNavConfig = [
+  {
+    title: "Opinion Survey",
+    path: "/opinionsurvey/survey",
+    icon: <Iconify icon="ic:round-dashboard" width="24px" height="24px" />,
+  },
+];
+
+const mlaNavConfig = [
   {
     title: "Opinion Dashboard",
     path: "/dashboard",
@@ -146,10 +154,10 @@ const navConfig = [
     path: "/reports",
     icon: <Iconify icon="ri:mind-map" width="24px" height="24px" />,
     children: [
-      {
-        title: "Voter and Volunteer Mapping",
-        path: "/voter-and-volunteer-mapping",
-      },
+      // {
+      //   title: "Voter and Volunteer Mapping",
+      //   path: "/voter-and-volunteer-mapping",
+      // },
       {
         title: "User Mapping",
         path: "/user-mapping",
@@ -213,4 +221,4 @@ const navConfig = [
   },
 ];
 
-export default navConfig;
+export { userNavConfig, mlaNavConfig };

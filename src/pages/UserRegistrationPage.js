@@ -12,35 +12,39 @@ import { useEffect, useState } from "react";
 import instance from "../utils/axios";
 import { set } from "date-fns";
 import { showAlert } from "../actions/alert";
+import { FormProvider, RHFTextField } from "../components/hook-form";
+import SearchByFilter from "../sections/common/SearchByFilter";
+import { phoneRegExp } from "../constants";
 
-const UserRegistrationPage = ({ dashboard }) => {
-  const location = useLocation();
-  const userData = location.state ? location.state.userData : null;
-  const unFilteredData = location.state ? location.state.unFilteredData : null;
-  const editUser = userData === null ? [] : userData;
-  const pageName = userData === null ? "User Registration" : "Edit User";
+const UserRegistrationPage = ({ common, showAlert }) => {
+  const props = useLocation().state;
+
+  const pageName = props.userData === null ? "User Registration" : "Edit User";
+
+  const [filterValues, setFilterValues] = useState(null);
+  const [isLoading, setLoading] = useState(false);
 
   const schema = Yup.object().shape({
-    residential: Yup.string(),
-    religion_id: Yup.string(),
-    caste_id: Yup.string(),
-    disability: Yup.string(),
-    govt_employee: Yup.string(),
-    current_address: Yup.string(),
-    permenent_address: Yup.string(),
-    intrested_party: Yup.string(),
+    user_displayname: Yup.string().required("Full name is required"),
+    phone_no: Yup.string().matches(phoneRegExp, "Phone number is not valid").required("Phone number is required"),
+    password: Yup.string().required("Password is required").min(8, "Password must be at least 8 characters"),
+    office_phone_no: Yup.string(),
+    age: Yup.string(),
+    email: Yup.string().email(),
+    designation_id: Yup.string().required("Designation id is required"),
   });
 
   const defaultValues = {
-    survey_phone_no: userData.survey_phone_no ?? "",
-    residential: userData.residential ?? "",
-    religion_id: userData.religion_id ?? "",
-    caste_id: userData.caste_id ?? "",
-    disability: userData.disability ?? "",
-    govt_employee: userData.govt_employee ?? "",
-    current_address: userData.current_address ?? "",
-    permenent_address: userData.permenent_address ?? "",
-    intrested_party: userData.intrested_party ?? "",
+    user_displayname: props?.userData?.user_displayname ?? "",
+    phone_no: props?.userData?.phone_no ?? "",
+    password: props?.userData?.password ?? "",
+    office_phone_no: props?.userData?.office_phone_no ?? "",
+    age: props?.userData?.age ?? "",
+    email: props?.userData?.email ?? "",
+    designation_id: props?.userData?.designation_id ?? "",
+    mandal_pk: props?.userData?.mandal_pk ?? "",
+    division_pk: props?.userData?.division_pk ?? "",
+    sachivalayam_pk: props?.userData?.sachivalayam_pk ?? "",
   };
 
   const methods = useForm({
@@ -48,563 +52,169 @@ const UserRegistrationPage = ({ dashboard }) => {
     defaultValues,
   });
 
-  const { handleSubmit } = methods;
+  const { handleSubmit, reset } = methods;
 
-  const onSubmit = async (data) => {};
-
-  // console.log("userData", userData);
-  console.log("unFilteredData", unFilteredData);
-  const findEditUser = unFilteredData
-    ? unFilteredData.filter((item) => {
-        return item.user_pk === editUser[1];
-      })
-    : [];
-  console.log("findEditUser", findEditUser);
-
-  const [isLoading, setIsLoading] = useState(false);
-  const [fetchAssignAuthority, setFetchAssignAuthority] = useState({
-    designation: [{}],
-    state: [{}],
-    district: [{}],
-    constituency: [{}],
-    mandal: [{}],
-    division: [{}],
-    sachivalayam: [{}],
-    part: [{}],
-    village: [{}],
-    reporting_manager: [{}],
-  });
-
-  const [basicInfo, setBasicInfo] = useState({
-    user_displayname: "",
-    username: "",
-    password: "",
-    phone_no: "",
-    office_phone_no: "",
-    age: "",
-    email: "",
-  });
-
-  const [filterValues, setFilterValues] = useState({
-    designation_id: "",
-    state_id: "",
-    district_id: "",
-    consistency_id: "",
-    mandal_id: "",
-    division_id: "",
-    sachivalayam_id: "",
-    part_no: "",
-    village_id: "",
-    reporting_manager: null,
-  });
-
-  useEffect(() => {
-    const fetchAssignAuthorityData = async () => {
-      // try {
-      //   ////// Designation
-      //   const designationResponse = await instance.post(getAllDesignationsRoute);
-      //   const designationResponseData = designationResponse.data.message;
-      //   console.log("designationResponseData", designationResponseData);
-      //   //// States
-      //   const statesResponse = await instance.post(getAllStatesRoute);
-      //   const statesResponseData = statesResponse.data.message;
-      //   // console.log("statesResponseData", statesResponseData);
-      //   //// Districts
-      //   const districtsResponse = await instance.post(getAllDistrictsRoute);
-      //   const districtsResponseData = districtsResponse.data.message;
-      //   // console.log("districtsResponseData", districtsResponseData);
-      //   /// Constituencies
-      //   const constituenciesResponse = await instance.post(getAllConstituenciesRoute);
-      //   const constituenciesResponseData = constituenciesResponse.data.message;
-      //   // console.log("constituenciesResponseData", constituenciesResponseData);
-      //   // Mandals
-      //   const mandalsResponse = await instance.post(getAllMandalRoute);
-      //   const mandalsResponseData = mandalsResponse.data.message;
-      //   // console.log("mandalsResponseData", mandalsResponseData);
-      //   // Divisions
-      //   const divisionsResponse = await instance.post(getAllDivisionRoute);
-      //   const divisionsResponseData = divisionsResponse.data.message;
-      //   // console.log("divisionsResponseData", divisionsResponseData);
-      //   // Sachivalayam
-      //   const sachivalayamResponse = await instance.post(getAllSachivalayamRoute);
-      //   const sachivalayamResponseData = sachivalayamResponse.data.message;
-      //   // console.log("sachivalayamResponseData", sachivalayamResponseData);
-      //   // Parts
-      //   const partsResponse = await instance.post(getAllPartsRoute);
-      //   const partsResponseData = partsResponse.data.message;
-      //   // console.log("partsResponseData", partsResponseData);
-      //   // Village
-      //   const villageResponse = await instance.post(getAllVillageRoute);
-      //   const villageResponseData = villageResponse.data.message;
-      //   // console.log("villageResponseData", villageResponseData);
-      //   /// state updating
-      //   setFetchAssignAuthority({
-      //     ...fetchAssignAuthority,
-      //     designation: designationResponseData,
-      //     state: statesResponseData,
-      //     district: districtsResponseData,
-      //     constituency: constituenciesResponseData,
-      //     mandal: mandalsResponseData,
-      //     division: divisionsResponseData,
-      //     sachivalayam: sachivalayamResponseData,
-      //     part: partsResponseData,
-      //     village: villageResponseData,
-      //   });
-      // } catch (e) {
-      //   console.log(e);
-      // }
-    };
-    fetchAssignAuthorityData();
-    if (filterValues.state_id === "") {
-      setFilterValues({
-        ...filterValues,
-        state_id: findEditUser[0] && findEditUser[0].state_id,
-        district_id: findEditUser[0] && findEditUser[0].district_id,
-        consistency_id: findEditUser[0] && findEditUser[0].consistency_id,
-        mandal_id: findEditUser[0] && findEditUser[0].mandal_id,
-        division_id: findEditUser[0] && findEditUser[0].division_id,
-        sachivalayam_id: findEditUser[0] && findEditUser[0].sachivalayam_id,
-        part_no: findEditUser[0] && findEditUser[0].part_no,
-        village_id: findEditUser[0] && findEditUser[0].village_id,
-      });
+  const onSubmit = async (data) => {
+    if (!filterValues["mandal"] || !filterValues["division"] || !filterValues["sachivalayam"]) {
+      showAlert({ text: "Please select mandal & division & sachivalyam" });
+      return;
     }
-  }, []);
-  // console.log("basicInfo", basicInfo);
 
-  // const handleSubmit = () => {
-  //   setIsLoading(true);
-  //   const requestBody = {
-  //     ...basicInfo,
-  //     ...filterValues,
-  //   };
-  //   console.log("requestBody", requestBody);
+    setLoading(true);
+    try {
+      var jsonData = {
+        ...data,
+        username: data.phone_no,
+        state_id: 5,
+        district_id: 6,
+        consistency_id: 3,
+        mandal_id: filterValues.mandal.mandal_pk,
+        division_id: filterValues.division.division_pk,
+        sachivalayam_id: filterValues.sachivalayam.sachivalayam_pk,
+      };
 
-  //   const response = instance.post(createUsersRoute, requestBody);
-  //   console.log("response", response.data);
+      if (props.userData != null) {
+        await instance.put(`${createUsersRoute}/${props.userData.user_pk}`, jsonData);
+        showAlert({ text: "User updated successfully", color: "success" });
+      } else {
+        await instance.post(createUsersRoute, jsonData);
+        showAlert({ text: "User added successfully", color: "success" });
+        reset();
+      }
 
-  //   showAlert({ text: "User Created Successfully", color: "success" });
-
-  //   setIsLoading(false);
-  //   setBasicInfo({
-  //     user_displayname: "",
-  //     username: "",
-  //     password: "",
-  //     phone_no: "",
-  //     office_phone_no: "",
-  //     age: "",
-  //     email: "",
-  //   });
-
-  //   setFilterValues({
-  //     designation_id: "",
-  //     state_id: "",
-  //     district_id: "",
-  //     consistency_id: "",
-  //     mandal_id: "",
-  //     division_id: "",
-  //     sachivalayam_id: "",
-  //     part_no: "",
-  //     village_id: "",
-  //     reporting_manager: null,
-  //   });
-  // };
-
-  const handleEditComplete = () => {
-    setIsLoading(true);
-
-    setIsLoading(false);
+      setLoading(false);
+    } catch (error) {
+      console.error(error);
+      showAlert({ text: "Something went wrong" });
+      setLoading(false);
+    }
   };
-
-  console.log("filterValues", filterValues);
 
   return (
     <Page title={pageName}>
-      <Container maxWidth="xl">
-        <Typography variant="h4" sx={{ mb: 1 }}>
-          {pageName}
-        </Typography>
+      <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+        <Container maxWidth="xl">
+          <Typography variant="h4" sx={{ mb: 1 }}>
+            {pageName}
+          </Typography>
 
-        <Card sx={{ p: 3 }}>
-          <Typography sx={{ pb: 2 }}>Basic Info</Typography>
+          <Card sx={{ p: 3 }}>
+            <Typography sx={{ pb: 2 }}>Basic Info</Typography>
 
-          <Grid container spacing={2} alignItems="center">
-            <Grid item xs={12} md={6} lg={3}>
-              <TextField
-                size="small"
-                label="User Display Name*"
-                fullWidth
-                value={basicInfo.user_displayname || (findEditUser[0] && findEditUser[0].user_displayname)}
-                onChange={(e) => {
-                  setBasicInfo({
-                    ...basicInfo,
-                    user_displayname: e.target.value,
-                  });
-                }}
-                required
-              />
+            <Grid container spacing={2}>
+              <Grid item xs={12} md={6} lg={3}>
+                <RHFTextField name="user_displayname" label="Full name *" />
+              </Grid>
+
+              <Grid item xs={12} md={6} lg={3}>
+                <RHFTextField name="phone_no" label="Username/Phone Number *" />
+              </Grid>
+
+              <Grid item xs={12} md={6} lg={3}>
+                <RHFTextField name="password" label="Password *" />
+              </Grid>
+
+              <Grid item xs={12} md={6} lg={3}>
+                <RHFTextField name="office_phone_no" label="Office Phone Number" />
+              </Grid>
+
+              <Grid item xs={12} md={6} lg={3}>
+                <RHFTextField name="age" label="Age" />
+              </Grid>
+
+              <Grid item xs={12} md={6} lg={3}>
+                <RHFTextField name="email" label="Email" />
+              </Grid>
             </Grid>
+          </Card>
 
-            <Grid item xs={12} md={6} lg={3}>
-              <TextField
-                size="small"
-                label="User Name"
-                fullWidth
-                value={basicInfo.username || (findEditUser[0] && findEditUser[0].username)}
-                onChange={(e) => {
-                  setBasicInfo({
-                    ...basicInfo,
-                    username: e.target.value,
-                  });
-                }}
-                required
-              />
-            </Grid>
+          <Card sx={{ p: 3, mt: 1 }}>
+            <Typography sx={{ pb: 2 }}>Assign Authority</Typography>
 
-            <Grid item xs={12} md={6} lg={3}>
-              <TextField
-                size="small"
-                label="Password"
-                fullWidth
-                value={basicInfo.password || (findEditUser[0] && findEditUser[0].password)}
-                onChange={(e) => {
-                  setBasicInfo({
-                    ...basicInfo,
-                    password: e.target.value,
-                  });
-                }}
-                required
-              />
-            </Grid>
-
-            <Grid item xs={12} md={6} lg={3}>
-              <TextField
-                size="small"
-                label="Phone Number"
-                type="number"
-                fullWidth
-                value={basicInfo.phone_no || (findEditUser[0] && findEditUser[0].phone_no)}
-                onChange={(e) => {
-                  setBasicInfo({
-                    ...basicInfo,
-                    phone_no: e.target.value,
-                  });
-                }}
-                required
-              />
-            </Grid>
-
-            <Grid item xs={12} md={6} lg={3}>
-              <TextField
-                size="small"
-                label="Office Phone Number"
-                fullWidth
-                type="number"
-                value={basicInfo.office_phone_no || (findEditUser[0] && findEditUser[0].office_phone_no)}
-                onChange={(e) => {
-                  setBasicInfo({
-                    ...basicInfo,
-                    office_phone_no: e.target.value,
-                  });
-                }}
-              />
-            </Grid>
-
-            <Grid item xs={12} md={6} lg={3}>
-              <TextField
-                size="small"
-                label="Age"
-                fullWidth
-                value={basicInfo.age || (findEditUser[0] && findEditUser[0].age)}
-                onChange={(e) => {
-                  setBasicInfo({
-                    ...basicInfo,
-                    age: e.target.value,
-                  });
-                }}
-                required
-              />
-            </Grid>
-
-            <Grid item xs={12} md={6} lg={3}>
-              <TextField
-                type="email"
-                size="small"
-                label="Email"
-                fullWidth
-                value={basicInfo.email || (findEditUser[0] && findEditUser[0].email)}
-                onChange={(e) => {
-                  setBasicInfo({
-                    ...basicInfo,
-                    email: e.target.value,
-                  });
-                }}
-              />
-            </Grid>
-          </Grid>
-        </Card>
-
-        <Card sx={{ p: 3, mt: 1 }}>
-          <Typography sx={{ pb: 2 }}>Assign Authority</Typography>
-
-          <Grid container spacing={2} alignItems="center">
-            <Grid item xs={12} md={6} lg={3}>
-              <TextField
-                size="small"
-                label="Select Designation*"
-                fullWidth
-                select
-                value={filterValues.designation_id || (findEditUser[0] && findEditUser[0].designation_id)}
-                onChange={(event) => {
-                  setFilterValues({
-                    ...filterValues,
-                    designation_id: event.target.value,
-                  });
-                }}
-              >
-                {fetchAssignAuthority.designation.map((designation) => (
-                  <MenuItem key={designation.lookup_pk} value={designation.lookup_pk}>
-                    {designation.designation_name}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </Grid>
-
-            <Grid item xs={12} md={6} lg={3}>
-              <TextField
-                size="small"
-                label="Select Constistency*"
-                fullWidth
-                select
-                value={typeof filterValues.consistency_id === "string" ? findEditUser[0] && findEditUser[0].consistency_pk : filterValues.consistency_id}
-                onChange={(event) => {
-                  setFilterValues({
-                    ...filterValues,
-                    consistency_id: event.target.value,
-                  });
-                }}
-              >
-                {/*filter constituencies by district_id  */}
-                {fetchAssignAuthority.constituency
-                  .filter((constituency) => {
-                    return constituency.district_pk === filterValues.district_id;
-                  })
-                  .map((constituency) => (
-                    <MenuItem key={constituency.consistency_pk} value={constituency.consistency_pk}>
-                      {constituency.consistency_name}
+            <Grid container spacing={2}>
+              <Grid item xs={12} md={6} lg={3}>
+                <RHFTextField name="designation_id" label="Select Designation*" select>
+                  {common.designation?.map((item, index) => (
+                    <MenuItem key={index} value={item.value}>
+                      {item.label}
                     </MenuItem>
                   ))}
-              </TextField>
-            </Grid>
+                </RHFTextField>
+              </Grid>
 
-            <Grid item xs={12} md={6} lg={3}>
-              <TextField
-                size="small"
-                label="Select Mandal*"
-                fullWidth
-                select
-                value={filterValues.mandal_id}
-                onChange={(event) => {
-                  setFilterValues({
-                    ...filterValues,
-                    mandal_id: event.target.value,
-                  });
+              <SearchByFilter lg={3} defaultValues={defaultValues} showPartNo={false} showVillage={false} showOtherFilters={false} onChanged={(value) => setFilterValues(value)} />
+            </Grid>
+          </Card>
+
+          <Box sx={{ pt: 2, textAlign: "end" }}>
+            <LoadingButton type="submit" variant="contained" loading={isLoading}>
+              Submit
+            </LoadingButton>
+          </Box>
+
+          {/* <Card sx={{ p: 3, mt: 1 }}>
+            <Typography sx={{ pb: 2 }}>Assign Authority</Typography>
+            <Grid container spacing={2} alignItems="center">
+              <Grid item xs={12} md={6} lg={2}>
+                <FormControlLabel control={<CheckBox />} label="View" />
+              </Grid>
+              <Grid item xs={12} md={6} lg={2}>
+                <FormControlLabel control={<CheckBox />} label="Add" />
+              </Grid>
+              <Grid item xs={12} md={6} lg={2}>
+                <FormControlLabel control={<CheckBox />} label="Update" />
+              </Grid>
+              <Grid item xs={12} md={6} lg={2}>
+                <FormControlLabel control={<CheckBox />} label="Delete" />
+              </Grid>
+
+              <Grid
+                item
+                xs={12}
+                md={6}
+                lg={2}
+                sx={{
+                  marginLeft: "auto",
                 }}
               >
-                {/*filter mandals by consistency_id  */}
+                {userData === null ? (
+                  <LoadingButton
+                    loading={isLoading}
+                    onClick={handleSubmit}
+                    variant="contained"
+                    sx={{
+                      padding: "15px 40px",
+                    }}
+                  >
+                    Submit
+                  </LoadingButton>
+                ) : (
+                  <LoadingButton
+                    loading={isLoading}
+                    onClick={handleEditComplete}
+                    variant="contained"
+                    sx={{
+                      padding: "15px 20px",
+                    }}
+                  >
+                    Update Details
+                  </LoadingButton>
+                )}
+              </Grid>
+            </Grid>
+          </Card> */}
 
-                {fetchAssignAuthority.mandal
-                  .filter((mandal) => {
-                    return mandal.consistency_id === filterValues.consistency_id;
-                  })
-                  .map((mandal) => (
-                    <MenuItem key={mandal.mandal_pk} value={mandal.mandal_pk}>
-                      {mandal.mandal_name}
-                    </MenuItem>
-                  ))}
-              </TextField>
-            </Grid>
-
-            <Grid item xs={12} md={6} lg={3}>
-              <TextField
-                size="small"
-                label="Select Division*"
-                fullWidth
-                select
-                value={filterValues.division_id}
-                onChange={(event) => {
-                  setFilterValues({
-                    ...filterValues,
-                    division_id: event.target.value,
-                  });
-                }}
-              >
-                {/*filter divisions by mandal_id  */}
-                {fetchAssignAuthority.division
-                  .filter((division) => {
-                    return division.mandal_id === filterValues.mandal_id;
-                  })
-                  .map((division) => (
-                    <MenuItem key={division.division_pk} value={division.division_pk}>
-                      {division.division_name}
-                    </MenuItem>
-                  ))}
-              </TextField>
-            </Grid>
-
-            <Grid item xs={12} md={6} lg={3}>
-              <TextField
-                size="small"
-                label="Select Sachivalayam*"
-                fullWidth
-                select
-                value={filterValues.sachivalayam_id}
-                onChange={(event) => {
-                  setFilterValues({
-                    ...filterValues,
-
-                    sachivalayam_id: event.target.value,
-                  });
-                }}
-              >
-                {/*filter sachivalayam by division_id  */}
-                {fetchAssignAuthority.sachivalayam
-                  .filter((sachivalayam) => {
-                    return sachivalayam.division_id === filterValues.division_id;
-                  })
-                  .map((sachivalayam) => (
-                    <MenuItem key={sachivalayam.sachivalayam_pk} value={sachivalayam.sachivalayam_pk}>
-                      {sachivalayam.sachivalayam_name}
-                    </MenuItem>
-                  ))}
-              </TextField>
-            </Grid>
-
-            <Grid item xs={12} md={6} lg={3}>
-              <TextField
-                size="small"
-                label="Part No*"
-                fullWidth
-                select
-                value={filterValues.part_no}
-                onChange={(event) => {
-                  setFilterValues({
-                    ...filterValues,
-                    part_no: event.target.value,
-                  });
-                }}
-              >
-                {/*filter parts by sachivalayam_id  */}
-                {fetchAssignAuthority.part
-                  .filter((part) => {
-                    return part.sachivalayam_id === filterValues.sachivalayam_id;
-                  })
-                  .map((part) => (
-                    <MenuItem key={part.part_no} value={part.part_no}>
-                      {part.part_no}
-                    </MenuItem>
-                  ))}
-              </TextField>
-            </Grid>
-
-            <Grid item xs={12} md={6} lg={3}>
-              <TextField
-                size="small"
-                label="Select Village*"
-                fullWidth
-                select
-                value={filterValues.village_id}
-                onChange={(event) => {
-                  setFilterValues({
-                    ...filterValues,
-                    village_id: event.target.value,
-                  });
-                }}
-              >
-                {/*filter village by part_no  */}
-                {fetchAssignAuthority.village
-                  .filter((village) => {
-                    return village.part_no === filterValues.part_no;
-                  })
-                  .map((village) => (
-                    <MenuItem key={village.village_pk} value={village.village_pk}>
-                      {village.village_name}
-                    </MenuItem>
-                  ))}
-              </TextField>
-            </Grid>
-
-            <Grid item xs={12} md={6} lg={3}>
-              <TextField size="small" label="Reporting Manager" fullWidth select />
-            </Grid>
-
-            <Grid item xs={12} md={6} lg={3}>
-              <LoadingButton variant="contained">Search</LoadingButton>
-            </Grid>
-          </Grid>
-        </Card>
-
-        <Card sx={{ p: 3, mt: 1 }}>
-          <Typography sx={{ pb: 2 }}>Assign Authority</Typography>
-          <Grid container spacing={2} alignItems="center">
-            <Grid item xs={12} md={6} lg={2}>
-              <FormControlLabel control={<CheckBox />} label="View" />
-            </Grid>
-            <Grid item xs={12} md={6} lg={2}>
-              <FormControlLabel control={<CheckBox />} label="Add" />
-            </Grid>
-            <Grid item xs={12} md={6} lg={2}>
-              <FormControlLabel control={<CheckBox />} label="Update" />
-            </Grid>
-            <Grid item xs={12} md={6} lg={2}>
-              <FormControlLabel control={<CheckBox />} label="Delete" />
-            </Grid>
-
-            <Grid
-              item
-              xs={12}
-              md={6}
-              lg={2}
-              sx={{
-                marginLeft: "auto",
-              }}
-            >
-              {userData === null ? (
-                <LoadingButton
-                  loading={isLoading}
-                  onClick={handleSubmit}
-                  variant="contained"
-                  sx={{
-                    padding: "15px 40px",
-                  }}
-                >
-                  Submit
-                </LoadingButton>
-              ) : (
-                <LoadingButton
-                  loading={isLoading}
-                  onClick={handleEditComplete}
-                  variant="contained"
-                  sx={{
-                    padding: "15px 20px",
-                  }}
-                >
-                  Update Details
-                </LoadingButton>
-              )}
-            </Grid>
-          </Grid>
-        </Card>
-
-        <Box p={1} />
-      </Container>
+          <Box p={1} />
+        </Container>
+      </FormProvider>
     </Page>
   );
 };
 
 const mapStateToProps = (state) => {
   return {
-    dashboard: state.dashboard,
+    common: state.common,
   };
 };
 
-export default connect(mapStateToProps, null)(UserRegistrationPage);
+export default connect(mapStateToProps, { showAlert })(UserRegistrationPage);

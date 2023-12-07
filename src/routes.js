@@ -42,6 +42,7 @@ import VotingPollSurveyPage from "./pages/VotingPollSurveyPage";
 import VotingPollSurveyResultsPage from "./pages/VotingPollSurveyResultsPage";
 import VotingSurveyReportsPage from "./pages/VotingSurveyReportsPage";
 import VotingPollDashBoardPage from "./pages/VotingPollDashBoardPage";
+import { LOGIN_TYPES } from "./constants";
 
 const Router = () => {
   return (
@@ -53,11 +54,11 @@ const Router = () => {
       <Route path="/forget-password" element={<ForgetPage />} />
       <Route path="/reset-password" element={<ResetPage />} />
 
-      <Route path="/" element={<ProtectedRoute />}>
-        <Route path="" element={<DashboardLayout />}>
+      <Route path="/" element={<ProtectedRoute type={LOGIN_TYPES} />}>
+        <Route path="" element={<DashboardLayout type={LOGIN_TYPES[0]} />}>
           <Route path="dashboard" element={<DashboardPage />} />
           <Route path="voting-poll-dashboard" element={<VotingPollDashBoardPage />} />
-          {/* Opinion Survey with Sub Menu */}
+          {/* Voting Opinion Survey with Sub Menu */}
           <Route path="opinionsurvey/survey" element={<OpinionPollSurveyPage />} />
           <Route path="opinionsurvey/results" element={<OpinionPollSurveyResultsPage />} />
           <Route path="opinionsurvey/reports" element={<SurveyReportsPage />} />
@@ -92,7 +93,15 @@ const Router = () => {
         </Route>
       </Route>
 
-      <Route path="*" element={<Navigate to="/404" replace />} />
+      <Route path="/" element={<ProtectedRoute type={[LOGIN_TYPES[6]]} />}>
+        <Route path="" element={<DashboardLayout type={LOGIN_TYPES[6]} />}>
+          <Route path="gruhasarathi/opinionsurvey/survey" element={<OpinionPollSurveyPage />} />
+          <Route path="gruhasarathi/opinionsurvey/results" element={<OpinionPollSurveyResultsPage />} />
+          <Route path="gruhasarathi/opinionsurvey/reports" element={<SurveyReportsPage />} />
+        </Route>
+      </Route>
+
+      {/* <Route path="*" element={<Navigate to="/404" replace />} /> */}
     </Routes>
   );
 };

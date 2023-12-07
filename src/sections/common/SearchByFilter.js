@@ -7,7 +7,7 @@ import { getAllCommonData } from "../../actions/common";
 import { casteList } from "../../constants";
 import { ageDropdown } from "../../utils/dropdownconstants";
 
-const SearchByFilter = ({ account, common, getAllCommonData, onChanged }) => {
+const SearchByFilter = ({ account, common, defaultValues, getAllCommonData, onChanged, lg = 2, showPartNo = true, showVillage = true, showOtherFilters = true }) => {
   const [formValues, setFormValues] = useState({
     mandal: null,
     division: null,
@@ -41,6 +41,15 @@ const SearchByFilter = ({ account, common, getAllCommonData, onChanged }) => {
 
     if (common.villages.length > 0 && account.user.village_pk != null) {
       setFormValues((state) => ({ ...state, village: common.villages[0] }));
+    }
+
+    if (defaultValues) {
+      setFormValues((state) => ({
+        ...state,
+        mandal: common.mandals.find((e) => e.mandal_pk == defaultValues.mandal_pk),
+        division: common.divisions.find((e) => e.division_pk == defaultValues.division_pk),
+        sachivalayam: common.sachivalayams.find((e) => e.sachivalayam_pk == defaultValues.sachivalayam_pk),
+      }));
     }
   }, [common]);
 
@@ -80,7 +89,7 @@ const SearchByFilter = ({ account, common, getAllCommonData, onChanged }) => {
 
   return (
     <>
-      <Grid item xs={12} md={6} lg={2}>
+      <Grid item xs={12} md={6} lg={lg}>
         <RHFAutoComplete
           name="mandal"
           label="Select Mandal"
@@ -92,7 +101,7 @@ const SearchByFilter = ({ account, common, getAllCommonData, onChanged }) => {
           disabled={account.user.mandal_pk != null}
         />
       </Grid>
-      <Grid item xs={12} md={6} lg={2}>
+      <Grid item xs={12} md={6} lg={lg}>
         <RHFAutoComplete
           name="division"
           label="Select Division"
@@ -103,7 +112,7 @@ const SearchByFilter = ({ account, common, getAllCommonData, onChanged }) => {
           disabled={account.user.division_pk != null}
         />
       </Grid>
-      <Grid item xs={12} md={6} lg={2}>
+      <Grid item xs={12} md={6} lg={lg}>
         <RHFAutoComplete
           name="sachivalayam"
           label="Select Sachivalayam"
@@ -114,83 +123,94 @@ const SearchByFilter = ({ account, common, getAllCommonData, onChanged }) => {
           disabled={account.user.sachivalayam_pk != null}
         />
       </Grid>
-      <Grid item xs={12} md={6} lg={2}>
-        <RHFAutoComplete
-          name="partno"
-          label="Select Part/Booth No"
-          value={formValues.partno}
-          options={common.parts.filter((e) => e.sachivalayam_id == formValues?.sachivalayam?.sachivalayam_pk)}
-          getOptionLabel={(option) => String(option.part_no)}
-          onChange={handleChange}
-          disabled={account.user.part_no != null}
-        />
-      </Grid>
-      <Grid item xs={12} md={6} lg={2}>
-        <RHFAutoComplete
-          name="village"
-          label="Select Village"
-          value={formValues.village}
-          options={common.villages.filter((e) => e.part_no == formValues?.partno?.part_no)}
-          getOptionLabel={(option) => option.village_name}
-          onChange={handleChange}
-          disabled={account.user.village_pk != null}
-        />
-      </Grid>
-      <Grid item xs={12} md={6} lg={2}>
-        <RHFAutoComplete
-          name="gender"
-          label="Select Gender"
-          options={[
-            {
-              label: "Male",
-            },
-            {
-              label: "Female",
-            },
-            {
-              label: "Transgender",
-            },
-          ]}
-        />
-      </Grid>{" "}
-      <Grid item xs={12} md={6} lg={2}>
-        <RHFAutoComplete name="religion" label="Select Religion" />
-      </Grid>{" "}
-      <Grid item xs={12} md={6} lg={2}>
-        <RHFAutoComplete name="caste" label="Select Caste" options={casteList} />
-      </Grid>
-      <Grid item xs={12} md={6} lg={2}>
-        <RHFAutoComplete
-          name="Disable"
-          label="Disability"
-          options={[
-            {
-              label: "Yes",
-            },
-            {
-              label: "No",
-            },
-          ]}
-          onChange={handleChange} // Add this line
-        />
-      </Grid>
-      <Grid item xs={12} md={6} lg={2}>
-        <RHFAutoComplete
-          name="Govt Employee"
-          label="Govt Employee"
-          options={[
-            {
-              label: "Yes",
-            },
-            {
-              label: "No",
-            },
-          ]}
-        />
-      </Grid>{" "}
-      <Grid item xs={12} md={6} lg={2}>
-        <RHFAutoComplete name="age" label="Select Age" options={ageDropdown} />
-      </Grid>
+
+      {showPartNo && (
+        <Grid item xs={12} md={6} lg={lg}>
+          <RHFAutoComplete
+            name="partno"
+            label="Select Part/Booth No"
+            value={formValues.partno}
+            options={common.parts.filter((e) => e.sachivalayam_id == formValues?.sachivalayam?.sachivalayam_pk)}
+            getOptionLabel={(option) => String(option.part_no)}
+            onChange={handleChange}
+            disabled={account.user.part_no != null}
+          />
+        </Grid>
+      )}
+
+      {showVillage && (
+        <Grid item xs={12} md={6} lg={lg}>
+          <RHFAutoComplete
+            name="village"
+            label="Select Village"
+            value={formValues.village}
+            options={common.villages.filter((e) => e.part_no == formValues?.partno?.part_no)}
+            getOptionLabel={(option) => option.village_name}
+            onChange={handleChange}
+            disabled={account.user.village_pk != null}
+          />
+        </Grid>
+      )}
+
+      {showOtherFilters && (
+        <>
+          <Grid item xs={12} md={6} lg={lg}>
+            <RHFAutoComplete
+              name="gender"
+              label="Select Gender"
+              options={[
+                {
+                  label: "Male",
+                },
+                {
+                  label: "Female",
+                },
+                {
+                  label: "Transgender",
+                },
+              ]}
+            />
+          </Grid>{" "}
+          <Grid item xs={12} md={6} lg={lg}>
+            <RHFAutoComplete name="religion" label="Select Religion" />
+          </Grid>{" "}
+          <Grid item xs={12} md={6} lg={lg}>
+            <RHFAutoComplete name="caste" label="Select Caste" options={casteList} />
+          </Grid>
+          <Grid item xs={12} md={6} lg={lg}>
+            <RHFAutoComplete
+              name="Disable"
+              label="Disability"
+              options={[
+                {
+                  label: "Yes",
+                },
+                {
+                  label: "No",
+                },
+              ]}
+              onChange={handleChange} // Add this line
+            />
+          </Grid>
+          <Grid item xs={12} md={6} lg={lg}>
+            <RHFAutoComplete
+              name="Govt Employee"
+              label="Govt Employee"
+              options={[
+                {
+                  label: "Yes",
+                },
+                {
+                  label: "No",
+                },
+              ]}
+            />
+          </Grid>{" "}
+          <Grid item xs={12} md={6} lg={lg}>
+            <RHFAutoComplete name="age" label="Select Age" options={ageDropdown} />
+          </Grid>
+        </>
+      )}
     </>
   );
 };

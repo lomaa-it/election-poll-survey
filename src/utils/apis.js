@@ -8,7 +8,7 @@ export const loginRoute = "/users-login";
 
 // GET ALL DATA
 export const getAllVotersRoute = "/voters/getall";
-export const getAllUsersRoute = "/getalluserswithjoin";
+export const getAllUsersRoute = "/getalluserswithjoinandwhere";
 export const getAllDesignationsRoute = "/designation/getall";
 export const getAllPartiesRoute = "/getallparties";
 export const getAllStatesRoute = "/states/getall";
@@ -43,7 +43,7 @@ export const getPartsById = "/parts-get-by-id/";
 export const getVillageById = "/villages-get-by-id/";
 
 // Create
-export const createUsersRoute = "/users/";
+export const createUsersRoute = "/users";
 export const createDesignationsRoute = "/lookup/";
 export const createStatesRoute = "/states/";
 export const createDistrictsRoute = "/districts/";
@@ -60,3 +60,5 @@ export const deleteStatesByIdRoute = "/states/";
 // Update By Id
 export const updateStatesByIdRoute = "/states/";
 export const saveOrupdatedSurvey = "/save_or_updated_survey";
+
+export const designationMappingRoute = "/designationmappingtousers";

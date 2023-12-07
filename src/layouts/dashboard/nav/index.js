@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { styled, alpha } from "@mui/material/styles";
 import { Box, Link, Button, Drawer, Typography, Avatar, Stack } from "@mui/material";
@@ -6,9 +6,9 @@ import useResponsive from "../../../hooks/useResponsive";
 import Logo from "../../../components/logo";
 import Scrollbar from "../../../components/Scrollbar";
 import NavSection from "../../../components/NavSection";
-import navConfig from "./config";
+import { mlaNavConfig, userNavConfig } from "./config";
 import { connect } from "react-redux";
-import { PUBLIC_URL } from "../../../constants";
+import { LOGIN_TYPES, PUBLIC_URL } from "../../../constants";
 
 const NAV_WIDTH = 280;
 
@@ -20,10 +20,22 @@ const StyledAccount = styled("div")(({ theme }) => ({
   backgroundColor: alpha(theme.palette.grey[500], 0.12),
 }));
 
-const Nav = ({ account, openNav, onCloseNav }) => {
+const Nav = ({ type, account, openNav, onCloseNav }) => {
   const { pathname } = useLocation();
+  const [navConfig, setNavConfig] = useState([]);
 
   const isDesktop = useResponsive("up", "lg");
+
+  useEffect(() => {
+    let navbar = [];
+    if (type == LOGIN_TYPES[6]) {
+      navbar = userNavConfig;
+    } else {
+      navbar = mlaNavConfig;
+    }
+
+    setNavConfig(navbar);
+  }, []);
 
   useEffect(() => {
     if (openNav) {

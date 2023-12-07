@@ -1,69 +1,61 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  Typography,
-  Card,
-  Stack,
-  Grid,
-  Switch,
-  Divider,
-  Box,
-  Chip,
-  TextField,
-  Button,
-} from "@mui/material";
+import { Typography, Card, Stack, Grid, Switch, Divider, Box, Chip, TextField, Button, CircularProgress, Checkbox, IconButton } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { CheckBox } from "@mui/icons-material";
 import MUIDataTable from "mui-datatables";
 import { connect } from "react-redux";
 import { showAlert } from "../../actions/alert";
-import { LoadingButton } from "@mui/lab";
-import ViewUserPage from "../../pages/ViewUserPage";
-
+import { getMuiTableTheme } from "../../constants";
+import { checkOrUncheckUser } from "../../actions/user";
 import EditNoteIcon from "@mui/icons-material/EditNote";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import { searchFiltercolor } from "../../constants";
 
-const ViewUsersList = ({ showAlert, usersData, unFilteredData }) => {
+const ViewUsersList = ({ user, showAlert, checkOrUncheckUser }) => {
+  const navigate = useNavigate();
+
   useEffect(() => {}, []);
 
   const columns = [
     {
+      name: "is_first_login",
+      label: "Is First",
+      options: {
+        display: false,
+      },
+    },
+    {
+      name: "isCheck",
       label: "Select",
+      options: {
+        customBodyRender: (value, tableMeta, updateValue) => {
+          var data = tableMeta.rowData;
+          return data[0] ? <Checkbox checked={value} onChanged={(e) => checkOrUncheckUser(e, data[3])} /> : null;
+        },
+      },
     },
-
     {
-      label: "User Name",
-    },
-    {
+      name: "user_pk",
       label: "User Id",
     },
+    { name: "user_displayname", label: "User Name" },
+    { name: "lookup_valuename", label: "Designation" },
+    { name: "mandal_name", label: "Mandal Name" },
+    { name: "division_name", label: "Division Name" },
+    { name: "sachivalayam_name", label: "Sachivalyam Name" },
+    { name: "part_no", label: "Part/Booth No" },
+    { name: "village_name", label: "Village" },
+    { name: "phone_no", label: "Phone" },
     {
-      label: "User Login Name",
-    },
-    {
-      label: "Designation",
-    },
-    {
-      label: "Mandal Name",
-    },
-    {
-      label: "Division Name",
-    },
-    {
-      label: "Sachivalyam Name",
-    },
-    {
-      label: "Part/Booth No",
-    },
-    {
-      label: "Village",
-    },
-    {
-      label: "Phone",
-    },
-    {
-      label: "Edit",
+      name: "user_pk",
+      label: "Action",
+      options: {
+        customBodyRender: (value, tableMeta, updateValue) => {
+          return (
+            <IconButton color="primary" onClick={() => handleEdit(value)}>
+              <EditNoteIcon />
+            </IconButton>
+          );
+        },
+      },
     },
   ];
 
@@ -73,91 +65,39 @@ const ViewUsersList = ({ showAlert, usersData, unFilteredData }) => {
     responsive: "standard",
   };
 
-  const renderCheckBox = () => {
-    return <CheckBox />;
-  };
-  const navigate = useNavigate();
-
-  const renderEditAndDelete = (userData) => {
-    // console.log("renderEditAndDelete", userData);
-
-    const onClickEdit = () => {
-      // console.log("onClickEdit", userData);
-      showAlert({ text: "Edit Details", color: "success" });
-      //Redirect to this route /user-registration and pass the user data using react-router-dom
+  const handleEdit = (id) => {
+    var index = user.data.findIndex((e) => e.user_pk == id);
+    if (index != -1) {
       navigate("/user-management/user-registration", {
-        state: { userData, unFilteredData },
+        state: { userData: user.data[index] },
       });
-    };
-
-    return (
-      <Box>
-        <Button
-          onClick={onClickEdit}
-          variant="contained"
-          sx={{
-            backgroundColor: "#013157",
-
-            borderRadius: "20px",
-          }}
-        >
-          <EditNoteIcon
-          // sx={{
-          //   color: "#1976d2",
-          // }}
-          />
-        </Button>
-
-        {/* <DeleteForeverIcon
-          sx={{
-            color: "#f44336",
-            marginLeft: "10px",
-          }}
-        /> */}
-      </Box>
-    );
+    }
   };
 
-  const filterChartData = usersData.map((item) => {
-    return [renderCheckBox(), ...item, renderEditAndDelete(item)];
-  });
-
-  const getMuiTheme = () =>
-    createTheme({
-      components: {
-        MUIDataTableHeadCell: {
-          styleOverrides: {
-            root: {
-              backgroundColor: searchFiltercolor,
-            },
-          },
-        },
-      },
-    });
   return (
     <Card elevation={1}>
-      <Stack>
-        <Divider />
-        <ThemeProvider theme={getMuiTheme()}>
-          <MUIDataTable
-            title="Users List Table"
-            columns={columns}
-            data={filterChartData}
-            options={options}
-          />
+      {user.isLoading && (
+        <Box minHeight={200} display="flex" justifyContent="center" alignItems="center">
+          <CircularProgress />
+        </Box>
+      )}
+
+      {!user.isLoading && (
+        <ThemeProvider theme={getMuiTableTheme()}>
+          <MUIDataTable title="Users List" columns={columns} data={user.data} options={options} />
         </ThemeProvider>
-      </Stack>
+      )}
     </Card>
   );
 };
 
 const mapStateToProps = (state) => {
   return {
-    batches: state.common,
-    students: state.management,
+    user: state.user,
   };
 };
 
 export default connect(mapStateToProps, {
   showAlert,
+  checkOrUncheckUser,
 })(ViewUsersList);

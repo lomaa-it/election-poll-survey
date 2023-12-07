@@ -96,7 +96,6 @@ const StatesList = ({ showAlert, stateList, setStateList }) => {
             {/* inputfield already filled with state name with update and cancel button */}
             <TextField
               size="small"
-              size="small"
               label="State Name"
               fullWidth
               onChange={handleStateNameChange}

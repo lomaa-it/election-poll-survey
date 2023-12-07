@@ -11,7 +11,7 @@ import { FormProvider, RHFTextField } from "../../../components/hook-form";
 import { connect } from "react-redux";
 import { authSuccess } from "../../../actions/auth";
 import { showAlert } from "../../../actions/alert";
-import { phoneRegExp } from "../../../constants";
+import { LOGIN_TYPES, phoneRegExp } from "../../../constants";
 import instance from "../../../utils/axios";
 import { loginRoute } from "../../../utils/apis";
 
@@ -48,8 +48,12 @@ const LoginForm = ({ showAlert, authSuccess }) => {
       setLoading(false);
 
       if (responseData.length == 1) {
-        authSuccess(responseData[0]);
-        navigate("/dashboard");
+        var userData = responseData[0];
+        authSuccess(userData);
+
+        if (userData.desgination_name == LOGIN_TYPES[6]) navigate("/gruhasarathi/opinionsurvey/survey", { replace: true });
+        else navigate("/dashboard", { replace: true });
+
         return;
       } else {
         showAlert({ text: "Invalid Credientials" });

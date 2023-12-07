@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Grid, Container, Typography, Box, TextField, Card } from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
@@ -5,11 +6,26 @@ import { LoadingButton } from "@mui/lab";
 
 import UserMappingList from "../sections/reports/UserMappingList";
 import Button from "@mui/material/Button";
-import VoterAndVolunteerMappingList from "../sections/reports/VoterAndVolunteerMappingList";
 import SearchByFilter from "../sections/common/SearchByFilter";
 import { searchFiltercolor } from "../constants";
+import { getAllUsers, clearUserReducer } from "../actions/user";
 
-const UserMappingPage = ({ dashboard }) => {
+const UserMappingPage = ({ common, clearUserReducer, getAllUsers }) => {
+  const [filterValues, setFilterValues] = useState(null);
+  const [isLoading, setLoading] = useState(false);
+
+  useEffect(() => {
+    clearUserReducer();
+  }, []);
+
+  const onSubmit = async () => {
+    setLoading(true);
+
+    await getAllUsers(filterValues);
+
+    setLoading(false);
+  };
+
   return (
     <Page title="View User">
       <Container maxWidth="xl">
@@ -21,54 +37,19 @@ const UserMappingPage = ({ dashboard }) => {
           <Typography sx={{ pb: 2 }}>Search by filter</Typography>
 
           <Grid container spacing={2} alignItems="center">
-            <SearchByFilter />
-            <Grid
-              item
-              xs={12}
-              md={6}
-              lg={2}
-              sx={{
-                marginLeft: "auto",
-              }}
-            >
-              <LoadingButton variant="contained">Search</LoadingButton>
-            </Grid>
-          </Grid>
-        </Card>
+            <SearchByFilter showPartNo={false} showVillage={false} showOtherFilters={false} onChanged={(value) => setFilterValues(value)} />
 
-        <Card sx={{ p: 3, marginTop: 1 }}>
-          <Grid container spacing={2} alignItems="center">
-            <Grid item xs={12} md={6} lg={3}>
-              <TextField size="small" label="Select Designation" fullWidth select />
-            </Grid>
-            <Grid item xs={12} md={6} lg={3}>
-              <Button
-                variant="outlined"
-                sx={{
-                  padding: "15px 45px",
-                }}
-              >
-                Assign Designation
-              </Button>
-            </Grid>
-            <Grid item xs={12} md={6} lg={3}>
-              <TextField size="small" label="Select Reporting Manager" fullWidth select />
-            </Grid>
-            <Grid item xs={12} md={6} lg={3}>
-              <Button
-                variant="outlined"
-                sx={{
-                  padding: "15px 45px",
-                }}
-              >
-                Assign Reporting Manager
-              </Button>
+            <Grid item xs={12} md={6} lg={2}>
+              <LoadingButton loading={isLoading} variant="contained" onClick={onSubmit}>
+                Search
+              </LoadingButton>
             </Grid>
           </Grid>
         </Card>
 
         <Box p={1} />
-        <UserMappingList />
+
+        <UserMappingList filterValues={filterValues} />
       </Container>
     </Page>
   );
@@ -76,8 +57,8 @@ const UserMappingPage = ({ dashboard }) => {
 
 const mapStateToProps = (state) => {
   return {
-    dashboard: state.dashboard,
+    common: state.common,
   };
 };
 
-export default connect(mapStateToProps, null)(UserMappingPage);
+export default connect(mapStateToProps, { clearUserReducer, getAllUsers })(UserMappingPage);

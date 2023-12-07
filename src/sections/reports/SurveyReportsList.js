@@ -175,7 +175,6 @@ const SurveyReportsList = ({ dashboard, getOpinionResults, clearDashboardReducer
           <Grid item xs={12} md={6} lg={2}>
             <TextField
               size="small"
-              size="small"
               label="Select User"
               fullWidth
               select
