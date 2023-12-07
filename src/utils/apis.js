@@ -1,5 +1,5 @@
-export const baseServerUrl = "http://localhost:8080";
-// export const baseServerUrl = "https://poll-7ks0.onrender.com";
+// export const baseServerUrl = "http://localhost:8080";
+export const baseServerUrl = "https://poll-7ks0.onrender.com";
 // export const baseServerUrl = "https://554c-123-201-170-142.ngrok-free.app";
 
 // Voter Api
