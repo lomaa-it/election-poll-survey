@@ -10,6 +10,7 @@ export const loginRoute = "/users-login";
 export const getAllVotersRoute = "/voters/getall";
 export const getAllUsersRoute = "/getalluserswithjoin";
 export const getAllDesignationsRoute = "/getalldesignations";
+export const getAllPartiesRoute = "/getallparties";
 export const getAllStatesRoute = "/states/getall";
 export const getAllDistrictsRoute = "/districts/getall";
 export const getAllConstituenciesRoute = "/constituencies/getall";

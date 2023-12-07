@@ -1,4 +1,11 @@
-import { Grid, Container, Typography, Box, TextField, Card } from "@mui/material";
+import {
+  Grid,
+  Container,
+  Typography,
+  Box,
+  TextField,
+  Card,
+} from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -6,10 +13,16 @@ import { LoadingButton } from "@mui/lab";
 import ViewUsersList from "../sections/reports/ViewUsersList";
 import Button from "@mui/material/Button";
 import PartiesList from "../sections/reports/PartiesList";
+import { getAllPartiesRoute } from "../utils/apis";
 
 const PartiesPage = ({ dashboard }) => {
+
+  
+
+
+
   return (
-    <Page title="View User">
+    <Page title="Parties">
       <Container maxWidth="xl">
         <Typography variant="h4" sx={{ mb: 1 }}>
           Parties
@@ -31,7 +44,8 @@ const PartiesPage = ({ dashboard }) => {
                 gap: "15px",
               }}
             >
-              <TextField size="small" label="Sequence Number" fullWidth /> <TextField size="small" label="Party Name" fullWidth />
+              <TextField size="small" label="Sequence Number" fullWidth />{" "}
+              <TextField size="small" label="Party Name" fullWidth />
               <LoadingButton
                 variant="contained"
                 sx={{
