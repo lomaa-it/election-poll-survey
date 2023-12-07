@@ -21,7 +21,7 @@ import Sachivalayam from "../../pages/Sachivalayam";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
-const VillagesList = ({ showAlert }) => {
+const VillagesList = ({ showAlert, villageList }) => {
   useEffect(() => {}, []);
 
   const columns = [
@@ -40,6 +40,9 @@ const VillagesList = ({ showAlert }) => {
     },
     {
       label: "Part Number",
+    },
+    {
+      label: "Village Name",
     },
 
     {
@@ -70,6 +73,18 @@ const VillagesList = ({ showAlert }) => {
     );
   };
 
+  const formartedData = villageList.map((village) => {
+    return [
+      village.constituency_name || "Constituency",
+      village.mandal_name || "Mandal",
+      village.division_name || "Division",
+      village.sachivalayam_name || "Sachivalayam",
+      village.part_no || "Part No",
+      village.village_name || "Village Name",
+      renderEditAndDelete(),
+    ];
+  });
+
   return (
     <Card elevation={1}>
       <Stack>
@@ -78,34 +93,7 @@ const VillagesList = ({ showAlert }) => {
         <MUIDataTable
           title=""
           columns={columns}
-          data={[
-            [
-             
-              "constituency - 1",
-              "Mandal - 1",
-              "DAMALACHERUVU",
-              "Uppara Palli",
-              "45487",
-              renderEditAndDelete(),
-            ],
-            [
-              
-              "constituency - 2",
-              "Mandal - 1",
-              "MOGARALA",
-              "Padiputlabailu",
-              "545454",
-              renderEditAndDelete(),
-            ],
-            [
-             
-              "constituency - 3",
-              "Mandal - 1",
-              "NENDRAGUNTA",
-              "Gadanki","54445",
-              renderEditAndDelete(),
-            ],
-          ]}
+          data={formartedData}
           options={options}
         />
       </Stack>

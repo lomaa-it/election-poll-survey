@@ -51,6 +51,7 @@ export const createMandalsRoute = "/mandals/";
 export const createDivisionsRoute = "/divisions/";
 export const createSachivalayamRoute = "/sachivalayam/";
 export const createPartsRoute = "/parts/";
+export const createVillagesRoute = "/villages/";
 
 // Delete By Id
 export const deleteStatesByIdRoute = "/states/";
