@@ -67,7 +67,7 @@ export const getAllCommonData = (user) => async (dispatch) => {
       filtersData["sachivalayams"] = sachivalayamResponseData.filter((e) => e.sachivalayam_pk == user.sachivalayam_pk);
     }
 
-    if (user.part_no != null) {
+    if (user.parts.length > 0) {
       filtersData["parts"] = partsResponseData.filter((e) => user.parts.includes(String(e.part_no)));
     }
 
