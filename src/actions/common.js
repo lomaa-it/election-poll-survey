@@ -68,14 +68,12 @@ export const getAllCommonData = (user) => async (dispatch) => {
     }
 
     if (user.part_no != null) {
-      filtersData["parts"] = partsResponseData.filter((e) => e.part_no == user.part_no);
+      filtersData["parts"] = partsResponseData.filter((e) => user.parts.includes(String(e.part_no)));
     }
 
     if (user.village_pk != null) {
       filtersData["villages"] = villageResponseData.filter((e) => e.village_pk == user.village_pk);
     }
-
-    console.log(filtersData);
 
     dispatch({
       type: "COMMON_LOAD_SUCCESS",

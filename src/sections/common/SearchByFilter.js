@@ -35,13 +35,13 @@ const SearchByFilter = ({ account, common, defaultValues, getAllCommonData, onCh
       setFormValues((state) => ({ ...state, sachivalayam: common.sachivalayams[0] }));
     }
 
-    if (common.parts.length > 0 && account.user.part_no != null) {
-      setFormValues((state) => ({ ...state, partno: common.parts[0] }));
-    }
+    // if (common.parts.length > 0 && account.user.part_no != null) {
+    //   setFormValues((state) => ({ ...state, partno: common.parts[0] }));
+    // }
 
-    if (common.villages.length > 0 && account.user.village_pk != null) {
-      setFormValues((state) => ({ ...state, village: common.villages[0] }));
-    }
+    // if (common.villages.length > 0 && account.user.village_pk != null) {
+    //   setFormValues((state) => ({ ...state, village: common.villages[0] }));
+    // }
 
     if (defaultValues) {
       setFormValues((state) => ({
@@ -135,7 +135,7 @@ const SearchByFilter = ({ account, common, defaultValues, getAllCommonData, onCh
             options={common.parts.filter((e) => e.sachivalayam_id == formValues?.sachivalayam?.sachivalayam_pk)}
             getOptionLabel={(option) => String(option.part_no)}
             onChange={handleChange}
-            disabled={account.user.part_no != null}
+            // disabled={account.user.part_no != null}
           />
         </Grid>
       )}
@@ -149,7 +149,7 @@ const SearchByFilter = ({ account, common, defaultValues, getAllCommonData, onCh
             options={common.villages.filter((e) => e.part_no == formValues?.partno?.part_no)}
             getOptionLabel={(option) => option.village_name}
             onChange={handleChange}
-            disabled={account.user.village_pk != null}
+            // disabled={account.user.village_pk != null}
           />
         </Grid>
       )}

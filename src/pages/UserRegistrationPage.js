@@ -19,7 +19,7 @@ import { phoneRegExp } from "../constants";
 const UserRegistrationPage = ({ common, showAlert }) => {
   const props = useLocation().state;
 
-  const pageName = props?.userData === null ? "User Registration" : "Edit User";
+  const pageName = props?.userData == null ? "User Registration" : "Edit User";
 
   const [filterValues, setFilterValues] = useState(null);
   const [isLoading, setLoading] = useState(false);
@@ -73,7 +73,7 @@ const UserRegistrationPage = ({ common, showAlert }) => {
         sachivalayam_id: filterValues.sachivalayam.sachivalayam_pk,
       };
 
-      if (props.userData != null) {
+      if (props?.userData != null) {
         await instance.put(`${createUsersRoute}/${props.userData.user_pk}`, jsonData);
         showAlert({ text: "User updated successfully", color: "success" });
       } else {

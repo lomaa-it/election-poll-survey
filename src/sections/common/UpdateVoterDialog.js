@@ -11,7 +11,6 @@ import { FormProvider, RHFRadio, RHFTextField } from "../../components/hook-form
 import { connect } from "react-redux";
 import { showAlert } from "../../actions/alert";
 import { updateVoterDetails } from "../../actions/voter";
-import { json } from "react-router-dom";
 
 const UpdateVoterDialog = ({ common, voterData, showAlert, updateVoterDetails }) => {
   const [open, setOpen] = useState(false);
@@ -30,7 +29,7 @@ const UpdateVoterDialog = ({ common, voterData, showAlert, updateVoterDetails })
   });
 
   const defaultValues = {
-    phone_no: voterData.phone_no ?? "",
+    phone_no: voterData.voter_phone_no ?? "",
     is_resident: voterData.is_resident ?? "",
     religion_id: voterData.religion_id ?? "",
     caste_id: voterData.caste_id ?? "",
@@ -38,7 +37,7 @@ const UpdateVoterDialog = ({ common, voterData, showAlert, updateVoterDetails })
     govt_employee: voterData.govt_employee ?? "",
     current_address: voterData.current_address ?? "",
     permenent_address: voterData.permenent_address ?? "",
-    intrested_party: voterData.intrested_party ?? PARTY_ID.NEUTRAL,
+    intrested_party: voterData.intrested_party ?? "",
   };
 
   const methods = useForm({
@@ -50,9 +49,14 @@ const UpdateVoterDialog = ({ common, voterData, showAlert, updateVoterDetails })
   const residential = watch(["is_resident"]);
 
   const onSubmit = async (data) => {
+    if (data.intrested_party == null) {
+      showAlert({ text: "Interested party is required" });
+      return;
+    }
+
     setLoading(true);
 
-    const jsonData = { ...data, religion_name: common.religion.find((e) => e.value == data.religion_id)?.label ?? "", caste_name: common.caste.find((e) => e.value == data.caste_id)?.label ?? "" };
+    const jsonData = { ...data, voter_phone_no: data.phone_no, religion_name: common.religion.find((e) => e.value == data.religion_id)?.label ?? "", caste_name: common.caste.find((e) => e.value == data.caste_id)?.label ?? "" };
 
     var result = await updateVoterDetails(voterData.voter_pkk, jsonData);
     if (result) {
@@ -78,6 +82,7 @@ const UpdateVoterDialog = ({ common, voterData, showAlert, updateVoterDetails })
           <DialogTitle>Update Details</DialogTitle>
           <DialogContent>
             <Box py={1}>
+              <Typography sx={{ mb: 3 }}>Name: {voterData.voter_name}</Typography>
               <Grid container spacing={3} alignItems="center">
                 <Grid item xs={12} md={12} lg={12}>
                   <RHFTextField name="phone_no" label="Phone Number" />
@@ -119,14 +124,14 @@ const UpdateVoterDialog = ({ common, voterData, showAlert, updateVoterDetails })
                 </Grid>
                 <Grid item xs={12} md={6} lg={6}>
                   <RHFTextField name="disability" label="Disability" select>
-                    <MenuItem value="1">Yes</MenuItem>
-                    <MenuItem value="0">No</MenuItem>
+                    <MenuItem value={1}>Yes</MenuItem>
+                    <MenuItem value={0}>No</MenuItem>
                   </RHFTextField>
                 </Grid>
                 <Grid item xs={12} md={6} lg={6}>
                   <RHFTextField name="govt_employee" label="Govt Employee" select>
-                    <MenuItem value="1">Yes</MenuItem>
-                    <MenuItem value="0">No</MenuItem>
+                    <MenuItem value={1}>Yes</MenuItem>
+                    <MenuItem value={0}>No</MenuItem>
                   </RHFTextField>
                 </Grid>
                 <Grid item xs={12} md={12} lg={12}>

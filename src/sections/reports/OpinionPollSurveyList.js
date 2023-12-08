@@ -45,7 +45,7 @@ const OpinionPollSurveyList = ({ voter, showAlert, changeOpinionPoll }) => {
       label: "Age",
     },
     {
-      name: "phone_no",
+      name: "voter_phone_no",
       label: "Phone",
       options: {
         customBodyRender: (value, tableMeta, updateValue) => {
