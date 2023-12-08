@@ -128,7 +128,7 @@ const MandalsList = ({
           mandal_name: selectedValues.mandal_name,
         }
       );
-      console.log("updated response", response);
+  
       setIsLoading(false);
       showAlert({ text: "Mandal Updated Successfully", color: "success" });
       setRefresh((prevState) => !prevState);

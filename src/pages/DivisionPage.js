@@ -51,25 +51,25 @@ const DivisionPage = ({ dashboard }) => {
     const fecthOptionsData = async () => {
       try {
         /// get all states
-        const statesResponse = await instance.get(getAllStatesRoute);
-        // console.log("states", statesResponse.data.message);
+        const statesResponse = await instance.post(getAllStatesRoute);
+        console.log("states", statesResponse.data.message);
         /// get all districts
-        const districtsResponse = await instance.get(getAllDistrictsRoute);
-        // console.log("districts", districtsResponse.data.message);
+        const districtsResponse = await instance.post(getAllDistrictsRoute);
+        console.log("districts", districtsResponse.data.message);
 
         /// get all constituencies
-        const constituenciesResponse = await instance.get(
+        const constituenciesResponse = await instance.post(
           getAllConstituenciesRoute
         );
-        // console.log("constituencies", constituenciesResponse.data.message);
+        console.log("constituencies", constituenciesResponse.data.message);
 
         /// get all mandals
-        const mandalsResponse = await instance.get(getAllMandalRoute);
-        // console.log("mandals", mandalsResponse.data.message);
+        const mandalsResponse = await instance.post(getAllMandalRoute);
+        console.log("mandals", mandalsResponse.data.message);
 
         /// get all divisions
-        const divisionsResponse = await instance.get(getAllDivisionRoute);
-        // console.log("divisions", divisionsResponse.data.message);
+        const divisionsResponse = await instance.post(getAllDivisionRoute);
+        console.log("divisions", divisionsResponse.data.message);
 
         /// state update
         setFetchedData((prevState) => ({
@@ -91,8 +91,8 @@ const DivisionPage = ({ dashboard }) => {
     const fecthOptionsData = async () => {
       try {
         /// get all divisions
-        const divisionsResponse = await instance.get(getAllDivisionRoute);
-        // console.log("divisions", divisionsResponse.data.message);
+        const divisionsResponse = await instance.post(getAllDivisionRoute);
+        console.log("divisions", divisionsResponse.data.message);
 
         /// state update
         setFetchedData((prevState) => ({
@@ -146,7 +146,14 @@ const DivisionPage = ({ dashboard }) => {
         <Card sx={{ p: 3 }}>
           <Grid container spacing={2} alignItems="center">
             <Grid item xs={12} md={6} lg={9}>
-              <DivisionList divisionList={fetchedData.division} />
+              <DivisionList
+                fetchedData={fetchedData}
+                setFetchedData={setFetchedData}
+                selectedValues={selectedValues}
+                setSelectedValues={setSelectedValues}
+                refresh={refresh}
+                setRefresh={setRefresh}
+              />
             </Grid>
             <Grid
               item

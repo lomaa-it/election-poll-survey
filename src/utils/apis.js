@@ -62,5 +62,6 @@ export const deleteStatesByIdRoute = "/states/";
 export const updateStatesByIdRoute = "/states/";
 export const saveOrupdatedSurvey = "/save_or_updated_survey";
 export const updateMandalByIdRoute = "/mandals/";
+export const updateDivisionByIdRoute = "/divisions/";
 
 export const designationMappingRoute = "/designationmappingtousers";
