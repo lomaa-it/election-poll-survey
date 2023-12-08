@@ -18,8 +18,8 @@ const UpdateVoterDialog = ({ common, voterData, showAlert, updateVoterDetails })
   const [isLoading, setLoading] = useState(false);
 
   const schema = Yup.object().shape({
-    survey_phone_no: Yup.string().matches(phoneRegExp, "Phone number is not valid").required("Phone number is required"),
-    residential: Yup.string(),
+    phone_no: Yup.string().matches(phoneRegExp, "Phone number is not valid").required("Phone number is required"),
+    is_resident: Yup.string(),
     religion_id: Yup.string(),
     caste_id: Yup.string(),
     disability: Yup.string(),
@@ -30,8 +30,8 @@ const UpdateVoterDialog = ({ common, voterData, showAlert, updateVoterDetails })
   });
 
   const defaultValues = {
-    survey_phone_no: voterData.survey_phone_no ?? "",
-    residential: voterData.residential ?? "",
+    phone_no: voterData.phone_no ?? "",
+    is_resident: voterData.is_resident ?? "",
     religion_id: voterData.religion_id ?? "",
     caste_id: voterData.caste_id ?? "",
     disability: voterData.disability ?? "",
@@ -47,7 +47,7 @@ const UpdateVoterDialog = ({ common, voterData, showAlert, updateVoterDetails })
   });
 
   const { handleSubmit, watch } = methods;
-  const residential = watch(["residential"]);
+  const residential = watch(["is_resident"]);
 
   const onSubmit = async (data) => {
     setLoading(true);
@@ -80,11 +80,11 @@ const UpdateVoterDialog = ({ common, voterData, showAlert, updateVoterDetails })
             <Box py={1}>
               <Grid container spacing={3} alignItems="center">
                 <Grid item xs={12} md={12} lg={12}>
-                  <RHFTextField name="survey_phone_no" label="Phone Number" />
+                  <RHFTextField name="phone_no" label="Phone Number" />
                 </Grid>
                 <Grid item xs={12} md={12} lg={12}>
                   <RHFRadio
-                    name="residential"
+                    name="is_resident"
                     options={[
                       { label: "Is Residential", value: 1 },
                       { label: "Non-Residential", value: 0 },

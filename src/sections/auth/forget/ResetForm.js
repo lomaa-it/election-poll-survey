@@ -49,7 +49,7 @@ const ResetForm = ({ showAlert }) => {
       await instance.post(resetPswdRoute, jsonData);
 
       setLoading(false);
-      showAlert({ text: "Password reset completed" });
+      showAlert({ text: "Password reset completed", color: "success" });
 
       navigate("/login", { replace: true });
     } catch (error) {

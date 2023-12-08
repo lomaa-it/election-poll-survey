@@ -45,7 +45,7 @@ const OpinionPollSurveyList = ({ voter, showAlert, changeOpinionPoll }) => {
       label: "Age",
     },
     {
-      name: "survey_phone_no",
+      name: "phone_no",
       label: "Phone",
       options: {
         customBodyRender: (value, tableMeta, updateValue) => {
@@ -182,7 +182,7 @@ const OpinionPollSurveyList = ({ voter, showAlert, changeOpinionPoll }) => {
       },
     },
     {
-      name: "residential",
+      name: "is_resident",
       label: "Residential",
       options: {
         customBodyRender: (value, tableMeta, updateValue) => {
