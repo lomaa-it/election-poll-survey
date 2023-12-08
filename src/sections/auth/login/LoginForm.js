@@ -49,10 +49,17 @@ const LoginForm = ({ showAlert, authSuccess }) => {
 
       if (responseData.length == 1) {
         var userData = responseData[0];
-        authSuccess(userData);
+        if (userData.is_first_login == 1) {
+          navigate("/reset-password", { replace: true, state: userData });
+        } else {
+          authSuccess(userData);
 
-        if (userData.desgination_name == LOGIN_TYPES[6]) navigate("/gruhasarathi/opinionsurvey/survey", { replace: true });
-        else navigate("/dashboard", { replace: true });
+          if (userData.desgination_name == LOGIN_TYPES[6]) {
+            navigate("/gruhasarathi/opinionsurvey/survey", { replace: true });
+          } else {
+            navigate("/dashboard", { replace: true });
+          }
+        }
 
         return;
       } else {
@@ -63,20 +70,6 @@ const LoginForm = ({ showAlert, authSuccess }) => {
       showAlert({ text: "Something went wrong" });
       setLoading(false);
     }
-    // alert("New user? Secure your account by resetting your password.");
-    // showAlert({
-    //   text: "New user? Secure your account by resetting your password.",
-    //   color: "success",
-    // });
-
-    // if (data.username === "admin" && data.password === "admin123") {
-    //   setLoading(true);
-
-    //   navigate("/dashboard");
-    //   return;
-    // }
-
-    // navigate("/reset-password");
   };
 
   return (

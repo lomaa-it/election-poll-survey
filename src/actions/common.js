@@ -75,7 +75,7 @@ export const getAllCommonData = (user) => async (dispatch) => {
       filtersData["villages"] = villageResponseData.filter((e) => e.village_pk == user.village_pk);
     }
 
-    // console.log(filtersData);
+    console.log(filtersData);
 
     dispatch({
       type: "COMMON_LOAD_SUCCESS",

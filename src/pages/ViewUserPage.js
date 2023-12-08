@@ -88,46 +88,6 @@ const ViewUserPage = ({ common, clearUserReducer, getAllUsers }) => {
         <Box p={1} />
 
         <ViewUsersList />
-
-        <Box p={1} />
-
-        <Card sx={{ p: 3 }}>
-          <Grid container spacing={2} alignItems="center">
-            <Grid item xs={12} md={6} lg={6}>
-              <Button
-                variant="outlined"
-                sx={{
-                  color: "#EF8F50",
-                  borderColor: "#EF8F50",
-                  padding: "10px 35px",
-                }}
-              >
-                Send Login Credentials
-              </Button>
-            </Grid>
-
-            <Grid
-              item
-              xs={12}
-              md={6}
-              lg={3}
-              sx={{
-                display: "flex",
-              }}
-            >
-              <Button
-                variant="outlined"
-                sx={{
-                  marginRight: "10px",
-                  padding: "10px 35px",
-                }}
-              >
-                Add
-              </Button>
-              <Button variant="outlined">Upload</Button>
-            </Grid>
-          </Grid>
-        </Card>
       </Container>
     </Page>
   );

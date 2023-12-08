@@ -19,7 +19,7 @@ import { phoneRegExp } from "../constants";
 const UserRegistrationPage = ({ common, showAlert }) => {
   const props = useLocation().state;
 
-  const pageName = props.userData === null ? "User Registration" : "Edit User";
+  const pageName = props?.userData === null ? "User Registration" : "Edit User";
 
   const [filterValues, setFilterValues] = useState(null);
   const [isLoading, setLoading] = useState(false);
@@ -27,7 +27,7 @@ const UserRegistrationPage = ({ common, showAlert }) => {
   const schema = Yup.object().shape({
     user_displayname: Yup.string().required("Full name is required"),
     phone_no: Yup.string().matches(phoneRegExp, "Phone number is not valid").required("Phone number is required"),
-    password: Yup.string().required("Password is required").min(8, "Password must be at least 8 characters"),
+    // password: Yup.string().required("Password is required").min(8, "Password must be at least 8 characters"),
     office_phone_no: Yup.string(),
     age: Yup.string(),
     email: Yup.string().email(),
@@ -37,7 +37,7 @@ const UserRegistrationPage = ({ common, showAlert }) => {
   const defaultValues = {
     user_displayname: props?.userData?.user_displayname ?? "",
     phone_no: props?.userData?.phone_no ?? "",
-    password: props?.userData?.password ?? "",
+    // password: props?.userData?.password ?? "",
     office_phone_no: props?.userData?.office_phone_no ?? "",
     age: props?.userData?.age ?? "",
     email: props?.userData?.email ?? "",
@@ -110,9 +110,9 @@ const UserRegistrationPage = ({ common, showAlert }) => {
                 <RHFTextField name="phone_no" label="Username/Phone Number *" />
               </Grid>
 
-              <Grid item xs={12} md={6} lg={3}>
+              {/* <Grid item xs={12} md={6} lg={3}>
                 <RHFTextField name="password" label="Password *" />
-              </Grid>
+              </Grid> */}
 
               <Grid item xs={12} md={6} lg={3}>
                 <RHFTextField name="office_phone_no" label="Office Phone Number" />
@@ -203,8 +203,6 @@ const UserRegistrationPage = ({ common, showAlert }) => {
               </Grid>
             </Grid>
           </Card> */}
-
-          <Box p={1} />
         </Container>
       </FormProvider>
     </Page>

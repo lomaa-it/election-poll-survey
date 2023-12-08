@@ -1,37 +1,32 @@
 import * as Yup from "yup";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import {
-  Stack,
-  IconButton,
-  InputAdornment,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Stack, IconButton, InputAdornment, TextField, Typography } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { FormProvider, RHFTextField } from "../../../components/hook-form";
 import { connect } from "react-redux";
 import { showAlert } from "../../../actions/alert";
+import instance from "../../../utils/axios";
+import { resetPswdRoute } from "../../../utils/apis";
 
 const ResetForm = ({ showAlert }) => {
   const navigate = useNavigate();
+  const props = useLocation().state;
 
   const [isLoading, setLoading] = useState(false);
 
   const LoginSchema = Yup.object().shape({
-    opassword: Yup.string().required("Old Password is required"),
-    password: Yup.string()
-      .required("Password is required")
-      .min(8, "Password must be at least 8 characters"),
-    cpassword: Yup.string().required("Confirm Password is required"),
+    newpswd: Yup.string().required("Password is required").min(8, "Password must be at least 8 characters"),
+    confirmpswd: Yup.string()
+      .required("Confirm password is required")
+      .oneOf([Yup.ref("newpswd")], "Confirm password must be match"),
   });
 
   const defaultValues = {
-    opassword: "",
-    password: "",
-    cpassword: "",
+    newpswd: "",
+    confirmpswd: "",
   };
 
   const methods = useForm({
@@ -43,30 +38,36 @@ const ResetForm = ({ showAlert }) => {
 
   const onSubmit = async (data) => {
     setLoading(true);
+    console.log(props);
 
-    // check if user already change there old auto genarated password or not
+    try {
+      var jsonData = {
+        user_pk: props?.user_pk,
+        password: data.newpswd,
+      };
 
-    navigate("/login", { replace: true });
-    setLoading(false);
+      await instance.post(resetPswdRoute, jsonData);
+
+      setLoading(false);
+      showAlert({ text: "Password reset completed" });
+
+      navigate("/login", { replace: true });
+    } catch (error) {
+      console.error(error);
+      showAlert({ text: "Something went wrong" });
+      setLoading(false);
+    }
   };
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Stack my={3} spacing={3}>
-        <RHFTextField name="opassword" label="Old Password" />
+        <RHFTextField name="newpswd" label="New Password" type="password" />
 
-        <RHFTextField name="password" label="Password" type="password" />
-
-        <RHFTextField name="cpassword" label="Confirm Password" />
+        <RHFTextField name="confirmpswd" label="Confirm New Password" />
       </Stack>
 
-      <LoadingButton
-        fullWidth
-        loading={isLoading}
-        size="large"
-        type="submit"
-        variant="contained"
-      >
+      <LoadingButton fullWidth loading={isLoading} size="large" type="submit" variant="contained">
         Submit
       </LoadingButton>
     </FormProvider>

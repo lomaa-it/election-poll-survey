@@ -46,9 +46,9 @@ const SearchByFilter = ({ account, common, defaultValues, getAllCommonData, onCh
     if (defaultValues) {
       setFormValues((state) => ({
         ...state,
-        mandal: common.mandals.find((e) => e.mandal_pk == defaultValues.mandal_pk),
-        division: common.divisions.find((e) => e.division_pk == defaultValues.division_pk),
-        sachivalayam: common.sachivalayams.find((e) => e.sachivalayam_pk == defaultValues.sachivalayam_pk),
+        mandal: defaultValues.mandal_pk ? common.mandals.find((e) => e.mandal_pk === defaultValues.mandal_pk) : state.mandal,
+        division: defaultValues.division_pk ? common.divisions.find((e) => e.division_pk === defaultValues.division_pk) : state.division,
+        sachivalayam: defaultValues.sachivalayam_pk ? common.sachivalayams.find((e) => e.sachivalayam_pk === defaultValues.sachivalayam_pk) : state.sachivalayam,
       }));
     }
   }, [common]);
@@ -101,6 +101,7 @@ const SearchByFilter = ({ account, common, defaultValues, getAllCommonData, onCh
           disabled={account.user.mandal_pk != null}
         />
       </Grid>
+
       <Grid item xs={12} md={6} lg={lg}>
         <RHFAutoComplete
           name="division"
@@ -112,6 +113,7 @@ const SearchByFilter = ({ account, common, defaultValues, getAllCommonData, onCh
           disabled={account.user.division_pk != null}
         />
       </Grid>
+
       <Grid item xs={12} md={6} lg={lg}>
         <RHFAutoComplete
           name="sachivalayam"
