@@ -24,6 +24,8 @@ import Sachivalayam from "../../pages/Sachivalayam";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { set } from "date-fns";
+import { updateMandalByIdRoute } from "../../utils/apis";
+import instance from "../../utils/axios";
 
 const MandalsList = ({
   showAlert,
@@ -41,6 +43,7 @@ const MandalsList = ({
     state_id: "",
     district_id: "",
     consistency_id: "",
+    mandal_id: "",
     mandal_name: "",
   });
 
@@ -66,8 +69,28 @@ const MandalsList = ({
     responsive: "standard",
   };
 
-  const handleClick = (event) => {
+  const handleClick = (event, data) => {
     setAnchorEl(event.currentTarget);
+    // console.log("data", data);
+
+    //find district_id using consistency_id
+    const district_id = fetchedData.consistency.find(
+      (consistency) => consistency.consistency_pk === data.consistency_id
+    ).district_pk;
+
+    //find state_id using district_id
+    const state_id = fetchedData.district.find(
+      (district) => district.district_pk === district_id
+    ).state_id;
+
+    setSelectedValues((prevState) => ({
+      ...prevState,
+      state_id: state_id,
+      district_id: district_id,
+      consistency_id: data.consistency_id,
+      mandal_id: data.mandal_pk,
+      mandal_name: data.mandal_name,
+    }));
   };
 
   const handleClose = () => {
@@ -76,6 +99,7 @@ const MandalsList = ({
       state_id: "",
       district_id: "",
       consistency_id: "",
+      mandal_id: "",
       mandal_name: "",
     });
   };
@@ -86,24 +110,59 @@ const MandalsList = ({
       state_id: "",
       district_id: "",
       consistency_id: "",
+      mandal_id: "",
       mandal_name: "",
     });
   };
 
   // update details
-  const handleSubmit = async () => {};
+  const handleSubmit = async () => {
+    // console.log("selectedValues", selectedValues);
+
+    try {
+      setIsLoading(true);
+      const response = await instance.put(
+        updateMandalByIdRoute + selectedValues.mandal_id,
+        {
+          consistency_id: selectedValues.consistency_id,
+          mandal_name: selectedValues.mandal_name,
+        }
+      );
+      console.log("updated response", response);
+      setIsLoading(false);
+      showAlert({ text: "Mandal Updated Successfully", color: "success" });
+      setRefresh((prevState) => !prevState);
+      setSelectedValues({
+        state_id: "",
+        district_id: "",
+        consistency_id: "",
+        mandal_id: "",
+        mandal_name: "",
+      });
+
+      setAnchorEl(null);
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false);
+      showAlert({ text: "Something went wrong", color: "error" });
+      setRefresh((prevState) => !prevState);
+    }
+  };
 
   const renderEditAndDelete = (data) => {
+    // Create a popover for the mandal
     const open = Boolean(anchorEl);
     const id = open ? `simple-popover-${data.mandal_pk}` : undefined;
-    const onShow = () => {
-      console.log(data);
-    };
-    console.log(data);
 
     return (
       <Box>
-        <Button aria-describedby={id} variant="contained" onClick={handleClick}>
+        <Button
+          aria-describedby={id}
+          variant="contained"
+          onClick={(e) => {
+            handleClick(e, data);
+          }}
+        >
           <EditNoteIcon />
         </Button>
         <Popover

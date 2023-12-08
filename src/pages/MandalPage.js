@@ -48,20 +48,16 @@ const MandalPage = ({ dashboard }) => {
       try {
         /// get all states
         const statesResponse = await instance.post(getAllStatesRoute);
-        // console.log("states", statesResponse.data.message);
+        console.log("states", statesResponse.data.message);
         /// get all districts
         const districtsResponse = await instance.post(getAllDistrictsRoute);
-        // console.log("districts", districtsResponse.data.message);
+        console.log("districts", districtsResponse.data.message);
 
         /// get all constituencies
         const constituenciesResponse = await instance.post(
           getAllConstituenciesRoute
         );
-        // console.log("constituencies", constituenciesResponse.data.message);
-
-        /// get all mandals
-        const mandalsResponse = await instance.post(getAllMandalRoute);
-        // console.log("mandals", mandalsResponse.data.message);
+        console.log("constituencies", constituenciesResponse.data.message);
 
         /// state update
         setFetchedData((prevState) => ({
@@ -69,6 +65,24 @@ const MandalPage = ({ dashboard }) => {
           states: statesResponse.data.message,
           district: districtsResponse.data.message,
           consistency: constituenciesResponse.data.message,
+        }));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fecthOptionsData();
+  }, []);
+
+  useEffect(() => {
+    const fecthOptionsData = async () => {
+      try {
+        /// get all mandals
+        const mandalsResponse = await instance.post(getAllMandalRoute);
+        console.log("mandals", mandalsResponse.data.message);
+
+        /// state update
+        setFetchedData((prevState) => ({
+          ...prevState,
           mandal: mandalsResponse.data.message,
         }));
       } catch (error) {
@@ -76,7 +90,7 @@ const MandalPage = ({ dashboard }) => {
       }
     };
     fecthOptionsData();
-  }, [fetchedData.mandal]);
+  }, [refresh]);
 
   const handleSubmit = async () => {
     console.log(selectedValues);
@@ -123,7 +137,6 @@ const MandalPage = ({ dashboard }) => {
                 setSelectedValues={setSelectedValues}
                 refresh={refresh}
                 setRefresh={setRefresh}
-                
               />
             </Grid>
             <Grid
