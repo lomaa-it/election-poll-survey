@@ -1,5 +1,15 @@
 import { useEffect, useState } from "react";
-import { Typography, Card, Stack, Grid, Switch, Divider, Box, Chip, TextField } from "@mui/material";
+import {
+  Typography,
+  Card,
+  Stack,
+  Grid,
+  Switch,
+  Divider,
+  Box,
+  Chip,
+  TextField,
+} from "@mui/material";
 import { CheckBox } from "@mui/icons-material";
 import Button from "@mui/material/Button";
 import MUIDataTable from "mui-datatables";
@@ -10,31 +20,56 @@ import EditNoteIcon from "@mui/icons-material/EditNote";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { searchFiltercolor } from "../../constants";
+import instance from "../../utils/axios";
+import { getAllNavaratnaluRoute, getAllTicketsRoute } from "../../utils/apis";
 
 const ViewTicketsList = ({ showAlert }) => {
-  useEffect(() => {}, []);
+  const [isLoading, setLoading] = useState(false);
+  const [fechtedData, setFechtedData] = useState({
+    navaratnalu: [],
+    tickets: [],
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const navaratnaluResponse = await instance.post(getAllNavaratnaluRoute);
+      const navaratanaluResponseData = navaratnaluResponse.data?.message ?? [];
+      const ticketsResponse = await instance.post(getAllTicketsRoute);
+      const ticketsResponseData = ticketsResponse.data?.message ?? [];
+      console.log("ticketsResponseData", ticketsResponseData);
+      console.log("navaratanaluResponseData", navaratanaluResponseData);
+      setFechtedData({
+        navaratnalu: navaratanaluResponseData,
+        tickets: ticketsResponseData,
+      });
+    };
+    fetchData();
+  }, []);
 
   const columns = [
     {
       label: "Select",
     },
-    {
-      label: "Volunteer ID",
-    },
-    {
-      label: "Volunteer Name",
-    },
-    {
-      label: "Voter ID",
-    },
-    {
-      label: "Voter Name",
-    },
-    {
-      label: "Phone",
-    },
+    // {
+    //   label: "Volunteer ID",
+    // },
+    // {
+    //   label: "Volunteer Name",
+    // },
+    // {
+    //   label: "Voter ID",
+    // },
+    // {
+    //   label: "Voter Name",
+    // },
+    // {
+    //   label: "Phone",
+    // },
     {
       label: "Navaratnalu Name",
+    },
+    {
+      label: "Description/Reason",
     },
     {
       label: "Status",
@@ -46,6 +81,8 @@ const ViewTicketsList = ({ showAlert }) => {
     selectableRows: "none",
     responsive: "standard",
   };
+
+  console.log("fechtedData", fechtedData);
 
   const renderCheckBox = () => {
     return <CheckBox />;
@@ -84,6 +121,24 @@ const ViewTicketsList = ({ showAlert }) => {
         },
       },
     });
+
+  /// formatdata for MUIDataTable using fechtedData and filter navaratnalu_name in navaratnalu with   navaratnalu_pk in tickets
+  const formatData = fechtedData.tickets.map((ticket) => {
+    const navaratnalu = fechtedData.navaratnalu.find(
+      (navaratnalu) => navaratnalu.navaratnalu_pk === ticket.navaratnalu_id
+    );
+    return [
+      renderCheckBox(),
+      // ticket.volunteer_id || "-",
+      // ticket.volunteer_name || "-",
+      // ticket.voter_pk || "-",
+      // ticket.voter_name || "-",
+      // ticket.phone || "-",
+      navaratnalu.navaratnalu_name || "-",
+      ticket.reason || "-",
+      renderStatusButton(),
+    ];
+  });
 
   return (
     <Card elevation={1}>
@@ -146,12 +201,7 @@ const ViewTicketsList = ({ showAlert }) => {
           <MUIDataTable
             title="Tickets List"
             columns={columns}
-            data={[
-              [renderCheckBox(), "5454", "Volunteer 1", "123154", "Voter 1", "912345678", "Arogyasri", "Open"],
-              [renderCheckBox(), "5454", "Volunteer 1", "123154", "Voter 1", "912345678", "Arogyasri", "Open"],
-              [renderCheckBox(), "5454", "Volunteer 1", "123154", "Voter 1", "912345678", "Arogyasri", "Open"],
-              [renderCheckBox(), "5454", "Volunteer 1", "123154", "Voter 1", "912345678", "Arogyasri", "Open"],
-            ]}
+            data={formatData}
             options={options}
           />
         </ThemeProvider>

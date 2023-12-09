@@ -75,7 +75,7 @@ const LoginForm = ({ showAlert, authSuccess }) => {
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Stack spacing={2}>
-        <RHFTextField name="phone_no" label="Phone number" />
+        <RHFTextField name="phone_no" label="Phone number" type="number"/>
 
         <RHFTextField
           name="password"

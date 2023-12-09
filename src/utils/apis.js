@@ -13,6 +13,7 @@ export const loginRoute = "/users-login";
 export const resetPswdRoute = "/updateuserpassword";
 
 // GET ALL DATA
+export const getAllTicketsRoute = "/ticket_master/getall";
 export const getAllVotersRoute = "/voters/getall";
 export const getAllUsersRoute = "/getalluserswithjoinandwhere";
 export const getAllDesignationsRoute = "/designation/getall";
@@ -60,6 +61,7 @@ export const createDivisionsRoute = "/divisions/";
 export const createSachivalayamRoute = "/sachivalayam/";
 export const createPartsRoute = "/parts/";
 export const createVillagesRoute = "/villages/";
+export const createTicketRoute = "/ticket_master";
 
 // Delete By Id
 export const deleteStatesByIdRoute = "/states/";
