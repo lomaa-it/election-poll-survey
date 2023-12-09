@@ -137,11 +137,11 @@ const DivisionPage = ({ dashboard }) => {
   };
 
   return (
-    <Page title="View User">
+    <Page title="Division">
       <Container maxWidth="xl">
-        <Typography variant="h4" sx={{ mb: 1 }}>
+        {/* <Typography variant="h4" sx={{ mb: 1 }}>
           Division
-        </Typography>
+        </Typography> */}
 
         <Card sx={{ p: 3 }}>
           <Grid container spacing={2} alignItems="center">

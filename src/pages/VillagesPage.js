@@ -166,11 +166,11 @@ const VillagesPage = ({ dashboard }) => {
   };
 
   return (
-    <Page title="View User">
+    <Page title="Villages">
       <Container maxWidth="xl">
-        <Typography variant="h4" sx={{ mb: 1 }}>
+        {/* <Typography variant="h4" sx={{ mb: 1 }}>
           Villages
-        </Typography>
+        </Typography> */}
 
         <Card sx={{ p: 3 }}>
           <Typography sx={{ pb: 2 }}>Add Village</Typography>

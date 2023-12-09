@@ -166,9 +166,9 @@ const PartsPage = ({ dashboard }) => {
   return (
     <Page title="Part">
       <Container maxWidth="xl">
-        <Typography variant="h4" sx={{ mb: 1 }}>
+        {/* <Typography variant="h4" sx={{ mb: 1 }}>
           Parts
-        </Typography>
+        </Typography> */}
 
         <Card sx={{ p: 3 }}>
           <Typography sx={{ pb: 2 }}>Add Parts</Typography>

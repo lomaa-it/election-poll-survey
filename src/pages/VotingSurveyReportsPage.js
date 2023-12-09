@@ -6,12 +6,12 @@ import VotingSurveyReportsList from "../sections/reports/VotingSurveyReportsList
 
 export default function VotingSurveyReportsPage() {
   return (
-    <Page title="Students">
+    <Page title="Voting Survey Reports">
       <Container maxWidth="xl">
         <Box mb={5}>
-          <Typography variant="h4" gutterBottom>
+          {/* <Typography variant="h4" gutterBottom>
             Voting Survey Reports
-          </Typography>
+          </Typography> */}
         </Box>
 
         <VotingSurveyReportsList />

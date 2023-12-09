@@ -52,9 +52,9 @@ const StatesPage = ({ dashboard }) => {
   return (
     <Page title="States">
       <Container maxWidth="xl">
-        <Typography variant="h4" sx={{ mb: 1 }}>
+        {/* <Typography variant="h4" sx={{ mb: 1 }}>
           States
-        </Typography>
+        </Typography> */}
 
         <Card sx={{ p: 3 }}>
           <Grid container spacing={2} alignItems="center">

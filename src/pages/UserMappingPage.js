@@ -1,5 +1,12 @@
 import { useEffect, useState } from "react";
-import { Grid, Container, Typography, Box, TextField, Card } from "@mui/material";
+import {
+  Grid,
+  Container,
+  Typography,
+  Box,
+  TextField,
+  Card,
+} from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -26,21 +33,32 @@ const UserMappingPage = ({ common, clearUserReducer, getAllUsers }) => {
     setLoading(false);
   };
 
+  
+
   return (
-    <Page title="View User">
+    <Page title="User Mapping">
       <Container maxWidth="xl">
-        <Typography variant="h4" sx={{ mb: 1 }}>
+        {/* <Typography variant="h4" sx={{ mb: 1 }}>
           User Mapping
-        </Typography>
+        </Typography> */}
 
         <Card sx={{ p: 3, backgroundColor: searchFiltercolor }}>
-          <Typography sx={{ pb: 2 }}>Search by filter</Typography>
+          {/* <Typography sx={{ pb: 2 }}>Search by filter</Typography> */}
 
           <Grid container spacing={2} alignItems="center">
-            <SearchByFilter showPartNo={false} showVillage={false} showOtherFilters={false} onChanged={(value) => setFilterValues(value)} />
+            <SearchByFilter
+              showPartNo={false}
+              showVillage={false}
+              showOtherFilters={false}
+              onChanged={(value) => setFilterValues(value)}
+            />
 
             <Grid item xs={12} md={6} lg={2}>
-              <LoadingButton loading={isLoading} variant="contained" onClick={onSubmit}>
+              <LoadingButton
+                loading={isLoading}
+                variant="contained"
+                onClick={onSubmit}
+              >
                 Search
               </LoadingButton>
             </Grid>
@@ -61,4 +79,6 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { clearUserReducer, getAllUsers })(UserMappingPage);
+export default connect(mapStateToProps, { clearUserReducer, getAllUsers })(
+  UserMappingPage
+);

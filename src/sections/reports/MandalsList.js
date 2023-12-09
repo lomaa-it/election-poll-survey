@@ -73,15 +73,17 @@ const MandalsList = ({
     setAnchorEl(event.currentTarget);
     // console.log("data", data);
 
-    //find district_id using consistency_id
-    const district_id = fetchedData.consistency.find(
+   //find district_id using consistency_id
+    const consistency = fetchedData.consistency.find(
       (consistency) => consistency.consistency_pk === data.consistency_id
-    ).district_pk;
+    );
+    const district_id = consistency ? consistency.district_pk : null;
 
-    //find state_id using district_id
-    const state_id = fetchedData.district.find(
+     //find state_id using district_id
+     const district = fetchedData.district.find(
       (district) => district.district_pk === district_id
-    ).state_id;
+    );
+    const state_id = district ? district.state_id : null;
 
     setSelectedValues((prevState) => ({
       ...prevState,

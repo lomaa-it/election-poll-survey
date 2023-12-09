@@ -29,7 +29,7 @@ const DivisionList = ({
   refresh,
   setRefresh,
 }) => {
-  useEffect(() => {}, []);
+
   const [anchorEl, setAnchorEl] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -72,19 +72,22 @@ const DivisionList = ({
     console.log("Divison data", data);
 
     // find consistency_id using mandal_id
-    const consistency_id = fetchedData.mandal.find(
+    const mandal = fetchedData.mandal.find(
       (mandal) => mandal.mandal_pk === data.mandal_id
-    ).consistency_id;
+    );
+    const consistency_id = mandal ? mandal.consistency_id : null;
 
     //find district_id using consistency_id
-    const district_id = fetchedData.consistency.find(
+    const consistency = fetchedData.consistency.find(
       (consistency) => consistency.consistency_pk === consistency_id
-    ).district_pk;
+    );
+    const district_id = consistency ? consistency.district_pk : null;
 
     //find state_id using district_id
-    const state_id = fetchedData.district.find(
+    const district = fetchedData.district.find(
       (district) => district.district_pk === district_id
-    ).state_id;
+    );
+    const state_id = district ? district.state_id : null;
 
     setSelectedValues((prevState) => ({
       ...prevState,

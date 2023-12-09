@@ -5,12 +5,12 @@ import SurveyReportsList from "../sections/reports/SurveyReportsList";
 
 export default function SurveyReportsPage() {
   return (
-    <Page title="Students">
+    <Page title="Opinion Survey Reports">
       <Container maxWidth="xl">
         <Box mb={1}>
-          <Typography variant="h4" gutterBottom>
+          {/* <Typography variant="h4" gutterBottom>
             Opinion Survey Reports
-          </Typography>
+          </Typography> */}
         </Box>
 
         <SurveyReportsList />

@@ -13,11 +13,11 @@ import { useState } from "react";
 
 const VoterRegistrationPage = ({ dashboard }) => {
   return (
-    <Page title="Voter Registration">
+    <Page title="Add Voter">
       <Container maxWidth="xl">
-        <Typography variant="h4" sx={{ mb: 1 }}>
+        {/* <Typography variant="h4" sx={{ mb: 1 }}>
           Add Voter
-        </Typography>
+        </Typography> */}
         <Card sx={{ p: 3, mt: 1, mb: 2 }}>
           <Typography sx={{ pb: 2 }}>Assign Authority</Typography>
 

@@ -88,7 +88,7 @@ const VotingSurveyReportsList = ({ showAlert }) => {
     <Card elevation={1}>
       <Stack>
         <Box p={3}>
-          <Typography sx={{ pb: 2 }}>Search by filter</Typography>
+          {/* <Typography sx={{ pb: 2 }}>Search by filter</Typography> */}
 
           <Grid container spacing={2} alignItems="center">
             <SearchByFilter />

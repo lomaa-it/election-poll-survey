@@ -1,6 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Grid, Container, Typography, Box, TextField, Card } from "@mui/material";
+import {
+  Grid,
+  Container,
+  Typography,
+  Box,
+  TextField,
+  Card,
+} from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -29,13 +36,11 @@ const OpinionPollSurveyPage = ({ getAllVotersSurvey, clearVoterReducer }) => {
   return (
     <Page title="Opinion Survey">
       <Container maxWidth="xl">
-        <Typography variant="h4" sx={{ mb: 1 }}>
+        {/* <Typography variant="h4" sx={{ mb: 1 }}>
           Opinion Survey
-        </Typography>
+        </Typography> */}
 
         <Card sx={{ p: 3, backgroundColor: searchFiltercolor }}>
-          <Typography sx={{ pb: 2 }}>Search by filter</Typography>
-
           <Grid container spacing={2} alignItems="center">
             <SearchByFilter onChanged={(value) => setFilterValues(value)} />
 
@@ -100,7 +105,11 @@ const OpinionPollSurveyPage = ({ getAllVotersSurvey, clearVoterReducer }) => {
               />
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
-              <LoadingButton loading={isLoading} variant="contained" onClick={onSubmit}>
+              <LoadingButton
+                loading={isLoading}
+                variant="contained"
+                onClick={onSubmit}
+              >
                 Search
               </LoadingButton>
             </Grid>
@@ -119,4 +128,6 @@ const OpinionPollSurveyPage = ({ getAllVotersSurvey, clearVoterReducer }) => {
   );
 };
 
-export default connect(null, { getAllVotersSurvey, clearVoterReducer })(OpinionPollSurveyPage);
+export default connect(null, { getAllVotersSurvey, clearVoterReducer })(
+  OpinionPollSurveyPage
+);

@@ -1,5 +1,14 @@
 import { useEffect, useState } from "react";
-import { Grid, Container, Typography, Box, TextField, Card, MenuItem, CircularProgress } from "@mui/material";
+import {
+  Grid,
+  Container,
+  Typography,
+  Box,
+  TextField,
+  Card,
+  MenuItem,
+  CircularProgress,
+} from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { BarChartWidget, PieChartWidget } from "../sections/common";
@@ -7,10 +16,17 @@ import * as Colors from "../utils/constants";
 import SearchByFilter from "../sections/common/SearchByFilter";
 import { LoadingButton } from "@mui/lab";
 import { ageDropdown } from "../utils/dropdownconstants";
-import { getOpinionDashboard, clearDashboardReducer } from "../actions/dashboard";
+import {
+  getOpinionDashboard,
+  clearDashboardReducer,
+} from "../actions/dashboard";
 import { casteList, searchFiltercolor } from "../constants";
 
-const DashboardApp = ({ dashboard, getOpinionDashboard, clearDashboardReducer }) => {
+const DashboardApp = ({
+  dashboard,
+  getOpinionDashboard,
+  clearDashboardReducer,
+}) => {
   const [filterValues, setFilterValues] = useState(null);
   const [isLoading, setLoading] = useState(false);
 
@@ -27,14 +43,14 @@ const DashboardApp = ({ dashboard, getOpinionDashboard, clearDashboardReducer })
   };
 
   return (
-    <Page title="Dashboard">
+    <Page title="Opinion Dashboard">
       <Container maxWidth="xl">
-        <Typography variant="h4" sx={{ mb: 1 }}>
+        {/* <Typography variant="h4" sx={{ mb: 1 }}>
           Opinion Dashboard
-        </Typography>
+        </Typography> */}
 
         <Card sx={{ p: 3, backgroundColor: searchFiltercolor }}>
-          <Typography sx={{ pb: 2 }}>Search by filter</Typography>
+      
 
           <Grid container spacing={2} alignItems="center">
             <SearchByFilter onChanged={(value) => setFilterValues(value)} />
@@ -66,7 +82,11 @@ const DashboardApp = ({ dashboard, getOpinionDashboard, clearDashboardReducer })
             </Grid>
 
             <Grid item xs={12} md={6} lg={2}>
-              <LoadingButton loading={isLoading} variant="contained" onClick={onSubmit}>
+              <LoadingButton
+                loading={isLoading}
+                variant="contained"
+                onClick={onSubmit}
+              >
                 Search
               </LoadingButton>
             </Grid>
@@ -76,7 +96,12 @@ const DashboardApp = ({ dashboard, getOpinionDashboard, clearDashboardReducer })
         <Box p={1} />
 
         {dashboard.isLoading && (
-          <Box minHeight={200} display="flex" justifyContent="center" alignItems="center">
+          <Box
+            minHeight={200}
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+          >
             <CircularProgress />
           </Box>
         )}
@@ -100,7 +125,11 @@ const DashboardApp = ({ dashboard, getOpinionDashboard, clearDashboardReducer })
                     value: dashboard.opinion?.gender?.["tg"] ?? 0,
                   },
                 ]}
-                chartColors={[Colors.MaleColor, Colors.FemaleColor, Colors.TransgenderColor]}
+                chartColors={[
+                  Colors.MaleColor,
+                  Colors.FemaleColor,
+                  Colors.TransgenderColor,
+                ]}
               />
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
@@ -132,7 +161,15 @@ const DashboardApp = ({ dashboard, getOpinionDashboard, clearDashboardReducer })
                     value: dashboard.opinion?.opnion_votes?.["congress"] ?? 0,
                   },
                 ]}
-                chartColors={[Colors.YSRCPColor, Colors.NETURALColor, Colors.TDPColor, Colors.JSPColor, Colors.BJPColor, Colors.CONGRESSColor, Colors.OTHERColor]}
+                chartColors={[
+                  Colors.YSRCPColor,
+                  Colors.NETURALColor,
+                  Colors.TDPColor,
+                  Colors.JSPColor,
+                  Colors.BJPColor,
+                  Colors.CONGRESSColor,
+                  Colors.OTHERColor,
+                ]}
               />
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
@@ -161,14 +198,26 @@ const DashboardApp = ({ dashboard, getOpinionDashboard, clearDashboardReducer })
                   { label: "Cancel", value: 876 },
                   { label: "Escalated", value: 2542 },
                 ]}
-                chartColors={[Colors.OpenColor, Colors.ResolvedColor, Colors.CancelColor, Colors.EscalatedColor]}
+                chartColors={[
+                  Colors.OpenColor,
+                  Colors.ResolvedColor,
+                  Colors.CancelColor,
+                  Colors.EscalatedColor,
+                ]}
               />
             </Grid>
             <Grid item xs={12} md={6} lg={8}>
               <BarChartWidget
                 title="Ticktes"
                 sx={{ height: "100%" }}
-                chartLabels={["Pakala", "Ramchandrapuram", "Chinnagottigallu", "Chandragiri", "Yerravanipalem", "Tirupathi (Rural)"]}
+                chartLabels={[
+                  "Pakala",
+                  "Ramchandrapuram",
+                  "Chinnagottigallu",
+                  "Chandragiri",
+                  "Yerravanipalem",
+                  "Tirupathi (Rural)",
+                ]}
                 chartColors={[Colors.completedColor, Colors.pendingColor]}
                 chartData={[
                   {
@@ -216,7 +265,14 @@ const DashboardApp = ({ dashboard, getOpinionDashboard, clearDashboardReducer })
                     value: dashboard.opinion?.age?.["80-80+"] ?? 0,
                   },
                 ]}
-                chartColors={[Colors.Age1Color, Colors.Age2Color, Colors.Age3Color, Colors.Age4Color, Colors.Age5Color, Colors.Age6Color]}
+                chartColors={[
+                  Colors.Age1Color,
+                  Colors.Age2Color,
+                  Colors.Age3Color,
+                  Colors.Age4Color,
+                  Colors.Age5Color,
+                  Colors.Age6Color,
+                ]}
               />
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
@@ -309,7 +365,8 @@ const DashboardApp = ({ dashboard, getOpinionDashboard, clearDashboardReducer })
                   },
                   {
                     label: "Non Residental",
-                    value: dashboard.opinion?.residential?.["nonresidential"] ?? 0,
+                    value:
+                      dashboard.opinion?.residential?.["nonresidential"] ?? 0,
                   },
                 ]}
               />

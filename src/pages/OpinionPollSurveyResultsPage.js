@@ -1,5 +1,13 @@
 import { useEffect, useState } from "react";
-import { Grid, Container, Typography, Box, TextField, Card, MenuItem } from "@mui/material";
+import {
+  Grid,
+  Container,
+  Typography,
+  Box,
+  TextField,
+  Card,
+  MenuItem,
+} from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -9,10 +17,22 @@ import PollResultsBarChartWidget from "../sections/opinionPollSurveyResults/Poll
 import SearchByFilter from "../sections/common/SearchByFilter";
 import { getOpinionResults, clearDashboardReducer } from "../actions/dashboard";
 import { BarChartWidget } from "../sections/common";
-import { BJPColor, CONGRESSColor, JSPColor, NETURALColor, OTHERColor, TDPColor, YSRCPColor } from "../utils/constants";
+import {
+  BJPColor,
+  CONGRESSColor,
+  JSPColor,
+  NETURALColor,
+  OTHERColor,
+  TDPColor,
+  YSRCPColor,
+} from "../utils/constants";
 import { searchFiltercolor } from "../constants";
 
-const OpinionPollSurveyResultsPage = ({ dashboard, getOpinionResults, clearDashboardReducer }) => {
+const OpinionPollSurveyResultsPage = ({
+  dashboard,
+  getOpinionResults,
+  clearDashboardReducer,
+}) => {
   const [filterValues, setFilterValues] = useState(null);
   const [isLoading, setLoading] = useState(false);
 
@@ -29,19 +49,21 @@ const OpinionPollSurveyResultsPage = ({ dashboard, getOpinionResults, clearDashb
   };
 
   return (
-    <Page title="View Tickets">
+    <Page title=" Opinion Results">
       <Container maxWidth="xl">
-        <Typography variant="h4" sx={{ mb: 1 }}>
+        {/* <Typography variant="h4" sx={{ mb: 1 }}>
           Opinion Results
-        </Typography>
+        </Typography> */}
         <Card sx={{ p: 3, backgroundColor: searchFiltercolor }}>
-          <Typography sx={{ pb: 2 }}>Search by filter</Typography>
-
           <Grid container spacing={2} alignItems="center">
             <SearchByFilter onChanged={(value) => setFilterValues(value)} />
 
             <Grid item xs={12} md={6} lg={2}>
-              <LoadingButton loading={isLoading} variant="contained" onClick={onSubmit}>
+              <LoadingButton
+                loading={isLoading}
+                variant="contained"
+                onClick={onSubmit}
+              >
                 Search
               </LoadingButton>
             </Grid>
@@ -74,22 +96,59 @@ const OpinionPollSurveyResultsPage = ({ dashboard, getOpinionResults, clearDashb
               <BarChartWidget
                 distributed={true}
                 withCard={false}
-                chartLabels={["Neutral", "YCP", "TDP", "JSP", "Congress", "BJP", "Others"]}
+                chartLabels={[
+                  "Neutral",
+                  "YCP",
+                  "TDP",
+                  "JSP",
+                  "Congress",
+                  "BJP",
+                  "Others",
+                ]}
                 chartData={[
                   {
                     name: "Total",
                     data: [
-                      dashboard.opinionResults.reduce((sum, e) => sum + e.neutral, 0),
-                      dashboard.opinionResults.reduce((sum, e) => sum + e.ysrcp, 0),
-                      dashboard.opinionResults.reduce((sum, e) => sum + e.tdp, 0),
-                      dashboard.opinionResults.reduce((sum, e) => sum + e.janasena, 0),
-                      dashboard.opinionResults.reduce((sum, e) => sum + e.congress, 0),
-                      dashboard.opinionResults.reduce((sum, e) => sum + e.bjp, 0),
-                      dashboard.opinionResults.reduce((sum, e) => sum + e.otherss, 0),
+                      dashboard.opinionResults.reduce(
+                        (sum, e) => sum + e.neutral,
+                        0
+                      ),
+                      dashboard.opinionResults.reduce(
+                        (sum, e) => sum + e.ysrcp,
+                        0
+                      ),
+                      dashboard.opinionResults.reduce(
+                        (sum, e) => sum + e.tdp,
+                        0
+                      ),
+                      dashboard.opinionResults.reduce(
+                        (sum, e) => sum + e.janasena,
+                        0
+                      ),
+                      dashboard.opinionResults.reduce(
+                        (sum, e) => sum + e.congress,
+                        0
+                      ),
+                      dashboard.opinionResults.reduce(
+                        (sum, e) => sum + e.bjp,
+                        0
+                      ),
+                      dashboard.opinionResults.reduce(
+                        (sum, e) => sum + e.otherss,
+                        0
+                      ),
                     ],
                   },
                 ]}
-                chartColors={[NETURALColor, YSRCPColor, TDPColor, JSPColor, CONGRESSColor, BJPColor, OTHERColor]}
+                chartColors={[
+                  NETURALColor,
+                  YSRCPColor,
+                  TDPColor,
+                  JSPColor,
+                  CONGRESSColor,
+                  BJPColor,
+                  OTHERColor,
+                ]}
               />
             </Grid>
           </Grid>
@@ -109,4 +168,7 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { getOpinionResults, clearDashboardReducer })(OpinionPollSurveyResultsPage);
+export default connect(mapStateToProps, {
+  getOpinionResults,
+  clearDashboardReducer,
+})(OpinionPollSurveyResultsPage);

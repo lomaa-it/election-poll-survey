@@ -1,6 +1,14 @@
 import PropTypes from "prop-types";
 import { styled } from "@mui/material/styles";
-import { Box, Stack, AppBar, Toolbar, IconButton, Typography, Badge } from "@mui/material";
+import {
+  Box,
+  Stack,
+  AppBar,
+  Toolbar,
+  IconButton,
+  Typography,
+  Badge,
+} from "@mui/material";
 import { bgBlur } from "../../../utils/cssStyles";
 import Iconify from "../../../components/Iconify";
 import AccountPopover from "./AccountPopover";
@@ -36,6 +44,11 @@ Header.propTypes = {
 };
 
 export default function Header({ onOpenNav }) {
+  // get title from chrome tab and remove this | AP Polling Survey from the title
+
+  // const title = document.title.replace("| AP Polling Survey", "");
+  const title = document.title;
+
   return (
     <StyledRoot elevation={5}>
       <StyledToolbar>
@@ -49,8 +62,23 @@ export default function Header({ onOpenNav }) {
         >
           <Iconify icon="eva:menu-2-fill" />
         </IconButton>
-
-        <Typography>Andhra Pradesh &#8594; Tirupathi</Typography>
+        <Box>
+          <Typography
+            sx={{
+              margin: 0,
+            }}
+          >
+            Andhra Pradesh &#8594; Tirupathi
+          </Typography>
+          <br />
+          <Typography
+            sx={{
+              margin: 0,
+            }}
+          >
+            {title}
+          </Typography>
+        </Box>
 
         <Box sx={{ flexGrow: 1 }} />
 
@@ -62,11 +90,23 @@ export default function Header({ onOpenNav }) {
             sm: 1,
           }}
         >
-          <Box component="img" src={PUBLIC_URL + "/static/images/imgs-1.png"} sx={{ width: 60, height: 60 }} />
+          <Box
+            component="img"
+            src={PUBLIC_URL + "/static/images/imgs-1.png"}
+            sx={{ width: 60, height: 60 }}
+          />
 
-          <Box component="img" src={PUBLIC_URL + "/static/images/imgs-2.png"} sx={{ width: 60, height: 60 }} />
+          <Box
+            component="img"
+            src={PUBLIC_URL + "/static/images/imgs-2.png"}
+            sx={{ width: 60, height: 60 }}
+          />
 
-          <Box component="img" src={PUBLIC_URL + "/static/images/imgs-3.png"} sx={{ width: 60, height: 60 }} />
+          <Box
+            component="img"
+            src={PUBLIC_URL + "/static/images/imgs-3.png"}
+            sx={{ width: 60, height: 60 }}
+          />
 
           <Box p={0.5} />
 

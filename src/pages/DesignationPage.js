@@ -72,11 +72,11 @@ const DesignationPage = ({ dashboard }) => {
   };
 
   return (
-    <Page title="View User">
+    <Page title="Designations">
       <Container maxWidth="xl">
-        <Typography variant="h4" sx={{ mb: 1 }}>
+        {/* <Typography variant="h4" sx={{ mb: 1 }}>
           Designations
-        </Typography>
+        </Typography> */}
 
         <Card sx={{ p: 3 }}>
           <Grid container spacing={2} alignItems="center">

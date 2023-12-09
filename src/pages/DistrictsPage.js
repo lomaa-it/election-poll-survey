@@ -60,11 +60,11 @@ const DistrictsPage = ({ dashboard }) => {
   };
 
   return (
-    <Page title="View User">
+    <Page title="Districts">
       <Container maxWidth="xl">
-        <Typography variant="h4" sx={{ mb: 1 }}>
+        {/* <Typography variant="h4" sx={{ mb: 1 }}>
           Districts
-        </Typography>
+        </Typography> */}
 
         <Card sx={{ p: 3 }}>
           <Grid container spacing={2} alignItems="center">

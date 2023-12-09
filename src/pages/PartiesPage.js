@@ -24,9 +24,9 @@ const PartiesPage = ({ dashboard }) => {
   return (
     <Page title="Parties">
       <Container maxWidth="xl">
-        <Typography variant="h4" sx={{ mb: 1 }}>
+        {/* <Typography variant="h4" sx={{ mb: 1 }}>
           Parties
-        </Typography>
+        </Typography> */}
 
         <Card sx={{ p: 3 }}>
           <Grid container spacing={2} alignItems="center">

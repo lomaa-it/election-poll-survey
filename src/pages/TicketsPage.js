@@ -41,12 +41,12 @@ const TicketsPage = ({ dashboard }) => {
   return (
     <Page title="View Tickets">
       <Container maxWidth="xl">
-        <Typography variant="h4" sx={{ mb: 1 }}>
+        {/* <Typography variant="h4" sx={{ mb: 1 }}>
           View Tickets
-        </Typography>
+        </Typography> */}
 
         <Card sx={{ p: 3, backgroundColor: searchFiltercolor }}>
-          <Typography sx={{ pb: 2 }}>Search by filter</Typography>
+          {/* <Typography sx={{ pb: 2 }}>Search by filter</Typography> */}
 
           <Grid container spacing={2} alignItems="center">
             <SearchByFilter />

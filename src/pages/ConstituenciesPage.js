@@ -85,11 +85,11 @@ const ConstituenciesPage = ({ dashboard }) => {
   };
 
   return (
-    <Page title="View User">
+    <Page title="Constituencies">
       <Container maxWidth="xl">
-        <Typography variant="h4" sx={{ mb: 1 }}>
+        {/* <Typography variant="h4" sx={{ mb: 1 }}>
           Constituencies
-        </Typography>
+        </Typography> */}
 
         <Card sx={{ p: 3 }}>
           <Grid container spacing={2} alignItems="center">

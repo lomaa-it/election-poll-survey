@@ -11,9 +11,6 @@ import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
 
-import ViewUsersList from "../sections/reports/ViewUsersList";
-import Button from "@mui/material/Button";
-import VoterAndVolunteerMappingList from "../sections/reports/VoterAndVolunteerMappingList";
 import SachivalayamList from "../sections/reports/SachivalayamList";
 import { useEffect, useState } from "react";
 import instance from "../utils/axios";
@@ -55,24 +52,24 @@ const Sachivalayam = ({ dashboard }) => {
     const fecthOptionsData = async () => {
       try {
         /// get all states
-        const statesResponse = await instance.get(getAllStatesRoute);
+        const statesResponse = await instance.post(getAllStatesRoute);
         // console.log("states", statesResponse.data.message);
         /// get all districts
-        const districtsResponse = await instance.get(getAllDistrictsRoute);
+        const districtsResponse = await instance.post(getAllDistrictsRoute);
         // console.log("districts", districtsResponse.data.message);
 
         /// get all constituencies
-        const constituenciesResponse = await instance.get(
+        const constituenciesResponse = await instance.post(
           getAllConstituenciesRoute
         );
         // console.log("constituencies", constituenciesResponse.data.message);
 
         /// get all mandals
-        const mandalsResponse = await instance.get(getAllMandalRoute);
+        const mandalsResponse = await instance.post(getAllMandalRoute);
         // console.log("mandals", mandalsResponse.data.message);
 
         /// get all divisions
-        const divisionsResponse = await instance.get(getAllDivisionRoute);
+        const divisionsResponse = await instance.post(getAllDivisionRoute);
         // console.log("divisions", divisionsResponse.data.message);
 
         /// state update
@@ -94,7 +91,7 @@ const Sachivalayam = ({ dashboard }) => {
     const fecthOptionsData = async () => {
       try {
         /// get all sachivalayam
-        const sachivalayamResponse = await instance.get(
+        const sachivalayamResponse = await instance.post(
           getAllSachivalayamRoute
         );
         console.log("sachivalayam", sachivalayamResponse.data.message);
@@ -144,16 +141,24 @@ const Sachivalayam = ({ dashboard }) => {
   };
 
   return (
-    <Page title="View User">
+    <Page title="Sachivalayam">
       <Container maxWidth="xl">
-        <Typography variant="h4" sx={{ mb: 1 }}>
+        {/* <Typography variant="h4" sx={{ mb: 1 }}>
           Sachivalayam
-        </Typography>
+        </Typography> */}
 
         <Card sx={{ p: 3 }}>
           <Grid container spacing={2} alignItems="center">
             <Grid item xs={12} md={6} lg={9}>
-              <SachivalayamList sachivalayamList={fetchedData.sachivalayam} />
+              <SachivalayamList
+                sachivalayamList={fetchedData.sachivalayam}
+                fetchedData={fetchedData}
+                setFetchedData={setFetchedData}
+                selectedValues={selectedValues}
+                setSelectedValues={setSelectedValues}
+                refresh={refresh}
+                setRefresh={setRefresh}
+              />
             </Grid>
             <Grid
               item
