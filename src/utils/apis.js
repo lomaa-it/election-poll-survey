@@ -1,6 +1,11 @@
 // export const baseServerUrl = "http://localhost:8080";
-export const baseServerUrl = "https://poll-7ks0.onrender.com";
+// export const baseServerUrl = "https://poll-7ks0.onrender.com";
 // export const baseServerUrl = "https://cd30-123-201-175-198.ngrok-free.app";
+
+// new api for baseServerUrl
+// export const baseServerUrl = "https://6079-123-201-170-56.ngrok-free.app";
+
+export const baseServerUrl = "https://backend.panoramadevopstech.com";
 
 // Voter Api
 
@@ -21,7 +26,8 @@ export const getAllSachivalayamRoute = "/sachivalayam/getall";
 export const getAllPartsRoute = "/parts/getall";
 export const getAllVillageRoute = "/villages/getall";
 export const getAllDistrictsWithJoinRoute = "/getalldistrictswithjoin";
-export const getAllConstituenciesWithJoinRoute = "/getallconstituencieswithjoin";
+export const getAllConstituenciesWithJoinRoute =
+  "/getallconstituencieswithjoin";
 export const getAllMandalsWithJoinRoute = "/getallmandalswithjoin";
 
 export const getOpinionDashboardRoute = "/getopinionpolldashboard";

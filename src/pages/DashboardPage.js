@@ -50,8 +50,6 @@ const DashboardApp = ({
         </Typography> */}
 
         <Card sx={{ p: 3, backgroundColor: searchFiltercolor }}>
-      
-
           <Grid container spacing={2} alignItems="center">
             <SearchByFilter onChanged={(value) => setFilterValues(value)} />
 

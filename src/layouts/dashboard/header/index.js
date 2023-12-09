@@ -15,6 +15,8 @@ import AccountPopover from "./AccountPopover";
 import { PUBLIC_URL } from "../../../constants";
 import { HeaderColor } from "../../../utils/constants";
 import NotificationsIcon from "@mui/icons-material/Notifications";
+import { useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 const NAV_WIDTH = 280;
 
@@ -44,10 +46,12 @@ Header.propTypes = {
 };
 
 export default function Header({ onOpenNav }) {
-  // get title from chrome tab and remove this | AP Polling Survey from the title
+  const location = useLocation();
 
-  // const title = document.title.replace("| AP Polling Survey", "");
-  const title = document.title;
+  const [title, setTitle] = useState(document.title);
+  useEffect(() => {
+    setTitle(document.title);
+  }, [location]);
 
   return (
     <StyledRoot elevation={5}>
