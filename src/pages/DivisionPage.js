@@ -137,7 +137,7 @@ const DivisionPage = ({ dashboard }) => {
   };
 
   return (
-    <Page title="Division">
+    <Page title="Divisions">
       <Container maxWidth="xl">
         {/* <Typography variant="h4" sx={{ mb: 1 }}>
           Division

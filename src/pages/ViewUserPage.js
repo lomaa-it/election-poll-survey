@@ -1,4 +1,11 @@
-import { Grid, Container, Typography, Box, TextField, Card } from "@mui/material";
+import {
+  Grid,
+  Container,
+  Typography,
+  Box,
+  TextField,
+  Card,
+} from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -26,7 +33,7 @@ const ViewUserPage = ({ common, clearUserReducer, getAllUsers }) => {
   };
 
   return (
-    <Page title="User List">
+    <Page title="View User">
       <Container maxWidth="xl">
         {/* <Typography variant="h4" sx={{ mb: 1 }}>
           User List
@@ -78,7 +85,11 @@ const ViewUserPage = ({ common, clearUserReducer, getAllUsers }) => {
             </Grid>
 
             <Grid item xs={12} md={6} lg={2}>
-              <LoadingButton loading={isLoading} variant="contained" onClick={onSubmit}>
+              <LoadingButton
+                loading={isLoading}
+                variant="contained"
+                onClick={onSubmit}
+              >
                 Search
               </LoadingButton>
             </Grid>
@@ -99,4 +110,6 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { clearUserReducer, getAllUsers })(ViewUserPage);
+export default connect(mapStateToProps, { clearUserReducer, getAllUsers })(
+  ViewUserPage
+);

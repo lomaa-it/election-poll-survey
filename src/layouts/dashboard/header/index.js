@@ -46,12 +46,27 @@ Header.propTypes = {
 };
 
 export default function Header({ onOpenNav }) {
-  const location = useLocation();
+  // const location = useLocation();
+
+  // const [title, setTitle] = useState(document.title);
+  // useEffect(() => {
+  //   setTitle(document.title);
+  // }, []);
 
   const [title, setTitle] = useState(document.title);
+
   useEffect(() => {
-    setTitle(document.title);
-  }, [location]);
+    const observer = new MutationObserver(() => {
+      //remove this "| AP Polling Survey" from title
+      const title = document.title.split("|")[0] + ":";
+      setTitle(title);
+      // setTitle(document.title);
+    });
+
+    observer.observe(document.querySelector("title"), { childList: true });
+
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <StyledRoot elevation={5}>
@@ -70,6 +85,7 @@ export default function Header({ onOpenNav }) {
           <Typography
             sx={{
               margin: 0,
+              padding: 0,
             }}
           >
             Andhra Pradesh &#8594; Tirupathi
@@ -78,6 +94,7 @@ export default function Header({ onOpenNav }) {
           <Typography
             sx={{
               margin: 0,
+              padding: 0, 
             }}
           >
             {title}

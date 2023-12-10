@@ -164,7 +164,7 @@ const PartsPage = ({ dashboard }) => {
   };
 
   return (
-    <Page title="Part">
+    <Page title="Parts">
       <Container maxWidth="xl">
         {/* <Typography variant="h4" sx={{ mb: 1 }}>
           Parts

@@ -1,13 +1,33 @@
 import * as Yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Grid, Container, Typography, Box, TextField, Card, FormControlLabel, MenuItem } from "@mui/material";
+import {
+  Grid,
+  Container,
+  Typography,
+  Box,
+  TextField,
+  Card,
+  FormControlLabel,
+  MenuItem,
+} from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
 import { useLocation } from "react-router-dom";
 import { CheckBox } from "@mui/icons-material";
-import { getAllDesignationsRoute, getAllStatesRoute, getAllDistrictsRoute, getAllConstituenciesRoute, getAllMandalRoute, getAllDivisionRoute, getAllSachivalayamRoute, getAllPartsRoute, getAllVillageRoute, createUsersRoute } from "../utils/apis";
+import {
+  getAllDesignationsRoute,
+  getAllStatesRoute,
+  getAllDistrictsRoute,
+  getAllConstituenciesRoute,
+  getAllMandalRoute,
+  getAllDivisionRoute,
+  getAllSachivalayamRoute,
+  getAllPartsRoute,
+  getAllVillageRoute,
+  createUsersRoute,
+} from "../utils/apis";
 import { useEffect, useState } from "react";
 import instance from "../utils/axios";
 import { set } from "date-fns";
@@ -19,14 +39,16 @@ import { phoneRegExp } from "../constants";
 const UserRegistrationPage = ({ common, showAlert }) => {
   const props = useLocation().state;
 
-  const pageName = props?.userData == null ? "User Registration" : "Edit User";
+  const pageName = props?.userData == null ? "Add User" : "Edit User";
 
   const [filterValues, setFilterValues] = useState(null);
   const [isLoading, setLoading] = useState(false);
 
   const schema = Yup.object().shape({
     user_displayname: Yup.string().required("Full name is required"),
-    phone_no: Yup.string().matches(phoneRegExp, "Phone number is not valid").required("Phone number is required"),
+    phone_no: Yup.string()
+      .matches(phoneRegExp, "Phone number is not valid")
+      .required("Phone number is required"),
     // password: Yup.string().required("Password is required").min(8, "Password must be at least 8 characters"),
     office_phone_no: Yup.string(),
     age: Yup.string(),
@@ -55,7 +77,11 @@ const UserRegistrationPage = ({ common, showAlert }) => {
   const { handleSubmit, reset } = methods;
 
   const onSubmit = async (data) => {
-    if (!filterValues["mandal"] || !filterValues["division"] || !filterValues["sachivalayam"]) {
+    if (
+      !filterValues["mandal"] ||
+      !filterValues["division"] ||
+      !filterValues["sachivalayam"]
+    ) {
       showAlert({ text: "Please select mandal & division & sachivalyam" });
       return;
     }
@@ -74,7 +100,10 @@ const UserRegistrationPage = ({ common, showAlert }) => {
       };
 
       if (props?.userData != null) {
-        await instance.put(`${createUsersRoute}/${props.userData.user_pk}`, jsonData);
+        await instance.put(
+          `${createUsersRoute}/${props.userData.user_pk}`,
+          jsonData
+        );
         showAlert({ text: "User updated successfully", color: "success" });
       } else {
         await instance.post(createUsersRoute, jsonData);
@@ -115,7 +144,10 @@ const UserRegistrationPage = ({ common, showAlert }) => {
               </Grid> */}
 
               <Grid item xs={12} md={6} lg={3}>
-                <RHFTextField name="office_phone_no" label="Office Phone Number" />
+                <RHFTextField
+                  name="office_phone_no"
+                  label="Office Phone Number"
+                />
               </Grid>
 
               <Grid item xs={12} md={6} lg={3}>
@@ -133,7 +165,11 @@ const UserRegistrationPage = ({ common, showAlert }) => {
 
             <Grid container spacing={2}>
               <Grid item xs={12} md={6} lg={3}>
-                <RHFTextField name="designation_id" label="Select Designation*" select>
+                <RHFTextField
+                  name="designation_id"
+                  label="Select Designation*"
+                  select
+                >
                   {common.designation?.map((item, index) => (
                     <MenuItem key={index} value={item.value}>
                       {item.label}
@@ -142,12 +178,23 @@ const UserRegistrationPage = ({ common, showAlert }) => {
                 </RHFTextField>
               </Grid>
 
-              <SearchByFilter lg={3} defaultValues={defaultValues} showPartNo={false} showVillage={false} showOtherFilters={false} onChanged={(value) => setFilterValues(value)} />
+              <SearchByFilter
+                lg={3}
+                defaultValues={defaultValues}
+                showPartNo={false}
+                showVillage={false}
+                showOtherFilters={false}
+                onChanged={(value) => setFilterValues(value)}
+              />
             </Grid>
           </Card>
 
           <Box sx={{ pt: 2, textAlign: "end" }}>
-            <LoadingButton type="submit" variant="contained" loading={isLoading}>
+            <LoadingButton
+              type="submit"
+              variant="contained"
+              loading={isLoading}
+            >
               Submit
             </LoadingButton>
           </Box>

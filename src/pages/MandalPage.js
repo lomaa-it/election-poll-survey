@@ -120,7 +120,7 @@ const MandalPage = ({ dashboard }) => {
   };
 
   return (
-    <Page title="Mandal">
+    <Page title="Mandals">
       <Container maxWidth="xl">
         {/* <Typography variant="h4" sx={{ mb: 1 }}>
           Mandals

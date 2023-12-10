@@ -41,7 +41,7 @@ const ViewVoterPage = ({ dashboard }) => {
   }, []);
 
   return (
-    <Page title="Voter List">
+    <Page title="View Voter">
       <Container maxWidth="xl">
         {/* <Typography variant="h4" sx={{ mb: 1 }}>
           Voter List

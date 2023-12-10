@@ -73,7 +73,7 @@ const VotingPollSurveyResultsPage = ({ dashboard }) => {
   };
 
   return (
-    <Page title="Voting Poll Survey Results">
+    <Page title="Voting Poll Results">
       <Container maxWidth="xl">
         {/* <Typography variant="h4" sx={{ mb: 1 }}>
           Voting Poll Survey Results

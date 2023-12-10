@@ -16,13 +16,8 @@ import PartiesList from "../sections/reports/PartiesList";
 import { getAllPartiesRoute } from "../utils/apis";
 
 const PartiesPage = ({ dashboard }) => {
-
-  
-
-
-
   return (
-    <Page title="Parties">
+    <Page title="Political Parties">
       <Container maxWidth="xl">
         {/* <Typography variant="h4" sx={{ mb: 1 }}>
           Parties

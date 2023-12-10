@@ -18,11 +18,12 @@ const StyledRoot = styled("div")(({ theme }) => ({
 
 const StyledContent = styled("div")(({ theme }) => ({
   margin: "auto",
-  minHeight: "100vh",
+  height: "100vh",
   display: "flex",
   justifyContent: "center",
+  alignItems: "center",
   flexDirection: "column",
-  padding: theme.spacing(6, 6),
+  padding: theme.spacing(2, 2),
   [theme.breakpoints.up("md")]: {
     padding: theme.spacing(3, 9),
   },
@@ -63,7 +64,7 @@ const LoginPage = () => {
     <Page title="Login">
       <StyledRoot>
         <StyledContent>
-          <Card className={classes.subContainer} sx={{ p: { xs: 2, sm: 3, md: 4, xl: 5 } }}>
+          <Card className={classes.subContainer} sx={{ p: { xs: 2, sm: 3, md: 4, xl: 3 } }}>
             <Grid
               container
               spacing={3}
@@ -89,16 +90,16 @@ const LoginPage = () => {
                     component="img"
                     src={PUBLIC_URL + "/static/images/map.png"}
                     sx={{
-                      width: "75%",
+                      width: "70%",
                       textAlign: "center",
                     }}
                   />
 
-                  <Typography variant="h4" sx={{ mt: 3, textAlign: "center" }}>
+                  <Typography variant="h5" sx={{ mt: 3, textAlign: "center" }}>
                     CHANDRAGIRI CONSTITUENCY
                   </Typography>
 
-                  <Typography variant="h6" sx={{ textAlign: "center", color: "#20287F" }}>
+                  <Typography variant="h7" sx={{ textAlign: "center", color: "#20287F" }}>
                     (ANDHRA PRADESH)
                   </Typography>
                 </Grid>
@@ -116,13 +117,13 @@ const LoginPage = () => {
                     alignItems: "center",
                   }}
                 >
-                  <Box component="img" src={PUBLIC_URL + "/static/images/mohith.png"} sx={{ width: "75%" }} />
+                  <Box component="img" src={PUBLIC_URL + "/static/images/mohith.png"} sx={{ width: "70%" }} />
 
-                  <Typography variant="h4" sx={{ mt: 3, textAlign: "center" }}>
+                  <Typography variant="h5" sx={{ mt: 3, textAlign: "center" }}>
                     CHEVIREDDY MOHITH REDDY
                   </Typography>
 
-                  <Typography variant="h6" sx={{ textAlign: "center", color: "#20287F" }}>
+                  <Typography variant="h7" sx={{ textAlign: "center", color: "#20287F" }}>
                     (TUDA CHAIRMAN & TTD BOARD MEMBER)
                   </Typography>
                 </Grid>
@@ -130,22 +131,22 @@ const LoginPage = () => {
 
               <Grid item xs={12} md={12} lg={4}>
                 <Box sx={{ pb: 2, display: "flex", justifyContent: "end" }}>
-                  <Box className={classes.linearAvatar} component="img" src={PUBLIC_URL + "/static/images/crbr.jpg"} sx={{ width: 100, height: 100, mr: 2 }} />
+                  <Box className={classes.linearAvatar} component="img" src={PUBLIC_URL + "/static/images/crbr.jpg"} sx={{ width: 70, height: 70, mr: 2 }} />
 
-                  <Box className={classes.linearAvatar} component="img" src={PUBLIC_URL + "/static/images/jagan.jpg"} sx={{ width: 100, height: 100 }} />
+                  <Box className={classes.linearAvatar} component="img" src={PUBLIC_URL + "/static/images/jagan.jpg"} sx={{ width: 70, height: 70 }} />
                 </Box>
 
                 <Container maxWidth="sm">
-                  <Card className={classes.card} elevation={24} sx={{ p: { xs: 2, sm: 3, md: 4, xl: 5 } }}>
+                  <Card className={classes.card} elevation={24} sx={{ p: { xs: 2, sm: 3, md: 4, xl: 3 } }}>
                     <Box sx={{ pb: 1, display: "flex", justifyContent: "center" }}>
-                      <Box component="img" src={PUBLIC_URL + "/static/assets/users.png"} sx={{ width: 80, height: 80 }} />
+                      <Box component="img" src={PUBLIC_URL + "/static/assets/users.png"} sx={{ width: 60, height: 60 }} />
                     </Box>
 
-                    <Typography variant="h4" gutterBottom>
+                    <Typography variant="h5" gutterBottom>
                       Login
                     </Typography>
 
-                    <Typography sx={{ color: "text.secondary", mb: 5 }}>Enter your credentials to continue</Typography>
+                    <Typography sx={{ color: "text.secondary", mb: 3 }}>Enter your credentials to continue</Typography>
 
                     <LoginForm />
                   </Card>

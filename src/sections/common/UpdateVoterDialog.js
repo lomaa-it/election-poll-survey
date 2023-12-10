@@ -2,22 +2,64 @@ import * as Yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import React, { useEffect, useState } from "react";
-import { Box, IconButton, Dialog, MenuItem, Grid, Radio, DialogContent, DialogTitle, FormControlLabel, DialogActions, Button, Typography, FormLabel } from "@mui/material";
-import { PARTY_ID, casteList, phoneRegExp, religionList } from "../../constants";
+import {
+  Box,
+  IconButton,
+  Dialog,
+  MenuItem,
+  Grid,
+  Radio,
+  DialogContent,
+  DialogTitle,
+  FormControlLabel,
+  DialogActions,
+  Button,
+  Typography,
+  FormLabel,
+} from "@mui/material";
+import FormControl from "@mui/material/FormControl";
+import RadioGroup from "@mui/material/RadioGroup";
+
+import {
+  PARTY_ID,
+  casteList,
+  phoneRegExp,
+  religionList,
+} from "../../constants";
 import { LoadingButton } from "@mui/lab";
 import EditIcon from "@mui/icons-material/Edit";
-import { BJPRadio, CongressRadio, JSPRadio, NeutralRadio, OthersRadio, TDPRadio, YCPRadio } from "./PartyRadioButtons";
-import { FormProvider, RHFRadio, RHFTextField } from "../../components/hook-form";
+import {
+  BJPRadio,
+  CongressRadio,
+  JSPRadio,
+  NeutralRadio,
+  OthersRadio,
+  TDPRadio,
+  YCPRadio,
+} from "./PartyRadioButtons";
+import {
+  FormProvider,
+  RHFRadio,
+  RHFTextField,
+} from "../../components/hook-form";
 import { connect } from "react-redux";
 import { showAlert } from "../../actions/alert";
 import { updateVoterDetails } from "../../actions/voter";
+import { RHFTextField2 } from "../../components/hook-form/RHFTextField";
 
-const UpdateVoterDialog = ({ common, voterData, showAlert, updateVoterDetails }) => {
+const UpdateVoterDialog = ({
+  common,
+  voterData,
+  showAlert,
+  updateVoterDetails,
+}) => {
   const [open, setOpen] = useState(false);
   const [isLoading, setLoading] = useState(false);
 
   const schema = Yup.object().shape({
-    phone_no: Yup.string().matches(phoneRegExp, "Phone number is not valid").required("Phone number is required"),
+    phone_no: Yup.string()
+      .matches(phoneRegExp, "Phone number is not valid")
+      .required("Phone number is required"),
     is_resident: Yup.string(),
     religion_id: Yup.string(),
     caste_id: Yup.string(),
@@ -56,7 +98,14 @@ const UpdateVoterDialog = ({ common, voterData, showAlert, updateVoterDetails })
 
     setLoading(true);
 
-    const jsonData = { ...data, voter_phone_no: data.phone_no, religion_name: common.religion.find((e) => e.value == data.religion_id)?.label ?? "", caste_name: common.caste.find((e) => e.value == data.caste_id)?.label ?? "" };
+    const jsonData = {
+      ...data,
+      voter_phone_no: data.phone_no,
+      religion_name:
+        common.religion.find((e) => e.value == data.religion_id)?.label ?? "",
+      caste_name:
+        common.caste.find((e) => e.value == data.caste_id)?.label ?? "",
+    };
 
     var result = await updateVoterDetails(voterData.voter_pkk, jsonData);
     if (result) {
@@ -82,10 +131,16 @@ const UpdateVoterDialog = ({ common, voterData, showAlert, updateVoterDetails })
           <DialogTitle>Update Details</DialogTitle>
           <DialogContent>
             <Box py={1}>
-              <Typography sx={{ mb: 3 }}>Name: {voterData.voter_name}</Typography>
+              <Typography sx={{ mb: 3 }}>
+                Name: {voterData.voter_name}
+              </Typography>
               <Grid container spacing={3} alignItems="center">
                 <Grid item xs={12} md={12} lg={12}>
-                  <RHFTextField name="phone_no" label="Phone Number" />
+                  <RHFTextField2
+                    name="phone_no"
+                    label="Phone Number"
+                    type="number"
+                  />
                 </Grid>
                 <Grid item xs={12} md={12} lg={12}>
                   <RHFRadio
@@ -97,11 +152,17 @@ const UpdateVoterDialog = ({ common, voterData, showAlert, updateVoterDetails })
                   />
                 </Grid>
                 <Grid item xs={12} md={12} lg={12}>
-                  <RHFTextField name="current_address" label="Current Address" />
+                  <RHFTextField
+                    name="current_address"
+                    label="Current Address"
+                  />
                 </Grid>
                 {residential == 0 && (
                   <Grid item xs={12} md={12} lg={12}>
-                    <RHFTextField name="permenent_address" label="Permanent Address" />
+                    <RHFTextField
+                      name="permenent_address"
+                      label="Permanent Address"
+                    />
                   </Grid>
                 )}
                 <Grid item xs={12} md={6} lg={6}>
@@ -123,29 +184,107 @@ const UpdateVoterDialog = ({ common, voterData, showAlert, updateVoterDetails })
                   </RHFTextField>
                 </Grid>
                 <Grid item xs={12} md={6} lg={6}>
-                  <RHFTextField name="disability" label="Disability" select>
+                  {/* <RHFTextField name="disability" label="Disability" select>
                     <MenuItem value={1}>Yes</MenuItem>
                     <MenuItem value={0}>No</MenuItem>
-                  </RHFTextField>
+                  </RHFTextField> */}
+
+                  <FormControl>
+                    <FormLabel id="demo-row-radio-buttons-group-label">
+                      Disability
+                    </FormLabel>
+                    <RadioGroup
+                      row
+                      aria-labelledby="demo-row-radio-buttons-group-label"
+                      name="row-radio-buttons-group"
+                      defaultValue={0} // Set default value here
+                    >
+                      <FormControlLabel
+                        value={1}
+                        control={<Radio />}
+                        label="Yes"
+                      />
+                      <FormControlLabel
+                        value={0}
+                        control={<Radio />}
+                        label="No"
+                      />
+                    </RadioGroup>
+                  </FormControl>
                 </Grid>
                 <Grid item xs={12} md={6} lg={6}>
-                  <RHFTextField name="govt_employee" label="Govt Employee" select>
+                  {/* <RHFTextField
+                    name="govt_employee"
+                    label="Govt Employee"
+                    select
+                  >
                     <MenuItem value={1}>Yes</MenuItem>
                     <MenuItem value={0}>No</MenuItem>
-                  </RHFTextField>
+                  </RHFTextField> */}
+
+                  <FormControl>
+                    <FormLabel id="demo-row-radio-buttons-group-label">
+                      Govt Employee
+                    </FormLabel>
+                    <RadioGroup
+                      row
+                      aria-labelledby="demo-row-radio-buttons-group-label"
+                      name="row-radio-buttons-group"
+                      defaultValue={0} // Set default value here
+                    >
+                      <FormControlLabel
+                        value={1}
+                        control={<Radio />}
+                        label="Yes"
+                      />
+                      <FormControlLabel
+                        value={0}
+                        control={<Radio />}
+                        label="No"
+                      />
+                    </RadioGroup>
+                  </FormControl>
                 </Grid>
                 <Grid item xs={12} md={12} lg={12}>
                   <RHFRadio
                     name="intrested_party"
                     labelPlacement="top"
                     options={[
-                      { label: "Neutral", value: PARTY_ID.NEUTRAL, custom: <NeutralRadio /> },
-                      { label: "YSRCP", value: PARTY_ID.YSRCP, custom: <YCPRadio /> },
-                      { label: "TDP", value: PARTY_ID.TDP, custom: <TDPRadio /> },
-                      { label: "JSP", value: PARTY_ID.JANASENA, custom: <JSPRadio /> },
-                      { label: "BJP", value: PARTY_ID.BJP, custom: <BJPRadio /> },
-                      { label: "Congress", value: PARTY_ID.CONGRESS, custom: <CongressRadio /> },
-                      { label: "Others", value: PARTY_ID.OTHERS, custom: <OthersRadio /> },
+                      {
+                        label: "Neutral",
+                        value: PARTY_ID.NEUTRAL,
+                        custom: <NeutralRadio fontSize={22} />,
+                      },
+                      {
+                        label: "YSRCP",
+                        value: PARTY_ID.YSRCP,
+                        custom: <YCPRadio fontSize={22} />,
+                      },
+                      {
+                        label: "TDP",
+                        value: PARTY_ID.TDP,
+                        custom: <TDPRadio fontSize={22} />,
+                      },
+                      {
+                        label: "JSP",
+                        value: PARTY_ID.JANASENA,
+                        custom: <JSPRadio fontSize={22} />,
+                      },
+                      {
+                        label: "BJP",
+                        value: PARTY_ID.BJP,
+                        custom: <BJPRadio fontSize={22} />,
+                      },
+                      {
+                        label: "Congress",
+                        value: PARTY_ID.CONGRESS,
+                        custom: <CongressRadio fontSize={22} />,
+                      },
+                      {
+                        label: "Others",
+                        value: PARTY_ID.OTHERS,
+                        custom: <OthersRadio fontSize={22} />,
+                      },
                     ]}
                     sx={{
                       ".MuiFormControlLabel-label": {
@@ -165,7 +304,11 @@ const UpdateVoterDialog = ({ common, voterData, showAlert, updateVoterDetails })
               Cancel
             </Button>
 
-            <LoadingButton type="submit" variant="contained" loading={isLoading}>
+            <LoadingButton
+              type="submit"
+              variant="contained"
+              loading={isLoading}
+            >
               Submit
             </LoadingButton>
           </DialogActions>
@@ -181,4 +324,6 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { showAlert, updateVoterDetails })(UpdateVoterDialog);
+export default connect(mapStateToProps, { showAlert, updateVoterDetails })(
+  UpdateVoterDialog
+);
