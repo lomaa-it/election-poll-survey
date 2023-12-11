@@ -5,8 +5,8 @@
 // new api for baseServerUrl
 // export const baseServerUrl = "https://6079-123-201-170-56.ngrok-free.app";
 
-export const baseServerUrl = "https://37bd-123-201-174-19.ngrok-free.app";
-// export const baseServerUrl = "https://backend.cgrysrcongress.in";
+// export const baseServerUrl = "https://37bd-123-201-174-19.ngrok-free.app";
+export const baseServerUrl = "https://backend.cgrysrcongress.in";
 
 // Voter Api
 
