@@ -22,6 +22,7 @@ import { LOGIN_TYPES, PUBLIC_URL, phoneRegExp } from "../../../constants";
 import instance from "../../../utils/axios";
 import { loginRoute } from "../../../utils/apis";
 import { RHFTextField2 } from "../../../components/hook-form/RHFTextField";
+import { he } from "date-fns/locale";
 
 const LoginForm = ({ showAlert, authSuccess }) => {
   const navigate = useNavigate();
@@ -30,8 +31,12 @@ const LoginForm = ({ showAlert, authSuccess }) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const LoginSchema = Yup.object().shape({
-    phone_no: Yup.string().matches(phoneRegExp, "Phone number is not valid").required("Phone number is required"),
-    password: Yup.string().required("Password is required").min(4, "Password must be at least 4 characters"),
+    phone_no: Yup.string()
+      .matches(phoneRegExp, "Phone number is not valid")
+      .required("Phone number is required"),
+    password: Yup.string()
+      .required("Password is required")
+      .min(4, "Password must be at least 4 characters"),
   });
 
   const defaultValues = {
@@ -107,7 +112,7 @@ const LoginForm = ({ showAlert, authSuccess }) => {
         <Box
           component="img"
           src={PUBLIC_URL + "/static/images/captcha.jpg"}
-          sx={{ width: "55%" }}
+          sx={{ width: "50%" }}
         />
         {/* <img
           className="captcha-image"
@@ -115,7 +120,13 @@ const LoginForm = ({ showAlert, authSuccess }) => {
           alt="captcha"
         /> */}
 
-        <RHFTextField name="captcha" label="Enter Captcha" />
+        <RHFTextField
+          name="captcha"
+          label="Enter Captcha"
+          sx={{
+            height: "30px",
+          }}
+        />
       </Stack>
 
       <Stack
@@ -124,7 +135,7 @@ const LoginForm = ({ showAlert, authSuccess }) => {
         justifyContent="end"
         sx={{ my: 1 }}
       >
-        <Link to="/forget-password" variant="subtitle2" underline="hover">
+        <Link to="/forget-password" variant="subtitle2" underline="hover" > 
           Forgot password?
         </Link>
       </Stack>
