@@ -182,7 +182,7 @@ const SearchByFilter = ({ account, common, defaultValues, getAllCommonData, onCh
           <Grid item xs={12} md={6} lg={lg}>
             <RHFAutoComplete
               name="Disable"
-              label="Disability"
+              label="Disability (40% or above)"
               options={[
                 {
                   label: "Yes",
