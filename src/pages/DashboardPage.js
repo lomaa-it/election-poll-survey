@@ -53,7 +53,7 @@ const DashboardApp = ({
           <Grid container spacing={2} alignItems="center">
             <SearchByFilter onChanged={(value) => setFilterValues(value)} />
 
-            <Grid item xs={12} md={6} lg={2}>
+            {/* <Grid item xs={12} md={6} lg={2}>
               <TextField
                 size="small"
                 sx={{
@@ -77,7 +77,7 @@ const DashboardApp = ({
                 fullWidth
                 select
               />
-            </Grid>
+            </Grid> */}
 
             <Grid item xs={12} md={6} lg={2}>
               <LoadingButton
