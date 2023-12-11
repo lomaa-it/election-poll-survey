@@ -11,65 +11,6 @@ export const searchFiltercolor = "#D3F0E3";
 export const LIMIT_PER_PAGE = 50;
 export const ROWS_PER_PAGE_OPTION = [50, 100, 200];
 
-export const religionList = [
-  {
-    label: "Hindu",
-    value: 10,
-  },
-  {
-    label: "Muslim",
-    value: 20,
-  },
-  {
-    label: "Christian",
-    value: 30,
-  },
-  {
-    label: "Sikh",
-    value: 40,
-  },
-  {
-    label: "Buddhist",
-    value: 50,
-  },
-  {
-    label: "Jain",
-    value: 60,
-  },
-  {
-    label: "Other",
-    value: 70,
-  },
-];
-
-export const casteList = [
-  {
-    label: "Brahmin",
-    value: 10,
-  },
-  {
-    label: "Kshatriya",
-    value: 20,
-  },
-  {
-    label: "Vaishya",
-    value: 30,
-  },
-
-  {
-    label: "Reddy",
-    value: "70",
-  },
-  {
-    label: "Raju",
-    value: "20",
-  },
-  {
-    label: "Other",
-    value: "45",
-  },
-];
-
 export const PUBLIC_URL = process.env.PUBLIC_URL;
 
 export const phoneRegExp = /\b\d{10}\b/;
