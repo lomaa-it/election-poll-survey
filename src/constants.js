@@ -8,6 +8,9 @@ export const LOGIN_TYPES = ["MLA", "MANDAL_CONVENER/CPRO", "PRO", "APRO", "BOOTH
 
 export const searchFiltercolor = "#D3F0E3";
 
+export const LIMIT_PER_PAGE = 50;
+export const ROWS_PER_PAGE_OPTION = [50, 100, 200];
+
 export const religionList = [
   {
     label: "Hindu",

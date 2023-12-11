@@ -1,3 +1,4 @@
+import { LIMIT_PER_PAGE } from "../constants";
 import { changeOpinionPollRoute, getAllNavaratnaluRoute, getAllVotorsSurveyRoute, saveOrupdatedSurvey } from "../utils/apis";
 import instance from "../utils/axios";
 
@@ -7,40 +8,43 @@ export const clearVoterReducer = () => async (dispatch) => {
   });
 };
 
-export const getAllVotersSurvey = (data) => async (dispatch) => {
-  dispatch({
-    type: "VOTER_LOAD_START",
-  });
-
-  try {
-    const jsonData = {
-      state_id: 5,
-      district_id: 6,
-      consistency_id: 3,
-      mandal_id: data.mandal?.mandal_pk,
-      division_id: data.division?.division_pk,
-      sachivalayam_id: data.sachivalayam?.sachivalayam_pk,
-      part_no: data.partno?.part_no,
-      village_id: data.village?.village_pk,
-    };
-
-    const response = await instance.post(getAllVotorsSurveyRoute, jsonData);
-    const responseData = response.data?.message ?? [];
-
-    // console.log(responseData);
-
+export const getAllVotersSurvey =
+  (data, pageNo = 0, limit = LIMIT_PER_PAGE) =>
+  async (dispatch) => {
     dispatch({
-      type: "VOTER_LOAD_SUCCESS",
-      payload: responseData,
+      type: "VOTER_LOAD_START",
     });
-  } catch (err) {
-    console.log(err);
-    dispatch({
-      type: "VOTER_LOAD_ERROR",
-      payload: err.message,
-    });
-  }
-};
+
+    try {
+      const jsonData = {
+        state_id: 5,
+        district_id: 6,
+        consistency_id: 3,
+        mandal_id: data.mandal?.mandal_pk ?? null,
+        division_id: data.division?.division_pk ?? null,
+        sachivalayam_id: data.sachivalayam?.sachivalayam_pk ?? null,
+        part_no: data.partno?.part_no ?? null,
+        village_id: data.village?.village_pk ?? null,
+      };
+
+      const response = await instance.post(`${getAllVotorsSurveyRoute}?page=${pageNo + 1}&&limit=${limit}`, jsonData);
+      const responseData = response.data;
+      console.log(responseData);
+
+      const itemsList = responseData?.data ?? [];
+
+      dispatch({
+        type: "VOTER_LOAD_SUCCESS",
+        payload: { data: itemsList, count: responseData.count, completed: responseData.completed, pending: responseData.pending, page: pageNo, limit: limit },
+      });
+    } catch (err) {
+      console.log(err);
+      dispatch({
+        type: "VOTER_LOAD_ERROR",
+        payload: err.message,
+      });
+    }
+  };
 
 export const changeOpinionPoll = (id, value) => async (dispatch) => {
   try {

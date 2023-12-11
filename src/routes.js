@@ -58,71 +58,31 @@ const Router = () => {
       <Route path="/" element={<ProtectedRoute type={LOGIN_TYPES} />}>
         <Route path="" element={<DashboardLayout type={LOGIN_TYPES[0]} />}>
           <Route path="dashboard" element={<DashboardPage />} />
-          <Route
-            path="voting-poll-dashboard"
-            element={<VotingPollDashBoardPage />}
-          />
+          <Route path="voting-poll-dashboard" element={<VotingPollDashBoardPage />} />
           {/* Voting Opinion Survey with Sub Menu */}
-          <Route
-            path="opinionsurvey/survey"
-            element={<OpinionPollSurveyPage />}
-          />
-          <Route
-            path="opinionsurvey/results"
-            element={<OpinionPollSurveyResultsPage />}
-          />
+          <Route path="opinionsurvey/survey" element={<OpinionPollSurveyPage />} />
+          <Route path="opinionsurvey/results" element={<OpinionPollSurveyResultsPage />} />
           <Route path="opinionsurvey/reports" element={<SurveyReportsPage />} />
           {/* Voting Poll Survey with Sub Menu */}
-          <Route
-            path="voting-poll-survey/survey"
-            element={<VotingPollSurveyPage />}
-          />
-          <Route
-            path="/voting-poll-survey/results"
-            element={<VotingPollSurveyResultsPage />}
-          />
-          <Route
-            path="/voting-poll-survey/reports"
-            element={<VotingSurveyReportsPage />}
-          />
-          <Route
-            path="voting-polling-reports"
-            element={<VotingPollingReportsPage />}
-          />
-          <Route
-            path="/voting-poll-survey/report-by-survey-and-voting-reason"
-            element={<ReportbySurveyandVotingReasonPage />}
-          />
+          <Route path="voting-poll-survey/survey" element={<VotingPollSurveyPage />} />
+          <Route path="/voting-poll-survey/results" element={<VotingPollSurveyResultsPage />} />
+          <Route path="/voting-poll-survey/reports" element={<VotingSurveyReportsPage />} />
+          <Route path="voting-polling-reports" element={<VotingPollingReportsPage />} />
+          <Route path="/voting-poll-survey/report-by-survey-and-voting-reason" element={<ReportbySurveyandVotingReasonPage />} />
           {/* User Management With Sub Menu */}
-          <Route
-            path="/user-management/user-registration"
-            element={<UserRegistrationPage />}
-          />
+          <Route path="/user-management/user-registration" element={<UserRegistrationPage />} />
           <Route path="/user-management/view-user" element={<ViewUserPage />} />
           {/* Voter Management with Sub Menu */}
           <Route path="tickets" element={<TicketsPage />} />
           <Route path="view-voter" element={<ViewVoterPage />} />
-          <Route
-            path="voter-registration"
-            element={<VoterRegistrationPage />}
-          />
-          <Route
-            path="voting-poll-results"
-            element={<VotingPollResultsPage />}
-          />
-          <Route
-            path="polling-results-by-state"
-            element={<VotingPollingResultsbyStatePage />}
-          />
+          <Route path="voter-registration" element={<VoterRegistrationPage />} />
+          <Route path="voting-poll-results" element={<VotingPollResultsPage />} />
+          <Route path="polling-results-by-state" element={<VotingPollingResultsbyStatePage />} />
           <Route path="add-ticket1" element={<AddTicketPage />} />
           <Route path="absent-ticket" element={<AbsentTicketPage />} />
-          <Route
-            path="voter-and-volunteer-mapping"
-            element={<VoterAndVolunteerMappingPage />}
-          />
+          <Route path="voter-and-volunteer-mapping" element={<VoterAndVolunteerMappingPage />} />
           <Route path="user-mapping" element={<UserMappingPage />} />
-          <Route path="divisions" element={<DivisionPage />} />{" "}
-          <Route path="mandals" element={<MandalPage />} />
+          <Route path="divisions" element={<DivisionPage />} /> <Route path="mandals" element={<MandalPage />} />
           <Route path="constituencies" element={<ConstituenciesPage />} />
           <Route path="districts" element={<DistrictsPage />} />
           <Route path="states" element={<StatesPage />} />
@@ -136,18 +96,9 @@ const Router = () => {
 
       <Route path="/" element={<ProtectedRoute type={[LOGIN_TYPES[6]]} />}>
         <Route path="" element={<DashboardLayout type={LOGIN_TYPES[6]} />}>
-          <Route
-            path="gruhasarathi/opinionsurvey/survey"
-            element={<OpinionPollSurveyPage />}
-          />
-          <Route
-            path="gruhasarathi/opinionsurvey/results"
-            element={<OpinionPollSurveyResultsPage />}
-          />
-          <Route
-            path="gruhasarathi/opinionsurvey/reports"
-            element={<SurveyReportsPage />}
-          />
+          <Route path="gruhasarathi/opinionsurvey/survey" element={<OpinionPollSurveyPage />} />
+          <Route path="gruhasarathi/opinionsurvey/results" element={<OpinionPollSurveyResultsPage />} />
+          <Route path="gruhasarathi/opinionsurvey/reports" element={<SurveyReportsPage />} />
         </Route>
       </Route>
 

@@ -1,6 +1,13 @@
+import { LIMIT_PER_PAGE } from "../constants";
+
 const initialState = {
   isLoading: false,
   data: [],
+  count: 0,
+  completed: 0,
+  pending: 0,
+  page: 0,
+  limit: LIMIT_PER_PAGE,
   errorMessage: null,
 };
 
@@ -12,6 +19,11 @@ export default function voterReducer(state = initialState, action) {
         ...state,
         isLoading: true,
         data: [],
+        count: 0,
+        completed: 0,
+        pending: 0,
+        page: 0,
+        limit: LIMIT_PER_PAGE,
         errorMessage: null,
       };
 
@@ -19,7 +31,7 @@ export default function voterReducer(state = initialState, action) {
       return {
         ...state,
         isLoading: false,
-        data: payload,
+        ...payload,
       };
 
     case "VOTER_LOAD_ERROR":
@@ -47,6 +59,11 @@ export default function voterReducer(state = initialState, action) {
       return {
         isLoading: false,
         data: [],
+        count: 0,
+        completed: 0,
+        pending: 0,
+        page: 0,
+        limit: LIMIT_PER_PAGE,
         errorMessage: null,
       };
 

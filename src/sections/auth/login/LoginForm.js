@@ -3,14 +3,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import {
-  Stack,
-  IconButton,
-  InputAdornment,
-  TextField,
-  Typography,
-  Box,
-} from "@mui/material";
+import { Stack, IconButton, InputAdornment, TextField, Typography, Box } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import { LoadingButton } from "@mui/lab";
 import Iconify from "../../../components/Iconify";
@@ -31,12 +24,8 @@ const LoginForm = ({ showAlert, authSuccess }) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const LoginSchema = Yup.object().shape({
-    phone_no: Yup.string()
-      .matches(phoneRegExp, "Phone number is not valid")
-      .required("Phone number is required"),
-    password: Yup.string()
-      .required("Password is required")
-      .min(4, "Password must be at least 4 characters"),
+    phone_no: Yup.string().matches(phoneRegExp, "Phone number is not valid").required("Phone number is required"),
+    password: Yup.string().required("Password is required").min(4, "Password must be at least 4 characters"),
     captcha: Yup.string().required("Captcha is required"),
   });
 
@@ -88,7 +77,7 @@ const LoginForm = ({ showAlert, authSuccess }) => {
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-      <Stack spacing={2}>
+      <Stack spacing={1.5}>
         <RHFTextField2 name="phone_no" label="Phone number" type="number" />
 
         <RHFTextField
@@ -98,23 +87,14 @@ const LoginForm = ({ showAlert, authSuccess }) => {
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <IconButton
-                  onClick={() => setShowPassword(!showPassword)}
-                  edge="end"
-                >
-                  <Iconify
-                    icon={showPassword ? "eva:eye-fill" : "eva:eye-off-fill"}
-                  />
+                <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                  <Iconify icon={showPassword ? "eva:eye-fill" : "eva:eye-off-fill"} />
                 </IconButton>
               </InputAdornment>
             ),
           }}
         />
-        <Box
-          component="img"
-          src={PUBLIC_URL + "/static/images/captcha.jpg"}
-          sx={{ width: "45%" }}
-        />
+        <Box component="img" src={PUBLIC_URL + "/static/images/captcha.jpg"} sx={{ width: "150px" }} />
         {/* <img
           className="captcha-image"
           src="https://miro.medium.com/v2/resize:fit:1024/0*obnHri9w__4Cmhbj.jpg"
@@ -130,24 +110,13 @@ const LoginForm = ({ showAlert, authSuccess }) => {
         />
       </Stack>
 
-      <Stack
-        direction="row"
-        alignItems="center"
-        justifyContent="end"
-        sx={{ my: 1 }}
-      >
-        <Link to="/forget-password" variant="subtitle2" underline="hover">
+      <Stack direction="row" alignItems="center" justifyContent="end" sx={{ my: 1 }}>
+        <Link to="/forget-password" underline="hover" style={{ fontSize: 16 }}>
           Forgot password?
         </Link>
       </Stack>
 
-      <LoadingButton
-        fullWidth
-        loading={isLoading}
-        size="medium"
-        type="submit"
-        variant="contained"
-      >
+      <LoadingButton fullWidth loading={isLoading} size="medium" type="submit" variant="contained">
         Login
       </LoadingButton>
     </FormProvider>

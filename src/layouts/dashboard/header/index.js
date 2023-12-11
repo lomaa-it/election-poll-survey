@@ -1,14 +1,6 @@
 import PropTypes from "prop-types";
 import { styled } from "@mui/material/styles";
-import {
-  Box,
-  Stack,
-  AppBar,
-  Toolbar,
-  IconButton,
-  Typography,
-  Badge,
-} from "@mui/material";
+import { Box, Stack, AppBar, Toolbar, IconButton, Typography, Badge } from "@mui/material";
 import { bgBlur } from "../../../utils/cssStyles";
 import Iconify from "../../../components/Iconify";
 import AccountPopover from "./AccountPopover";
@@ -94,7 +86,7 @@ export default function Header({ onOpenNav }) {
           <Typography
             sx={{
               margin: 0,
-              padding: 0, 
+              padding: 0,
             }}
           >
             {title}
@@ -111,23 +103,11 @@ export default function Header({ onOpenNav }) {
             sm: 1,
           }}
         >
-          <Box
-            component="img"
-            src={PUBLIC_URL + "/static/images/imgs-1.png"}
-            sx={{ width: 60, height: 60 }}
-          />
+          <Box component="img" src={PUBLIC_URL + "/static/images/imgs-1.png"} sx={{ width: 60, height: 60 }} />
 
-          <Box
-            component="img"
-            src={PUBLIC_URL + "/static/images/imgs-2.png"}
-            sx={{ width: 60, height: 60 }}
-          />
+          <Box component="img" src={PUBLIC_URL + "/static/images/imgs-2.png"} sx={{ width: 60, height: 60 }} />
 
-          <Box
-            component="img"
-            src={PUBLIC_URL + "/static/images/imgs-3.png"}
-            sx={{ width: 60, height: 60 }}
-          />
+          <Box component="img" src={PUBLIC_URL + "/static/images/imgs-3.png"} sx={{ width: 60, height: 60 }} />
 
           <Box p={0.5} />
 
