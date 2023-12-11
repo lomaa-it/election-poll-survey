@@ -206,7 +206,7 @@ const DashboardApp = ({
             </Grid>
             <Grid item xs={12} md={6} lg={8}>
               <BarChartWidget
-                title="Ticktes"
+                title="Tickets"
                 sx={{ height: "100%" }}
                 chartLabels={[
                   "Pakala",
