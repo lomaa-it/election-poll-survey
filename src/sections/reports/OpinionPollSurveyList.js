@@ -48,7 +48,7 @@ const OpinionPollSurveyList = ({ voter, showAlert, changeOpinionPoll }) => {
     },
     {
       name: "part_slno",
-      label: "Part SL NO",
+      label: "Part Slno",
     },
     {
       name: "voter_id",
