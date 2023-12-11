@@ -37,6 +37,7 @@ const LoginForm = ({ showAlert, authSuccess }) => {
     password: Yup.string()
       .required("Password is required")
       .min(4, "Password must be at least 4 characters"),
+    captcha: Yup.string().required("Captcha is required"),
   });
 
   const defaultValues = {
@@ -112,7 +113,7 @@ const LoginForm = ({ showAlert, authSuccess }) => {
         <Box
           component="img"
           src={PUBLIC_URL + "/static/images/captcha.jpg"}
-          sx={{ width: "50%" }}
+          sx={{ width: "45%" }}
         />
         {/* <img
           className="captcha-image"
@@ -124,7 +125,7 @@ const LoginForm = ({ showAlert, authSuccess }) => {
           name="captcha"
           label="Enter Captcha"
           sx={{
-            height: "30px",
+            height: "35px",
           }}
         />
       </Stack>
@@ -135,7 +136,7 @@ const LoginForm = ({ showAlert, authSuccess }) => {
         justifyContent="end"
         sx={{ my: 1 }}
       >
-        <Link to="/forget-password" variant="subtitle2" underline="hover" > 
+        <Link to="/forget-password" variant="subtitle2" underline="hover">
           Forgot password?
         </Link>
       </Stack>
