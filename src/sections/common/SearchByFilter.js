@@ -1,19 +1,44 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { Grid, Container, Typography, Box, TextField, Card, MenuItem } from "@mui/material";
+import {
+  Grid,
+  Container,
+  Typography,
+  Box,
+  TextField,
+  Card,
+  MenuItem,
+} from "@mui/material";
 import { FormProvider, RHFAutoComplete } from "../../components/hook-form";
 import { getAllCommonData } from "../../actions/common";
 import { casteList } from "../../constants";
 import { ageDropdown } from "../../utils/dropdownconstants";
 
-const SearchByFilter = ({ account, common, defaultValues, getAllCommonData, onChanged, lg = 2, showPartNo = true, showVillage = true, showOtherFilters = true }) => {
+const SearchByFilter = ({
+  account,
+  common,
+  defaultValues,
+  getAllCommonData,
+  reset,
+  onChanged,
+  lg = 2,
+  showPartNo = true,
+  showVillage = true,
+  showOtherFilters = true,
+}) => {
   const [formValues, setFormValues] = useState({
     mandal: null,
     division: null,
     sachivalayam: null,
     partno: null,
     village: null,
+    gender: null,
+    religion: null,
+    caste: null,
+    disable: null,
+    govtEmployee: null,
+    age: null,
   });
 
   useEffect(() => {
@@ -31,7 +56,10 @@ const SearchByFilter = ({ account, common, defaultValues, getAllCommonData, onCh
       setFormValues((state) => ({ ...state, division: common.divisions[0] }));
     }
 
-    if (common.sachivalayams.length > 0 && account.user.sachivalayam_pk != null) {
+    if (
+      common.sachivalayams.length > 0 &&
+      account.user.sachivalayam_pk != null
+    ) {
       setFormValues((state) => ({
         ...state,
         sachivalayam: common.sachivalayams[0],
@@ -49,9 +77,19 @@ const SearchByFilter = ({ account, common, defaultValues, getAllCommonData, onCh
     if (defaultValues) {
       setFormValues((state) => ({
         ...state,
-        mandal: defaultValues.mandal_pk ? common.mandals.find((e) => e.mandal_pk === defaultValues.mandal_pk) : state.mandal,
-        division: defaultValues.division_pk ? common.divisions.find((e) => e.division_pk === defaultValues.division_pk) : state.division,
-        sachivalayam: defaultValues.sachivalayam_pk ? common.sachivalayams.find((e) => e.sachivalayam_pk === defaultValues.sachivalayam_pk) : state.sachivalayam,
+        mandal: defaultValues.mandal_pk
+          ? common.mandals.find((e) => e.mandal_pk === defaultValues.mandal_pk)
+          : state.mandal,
+        division: defaultValues.division_pk
+          ? common.divisions.find(
+              (e) => e.division_pk === defaultValues.division_pk
+            )
+          : state.division,
+        sachivalayam: defaultValues.sachivalayam_pk
+          ? common.sachivalayams.find(
+              (e) => e.sachivalayam_pk === defaultValues.sachivalayam_pk
+            )
+          : state.sachivalayam,
       }));
     }
   }, [common]);
@@ -66,21 +104,45 @@ const SearchByFilter = ({ account, common, defaultValues, getAllCommonData, onCh
       values["sachivalayam"] = null;
       values["partno"] = null;
       values["village"] = null;
+      values["gender"] = null;
+      values["religion"] = null;
+      values["caste"] = null;
+      values["disable"] = null;
+      values["govtEmployee"] = null;
+      values["age"] = null;
     }
 
     if (name == "division") {
       values["sachivalayam"] = null;
       values["partno"] = null;
       values["village"] = null;
+      values["gender"] = null;
+      values["religion"] = null;
+      values["caste"] = null;
+      values["disable"] = null;
+      values["govtEmployee"] = null;
+      values["age"] = null;
     }
 
     if (name == "sachivalayam") {
       values["partno"] = null;
       values["village"] = null;
+      values["gender"] = null;
+      values["religion"] = null;
+      values["caste"] = null;
+      values["disable"] = null;
+      values["govtEmployee"] = null;
+      values["age"] = null;
     }
 
     if (name == "partno") {
       values["village"] = null;
+      values["gender"] = null;
+      values["religion"] = null;
+      values["caste"] = null;
+      values["disable"] = null;
+      values["govtEmployee"] = null;
+      values["age"] = null;
     }
 
     setFormValues((state) => ({ ...state, ...values }));
@@ -89,6 +151,23 @@ const SearchByFilter = ({ account, common, defaultValues, getAllCommonData, onCh
   useEffect(() => {
     if (onChanged != null) onChanged(formValues);
   }, [formValues]);
+
+  useEffect(() => {
+    if (reset) {
+      setFormValues((state) => ({
+        ...state,
+
+        partno: null,
+        village: null,
+        gender: null,
+        religion: null,
+        caste: null,
+        disable: null,
+        govtEmployee: null,
+        age: null,
+      }));
+    }
+  }, [reset]);
 
   return (
     <>
@@ -110,7 +189,9 @@ const SearchByFilter = ({ account, common, defaultValues, getAllCommonData, onCh
           name="division"
           label="Select Division"
           value={formValues.division}
-          options={common.divisions.filter((e) => e.mandal_id == formValues?.mandal?.mandal_pk)}
+          options={common.divisions.filter(
+            (e) => e.mandal_id == formValues?.mandal?.mandal_pk
+          )}
           getOptionLabel={(option) => option.division_name}
           onChange={handleChange}
           disabled={account.user.division_pk != null}
@@ -122,7 +203,9 @@ const SearchByFilter = ({ account, common, defaultValues, getAllCommonData, onCh
           name="sachivalayam"
           label="Select Sachivalayam"
           value={formValues.sachivalayam}
-          options={common.sachivalayams.filter((e) => e.division_id == formValues?.division?.division_pk)}
+          options={common.sachivalayams.filter(
+            (e) => e.division_id == formValues?.division?.division_pk
+          )}
           getOptionLabel={(option) => option.sachivalayam_name}
           onChange={handleChange}
           disabled={account.user.sachivalayam_pk != null}
@@ -135,7 +218,10 @@ const SearchByFilter = ({ account, common, defaultValues, getAllCommonData, onCh
             name="partno"
             label="Select Part/Booth No"
             value={formValues.partno}
-            options={common.parts.filter((e) => e.sachivalayam_id == formValues?.sachivalayam?.sachivalayam_pk)}
+            options={common.parts.filter(
+              (e) =>
+                e.sachivalayam_id == formValues?.sachivalayam?.sachivalayam_pk
+            )}
             getOptionLabel={(option) => String(option.part_no)}
             onChange={handleChange}
             // disabled={account.user.part_no != null}
@@ -149,7 +235,9 @@ const SearchByFilter = ({ account, common, defaultValues, getAllCommonData, onCh
             name="village"
             label="Select Village"
             value={formValues.village}
-            options={common.villages.filter((e) => e.part_no == formValues?.partno?.part_no)}
+            options={common.villages.filter(
+              (e) => e.part_no == formValues?.partno?.part_no
+            )}
             getOptionLabel={(option) => option.village_name}
             onChange={handleChange}
             // disabled={account.user.village_pk != null}
@@ -163,36 +251,55 @@ const SearchByFilter = ({ account, common, defaultValues, getAllCommonData, onCh
             <RHFAutoComplete
               name="gender"
               label="Select Gender"
+              value={formValues.gender}
               options={[
                 {
                   label: "Male",
+                  value: "male",
                 },
                 {
                   label: "Female",
+                  value: "female",
                 },
                 {
                   label: "Transgender",
+                  value: "transgender",
                 },
               ]}
               onChange={handleChange}
             />
           </Grid>{" "}
           <Grid item xs={12} md={6} lg={lg}>
-            <RHFAutoComplete name="religion" label="Select Religion" options={common.religion} onChange={handleChange} />
-          </Grid>
-          <Grid item xs={12} md={6} lg={lg}>
-            <RHFAutoComplete name="caste" label="Select Caste" options={common.caste} onChange={handleChange} />
+            <RHFAutoComplete
+              name="religion"
+              label="Select Religion"
+              value={formValues.religion}
+              options={common.religion}
+              onChange={handleChange}
+            />
           </Grid>
           <Grid item xs={12} md={6} lg={lg}>
             <RHFAutoComplete
-              name="Disable"
+              name="caste"
+              label="Select Caste"
+              value={formValues.caste}
+              options={common.caste}
+              onChange={handleChange}
+            />
+          </Grid>
+          <Grid item xs={12} md={6} lg={lg}>
+            <RHFAutoComplete
+              name="disable"
               label="Disability (40% or above)"
+              value={formValues.disable}
               options={[
                 {
                   label: "Yes",
+                  value: "yes",
                 },
                 {
                   label: "No",
+                  value: "no",
                 },
               ]}
               onChange={handleChange}
@@ -202,6 +309,7 @@ const SearchByFilter = ({ account, common, defaultValues, getAllCommonData, onCh
             <RHFAutoComplete
               name="Govt Employee"
               label="Govt Employee"
+              value={formValues.govtEmployee}
               options={[
                 {
                   label: "Yes",
@@ -214,7 +322,13 @@ const SearchByFilter = ({ account, common, defaultValues, getAllCommonData, onCh
             />
           </Grid>{" "}
           <Grid item xs={12} md={6} lg={lg}>
-            <RHFAutoComplete name="age" label="Select Age" options={ageDropdown} onChange={handleChange} />
+            <RHFAutoComplete
+              name="age"
+              label="Select Age"
+              value={formValues.age}
+              options={ageDropdown}
+              onChange={handleChange}
+            />
           </Grid>
         </>
       )}

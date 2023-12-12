@@ -13,6 +13,7 @@ import { searchFiltercolor } from "../constants";
 const OpinionPollSurveyPage = ({ getAllVotersSurvey, clearVoterReducer }) => {
   const [filterValues, setFilterValues] = useState(null);
   const [isLoading, setLoading] = useState(false);
+  const [reset, setReset] = useState(false);
 
   useEffect(() => {
     clearVoterReducer();
@@ -35,7 +36,7 @@ const OpinionPollSurveyPage = ({ getAllVotersSurvey, clearVoterReducer }) => {
 
         <Card sx={{ p: 3, backgroundColor: searchFiltercolor }}>
           <Grid container spacing={2} alignItems="center">
-            <SearchByFilter onChanged={(value) => setFilterValues(value)} />
+            <SearchByFilter reset={reset} onChanged={(value) => setFilterValues(value)} />
 
             <Grid item xs={12} md={6} lg={2}>
               <TextField

@@ -15,6 +15,7 @@ import UpdateVoterDialog from "../common/UpdateVoterDialog";
 
 const OpinionPollSurveyList = ({ voter, filterValues, showAlert, changeOpinionPoll, getAllVotersSurvey }) => {
   const navigate = useNavigate();
+  console.log("OpinionPollSurveyListVoter", voter);
 
   const columns = [
     {

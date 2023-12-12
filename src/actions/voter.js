@@ -1,5 +1,10 @@
 import { LIMIT_PER_PAGE } from "../constants";
-import { changeOpinionPollRoute, getAllNavaratnaluRoute, getAllVotorsSurveyRoute, saveOrupdatedSurvey } from "../utils/apis";
+import {
+  changeOpinionPollRoute,
+  getAllNavaratnaluRoute,
+  getAllVotorsSurveyRoute,
+  saveOrupdatedSurvey,
+} from "../utils/apis";
 import instance from "../utils/axios";
 
 export const clearVoterReducer = () => async (dispatch) => {
@@ -26,16 +31,27 @@ export const getAllVotersSurvey =
         part_no: data.partno?.part_no ?? null,
         village_id: data.village?.village_pk ?? null,
       };
+      console.log("jsonData", jsonData);
 
-      const response = await instance.post(`${getAllVotorsSurveyRoute}?page=${pageNo + 1}&&limit=${limit}`, jsonData);
+      const response = await instance.post(
+        `${getAllVotorsSurveyRoute}?page=${pageNo + 1}&&limit=${limit}`,
+        jsonData
+      );
       const responseData = response.data;
-      console.log(responseData);
+      console.log("responseData in voter.js", responseData);
 
       const itemsList = responseData?.data ?? [];
 
       dispatch({
         type: "VOTER_LOAD_SUCCESS",
-        payload: { data: itemsList, count: responseData.count, completed: responseData.completed, pending: responseData.pending, page: pageNo, limit: limit },
+        payload: {
+          data: itemsList,
+          count: responseData.count,
+          completed: responseData.completed,
+          pending: responseData.pending,
+          page: pageNo,
+          limit: limit,
+        },
       });
     } catch (err) {
       console.log(err);

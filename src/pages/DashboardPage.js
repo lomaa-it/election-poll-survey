@@ -29,6 +29,7 @@ const DashboardApp = ({
 }) => {
   const [filterValues, setFilterValues] = useState(null);
   const [isLoading, setLoading] = useState(false);
+  const [reset, setReset] = useState(false);
 
   useEffect(() => {
     clearDashboardReducer();
@@ -51,8 +52,10 @@ const DashboardApp = ({
 
         <Card sx={{ p: 3, backgroundColor: searchFiltercolor }}>
           <Grid container spacing={2} alignItems="center">
-            <SearchByFilter onChanged={(value) => setFilterValues(value)} />
-
+            <SearchByFilter
+              reset={reset}
+              onChanged={(value) => setFilterValues(value)}
+            />
             {/* <Grid item xs={12} md={6} lg={2}>
               <TextField
                 size="small"
@@ -78,7 +81,6 @@ const DashboardApp = ({
                 select
               />
             </Grid> */}
-
             <Grid item xs={12} md={6} lg={2}>
               <LoadingButton
                 loading={isLoading}
@@ -86,6 +88,19 @@ const DashboardApp = ({
                 onClick={onSubmit}
               >
                 Search
+              </LoadingButton>
+              <LoadingButton
+                loading={isLoading}
+                variant="contained"
+                sx={{
+                  backgroundColor: "red",
+                  marginLeft: "15px",
+                }}
+                onClick={() => {
+                  setReset(!reset);
+                }}
+              >
+                Clear
               </LoadingButton>
             </Grid>
           </Grid>
@@ -321,7 +336,7 @@ const DashboardApp = ({
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
               <PieChartWidget
-                title="Govt Employee Status"
+                title="Govt. Employees"
                 chartData={[
                   {
                     label: "YES",
@@ -355,7 +370,7 @@ const DashboardApp = ({
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
               <PieChartWidget
-                title="Residental Status"
+                title="Residential Status"
                 chartData={[
                   {
                     label: "Residental",

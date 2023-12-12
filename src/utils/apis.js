@@ -6,7 +6,8 @@
 // export const baseServerUrl = "https://6079-123-201-170-56.ngrok-free.app";
 
 // export const baseServerUrl = "https://37bd-123-201-174-19.ngrok-free.app";
-export const baseServerUrl = "https://backend.cgrysrcongress.in";
+// export const baseServerUrl = "https://backend.cgrysrcongress.in";
+export const baseServerUrl = "http://192.168.137.242:8080";
 
 // Voter Api
 
@@ -14,6 +15,7 @@ export const loginRoute = "/users-login";
 export const resetPswdRoute = "/updateuserpassword";
 
 // GET ALL DATA
+export const getTicketStatusRoute = "/getticketstatus";
 export const getAllTicketsRoute = "/ticket_master/getall";
 export const getAllVotersRoute = "/voters/getall";
 export const getAllUsersRoute = "/getalluserswithjoinandwhere";
@@ -28,7 +30,8 @@ export const getAllSachivalayamRoute = "/sachivalayam/getall";
 export const getAllPartsRoute = "/parts/getall";
 export const getAllVillageRoute = "/villages/getall";
 export const getAllDistrictsWithJoinRoute = "/getalldistrictswithjoin";
-export const getAllConstituenciesWithJoinRoute = "/getallconstituencieswithjoin";
+export const getAllConstituenciesWithJoinRoute =
+  "/getallconstituencieswithjoin";
 export const getAllMandalsWithJoinRoute = "/getallmandalswithjoin";
 
 export const getOpinionDashboardRoute = "/getopinionpolldashboard";
@@ -41,6 +44,7 @@ export const getAllNavaratnaluRoute = "/navaratnalu/getall";
 
 export const getAllCastesRoute = "/getAllCastes";
 export const getAllReligionRoute = "/getAllReligion";
+export const getNextLevelUserRoute = "/getnextleveluser";
 
 //////////////////
 // GET BY ID
@@ -67,10 +71,10 @@ export const createTicketRoute = "/ticket_master";
 export const deleteStatesByIdRoute = "/states/";
 
 // Update By Id
+export const updateTicketStatusRoute = "/updateticketstatus";
 export const updateStatesByIdRoute = "/states/";
 export const saveOrupdatedSurvey = "/save_or_updated_survey";
 export const updateMandalByIdRoute = "/mandals/";
 export const updateDivisionByIdRoute = "/divisions/";
-
 export const designationMappingRoute = "/designationmappingtousers";
 export const sendCredsToUsersRoute = "/sendcredstousers";

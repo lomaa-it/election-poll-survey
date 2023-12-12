@@ -9,8 +9,9 @@ import {
   Box,
   Chip,
   TextField,
+  MenuItem,
 } from "@mui/material";
-import { CheckBox } from "@mui/icons-material";
+import Checkbox from "@mui/material/Checkbox";
 import Button from "@mui/material/Button";
 import MUIDataTable from "mui-datatables";
 import { connect } from "react-redux";
@@ -21,14 +22,91 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { searchFiltercolor } from "../../constants";
 import instance from "../../utils/axios";
-import { getAllNavaratnaluRoute, getAllTicketsRoute } from "../../utils/apis";
+import {
+  getAllNavaratnaluRoute,
+  getAllTicketsRoute,
+  getNextLevelUserRoute,
+  getTicketStatusRoute,
+  updateTicketStatusRoute,
+} from "../../utils/apis";
+import { set } from "date-fns";
 
-const ViewTicketsList = ({ showAlert }) => {
+const ViewTicketsList = ({ showAlert, account }) => {
   const [isLoading, setLoading] = useState(false);
   const [fechtedData, setFechtedData] = useState({
     navaratnalu: [],
     tickets: [],
+    status: [],
+    nextLevelUser: [],
   });
+
+  const [refresh, setRefresh] = useState(false);
+  console.log("account", account);
+
+  const [selectedValues, setSelectedValues] = useState({
+    ticketList: [],
+    status_id: "",
+  });
+
+  useEffect(() => {
+    //next level users api call based on account.user.desgination_name
+    if (account.user.desgination_name === "VOLUNTEER") {
+      const fetchNextLevelUser = async () => {
+        const requestBody = {
+          designation_name: "VOLUNTEER",
+          part_no: account.user.part_no,
+        };
+        console.log("1requestBody", requestBody);
+
+        const nextLevelUserResponse = await instance.post(
+          getNextLevelUserRoute,
+          requestBody
+        );
+        const nextLevelUserResponseData =
+          nextLevelUserResponse.data?.message ?? [];
+        console.log("nextLevelUserResponseData", nextLevelUserResponseData);
+        setFechtedData((prevState) => ({
+          ...prevState,
+          nextLevelUser: nextLevelUserResponseData,
+        }));
+      };
+      fetchNextLevelUser();
+    } else if (account.user.desgination_name === "BOOTH_INCHARGE") {
+      const fetchNextLevelUser = async () => {
+        const requestBody = {
+          designation_name: "BOOTH_INCHARGE",
+          sachivalayam_id: account.user.sachivalayam_pk,
+        };
+        console.log("2requestBody", requestBody);
+        const nextLevelUserResponse = await instance.post(
+          getNextLevelUserRoute,
+          requestBody
+        );
+        console.log("nextLevelUserResponse", nextLevelUserResponse);
+        const nextLevelUserResponseData =
+          nextLevelUserResponse.data?.message ?? [];
+        console.log("nextLevelUserResponseData", nextLevelUserResponseData);
+        setFechtedData((prevState) => ({
+          ...prevState,
+          nextLevelUser: nextLevelUserResponseData,
+        }));
+      };
+      fetchNextLevelUser();
+    }
+
+    const fetchData = async () => {
+      const statusResponse = await instance.post(getTicketStatusRoute);
+      const statusResponseData = statusResponse.data?.message ?? [];
+
+      // console.log("statusResponseData", statusResponseData);
+
+      setFechtedData((prevState) => ({
+        ...prevState,
+        status: statusResponseData,
+      }));
+    };
+    fetchData();
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,15 +114,17 @@ const ViewTicketsList = ({ showAlert }) => {
       const navaratanaluResponseData = navaratnaluResponse.data?.message ?? [];
       const ticketsResponse = await instance.post(getAllTicketsRoute);
       const ticketsResponseData = ticketsResponse.data?.message ?? [];
-      console.log("ticketsResponseData", ticketsResponseData);
-      console.log("navaratanaluResponseData", navaratanaluResponseData);
-      setFechtedData({
+
+      // console.log("ticketsResponseData", ticketsResponseData);
+      // console.log("nvaratanaluResponseData", navaratanaluResponseData);
+      setFechtedData((prevState) => ({
+        ...prevState,
         navaratnalu: navaratanaluResponseData,
         tickets: ticketsResponseData,
-      });
+      }));
     };
     fetchData();
-  }, []);
+  }, [refresh]);
 
   const columns = [
     {
@@ -82,29 +162,32 @@ const ViewTicketsList = ({ showAlert }) => {
     responsive: "standard",
   };
 
-  console.log("fechtedData", fechtedData);
+  // console.log("fechtedData", fechtedData);
+  console.log("selectedValues", selectedValues);
 
-  const renderCheckBox = () => {
-    return <CheckBox />;
-  };
-  const renderSubmitButton = () => {
-    return <Button variant="outlined">Submit</Button>;
-  };
-
-  const renderStatusButton = () => {
+  const renderCheckBox = (ticket) => {
     return (
-      <TextField
-        size="small"
+      <Checkbox
+        onClick={() => {
+          // if same ticket is clicked again then remove it from the list
+          if (selectedValues.ticketList.includes(ticket.ticket_master_pk)) {
+            setSelectedValues((state) => ({
+              ...state,
+              ticketList: state.ticketList.filter(
+                (ticketId) => ticketId !== ticket.ticket_master_pk
+              ),
+            }));
+          } else {
+            setSelectedValues((state) => ({
+              ...state,
+              ticketList: [...state.ticketList, ticket.ticket_master_pk],
+            }));
+          }
+        }}
+        checked={selectedValues.ticketList.includes(ticket.ticket_master_pk)}
         sx={{
-          border: "none",
+          color: "primary.main",
         }}
-        id="Open"
-        label="Open"
-        variant="standard"
-        InputProps={{
-          disableUnderline: true,
-        }}
-        select
       />
     );
   };
@@ -127,8 +210,25 @@ const ViewTicketsList = ({ showAlert }) => {
     const navaratnalu = fechtedData.navaratnalu.find(
       (navaratnalu) => navaratnalu.navaratnalu_pk === ticket.navaratnalu_id
     );
+    const tickets = fechtedData.tickets.find(
+      (tickets) => tickets.navaratnalu_id === navaratnalu.navaratnalu_pk
+    );
+
+    if (tickets.status_id === 1) {
+      tickets.status_id = "Open";
+    }
+    if (tickets.status_id === 2) {
+      tickets.status_id = "Resolved";
+    }
+    if (tickets.status_id === 3) {
+      tickets.status_id = "Cancelled";
+    }
+    if (tickets.status_id === 4) {
+      tickets.status_id = "Escalated";
+    }
+
     return [
-      renderCheckBox(),
+      renderCheckBox(ticket),
       // ticket.volunteer_id || "-",
       // ticket.volunteer_name || "-",
       // ticket.voter_pk || "-",
@@ -136,9 +236,37 @@ const ViewTicketsList = ({ showAlert }) => {
       // ticket.phone || "-",
       navaratnalu.navaratnalu_name || "-",
       ticket.reason || "-",
-      renderStatusButton(),
+      tickets.status_id || "-",
     ];
   });
+
+  const handleSubmit = async () => {
+    const requestBody = {
+      ticketMasterPKList: selectedValues.ticketList,
+      status_id: selectedValues.status_id,
+    };
+    console.log("requestBody", requestBody);
+    try {
+      setLoading(true);
+      await instance.put(updateTicketStatusRoute, requestBody);
+      showAlert({
+        text: "Ticket status updated successfully",
+        color: "success",
+      });
+      setLoading(false);
+      setSelectedValues((state) => ({
+        ...state,
+        ticketList: [],
+        status_id: "",
+      }));
+      setRefresh((state) => !state);
+    } catch (error) {
+      console.log(error);
+      showAlert({ text: "Something went wrong" });
+      setLoading(false);
+      setRefresh((state) => !state);
+    }
+  };
 
   return (
     <Card elevation={1}>
@@ -163,8 +291,32 @@ const ViewTicketsList = ({ showAlert }) => {
               alignItems: "center",
             }}
           >
-            <TextField size="small" label="Ticket Status" fullWidth select />{" "}
+            <TextField
+              size="small"
+              label="Ticket Status"
+              fullWidth
+              select
+              value={selectedValues.status_id}
+              onChange={(e) => {
+                setSelectedValues((state) => ({
+                  ...state,
+                  status_id: e.target.value,
+                }));
+              }}
+            >
+              {fechtedData.status.map((status) => (
+                <MenuItem key={status.lookup_pk} value={status.lookup_pk}>
+                  {status.ticket_status}
+                </MenuItem>
+              ))}
+            </TextField>
             <LoadingButton
+              isLoading={isLoading}
+              onClick={handleSubmit}
+              disabled={
+                selectedValues.ticketList.length === 0 ||
+                !selectedValues.status_id
+              }
               variant="contained"
               sx={{
                 marginLeft: "10px",
@@ -186,7 +338,16 @@ const ViewTicketsList = ({ showAlert }) => {
               marginRight: "50px",
             }}
           >
-            <TextField size="small" label="Next Level User" fullWidth select />{" "}
+            <TextField size="small" label="Next Level User" fullWidth select>
+              {fechtedData.nextLevelUser.map((nextLevelUser) => (
+                <MenuItem
+                  key={nextLevelUser.user_pk}
+                  value={nextLevelUser.user_pk}
+                >
+                  {nextLevelUser.user_displayname}
+                </MenuItem>
+              ))}
+            </TextField>
             <LoadingButton
               variant="contained"
               sx={{
@@ -214,6 +375,7 @@ const mapStateToProps = (state) => {
   return {
     batches: state.common,
     students: state.management,
+    account: state.auth,
   };
 };
 
