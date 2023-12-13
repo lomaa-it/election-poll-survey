@@ -73,23 +73,30 @@ const ViewTicketsList = ({ showAlert, account }) => {
       fetchNextLevelUser();
     } else if (account.user.desgination_name === "BOOTH_INCHARGE") {
       const fetchNextLevelUser = async () => {
-        const requestBody = {
-          designation_name: "BOOTH_INCHARGE",
-          sachivalayam_id: account.user.sachivalayam_pk,
-        };
-        console.log("2requestBody", requestBody);
-        const nextLevelUserResponse = await instance.post(
-          getNextLevelUserRoute,
-          requestBody
-        );
-        console.log("nextLevelUserResponse", nextLevelUserResponse);
-        const nextLevelUserResponseData =
-          nextLevelUserResponse.data?.message ?? [];
-        console.log("nextLevelUserResponseData", nextLevelUserResponseData);
-        setFechtedData((prevState) => ({
-          ...prevState,
-          nextLevelUser: nextLevelUserResponseData,
-        }));
+        try {
+          const requestBody = {
+            designation_name: "BOOTH_INCHARGE",
+            sachivalayam_id: account.user.sachivalayam_pk,
+          };
+          console.log("2requestBody", requestBody);
+          const nextLevelUserResponse = await instance.post(
+            getNextLevelUserRoute,
+            requestBody
+          );
+          console.log("nextLevelUserResponse", nextLevelUserResponse);
+          const nextLevelUserResponseData =
+            nextLevelUserResponse.data?.message ?? [];
+          console.log("nextLevelUserResponseData", nextLevelUserResponseData);
+          setFechtedData((prevState) => ({
+            ...prevState,
+            nextLevelUser: nextLevelUserResponseData,
+          }));
+        } catch (error) {
+          console.error(
+            "An error occurred while fetching the next level user:",
+            error
+          );
+        }
       };
       fetchNextLevelUser();
     }

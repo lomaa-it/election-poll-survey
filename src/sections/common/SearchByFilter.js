@@ -36,8 +36,8 @@ const SearchByFilter = ({
     gender: null,
     religion: null,
     caste: null,
-    disable: null,
-    govtEmployee: null,
+    disability: null,
+    govt_employee: null,
     age: null,
   });
 
@@ -107,8 +107,8 @@ const SearchByFilter = ({
       values["gender"] = null;
       values["religion"] = null;
       values["caste"] = null;
-      values["disable"] = null;
-      values["govtEmployee"] = null;
+      values["disability"] = null;
+      values["govt_employee"] = null;
       values["age"] = null;
     }
 
@@ -119,8 +119,8 @@ const SearchByFilter = ({
       values["gender"] = null;
       values["religion"] = null;
       values["caste"] = null;
-      values["disable"] = null;
-      values["govtEmployee"] = null;
+      values["disability"] = null;
+      values["govt_employee"] = null;
       values["age"] = null;
     }
 
@@ -130,8 +130,8 @@ const SearchByFilter = ({
       values["gender"] = null;
       values["religion"] = null;
       values["caste"] = null;
-      values["disable"] = null;
-      values["govtEmployee"] = null;
+      values["disability"] = null;
+      values["govt_employee"] = null;
       values["age"] = null;
     }
 
@@ -140,8 +140,8 @@ const SearchByFilter = ({
       values["gender"] = null;
       values["religion"] = null;
       values["caste"] = null;
-      values["disable"] = null;
-      values["govtEmployee"] = null;
+      values["disability"] = null;
+      values["govt_employee"] = null;
       values["age"] = null;
     }
 
@@ -162,8 +162,8 @@ const SearchByFilter = ({
         gender: null,
         religion: null,
         caste: null,
-        disable: null,
-        govtEmployee: null,
+        disability: null,
+        govt_employee: null,
         age: null,
       }));
     }
@@ -255,15 +255,15 @@ const SearchByFilter = ({
               options={[
                 {
                   label: "Male",
-                  value: "male",
+                  value: 13,
                 },
                 {
                   label: "Female",
-                  value: "female",
+                  value: 14,
                 },
                 {
                   label: "Transgender",
-                  value: "transgender",
+                  value: 15,
                 },
               ]}
               onChange={handleChange}
@@ -289,17 +289,17 @@ const SearchByFilter = ({
           </Grid>
           <Grid item xs={12} md={6} lg={lg}>
             <RHFAutoComplete
-              name="disable"
+              name="disability"
               label="Disability (40% or above)"
-              value={formValues.disable}
+              value={formValues.disability}
               options={[
                 {
                   label: "Yes",
-                  value: "yes",
+                  value: true,
                 },
                 {
                   label: "No",
-                  value: "no",
+                  value: false,
                 },
               ]}
               onChange={handleChange}
@@ -307,15 +307,17 @@ const SearchByFilter = ({
           </Grid>
           <Grid item xs={12} md={6} lg={lg}>
             <RHFAutoComplete
-              name="Govt Employee"
+              name="govt_employee"
               label="Govt Employee"
-              value={formValues.govtEmployee}
+              value={formValues.govt_employee}
               options={[
                 {
                   label: "Yes",
+                  value: true,
                 },
                 {
                   label: "No",
+                  value: false,
                 },
               ]}
               onChange={handleChange}

@@ -30,6 +30,12 @@ export const getAllVotersSurvey =
         sachivalayam_id: data.sachivalayam?.sachivalayam_pk ?? null,
         part_no: data.partno?.part_no ?? null,
         village_id: data.village?.village_pk ?? null,
+        gender: data.gender?.value ?? null,
+        religion_id: data.religion?.value ?? null,
+        caste_id: data.caste?.value ?? null,
+        disability: data.disability?.value ?? null,
+        govt_employee: data.govt_employee?.value ?? null,
+        age: data.age?.value ?? "",
       };
       console.log("jsonData", jsonData);
 
@@ -39,8 +45,10 @@ export const getAllVotersSurvey =
       );
       const responseData = response.data;
       console.log("responseData in voter.js", responseData);
-
-      const itemsList = responseData?.data ?? [];
+      console.log(responseData.data);
+      // const itemsList = responseData?.data ?? [];
+      const itemsList = responseData?.message.data ?? [];
+      console.log("itemsList", itemsList);
 
       dispatch({
         type: "VOTER_LOAD_SUCCESS",

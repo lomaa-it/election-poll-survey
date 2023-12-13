@@ -37,6 +37,7 @@ const DashboardApp = ({
 
   const onSubmit = async () => {
     setLoading(true);
+    console.log("filterValues", filterValues)
 
     await getOpinionDashboard(filterValues);
 
@@ -321,7 +322,7 @@ const DashboardApp = ({
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
               <PieChartWidget
-                title="Differently-abled"
+                title="Disability (40% or above)"
                 chartData={[
                   {
                     label: "YES",
