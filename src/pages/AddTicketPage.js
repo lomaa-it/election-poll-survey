@@ -26,6 +26,7 @@ import { addVoterTicket } from "../actions/voter";
 import { showAlert } from "../actions/alert";
 import { createTicketRoute } from "../utils/apis";
 import instance from "../utils/axios";
+import TicketHistoryList from "../sections/reports/TicketHistoryList";
 
 const AddTicketPage = ({ common, voter, showAlert }) => {
   const navigate = useNavigate();
@@ -214,6 +215,7 @@ const AddTicketPage = ({ common, voter, showAlert }) => {
           </Card>
 
           <Box p={1} />
+          <TicketHistoryList />
 
           {/* <Card sx={{ p: 3 }}>
             <Typography sx={{ pb: 2 }}>Attachements Info</Typography>

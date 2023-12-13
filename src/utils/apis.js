@@ -15,6 +15,7 @@ export const loginRoute = "/users-login";
 export const resetPswdRoute = "/updateuserpassword";
 
 // GET ALL DATA
+export const getTicketHistoryRoute = "/gettickethistory";
 export const getTicketStatusRoute = "/getticketstatus";
 export const getAllTicketsRoute = "/ticket_master/getall";
 export const getAllVotersRoute = "/voters/getall";
