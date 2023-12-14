@@ -22,7 +22,10 @@ export const getAllUsers = (data) => async (dispatch) => {
       sachivalayam_id: data.sachivalayam?.sachivalayam_pk,
       part_no: data.partno?.part_no,
       village_id: data.village?.village_pk,
+      designation_id: data.designation?.value,
     };
+
+    console.log("jsonData", jsonData);
 
     const response = await instance.post(getAllUsersRoute, jsonData);
     const responseData = response.data?.message ?? [];

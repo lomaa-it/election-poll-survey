@@ -45,7 +45,6 @@ export const getAllVotersSurvey =
       );
       const responseData = response.data;
       console.log("responseData in voter.js", responseData);
-      console.log(responseData.data);
       // const itemsList = responseData?.data ?? [];
       const itemsList = responseData?.message.data ?? [];
       console.log("itemsList", itemsList);

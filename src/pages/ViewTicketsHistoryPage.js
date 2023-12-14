@@ -24,74 +24,88 @@ import CloudUploadRoundedIcon from "@mui/icons-material/CloudUploadRounded";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { addVoterTicket } from "../actions/voter";
 import { showAlert } from "../actions/alert";
-import { createTicketRoute } from "../utils/apis";
+import {
+  createTicketHistoryRoute,
+  createTicketRoute,
+  getTicketHistoryRoute,
+} from "../utils/apis";
 import instance from "../utils/axios";
 import TicketHistoryList from "../sections/reports/TicketHistoryList";
 
 const ViewTicketsHistoryPage = ({ common, voter, showAlert }) => {
   const navigate = useNavigate();
   const props = useLocation().state;
-  const [reasonError, setReasonError] = useState(false);
-  const [navaratnaluError, setNavaratnaluError] = useState(false);
 
   const [isLoading, setLoading] = useState(false);
-
+  const [fechtedData, setFechtedData] = useState({
+    isLoading: false,
+    ticketHistory: [],
+  });
 
   const schema = Yup.object().shape({
     navaratnalu_id: Yup.string().required("Navaratnalu is required"),
+    status_id: Yup.string().required("Status is required"),
     reason: Yup.string().required("Reason is required"),
   });
-  const [defaultValues, setDefaultValues] = useState({
-    volunteer_id: props[20],
-    voter_pk: props[0],
-    navaratnalu_id: "",
-    reason: "",
-  });
 
-  // const defaultValues = {
-  //   volunteer_id: props[20],
-  //   voter_pk: props[0],
-  //   navaratnalu_id: "",
-  //   reason: "",
-  // };
+  const defaultValues = {
+    navaratnalu_id: props.data?.navaratnalu_id ?? "",
+    status_id: props.data?.status_id ?? "",
+    reason: "",
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  console.log("props", props);
 
   const methods = useForm({
     resolver: yupResolver(schema),
     defaultValues,
   });
 
-  const { handleSubmit, reset } = methods;
+  const { handleSubmit, resetField } = methods;
 
-  const onSubmit = async () => {
-    if (defaultValues.navaratnalu_id === "") {
-      setNavaratnaluError(true);
-      return;
-    }
-
-    if (defaultValues.reason === "") {
-      setReasonError(true);
-      return;
-    }
-    console.log("defaultValues", defaultValues);
+  const onSubmit = async (data) => {
+    var values = {
+      ...data,
+      ticket_master_pk: props.data.ticket_master_pk,
+      ticket_attachment_id: 6,
+    };
     setLoading(true);
-    // var result = await addVoterTicket(props[0], data);
-    const result = await instance.post(createTicketRoute, defaultValues);
-    console.log("result", result);
-    setLoading(false);
 
-    if (result) {
+    try {
+      const result = await instance.post(createTicketHistoryRoute, values);
+      console.log("result", result);
+      setLoading(false);
+
       showAlert({ text: "Ticket submitted", color: "success" });
-      setDefaultValues({
-        volunteer_id: "",
-        voter_pk: "",
-        navaratnalu_id: "",
-        reason: "",
-      });
-      navigate(-1);
+      resetField("reason");
+      fetchData();
+    } catch (err) {
+      console.log(err);
     }
   };
 
-  console.log("propssss", props);
+  const fetchData = async () => {
+    setFechtedData((state) => ({
+      ...state,
+      ticketHistory: [],
+      isLoading: true,
+    }));
+
+    const ticketHistoryResponse = await instance.post(getTicketHistoryRoute, {
+      ticket_master_pk: props.data.ticket_master_pk,
+    });
+    console.log("ticketHistoryResponse", ticketHistoryResponse);
+
+    setFechtedData((state) => ({
+      ...state,
+      ticketHistory: ticketHistoryResponse.data.message,
+      isLoading: false,
+    }));
+  };
 
   return (
     <Page title="View Ticket History">
@@ -120,78 +134,36 @@ const ViewTicketsHistoryPage = ({ common, voter, showAlert }) => {
 
             <Grid container spacing={2} alignItems="start">
               <Grid item xs={12} md={6} lg={3}>
-                {/* <RHFTextField
+                <RHFTextField
                   name="navaratnalu_id"
                   label="Navaratnalu ID"
                   select
+                  disabled
                 >
                   {common.navaratnalu.map((item, index) => (
                     <MenuItem key={index} value={item.navaratnalu_pk}>
                       {item.navaratnalu_name}
                     </MenuItem>
                   ))}
-                </RHFTextField> */}
-                <TextField
-                  size="small"
-                  name="navaratnalu_id"
-                  label="Navaratnalu ID"
-                  fullWidth
-                  required
-                  select
-                  value={defaultValues.navaratnalu_id}
-                  onChange={(e) => {
-                    setDefaultValues({
-                      ...defaultValues,
-                      navaratnalu_id: e.target.value,
-                    });
-                    if (e.target.value === "") {
-                      setNavaratnaluError(true);
-                    } else {
-                      setNavaratnaluError(false);
-                    }
-                  }}
-                  error={navaratnaluError}
-                  helperText={navaratnaluError ? "This field is required" : ""}
-                >
-                  {common.navaratnalu.map((item, index) => (
-                    <MenuItem key={index} value={item.navaratnalu_pk}>
-                      {item.navaratnalu_name}
+                </RHFTextField>
+              </Grid>
+              <Grid item xs={12} md={6} lg={3}>
+                <RHFTextField name="status_id" label="Status" select>
+                  {common.ticket.map((item, index) => (
+                    <MenuItem key={index} value={item.value}>
+                      {item.label}
                     </MenuItem>
                   ))}
-                </TextField>
+                </RHFTextField>
               </Grid>
 
               <Grid item xs={12} md={6} lg={9}>
-                {/* <RHFTextField
+                <RHFTextField
                   name="reason"
                   label="Write Reason..."
                   fullWidth
                   multiline
                   rows={4}
-                /> */}
-                <TextField
-                  size="small"
-                  name="reason"
-                  label="Write Reason..."
-                  fullWidth
-                  multiline
-                  required
-                  rows={4}
-                  value={defaultValues.reason}
-                  onChange={(e) => {
-                    setDefaultValues({
-                      ...defaultValues,
-                      reason: e.target.value,
-                    });
-
-                    if (e.target.value === "") {
-                      setReasonError(true);
-                    } else {
-                      setReasonError(false);
-                    }
-                  }}
-                  error={reasonError}
-                  helperText={reasonError ? "This field is required" : ""}
                 />
               </Grid>
               <Grid
@@ -206,7 +178,6 @@ const ViewTicketsHistoryPage = ({ common, voter, showAlert }) => {
                 <LoadingButton
                   type="submit"
                   loading={isLoading}
-                  onClick={onSubmit}
                   variant="contained"
                 >
                   Submit
@@ -216,7 +187,7 @@ const ViewTicketsHistoryPage = ({ common, voter, showAlert }) => {
           </Card>
 
           <Box p={1} />
-          <TicketHistoryList />
+          <TicketHistoryList data={fechtedData} />
 
           {/* <Card sx={{ p: 3 }}>
             <Typography sx={{ pb: 2 }}>Attachements Info</Typography>

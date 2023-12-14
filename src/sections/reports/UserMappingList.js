@@ -77,7 +77,7 @@ const UserMappingList = ({ common, user, filterValues, showAlert, checkOrUncheck
 
   const handleSubmit = async () => {
     var userList = user.data.filter((e) => e.isCheck == true).map((e) => e.user_pk);
-    if (!formValues["partno"] || !formValues["designation_id"]) {
+    if (!formValues["partno"]) {
       showAlert({ text: "Please select designation & partno" });
       return;
     }

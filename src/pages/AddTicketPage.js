@@ -40,19 +40,11 @@ const AddTicketPage = ({ common, voter, showAlert }) => {
     navaratnalu_id: Yup.string().required("Navaratnalu is required"),
     reason: Yup.string().required("Reason is required"),
   });
-  const [defaultValues, setDefaultValues] = useState({
-    volunteer_id: props[20],
-    voter_pk: props[0],
+
+  const defaultValues = {
     navaratnalu_id: "",
     reason: "",
-  });
-
-  // const defaultValues = {
-  //   volunteer_id: props[20],
-  //   voter_pk: props[0],
-  //   navaratnalu_id: "",
-  //   reason: "",
-  // };
+  };
 
   const methods = useForm({
     resolver: yupResolver(schema),
@@ -61,31 +53,21 @@ const AddTicketPage = ({ common, voter, showAlert }) => {
 
   const { handleSubmit, reset } = methods;
 
-  const onSubmit = async () => {
-    if (defaultValues.navaratnalu_id === "") {
-      setNavaratnaluError(true);
-      return;
-    }
-
-    if (defaultValues.reason === "") {
-      setReasonError(true);
-      return;
-    }
-    console.log("defaultValues", defaultValues);
+  const onSubmit = async (data) => {
     setLoading(true);
     // var result = await addVoterTicket(props[0], data);
-    const result = await instance.post(createTicketRoute, defaultValues);
+    const result = await instance.post(createTicketRoute, {
+      ...data,
+      voter_pk: props[0],
+      volunteer_id: 12,
+      status_id: 1,
+    });
     console.log("result", result);
     setLoading(false);
 
     if (result) {
       showAlert({ text: "Ticket submitted", color: "success" });
-      setDefaultValues({
-        volunteer_id: "",
-        voter_pk: "",
-        navaratnalu_id: "",
-        reason: "",
-      });
+      reset();
       navigate(-1);
     }
   };
@@ -119,7 +101,7 @@ const AddTicketPage = ({ common, voter, showAlert }) => {
 
             <Grid container spacing={2} alignItems="start">
               <Grid item xs={12} md={6} lg={3}>
-                {/* <RHFTextField
+                <RHFTextField
                   name="navaratnalu_id"
                   label="Navaratnalu ID"
                   select
@@ -129,68 +111,16 @@ const AddTicketPage = ({ common, voter, showAlert }) => {
                       {item.navaratnalu_name}
                     </MenuItem>
                   ))}
-                </RHFTextField> */}
-                <TextField
-                  size="small"
-                  name="navaratnalu_id"
-                  label="Navaratnalu ID"
-                  fullWidth
-                  required
-                  select
-                  value={defaultValues.navaratnalu_id}
-                  onChange={(e) => {
-                    setDefaultValues({
-                      ...defaultValues,
-                      navaratnalu_id: e.target.value,
-                    });
-                    if (e.target.value === "") {
-                      setNavaratnaluError(true);
-                    } else {
-                      setNavaratnaluError(false);
-                    }
-                  }}
-                  error={navaratnaluError}
-                  helperText={navaratnaluError ? "This field is required" : ""}
-                >
-                  {common.navaratnalu.map((item, index) => (
-                    <MenuItem key={index} value={item.navaratnalu_pk}>
-                      {item.navaratnalu_name}
-                    </MenuItem>
-                  ))}
-                </TextField>
+                </RHFTextField>
               </Grid>
 
               <Grid item xs={12} md={6} lg={9}>
-                {/* <RHFTextField
+                <RHFTextField
                   name="reason"
                   label="Write Reason..."
                   fullWidth
                   multiline
                   rows={4}
-                /> */}
-                <TextField
-                  size="small"
-                  name="reason"
-                  label="Write Reason..."
-                  fullWidth
-                  multiline
-                  required
-                  rows={4}
-                  value={defaultValues.reason}
-                  onChange={(e) => {
-                    setDefaultValues({
-                      ...defaultValues,
-                      reason: e.target.value,
-                    });
-
-                    if (e.target.value === "") {
-                      setReasonError(true);
-                    } else {
-                      setReasonError(false);
-                    }
-                  }}
-                  error={reasonError}
-                  helperText={reasonError ? "This field is required" : ""}
                 />
               </Grid>
               <Grid
@@ -205,7 +135,6 @@ const AddTicketPage = ({ common, voter, showAlert }) => {
                 <LoadingButton
                   type="submit"
                   loading={isLoading}
-                  onClick={onSubmit}
                   variant="contained"
                 >
                   Submit

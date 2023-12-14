@@ -18,6 +18,7 @@ import SearchByFilter from "../sections/common/SearchByFilter";
 import { searchFiltercolor } from "../constants";
 import { getAllUsers, clearUserReducer } from "../actions/user";
 import { RHFAutoComplete } from "../components/hook-form";
+import { fi } from "date-fns/esm/locale";
 
 const UserMappingPage = ({ common, clearUserReducer, getAllUsers }) => {
   const [filterValues, setFilterValues] = useState(null);
@@ -29,11 +30,13 @@ const UserMappingPage = ({ common, clearUserReducer, getAllUsers }) => {
 
   const onSubmit = async () => {
     setLoading(true);
+    console.log("filterValues", filterValues);
 
     await getAllUsers(filterValues);
 
     setLoading(false);
   };
+  console.log("filterValues", filterValues);
 
   return (
     <Page title="User Mapping">
@@ -64,11 +67,11 @@ const UserMappingPage = ({ common, clearUserReducer, getAllUsers }) => {
                   borderRadius: "5px",
                 }}
               >
-                {common.users?.map((item, index) => (
+                {/* {common.users?.map((item, index) => (
                   <MenuItem key={index} value={item.value}>
                     {item.label}
                   </MenuItem>
-                ))}
+                ))} */}
               </TextField>
             </Grid>
 
@@ -79,6 +82,16 @@ const UserMappingPage = ({ common, clearUserReducer, getAllUsers }) => {
                 fullWidth
                 label="Select Designation*"
                 select
+                value={filterValues?.designation?.value ?? ""}
+                onChange={(e) =>
+                  setFilterValues({
+                    ...filterValues,
+                    designation: {
+                      label: e.target.value,
+                      value: e.target.value,
+                    },
+                  })
+                }
                 sx={{
                   backgroundColor: "white",
                   borderRadius: "5px",

@@ -31,38 +31,42 @@ import {
   getTicketHistoryRoute,
 } from "../../utils/apis";
 
-const TicketHistoryList = ({ showAlert, account }) => {
-  const [isLoading, setLoading] = useState(false);
-  const [fechtedData, setFechtedData] = useState({
-    ticketHistory: [],
-  });
-
-  const [refresh, setRefresh] = useState(false);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const ticketHistoryResponse = await instance.post(getTicketHistoryRoute);
-      console.log("ticketHistoryResponse", ticketHistoryResponse);
-      setFechtedData((state) => ({
-        ...state,
-        ticketHistory: ticketHistoryResponse.data.message,
-      }));
-    };
-    fetchData();
-  }, [refresh]);
-
+const TicketHistoryList = ({ data, showAlert, account }) => {
   const columns = [
     {
+      name: "reason",
       label: "Reason",
     },
     {
+      name: "createdon",
       label: "Created on",
     },
     {
+      name: "createdby",
       label: "Created by",
     },
     {
+      name: "status_id",
       label: "Status",
+      options: {
+        customBodyRender: (value, tableMeta, updateValue) => {
+          let statusname = "";
+          if (value === 1) {
+            statusname = "Open";
+          }
+          if (value === 2) {
+            statusname = "Resolved";
+          }
+          if (value === 3) {
+            statusname = "Cancelled";
+          }
+          if (value === 4) {
+            statusname = "Escalated";
+          }
+
+          return statusname;
+        },
+      },
     },
   ];
 
@@ -85,16 +89,6 @@ const TicketHistoryList = ({ showAlert, account }) => {
       },
     });
 
-  /// formatdata for MUIDataTable using fechtedData and filter navaratnalu_name in navaratnalu with   navaratnalu_pk in tickets
-  const formatData = fechtedData.ticketHistory.map((history) => {
-    return [
-      history.reason,
-      history.created_on,
-      history.created_by,
-      history.status_id,
-    ];
-  });
-
   return (
     <Card elevation={1}>
       <Stack>
@@ -104,7 +98,7 @@ const TicketHistoryList = ({ showAlert, account }) => {
           <MUIDataTable
             title="Ticket History List"
             columns={columns}
-            data={formatData}
+            data={data.ticketHistory}
             options={options}
           />
         </ThemeProvider>
@@ -114,11 +108,7 @@ const TicketHistoryList = ({ showAlert, account }) => {
 };
 
 const mapStateToProps = (state) => {
-  return {
-    batches: state.common,
-    students: state.management,
-    account: state.auth,
-  };
+  return {};
 };
 
 export default connect(mapStateToProps, {

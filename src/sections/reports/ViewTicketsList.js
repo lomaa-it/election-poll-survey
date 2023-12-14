@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Typography,
   Card,
@@ -10,6 +11,7 @@ import {
   Chip,
   TextField,
   MenuItem,
+  IconButton,
 } from "@mui/material";
 import Checkbox from "@mui/material/Checkbox";
 import Button from "@mui/material/Button";
@@ -31,7 +33,8 @@ import {
 } from "../../utils/apis";
 import { set } from "date-fns";
 
-const ViewTicketsList = ({ showAlert, account }) => {
+const ViewTicketsList = ({ common, showAlert, account }) => {
+  const navigate = useNavigate();
   const [isLoading, setLoading] = useState(false);
   const [fechtedData, setFechtedData] = useState({
     navaratnalu: [],
@@ -50,69 +53,55 @@ const ViewTicketsList = ({ showAlert, account }) => {
 
   useEffect(() => {
     //next level users api call based on account.user.desgination_name
-    if (account.user.desgination_name === "VOLUNTEER") {
-      const fetchNextLevelUser = async () => {
-        const requestBody = {
-          designation_name: "VOLUNTEER",
-          part_no: account.user.part_no,
-        };
-        console.log("1requestBody", requestBody);
-
-        const nextLevelUserResponse = await instance.post(
-          getNextLevelUserRoute,
-          requestBody
-        );
-        const nextLevelUserResponseData =
-          nextLevelUserResponse.data?.message ?? [];
-        console.log("nextLevelUserResponseData", nextLevelUserResponseData);
-        setFechtedData((prevState) => ({
-          ...prevState,
-          nextLevelUser: nextLevelUserResponseData,
-        }));
-      };
-      fetchNextLevelUser();
-    } else if (account.user.desgination_name === "BOOTH_INCHARGE") {
-      const fetchNextLevelUser = async () => {
-        try {
-          const requestBody = {
-            designation_name: "BOOTH_INCHARGE",
-            sachivalayam_id: account.user.sachivalayam_pk,
-          };
-          console.log("2requestBody", requestBody);
-          const nextLevelUserResponse = await instance.post(
-            getNextLevelUserRoute,
-            requestBody
-          );
-          console.log("nextLevelUserResponse", nextLevelUserResponse);
-          const nextLevelUserResponseData =
-            nextLevelUserResponse.data?.message ?? [];
-          console.log("nextLevelUserResponseData", nextLevelUserResponseData);
-          setFechtedData((prevState) => ({
-            ...prevState,
-            nextLevelUser: nextLevelUserResponseData,
-          }));
-        } catch (error) {
-          console.error(
-            "An error occurred while fetching the next level user:",
-            error
-          );
-        }
-      };
-      fetchNextLevelUser();
-    }
-
-    const fetchData = async () => {
-      const statusResponse = await instance.post(getTicketStatusRoute);
-      const statusResponseData = statusResponse.data?.message ?? [];
-
-      // console.log("statusResponseData", statusResponseData);
-
-      setFechtedData((prevState) => ({
-        ...prevState,
-        status: statusResponseData,
-      }));
-    };
-    fetchData();
+    // if (account.user.desgination_name === "VOLUNTEER") {
+    //   const fetchNextLevelUser = async () => {
+    //     const requestBody = {
+    //       designation_name: "VOLUNTEER",
+    //       part_no: account.user.part_no,
+    //     };
+    //     console.log("1requestBody", requestBody);
+    //     const nextLevelUserResponse = await instance.post(
+    //       getNextLevelUserRoute,
+    //       requestBody
+    //     );
+    //     const nextLevelUserResponseData =
+    //       nextLevelUserResponse.data?.message ?? [];
+    //     console.log("nextLevelUserResponseData", nextLevelUserResponseData);
+    //     setFechtedData((prevState) => ({
+    //       ...prevState,
+    //       nextLevelUser: nextLevelUserResponseData,
+    //     }));
+    //   };
+    //   fetchNextLevelUser();
+    // } else if (account.user.desgination_name === "BOOTH_INCHARGE") {
+    //   const fetchNextLevelUser = async () => {
+    //     try {
+    //       const requestBody = {
+    //         designation_name: "BOOTH_INCHARGE",
+    //         sachivalayam_id: account.user.sachivalayam_pk,
+    //       };
+    //       console.log("2requestBody", requestBody);
+    //       const nextLevelUserResponse = await instance.post(
+    //         getNextLevelUserRoute,
+    //         requestBody
+    //       );
+    //       console.log("nextLevelUserResponse", nextLevelUserResponse);
+    //       const nextLevelUserResponseData =
+    //         nextLevelUserResponse.data?.message ?? [];
+    //       console.log("nextLevelUserResponseData", nextLevelUserResponseData);
+    //       setFechtedData((prevState) => ({
+    //         ...prevState,
+    //         nextLevelUser: nextLevelUserResponseData,
+    //       }));
+    //     } catch (error) {
+    //       console.error(
+    //         "An error occurred while fetching the next level user:",
+    //         error
+    //       );
+    //     }
+    //   };
+    //   fetchNextLevelUser();
+    // }
   }, []);
 
   useEffect(() => {
@@ -167,6 +156,9 @@ const ViewTicketsList = ({ showAlert, account }) => {
     {
       label: "pending(no of days)",
     },
+    {
+      label: "Action",
+    },
   ];
 
   const options = {
@@ -218,6 +210,14 @@ const ViewTicketsList = ({ showAlert, account }) => {
       },
     });
 
+  const renderAction = (data) => {
+    return (
+      <IconButton onClick={() => handleEdit(data)}>
+        <EditNoteIcon />
+      </IconButton>
+    );
+  };
+
   /// formatdata for MUIDataTable using fechtedData and filter navaratnalu_name in navaratnalu with   navaratnalu_pk in tickets
   const formatData = fechtedData.tickets.map((ticket) => {
     const navaratnalu = fechtedData.navaratnalu.find(
@@ -226,18 +226,19 @@ const ViewTicketsList = ({ showAlert, account }) => {
     const tickets = fechtedData.tickets.find(
       (tickets) => tickets.navaratnalu_id === navaratnalu.navaratnalu_pk
     );
+    let statename = "";
 
     if (tickets.status_id === 1) {
-      tickets.status_id = "Open";
+      statename= "Open";
     }
     if (tickets.status_id === 2) {
-      tickets.status_id = "Resolved";
+      statename = "Resolved";
     }
     if (tickets.status_id === 3) {
-      tickets.status_id = "Cancelled";
+      statename = "Cancelled";
     }
     if (tickets.status_id === 4) {
-      tickets.status_id = "Escalated";
+      statename = "Escalated";
     }
     console.log(tickets);
 
@@ -251,10 +252,19 @@ const ViewTicketsList = ({ showAlert, account }) => {
       // ticket.phone || "-",
       navaratnalu.navaratnalu_name || "-",
       ticket.reason || "-",
-      tickets.status_id || "-",
-      tickets.pending_days || "-",
+      statename || "-",
+      tickets.pending_days || "1",
+      renderAction(ticket),
     ];
   });
+
+  const handleEdit = (data) => {
+    navigate(`/view-ticket-history`, {
+      state: {
+        data: data,
+      },
+    });
+  };
 
   const handleSubmit = async () => {
     const requestBody = {
@@ -320,9 +330,9 @@ const ViewTicketsList = ({ showAlert, account }) => {
                 }));
               }}
             >
-              {fechtedData.status.map((status) => (
-                <MenuItem key={status.lookup_pk} value={status.lookup_pk}>
-                  {status.ticket_status}
+              {common.ticket.map((item, index) => (
+                <MenuItem key={index} value={item.value}>
+                  {item.label}
                 </MenuItem>
               ))}
             </TextField>
@@ -389,8 +399,7 @@ const ViewTicketsList = ({ showAlert, account }) => {
 
 const mapStateToProps = (state) => {
   return {
-    batches: state.common,
-    students: state.management,
+    common: state.common,
     account: state.auth,
   };
 };

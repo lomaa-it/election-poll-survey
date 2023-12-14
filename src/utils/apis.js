@@ -8,6 +8,8 @@
 // export const baseServerUrl = "https://37bd-123-201-174-19.ngrok-free.app";
 // export const baseServerUrl = "https://backend.cgrysrcongress.in";
 export const baseServerUrl = "http://192.168.137.242:8080";
+/// new
+// export const baseServerUrl = "https://poll2.onrender.com"
 
 // Voter Api
 
@@ -15,12 +17,12 @@ export const loginRoute = "/users-login";
 export const resetPswdRoute = "/updateuserpassword";
 
 // GET ALL DATA
-export const getTicketHistoryRoute = "/gettickethistory";
+export const getTicketHistoryRoute = "/getonetickethistory";
 export const getTicketStatusRoute = "/getticketstatus";
 export const getAllTicketsRoute = "/ticket_master/getall";
 export const getAllVotersRoute = "/voters/getall";
 export const getAllUsersRoute = "/getalluserswithjoinandwhere";
-export const getAllDesignationsRoute = "/designation/getall";
+export const getAllDesignationsRoute = "/getalldesignations";
 export const getAllPartiesRoute = "/getallparties";
 export const getAllStatesRoute = "/states/getall";
 export const getAllDistrictsRoute = "/districts/getall";
@@ -67,6 +69,7 @@ export const createSachivalayamRoute = "/sachivalayam/";
 export const createPartsRoute = "/parts/";
 export const createVillagesRoute = "/villages/";
 export const createTicketRoute = "/createticketinticketmasterandtickethistory";
+export const createTicketHistoryRoute = "/ticket_history"
 
 // Delete By Id
 export const deleteStatesByIdRoute = "/states/";
