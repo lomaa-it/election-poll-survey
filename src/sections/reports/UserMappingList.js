@@ -140,7 +140,7 @@ const UserMappingList = ({ common, user, filterValues, showAlert, checkOrUncheck
                 />
               </Grid>
 
-              <Grid item xs={12} md={6} lg={3}>
+              {/* <Grid item xs={12} md={6} lg={3}>
                 <TextField name="designation_id" value={formValues.designation_id} size="small" fullWidth label="Select Designation*" select onChange={(e) => handleChange(e.target.name, e.target.value)}>
                   {common.designation?.map((item, index) => (
                     <MenuItem key={index} value={item.value}>
@@ -148,11 +148,11 @@ const UserMappingList = ({ common, user, filterValues, showAlert, checkOrUncheck
                     </MenuItem>
                   ))}
                 </TextField>
-              </Grid>
+              </Grid> */}
 
               <Grid item xs={12} md={6} lg={3}>
                 <LoadingButton loading={isLoading} variant="outlined" onClick={handleSubmit}>
-                  Assign Designation
+                  Assign Part No
                 </LoadingButton>
               </Grid>
             </Grid>

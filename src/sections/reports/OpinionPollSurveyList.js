@@ -258,7 +258,7 @@ const OpinionPollSurveyList = ({
     },
     {
       name: "current_address",
-      label: "Address",
+      label: "Current Address",
     },
     {
       name: "volunteer_id",
@@ -266,6 +266,10 @@ const OpinionPollSurveyList = ({
       options: {
         display: false,
       },
+    },
+    {
+      name: "permenent_address",
+      label: "Permanent Address",
     },
   ];
 
@@ -308,6 +312,8 @@ const OpinionPollSurveyList = ({
     console.log("tableState", tableState);
     getAllVotersSurvey(filterValues, tableState.page, tableState.rowsPerPage);
   };
+
+  console.log("votersssssss", voter);
 
   return (
     <>

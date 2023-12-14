@@ -101,16 +101,16 @@ const TicketsPage = ({ dashboard }) => {
                   Total
                 </TableCell>
                 <TableCell align="center" sx={{ fontSize: "1.2rem", fontWeight: "bold" }}>
-                  # Of Open
+                  Open
                 </TableCell>
                 <TableCell align="center" sx={{ fontSize: "1.2rem", fontWeight: "bold" }}>
-                  # Of Resolved
+                  Resolved
                 </TableCell>
                 <TableCell align="center" sx={{ fontSize: "1.2rem", fontWeight: "bold" }}>
-                  # Of Cancelled
+                  Cancelled
                 </TableCell>
                 <TableCell align="center" sx={{ fontSize: "1.2rem", fontWeight: "bold" }}>
-                  # Of Escalated
+                  Escalated
                 </TableCell>
               </TableRow>
             </TableHead>

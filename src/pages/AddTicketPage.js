@@ -90,7 +90,7 @@ const AddTicketPage = ({ common, voter, showAlert }) => {
     }
   };
 
-  console.log("props", props);
+  console.log("propsaddTickets", props);
 
   return (
     <Page title="Add Ticket">
@@ -215,7 +215,7 @@ const AddTicketPage = ({ common, voter, showAlert }) => {
           </Card>
 
           <Box p={1} />
-          <TicketHistoryList />
+          {/* <TicketHistoryList /> */}
 
           {/* <Card sx={{ p: 3 }}>
             <Typography sx={{ pb: 2 }}>Attachements Info</Typography>

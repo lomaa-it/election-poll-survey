@@ -1,4 +1,12 @@
-import { Grid, Container, Typography, Box, TextField, Card, FormControlLabel } from "@mui/material";
+import {
+  Grid,
+  Container,
+  Typography,
+  Box,
+  TextField,
+  Card,
+  FormControlLabel,
+} from "@mui/material";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControl from "@mui/material/FormControl";
@@ -27,51 +35,61 @@ const VoterRegistrationPage = ({ dashboard }) => {
             </Grid>
 
             <Grid item xs={12} md={6} lg={3}>
-              <TextField size="small" label="Select Consistency *" fullWidth select />
+              <TextField
+                size="small"
+                label="Select Consistency *"
+                fullWidth
+                select
+              />
             </Grid>
 
             <Grid item xs={12} md={6} lg={3}>
-              <TextField size="small" label="Select Mandal *" fullWidth select />
+              <TextField
+                size="small"
+                label="Select Mandal *"
+                fullWidth
+                select
+              />
             </Grid>
 
             <Grid item xs={12} md={6} lg={3}>
-              <TextField size="small" label="Select Division *" fullWidth select />
+              <TextField
+                size="small"
+                label="Select Division *"
+                fullWidth
+                select
+              />
             </Grid>
 
             <Grid item xs={12} md={6} lg={3}>
-              <TextField size="small" label="Select Sachivalayam *" fullWidth select />
+              <TextField
+                size="small"
+                label="Select Sachivalayam *"
+                fullWidth
+                select
+              />
             </Grid>
 
             <Grid item xs={12} md={6} lg={3}>
-              <TextField size="small" label="Select Booth/Part *" fullWidth select />
+              <TextField
+                size="small"
+                label="Select Booth/Part *"
+                fullWidth
+                select
+              />
             </Grid>
 
             <Grid item xs={12} md={6} lg={3}>
-              <TextField size="small" label="Select Village *" fullWidth select />
+              <TextField
+                size="small"
+                label="Select Village *"
+                fullWidth
+                select
+              />
             </Grid>
 
             <Grid item xs={12} md={6} lg={3}>
               <TextField size="small" label="Part SL No" fullWidth />
-            </Grid>
-
-            <Grid
-              item
-              xs={12}
-              md={6}
-              lg={3}
-              sx={{
-                marginLeft: "auto",
-                marginTop: "55px",
-              }}
-            >
-              <LoadingButton
-                variant="contained"
-                sx={{
-                  padding: "15px 40px",
-                }}
-              >
-                Submit
-              </LoadingButton>
             </Grid>
           </Grid>
         </Card>{" "}
@@ -81,7 +99,14 @@ const VoterRegistrationPage = ({ dashboard }) => {
           <Grid container spacing={2} alignItems="center">
             <Grid item xs={12} md={6} lg={3}>
               <Box px={2}>
-                <FormControlLabel control={<CheckBox />} label={<Typography style={{ marginLeft: "10px" }}>Is New Voter?</Typography>} />
+                <FormControlLabel
+                  control={<CheckBox />}
+                  label={
+                    <Typography style={{ marginLeft: "10px" }}>
+                      Is New Voter?
+                    </Typography>
+                  }
+                />
               </Box>
             </Grid>
             <Grid item xs={12} md={6} lg={3}>
@@ -101,11 +126,30 @@ const VoterRegistrationPage = ({ dashboard }) => {
             </Grid>
             <Grid item xs={12} md={6} lg={3}>
               <FormControl>
-                <FormLabel id="demo-radio-buttons-group-label">Guardian:</FormLabel>
-                <RadioGroup aria-labelledby="demo-radio-buttons-group-label" defaultValue="father" name="radio-buttons-group" row>
-                  <FormControlLabel value="father" control={<Radio />} label="Father" />
-                  <FormControlLabel value="mother" control={<Radio />} label="Mother" />
-                  <FormControlLabel value="husband" control={<Radio />} label="Husband" />
+                <FormLabel id="demo-radio-buttons-group-label">
+                  Guardian:
+                </FormLabel>
+                <RadioGroup
+                  aria-labelledby="demo-radio-buttons-group-label"
+                  defaultValue="father"
+                  name="radio-buttons-group"
+                  row
+                >
+                  <FormControlLabel
+                    value="father"
+                    control={<Radio />}
+                    label="Father"
+                  />
+                  <FormControlLabel
+                    value="mother"
+                    control={<Radio />}
+                    label="Mother"
+                  />
+                  <FormControlLabel
+                    value="husband"
+                    control={<Radio />}
+                    label="Husband"
+                  />
                 </RadioGroup>
               </FormControl>
             </Grid>
@@ -125,7 +169,12 @@ const VoterRegistrationPage = ({ dashboard }) => {
               <TextField size="small" label="Volunteer ID *" fullWidth select />
             </Grid>
             <Grid item xs={12} md={6} lg={3}>
-              <TextField size="small" label="Gruhasaradhi ID *" fullWidth select />
+              <TextField
+                size="small"
+                label="Gruhasaradhi ID *"
+                fullWidth
+                select
+              />
             </Grid>
             <Grid item xs={12} md={6} lg={3}>
               <TextField size="small" label="Phone Number *" fullWidth select />
@@ -139,13 +188,54 @@ const VoterRegistrationPage = ({ dashboard }) => {
                 marginLeft: "14px",
               }}
             >
-              <FormControlLabel control={<CheckBox />} label={<Typography style={{ marginLeft: "10px" }}>Resident</Typography>} />
+              <FormControlLabel
+                control={<CheckBox />}
+                label={
+                  <Typography style={{ marginLeft: "10px" }}>
+                    Resident
+                  </Typography>
+                }
+              />
             </Grid>
             <Grid item xs={12} md={6} lg={6}>
-              <TextField size="small" label="Permenent Address 1 *" fullWidth multiline rows={4} rowsMax={8} />
+              <TextField
+                size="small"
+                label="Permenent Address 1 *"
+                fullWidth
+                multiline
+                rows={4}
+                rowsMax={8}
+              />
             </Grid>
             <Grid item xs={12} md={6} lg={6}>
-              <TextField size="small" label="Current Address 1 *" fullWidth multiline rows={4} rowsMax={8} />
+              <TextField
+                size="small"
+                label="Current Address 1 *"
+                fullWidth
+                multiline
+                rows={4}
+                rowsMax={8}
+              />
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              md={12}
+              lg={12}
+              sx={{
+                marginLeft: "auto",
+                display: "flex",
+                justifyContent: "flex-end",
+              }}
+            >
+              <LoadingButton
+                variant="contained"
+                sx={{
+                  padding: "15px 40px",
+                }}
+              >
+                Submit
+              </LoadingButton>
             </Grid>
           </Grid>
         </Card>

@@ -73,29 +73,32 @@ const ViewTicketsList = ({ showAlert, account }) => {
       fetchNextLevelUser();
     } else if (account.user.desgination_name === "BOOTH_INCHARGE") {
       const fetchNextLevelUser = async () => {
-  try {
-    const requestBody = {
-      designation_name: "BOOTH_INCHARGE",
-      sachivalayam_id: account.user.sachivalayam_pk,
-    };
-    console.log("2requestBody", requestBody);
-    const nextLevelUserResponse = await instance.post(
-      getNextLevelUserRoute,
-      requestBody
-    );
-    console.log("nextLevelUserResponse", nextLevelUserResponse);
-    const nextLevelUserResponseData =
-      nextLevelUserResponse.data?.message ?? [];
-    console.log("nextLevelUserResponseData", nextLevelUserResponseData);
-    setFechtedData((prevState) => ({
-      ...prevState,
-      nextLevelUser: nextLevelUserResponseData,
-    }));
-  } catch (error) {
-    console.error("An error occurred while fetching the next level user:", error);
-  }
-};
-fetchNextLevelUser();
+        try {
+          const requestBody = {
+            designation_name: "BOOTH_INCHARGE",
+            sachivalayam_id: account.user.sachivalayam_pk,
+          };
+          console.log("2requestBody", requestBody);
+          const nextLevelUserResponse = await instance.post(
+            getNextLevelUserRoute,
+            requestBody
+          );
+          console.log("nextLevelUserResponse", nextLevelUserResponse);
+          const nextLevelUserResponseData =
+            nextLevelUserResponse.data?.message ?? [];
+          console.log("nextLevelUserResponseData", nextLevelUserResponseData);
+          setFechtedData((prevState) => ({
+            ...prevState,
+            nextLevelUser: nextLevelUserResponseData,
+          }));
+        } catch (error) {
+          console.error(
+            "An error occurred while fetching the next level user:",
+            error
+          );
+        }
+      };
+      fetchNextLevelUser();
     }
 
     const fetchData = async () => {
@@ -134,6 +137,9 @@ fetchNextLevelUser();
     {
       label: "Select",
     },
+    {
+      label: "Ticket ID",
+    },
     // {
     //   label: "Volunteer ID",
     // },
@@ -157,6 +163,9 @@ fetchNextLevelUser();
     },
     {
       label: "Status",
+    },
+    {
+      label: "pending(no of days)",
     },
   ];
 
@@ -230,9 +239,11 @@ fetchNextLevelUser();
     if (tickets.status_id === 4) {
       tickets.status_id = "Escalated";
     }
+    console.log(tickets);
 
     return [
       renderCheckBox(ticket),
+      ticket.ticket_master_pk,
       // ticket.volunteer_id || "-",
       // ticket.volunteer_name || "-",
       // ticket.voter_pk || "-",
@@ -241,6 +252,7 @@ fetchNextLevelUser();
       navaratnalu.navaratnalu_name || "-",
       ticket.reason || "-",
       tickets.status_id || "-",
+      tickets.pending_days || "-",
     ];
   });
 

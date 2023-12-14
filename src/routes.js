@@ -44,6 +44,7 @@ import VotingSurveyReportsPage from "./pages/VotingSurveyReportsPage";
 import VotingPollDashBoardPage from "./pages/VotingPollDashBoardPage";
 import { LOGIN_TYPES } from "./constants";
 import LandingPage from "./pages/LandingPage";
+import ViewTicketsHistoryPage from "./pages/ViewTicketsHistoryPage";
 
 const Router = () => {
   return (
@@ -79,6 +80,7 @@ const Router = () => {
           <Route path="voting-poll-results" element={<VotingPollResultsPage />} />
           <Route path="polling-results-by-state" element={<VotingPollingResultsbyStatePage />} />
           <Route path="add-ticket1" element={<AddTicketPage />} />
+          <Route path="view-ticket-history" element={<ViewTicketsHistoryPage />} />
           <Route path="absent-ticket" element={<AbsentTicketPage />} />
           <Route path="voter-and-volunteer-mapping" element={<VoterAndVolunteerMappingPage />} />
           <Route path="user-mapping" element={<UserMappingPage />} />

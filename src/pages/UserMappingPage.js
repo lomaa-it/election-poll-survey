@@ -6,6 +6,7 @@ import {
   Box,
   TextField,
   Card,
+  MenuItem,
 } from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
@@ -16,6 +17,7 @@ import Button from "@mui/material/Button";
 import SearchByFilter from "../sections/common/SearchByFilter";
 import { searchFiltercolor } from "../constants";
 import { getAllUsers, clearUserReducer } from "../actions/user";
+import { RHFAutoComplete } from "../components/hook-form";
 
 const UserMappingPage = ({ common, clearUserReducer, getAllUsers }) => {
   const [filterValues, setFilterValues] = useState(null);
@@ -32,8 +34,6 @@ const UserMappingPage = ({ common, clearUserReducer, getAllUsers }) => {
 
     setLoading(false);
   };
-
-  
 
   return (
     <Page title="User Mapping">
@@ -52,6 +52,45 @@ const UserMappingPage = ({ common, clearUserReducer, getAllUsers }) => {
               showOtherFilters={false}
               onChanged={(value) => setFilterValues(value)}
             />
+            <Grid item xs={12} md={6} lg={2}>
+              <TextField
+                name="user_id"
+                size="small"
+                fullWidth
+                label="Select User"
+                select
+                sx={{
+                  backgroundColor: "white",
+                  borderRadius: "5px",
+                }}
+              >
+                {common.users?.map((item, index) => (
+                  <MenuItem key={index} value={item.value}>
+                    {item.label}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </Grid>
+
+            <Grid item xs={12} md={6} lg={2}>
+              <TextField
+                name="designation_id"
+                size="small"
+                fullWidth
+                label="Select Designation*"
+                select
+                sx={{
+                  backgroundColor: "white",
+                  borderRadius: "5px",
+                }}
+              >
+                {common.designation?.map((item, index) => (
+                  <MenuItem key={index} value={item.value}>
+                    {item.label}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </Grid>
 
             <Grid item xs={12} md={6} lg={2}>
               <LoadingButton

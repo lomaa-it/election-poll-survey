@@ -66,7 +66,7 @@ export const createDivisionsRoute = "/divisions/";
 export const createSachivalayamRoute = "/sachivalayam/";
 export const createPartsRoute = "/parts/";
 export const createVillagesRoute = "/villages/";
-export const createTicketRoute = "/ticket_master";
+export const createTicketRoute = "/createticketinticketmasterandtickethistory";
 
 // Delete By Id
 export const deleteStatesByIdRoute = "/states/";

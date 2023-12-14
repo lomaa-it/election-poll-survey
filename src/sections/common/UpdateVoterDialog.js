@@ -131,9 +131,13 @@ const UpdateVoterDialog = ({
           <DialogTitle>Update Details</DialogTitle>
           <DialogContent>
             <Box py={1}>
+              <Typography sx={{ mb: 1}}>
+                Voter ID: {voterData.voter_id}
+              </Typography>
               <Typography sx={{ mb: 3 }}>
                 Name: {voterData.voter_name}
               </Typography>
+
               <Grid container spacing={3} alignItems="center">
                 <Grid item xs={12} md={12} lg={12}>
                   <RHFTextField2
