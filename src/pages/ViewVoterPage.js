@@ -1,4 +1,12 @@
-import { Grid, Container, Typography, Box, TextField, Card, MenuItem } from "@mui/material";
+import {
+  Grid,
+  Container,
+  Typography,
+  Box,
+  TextField,
+  Card,
+  MenuItem,
+} from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -12,10 +20,13 @@ import instance from "../utils/axios";
 import { ageDropdown } from "../utils/dropdownconstants";
 import SearchByFilter from "../sections/common/SearchByFilter";
 import { searchFiltercolor } from "../constants";
+import { RHFAutoComplete } from "../components/hook-form";
 
 const ViewVoterPage = ({ dashboard }) => {
   const [votersData, setVotersData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [reset, setReset] = useState(false);
+  const [filterValues, setFilterValues] = useState(null);
 
   useEffect(() => {
     setIsLoading(true);
@@ -29,7 +40,27 @@ const ViewVoterPage = ({ dashboard }) => {
         console.log("data", responseData);
 
         const filterData = responseData.map((item) => {
-          return [item.voter_id, " ", item.voter_name, item.guardian_name, "Male", item.is_resident != null ? "Yes" : "No", item.phone_no, item.age];
+          let genderName = "";
+          if (item.gender === 13) {
+            genderName = "Male";
+          }
+          if (item.gender === 14) {
+            genderName = "Male";
+          }
+          if (item.gender === 15) {
+            genderName = "Male";
+          }
+
+          return [
+            item.voter_id,
+            item.part_slno,
+            item.voter_name,
+            item.guardian_name,
+            genderName,
+            item.is_resident != null ? "Yes" : "No",
+            item.phone_no,
+            item.age,
+          ];
         });
         setVotersData(filterData);
         setIsLoading(false);
@@ -39,6 +70,14 @@ const ViewVoterPage = ({ dashboard }) => {
     };
     getVotersData();
   }, []);
+
+  const handleChange = (name, value) => {
+    const values = {};
+
+    values[name] = value;
+
+    setFilterValues((state) => ({ ...state, ...values }));
+  };
 
   return (
     <Page title="View Voter">
@@ -51,36 +90,56 @@ const ViewVoterPage = ({ dashboard }) => {
           {/* <Typography sx={{ pb: 2 }}>Search by filter</Typography> */}
 
           <Grid container spacing={2} alignItems="center">
-            <SearchByFilter />
+            <SearchByFilter
+              reset={reset}
+              onChanged={(value) => setFilterValues(value)}
+            />
 
             <Grid item xs={12} md={6} lg={2}>
-              <TextField
-                size="small"
+              <RHFAutoComplete
+                key={reset} // add this line
+                name="part_slno"
                 label="Part SLNO"
-                fullWidth
-                select
-                sx={{
-                  backgroundColor: "#fff",
-                  borderRadius: "5px",
-                }}
+                value={filterValues?.part_slno}
+                onChange={handleChange}
+                options={[
+                  { value: "1", label: "1" },
+                  { value: "2", label: "2" },
+                  { value: "3", label: "3" },
+                ]}
               />
             </Grid>
 
             <Grid item xs={12} md={6} lg={2}>
-              <TextField
-                size="small"
+              <RHFAutoComplete
+                key={reset} // add this line
+                name="voter_id"
                 label="Voter ID"
-                fullWidth
-                select
-                sx={{
-                  backgroundColor: "#fff",
-                  borderRadius: "5px",
-                }}
+                value={filterValues?.voter_id}
+                onChange={handleChange}
+                options={[
+                  { value: "1", label: "1" },
+                  { value: "2", label: "2" },
+                  { value: "3", label: "3" },
+                ]}
               />
             </Grid>
 
             <Grid item xs={12} md={6} lg={2}>
               <LoadingButton variant="contained">Search</LoadingButton>
+              <LoadingButton
+                loading={isLoading}
+                variant="contained"
+                sx={{
+                  backgroundColor: "red",
+                  marginLeft: "15px",
+                }}
+                onClick={() => {
+                  setReset(!reset);
+                }}
+              >
+                Clear
+              </LoadingButton>
             </Grid>
           </Grid>
         </Card>

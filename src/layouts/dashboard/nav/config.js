@@ -10,7 +10,7 @@ const userNavConfig = [
 
 const mlaNavConfig = [
   {
-    title: "Opinion Dashboard",
+    title: "Survey Dashboard",
     path: "/dashboard",
     icon: <Iconify icon="ic:round-dashboard" width="24px" height="24px" />,
   },
@@ -42,43 +42,43 @@ const mlaNavConfig = [
   },
 
   // Voting Poll Survey with Sub Menu
-  {
-    title: "Voting Poll Survey ",
-    path: "/voting-poll-survey",
-    icon: <Iconify icon="mdi:vote" width="24px" height="24px" />,
-    children: [
-      {
-        title: "Voting Poll Survey",
-        path: "/voting-poll-survey/survey",
-        icon: <Iconify icon="ic:round-person" width="24px" height="24px" />,
-      },
-      {
-        title: "Voting Poll Results",
-        path: "/voting-poll-survey/results",
-        icon: <Iconify icon="ic:round-person" width="24px" height="24px" />,
-      },
-      {
-        title: "Voting Poll Reports",
-        path: "/voting-poll-survey/reports",
-      },
-      // {
-      //   title: "Voting polling reports",
-      //   path: "voting-polling-reports",
-      // },
-      {
-        title: "Report by Survey and Voting Reason",
-        path: "/voting-poll-survey/report-by-survey-and-voting-reason",
-      },
-      // {
-      //   title: "Voting Poll Results",
-      //   path: "voting-poll-results",
-      // },
-      // {
-      //   title: "Results by District",
-      //   path: "polling-results-by-state",
-      // },
-    ],
-  },
+  // {
+  //   title: "Voting Poll Survey ",
+  //   path: "/voting-poll-survey",
+  //   icon: <Iconify icon="mdi:vote" width="24px" height="24px" />,
+  //   children: [
+  //     {
+  //       title: "Voting Poll Survey",
+  //       path: "/voting-poll-survey/survey",
+  //       icon: <Iconify icon="ic:round-person" width="24px" height="24px" />,
+  //     },
+  //     {
+  //       title: "Voting Poll Results",
+  //       path: "/voting-poll-survey/results",
+  //       icon: <Iconify icon="ic:round-person" width="24px" height="24px" />,
+  //     },
+  //     {
+  //       title: "Voting Poll Reports",
+  //       path: "/voting-poll-survey/reports",
+  //     },
+  //     // {
+  //     //   title: "Voting polling reports",
+  //     //   path: "voting-polling-reports",
+  //     // },
+  //     {
+  //       title: "Report by Survey and Voting Reason",
+  //       path: "/voting-poll-survey/report-by-survey-and-voting-reason",
+  //     },
+  //     // {
+  //     //   title: "Voting Poll Results",
+  //     //   path: "voting-poll-results",
+  //     // },
+  //     // {
+  //     //   title: "Results by District",
+  //     //   path: "polling-results-by-state",
+  //     // },
+  //   ],
+  // },
 
   // {
   //   title: "Voters",

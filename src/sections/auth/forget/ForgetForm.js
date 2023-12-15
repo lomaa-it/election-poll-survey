@@ -3,20 +3,27 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Stack, IconButton, InputAdornment, TextField, Typography } from "@mui/material";
+import {
+  Stack,
+  IconButton,
+  InputAdornment,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import Iconify from "../../../components/Iconify";
 import { FormProvider, RHFTextField } from "../../../components/hook-form";
 import { connect } from "react-redux";
 import { showAlert } from "../../../actions/alert";
 import { isOtpValid } from "../../../constants";
+import { RHFTextField2 } from "../../../components/hook-form/RHFTextField";
 
-const ForgetForm = ({ showAlert }) => {
+const ForgetForm = ({ showAlert, otpSent, setOtpSent }) => {
   const navigate = useNavigate();
 
   const [isLoading, setLoading] = useState(false);
 
-  const [otpSent, setOtpSent] = useState(null);
+  // const [otpSent, setOtpSent] = useState(null);
   const [otp, setOtp] = useState(null);
   const [otpError, setOtpError] = useState();
 
@@ -68,13 +75,32 @@ const ForgetForm = ({ showAlert }) => {
   if (!!otpSent) {
     return (
       <Stack spacing={3}>
-        <Typography gutterBottom variant="body2" sx={{ color: "text.secondary" }}>
-          Enter the OTP sent to +91 - 1234567890
+        <Typography
+          gutterBottom
+          variant="body2"
+          sx={{ color: "text.secondary" }}
+        >
+          Enter the OTP sent to +91 - {formValues?.username}
         </Typography>
 
-        <TextField size="small" name="otp" label="OTP" fullWidth error={!!otpError} helperText={otpError} onChange={(e) => setOtp(e.target.value)} />
+        <TextField
+          size="small"
+          name="otp"
+          label="OTP"
+          fullWidth
+          error={!!otpError}
+          helperText={otpError}
+          onChange={(e) => setOtp(e.target.value)}
+        />
 
-        <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isLoading} onClick={onOtpSubmit}>
+        <LoadingButton
+          fullWidth
+          size="large"
+          type="submit"
+          variant="contained"
+          loading={isLoading}
+          onClick={onOtpSubmit}
+        >
           Verify
         </LoadingButton>
       </Stack>
@@ -84,10 +110,16 @@ const ForgetForm = ({ showAlert }) => {
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Stack my={3} spacing={3}>
-        <RHFTextField name="username" label="Phone" />
+        <RHFTextField2 name="username" label="Phone" />
       </Stack>
 
-      <LoadingButton fullWidth loading={isLoading} size="large" type="submit" variant="contained">
+      <LoadingButton
+        fullWidth
+        loading={isLoading}
+        size="large"
+        type="submit"
+        variant="contained"
+      >
         Verify
       </LoadingButton>
     </FormProvider>

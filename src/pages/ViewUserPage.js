@@ -11,25 +11,48 @@ import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
 import ViewUsersList from "../sections/reports/ViewUsersList";
 import Button from "@mui/material/Button";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import SearchByFilter from "../sections/common/SearchByFilter";
 import { searchFiltercolor } from "../constants";
 import { clearUserReducer, getAllUsers } from "../actions/user";
+import { RHFAutoComplete } from "../components/hook-form";
+import { useLocation } from "react-router-dom";
 
 const ViewUserPage = ({ common, clearUserReducer, getAllUsers }) => {
   const [filterValues, setFilterValues] = useState(null);
   const [isLoading, setLoading] = useState(false);
+  const [reset, setReset] = useState(false);
+  let location = useLocation();
+  const buttonRef = useRef();
 
   useEffect(() => {
     clearUserReducer();
   }, []);
 
-  const onSubmit = async () => {
+  useEffect(() => {
+    setFilterValues(null);
+  }, [reset]);
+
+  const onSubmit = useCallback(async () => {
     setLoading(true);
+    console.log("filterValues232", filterValues);
+    console.log("HI im Here");
 
     await getAllUsers(filterValues);
 
     setLoading(false);
+  }, [filterValues, getAllUsers]);
+
+  useEffect(() => {
+    onSubmit();
+  }, [location, onSubmit]);
+
+  const handleChange = (name, value) => {
+    const values = {};
+
+    values[name] = value;
+
+    setFilterValues((state) => ({ ...state, ...values }));
   };
 
   return (
@@ -43,54 +66,61 @@ const ViewUserPage = ({ common, clearUserReducer, getAllUsers }) => {
           {/* <Typography sx={{ pb: 2 }}>Search by filter</Typography> */}
 
           <Grid container spacing={2} alignItems="center">
-            <SearchByFilter onChanged={(value) => setFilterValues(value)} />
+            <SearchByFilter
+              reset={reset}
+              onChanged={(value) => setFilterValues(value)}
+            />
 
             <Grid item xs={12} md={6} lg={2}>
-              <TextField
-                size="small"
-                label="User Type"
-                fullWidth
-                select
-                sx={{
-                  backgroundColor: "#fff",
-                  borderRadius: "5px",
-                }}
+              <RHFAutoComplete
+                key={reset} // add this line
+                name="designation"
+                label="Select Designation"
+                value={filterValues?.designation}
+                onChange={handleChange}
+                options={common.designation}
               />
             </Grid>
 
-            <Grid item xs={12} md={6} lg={2}>
-              <TextField
-                size="small"
+            {/* <Grid item xs={12} md={6} lg={2}>
+              <RHFAutoComplete
+                name="voter_id"
                 label="Voter ID"
-                fullWidth
-                select
-                sx={{
-                  backgroundColor: "#fff",
-                  borderRadius: "5px",
-                }}
-              />
-            </Grid>
 
-            <Grid item xs={12} md={6} lg={2}>
-              <TextField
-                size="small"
-                label="Voter Name"
-                fullWidth
-                select
-                sx={{
-                  backgroundColor: "#fff",
-                  borderRadius: "5px",
-                }}
+                // disabled={account.user.part_no != null}
               />
-            </Grid>
+            </Grid> */}
+
+            {/* <Grid item xs={12} md={6} lg={2}>
+              <RHFAutoComplete
+                name="voter_name"
+                label="Voter Name"
+
+                // disabled={account.user.part_no != null}
+              />
+            </Grid> */}
 
             <Grid item xs={12} md={6} lg={2}>
               <LoadingButton
+                ref={buttonRef}
                 loading={isLoading}
                 variant="contained"
                 onClick={onSubmit}
               >
                 Search
+              </LoadingButton>
+              <LoadingButton
+                loading={isLoading}
+                variant="contained"
+                sx={{
+                  backgroundColor: "red",
+                  marginLeft: "15px",
+                }}
+                onClick={() => {
+                  setReset(!reset);
+                }}
+              >
+                Clear
               </LoadingButton>
             </Grid>
           </Grid>

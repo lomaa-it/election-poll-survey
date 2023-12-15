@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   Grid,
   Container,
@@ -19,24 +19,40 @@ import { searchFiltercolor } from "../constants";
 import { getAllUsers, clearUserReducer } from "../actions/user";
 import { RHFAutoComplete } from "../components/hook-form";
 import { fi } from "date-fns/esm/locale";
+import { useLocation } from "react-router-dom";
 
 const UserMappingPage = ({ common, clearUserReducer, getAllUsers }) => {
   const [filterValues, setFilterValues] = useState(null);
   const [isLoading, setLoading] = useState(false);
+  const [reset, setReset] = useState(false);
+  let location = useLocation();
+  const buttonRef = useRef();
 
   useEffect(() => {
     clearUserReducer();
   }, []);
 
-  const onSubmit = async () => {
+  const onSubmit = useCallback(async () => {
     setLoading(true);
-    console.log("filterValues", filterValues);
+    console.log("filterValues232", filterValues);
+    console.log("HI im Here");
 
     await getAllUsers(filterValues);
 
     setLoading(false);
+  }, [filterValues, getAllUsers]);
+
+  useEffect(() => {
+    onSubmit();
+  }, [location, onSubmit]);
+
+  const handleChange = (name, value) => {
+    const values = {};
+
+    values[name] = value;
+
+    setFilterValues((state) => ({ ...state, ...values }));
   };
-  console.log("filterValues", filterValues);
 
   return (
     <Page title="User Mapping">
@@ -50,30 +66,12 @@ const UserMappingPage = ({ common, clearUserReducer, getAllUsers }) => {
 
           <Grid container spacing={2} alignItems="center">
             <SearchByFilter
+              reset={reset}
               showPartNo={false}
               showVillage={false}
               showOtherFilters={false}
               onChanged={(value) => setFilterValues(value)}
             />
-            <Grid item xs={12} md={6} lg={2}>
-              <TextField
-                name="user_id"
-                size="small"
-                fullWidth
-                label="Select User"
-                select
-                sx={{
-                  backgroundColor: "white",
-                  borderRadius: "5px",
-                }}
-              >
-                {/* {common.users?.map((item, index) => (
-                  <MenuItem key={index} value={item.value}>
-                    {item.label}
-                  </MenuItem>
-                ))} */}
-              </TextField>
-            </Grid>
 
             <Grid item xs={12} md={6} lg={2}>
               <TextField
@@ -104,14 +102,42 @@ const UserMappingPage = ({ common, clearUserReducer, getAllUsers }) => {
                 ))}
               </TextField>
             </Grid>
+            {/* <Grid item xs={12} md={6} lg={2}>
+              <RHFAutoComplete
+                key={reset} // add this line
+                name="user_id"
+                label="Select User"
+                value={filterValues?.user_id}
+                onChange={handleChange}
+                options={[
+                  { value: "1", label: "1" },
+                  { value: "2", label: "2" },
+                  { value: "3", label: "3" },
+                ]}
+              />
+            </Grid> */}
 
             <Grid item xs={12} md={6} lg={2}>
               <LoadingButton
+                ref={buttonRef}
                 loading={isLoading}
                 variant="contained"
                 onClick={onSubmit}
               >
                 Search
+              </LoadingButton>{" "}
+              <LoadingButton
+                loading={isLoading}
+                variant="contained"
+                sx={{
+                  backgroundColor: "red",
+                  marginLeft: "15px",
+                }}
+                onClick={() => {
+                  setReset(!reset);
+                }}
+              >
+                Clear
               </LoadingButton>
             </Grid>
           </Grid>

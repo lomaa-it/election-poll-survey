@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   Grid,
@@ -16,17 +16,20 @@ import OpinionPollSurveyList from "../sections/reports/OpinionPollSurveyList";
 import SearchByFilter from "../sections/common/SearchByFilter";
 import { getAllVotersSurvey, clearVoterReducer } from "../actions/voter";
 import { searchFiltercolor } from "../constants";
+import { useLocation } from "react-router-dom";
 
 const OpinionPollSurveyPage = ({ getAllVotersSurvey, clearVoterReducer }) => {
   const [filterValues, setFilterValues] = useState(null);
   const [isLoading, setLoading] = useState(false);
   const [reset, setReset] = useState(false);
+  let location = useLocation();
+  const buttonRef = useRef();
 
   useEffect(() => {
     clearVoterReducer();
   }, []);
 
-  const onSubmit = async () => {
+  const onSubmit = useCallback(async () => {
     setLoading(true);
     console.log("filterValues232", filterValues);
     console.log("HI im Here");
@@ -34,8 +37,11 @@ const OpinionPollSurveyPage = ({ getAllVotersSurvey, clearVoterReducer }) => {
     await getAllVotersSurvey(filterValues);
 
     setLoading(false);
-  };
-
+  }, [filterValues, getAllVotersSurvey]);
+  
+  useEffect(() => {
+    onSubmit();
+  }, [location, onSubmit]);
   return (
     <Page title="Opinion Survey">
       <Container maxWidth="xl">
@@ -112,6 +118,7 @@ const OpinionPollSurveyPage = ({ getAllVotersSurvey, clearVoterReducer }) => {
             </Grid> */}
             <Grid item xs={12} md={6} lg={2}>
               <LoadingButton
+                ref={buttonRef}
                 loading={isLoading}
                 variant="contained"
                 onClick={onSubmit}

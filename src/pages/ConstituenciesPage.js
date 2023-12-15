@@ -20,11 +20,11 @@ const ConstituenciesPage = ({ dashboard }) => {
   const [districtId, setDistrictId] = useState("");
   const [consituencyName, setConsituencyName] = useState("");
 
-  const fetchConstituencies = async () => {
-    const response = await instance.post(getAllConstituenciesWithJoinRoute);
-    console.log("constituencies", response.data.message);
-    setConstituenciesList(response.data.message);
-  };
+  // const fetchConstituencies = async () => {
+  //   const response = await instance.post(getAllConstituenciesWithJoinRoute);
+  //   console.log("constituencies", response.data.message);
+  //   setConstituenciesList(response.data.message);
+  // };
 
   const fetchStates = async () => {
     const response = await instance.post(getAllStatesRoute);
@@ -40,7 +40,7 @@ const ConstituenciesPage = ({ dashboard }) => {
 
   useEffect(() => {
     fecthDistricts();
-    fetchConstituencies();
+    // fetchConstituencies();
     fetchStates();
   }, []);
   const stateOptions = stateList.map((state) => {
@@ -81,7 +81,7 @@ const ConstituenciesPage = ({ dashboard }) => {
     setStateId("");
 
     console.log("creat", response.data);
-    fetchConstituencies();
+    // fetchConstituencies();
   };
 
   return (

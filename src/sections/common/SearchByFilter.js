@@ -153,22 +153,28 @@ const SearchByFilter = ({
   }, [formValues]);
 
   useEffect(() => {
-    if (reset) {
+    setFormValues((state) => ({
+      ...state,
+
+      partno: null,
+      village: null,
+      gender: null,
+      religion: null,
+      caste: null,
+      disability: null,
+      govt_employee: null,
+      age: null,
+    }));
+    if (account.user.mandal_pk === null) {
       setFormValues((state) => ({
         ...state,
-
-        partno: null,
-        village: null,
-        gender: null,
-        religion: null,
-        caste: null,
-        disability: null,
-        govt_employee: null,
-        age: null,
+        mandal: null,
+        division: null,
+        sachivalayam: null,
       }));
     }
   }, [reset]);
-  console.log(account)
+  console.log(account);
 
   return (
     <>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   Grid,
   Container,
@@ -21,6 +21,7 @@ import {
   clearDashboardReducer,
 } from "../actions/dashboard";
 import { casteList, searchFiltercolor } from "../constants";
+import { useLocation } from "react-router-dom";
 
 const DashboardApp = ({
   dashboard,
@@ -30,22 +31,29 @@ const DashboardApp = ({
   const [filterValues, setFilterValues] = useState(null);
   const [isLoading, setLoading] = useState(false);
   const [reset, setReset] = useState(false);
+  let location = useLocation();
+  const buttonRef = useRef();
 
   useEffect(() => {
     clearDashboardReducer();
   }, []);
 
-  const onSubmit = async () => {
+  const onSubmit = useCallback(async () => {
     setLoading(true);
-    console.log("filterValues", filterValues)
+    console.log("filterValues232", filterValues);
+    console.log("HI im Here");
 
     await getOpinionDashboard(filterValues);
 
     setLoading(false);
-  };
+  }, [filterValues, getOpinionDashboard]);
+
+  useEffect(() => {
+    onSubmit();
+  }, [location, onSubmit]);
 
   return (
-    <Page title="Opinion Dashboard">
+    <Page title="Survey Dashboard">
       <Container maxWidth="xl">
         {/* <Typography variant="h4" sx={{ mb: 1 }}>
           Opinion Dashboard
@@ -84,6 +92,7 @@ const DashboardApp = ({
             </Grid> */}
             <Grid item xs={12} md={6} lg={2}>
               <LoadingButton
+                ref={buttonRef}
                 loading={isLoading}
                 variant="contained"
                 onClick={onSubmit}
@@ -148,6 +157,22 @@ const DashboardApp = ({
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
               <PieChartWidget
+                title="Survey Status"
+                chartData={[
+                  {
+                    label: "Started",
+                    value: dashboard.opinion?.survey?.["surveysDone"] ?? 0,
+                  },
+                  {
+                    label: "Not Started",
+                    value: dashboard.opinion?.survey?.["surveysNotDone"] ?? 0,
+                  },
+                ]}
+                chartColors={[Colors.StartedColor, Colors.NotStartedColor]}
+              />
+            </Grid>
+            <Grid item xs={12} md={6} lg={4}>
+              <PieChartWidget
                 title="Voters Pulse"
                 chartData={[
                   {
@@ -184,22 +209,6 @@ const DashboardApp = ({
                   Colors.CONGRESSColor,
                   Colors.OTHERColor,
                 ]}
-              />
-            </Grid>
-            <Grid item xs={12} md={6} lg={4}>
-              <PieChartWidget
-                title="Survey Status"
-                chartData={[
-                  {
-                    label: "Started",
-                    value: dashboard.opinion?.survey?.["surveysDone"] ?? 0,
-                  },
-                  {
-                    label: "Not Started",
-                    value: dashboard.opinion?.survey?.["surveysNotDone"] ?? 0,
-                  },
-                ]}
-                chartColors={[Colors.StartedColor, Colors.NotStartedColor]}
               />
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
@@ -245,7 +254,6 @@ const DashboardApp = ({
                 ]}
               />
             </Grid>
-
             <Grid item xs={12} md={6} lg={4}>
               <PieChartWidget
                 title="Age Wise Voters"
@@ -288,38 +296,7 @@ const DashboardApp = ({
                   Colors.Age6Color,
                 ]}
               />
-            </Grid>
-            <Grid item xs={12} md={6} lg={4}>
-              <PieChartWidget
-                title="Caste Wise"
-                chartData={[
-                  {
-                    label: "Brahmin",
-                    value: 58,
-                  },
-                  {
-                    label: "Kshatriya",
-                    value: 20,
-                  },
-                  {
-                    label: "Vaishya",
-                    value: 30,
-                  },
-                  {
-                    label: "Reddy",
-                    value: 70,
-                  },
-                  {
-                    label: "Raju",
-                    value: 20,
-                  },
-                  {
-                    label: "Other",
-                    value: 45,
-                  },
-                ]}
-              />
-            </Grid>
+            </Grid>{" "}
             <Grid item xs={12} md={6} lg={4}>
               <PieChartWidget
                 title="Disability (40% or above)"
@@ -352,6 +329,84 @@ const DashboardApp = ({
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
               <PieChartWidget
+                title="Residential Status"
+                chartData={[
+                  {
+                    label: "Residental",
+                    value: dashboard.opinion?.residential?.["residential"] ?? 0,
+                  },
+                  {
+                    label: "Non Residental",
+                    value:
+                      dashboard.opinion?.residential?.["nonresidential"] ?? 0,
+                  },
+                ]}
+              />
+            </Grid>{" "}
+            <Grid item xs={12} md={6} lg={4}>
+              <PieChartWidget
+                title="Religion Wise"
+                chartData={[
+                  {
+                    label: "HINDU",
+                    value: 58,
+                  },
+                  {
+                    label: "MUSLIM",
+                    value: 20,
+                  },
+                  {
+                    label: "CHRISTIAN",
+                    value: 30,
+                  },
+                  {
+                    label: "SIKH",
+                    value: 70,
+                  },
+                  {
+                    label: "BUDDHIST",
+                    value: 20,
+                  },
+                  {
+                    label: "JAIN",
+                    value: 45,
+                  },
+                ]}
+              />
+            </Grid>
+            <Grid item xs={12} md={6} lg={4}>
+              <PieChartWidget
+                title="Caste Wise"
+                chartData={[
+                  {
+                    label: "Brahmin",
+                    value: 58,
+                  },
+                  {
+                    label: "Kshatriya",
+                    value: 20,
+                  },
+                  {
+                    label: "Vaishya",
+                    value: 30,
+                  },
+                  {
+                    label: "Reddy",
+                    value: 70,
+                  },
+                  {
+                    label: "Raju",
+                    value: 20,
+                  },
+                  {
+                    label: "Other",
+                    value: 45,
+                  },
+                ]}
+              />
+            </Grid>
+            {/* <Grid item xs={12} md={6} lg={4}>
+              <PieChartWidget
                 title="New Voter Registrations"
                 chartData={[
                   {
@@ -368,23 +423,7 @@ const DashboardApp = ({
                   },
                 ]}
               />
-            </Grid>
-            <Grid item xs={12} md={6} lg={4}>
-              <PieChartWidget
-                title="Residential Status"
-                chartData={[
-                  {
-                    label: "Residental",
-                    value: dashboard.opinion?.residential?.["residential"] ?? 0,
-                  },
-                  {
-                    label: "Non Residental",
-                    value:
-                      dashboard.opinion?.residential?.["nonresidential"] ?? 0,
-                  },
-                ]}
-              />
-            </Grid>
+            </Grid> */}
           </Grid>
         )}
       </Container>

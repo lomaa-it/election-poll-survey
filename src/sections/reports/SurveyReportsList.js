@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import {
   Typography,
   Card,
@@ -31,7 +31,7 @@ import {
 } from "../../utils/constants";
 import { searchFiltercolor } from "../../constants";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-
+import { useLocation } from "react-router-dom";
 const SurveyReportsList = ({
   dashboard,
   getOpinionResults,
@@ -39,18 +39,27 @@ const SurveyReportsList = ({
 }) => {
   const [filterValues, setFilterValues] = useState(null);
   const [isLoading, setLoading] = useState(false);
+  const [reset, setReset] = useState(false);
+  let location = useLocation();
+  const buttonRef = useRef();
 
   useEffect(() => {
     clearDashboardReducer();
   }, []);
 
-  const onSubmit = async () => {
+  const onSubmit = useCallback(async () => {
     setLoading(true);
+    console.log("filterValues232", filterValues);
+    console.log("HI im Here");
 
     await getOpinionResults(filterValues);
 
     setLoading(false);
-  };
+  }, [filterValues, getOpinionResults]);
+
+  useEffect(() => {
+    onSubmit();
+  }, [location, onSubmit]);
 
   const columns = [
     {
@@ -193,9 +202,12 @@ const SurveyReportsList = ({
     <>
       <Card sx={{ p: 3, backgroundColor: searchFiltercolor }}>
         <Grid container spacing={2} alignItems="center">
-          <SearchByFilter onChanged={(value) => setFilterValues(value)} />
+          <SearchByFilter
+            reset={reset}
+            onChanged={(value) => setFilterValues(value)}
+          />
 
-          <Grid item xs={12} md={6} lg={2}>
+          {/* <Grid item xs={12} md={6} lg={2}>
             <TextField
               size="small"
               label="Select User"
@@ -219,15 +231,29 @@ const SurveyReportsList = ({
                 borderRadius: "5px",
               }}
             />
-          </Grid>
+          </Grid> */}
 
           <Grid item xs={12} md={6} lg={2}>
             <LoadingButton
+              ref={buttonRef}
               loading={isLoading}
               variant="contained"
               onClick={onSubmit}
             >
               Search
+            </LoadingButton>
+            <LoadingButton
+              loading={isLoading}
+              variant="contained"
+              sx={{
+                backgroundColor: "red",
+                marginLeft: "15px",
+              }}
+              onClick={() => {
+                setReset(!reset);
+              }}
+            >
+              Clear
             </LoadingButton>
           </Grid>
         </Grid>

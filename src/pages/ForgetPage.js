@@ -13,6 +13,7 @@ import { ForgetForm } from "../sections/auth/forget";
 import Page from "../components/Page";
 import { PUBLIC_URL } from "../constants";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { useState } from "react";
 
 const StyledRoot = styled("div")(({ theme }) => ({
   background:
@@ -36,6 +37,7 @@ const StyledContent = styled("div")(({ theme }) => ({
 }));
 
 export default function ForgetPage() {
+  const [otpSent, setOtpSent] = useState(null);
   return (
     <Page title="Forget Password">
       <StyledRoot>
@@ -66,12 +68,13 @@ export default function ForgetPage() {
                 </Link>
                 Forget Password
               </Typography>
+              {!otpSent && (
+                <Typography sx={{ color: "text.secondary", mb: 5 }}>
+                  Enter your User ID (mobile number)
+                </Typography>
+              )}
 
-              <Typography sx={{ color: "text.secondary", mb: 5 }}>
-                Enter your details below to forget password
-              </Typography>
-
-              <ForgetForm />
+              <ForgetForm otpSent={otpSent} setOtpSent={setOtpSent} />
             </Card>
           </StyledContent>
         </Container>

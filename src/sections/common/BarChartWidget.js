@@ -29,7 +29,7 @@ export default function BarChartWidget({ title, subheader, chartLabels, chartDat
     return (
       <Card
         sx={{
-          boxShadow: "0px 0px 5px #969696",
+          boxShadow: "0px 0px 5px red",
         }}
         {...other}
       >
