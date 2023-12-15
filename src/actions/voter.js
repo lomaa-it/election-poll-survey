@@ -109,15 +109,15 @@ export const updateVoterDetails = (id, data) => async (dispatch) => {
   }
 };
 
-export const addVoterTicket = async (id, data) => {
+export const addVoterTicket = async (id, data, account) => {
   try {
     const jsonData = {
       voter_pk: id,
       navaratnalu_id: data.navaratnalu_id,
       reason: data.reason,
       status_id: 1,
-      volunteer_id: 11,
-      createdby: 11,
+      volunteer_id: account.user.user_pk,
+      createdby: account.user.user_pk,
     };
 
     var result = await instance.post(createTicketRoute, jsonData);
@@ -130,7 +130,7 @@ export const addVoterTicket = async (id, data) => {
   }
 };
 
-export const updateReplyVoterTicket = async (id, data) => {
+export const updateReplyVoterTicket = async (id, data, account) => {
   try {
     const jsonData = {
       ticket_master_pk: id,
@@ -138,8 +138,8 @@ export const updateReplyVoterTicket = async (id, data) => {
       reason: data.reason,
       status_id: data.status_id != "" ? data.status_id : 1,
       ticket_attachment_id: 6,
-      volunteer_id: 11,
-      createdby: 11,
+      volunteer_id: account.user.user_pk,
+      createdby: account.user.user_pk,
     };
 
     console.log(jsonData);

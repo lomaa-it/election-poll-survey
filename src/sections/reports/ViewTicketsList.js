@@ -120,12 +120,12 @@ const ViewTicketsList = ({ common, showAlert, account }) => {
     // {
     //   label: "Volunteer Name",
     // },
-    // {
-    //   label: "Voter ID",
-    // },
-    // {
-    //   label: "Voter Name",
-    // },
+    {
+      label: "Voter ID",
+    },
+    {
+      label: "Voter Name",
+    },
     // {
     //   label: "Phone",
     // },
@@ -226,8 +226,8 @@ const ViewTicketsList = ({ common, showAlert, account }) => {
       ticket.ticket_master_pk,
       // ticket.volunteer_id || "-",
       // ticket.volunteer_name || "-",
-      // ticket.voter_pk || "-",
-      // ticket.voter_name || "-",
+      ticket.voter_id || "-",
+      ticket.voter_name || "-",
       // ticket.phone || "-",
       navaratnalu.navaratnalu_name || "-",
       ticket.reason || "-",

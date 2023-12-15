@@ -16,7 +16,7 @@ import { getAllNavaratnaluRoute, getAllTicketsRoute, getNextLevelUserRoute, getT
 const TicketHistoryList = ({ data, showAlert, account }) => {
   const columns = [
     {
-      name: "createdby",
+      name: "user_displayname",
       label: "Created by",
     },
     {

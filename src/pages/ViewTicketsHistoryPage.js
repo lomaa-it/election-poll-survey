@@ -18,7 +18,7 @@ import { createTicketHistoryRoute, createTicketRoute, getTicketHistoryRoute } fr
 import instance from "../utils/axios";
 import TicketHistoryList from "../sections/reports/TicketHistoryList";
 
-const ViewTicketsHistoryPage = ({ common, voter, showAlert }) => {
+const ViewTicketsHistoryPage = ({ account, common, voter, showAlert }) => {
   const navigate = useNavigate();
   const props = useLocation().state;
 
@@ -71,7 +71,7 @@ const ViewTicketsHistoryPage = ({ common, voter, showAlert }) => {
 
   const handleAddTicket = async (data) => {
     setLoading(true);
-    var result = await addVoterTicket(props.data.voter_pkk, data);
+    var result = await addVoterTicket(props.data.voter_pkk, data, account);
     setLoading(false);
     if (result.status) {
       props.data.ticket_master_pk = result.message;
@@ -95,9 +95,8 @@ const ViewTicketsHistoryPage = ({ common, voter, showAlert }) => {
   };
 
   const handleUpadateTicket = async (data) => {
-    console.log(data);
     setLoading(true);
-    var result = await updateReplyVoterTicket(props.data.ticket_master_pk, data);
+    var result = await updateReplyVoterTicket(props.data.ticket_master_pk, data, account);
     setLoading(false);
     if (result.status) {
       showAlert({ text: "Ticket submitted", color: "success" });
@@ -294,6 +293,7 @@ const ViewTicketsHistoryPage = ({ common, voter, showAlert }) => {
 
 const mapStateToProps = (state) => {
   return {
+    account: state.auth,
     common: state.common,
     voter: state.voter,
   };

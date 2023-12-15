@@ -51,7 +51,7 @@ export default function voterReducer(state = initialState, action) {
     case "VOTER_UPDATE_SUCCESS":
       var index = state.data.findIndex((e) => e.voter_pkk == payload.id);
       if (index != -1) {
-        state.data[index] = { ...state.data[index], ...payload.value, opinionparty: payload.intrested_party };
+        state.data[index] = { ...state.data[index], ...payload.value, opinionparty: payload.value.intrested_party };
       }
       return { ...state };
 
