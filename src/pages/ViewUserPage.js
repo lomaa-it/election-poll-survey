@@ -56,7 +56,7 @@ const ViewUserPage = ({ common, clearUserReducer, getAllUsers }) => {
   };
 
   return (
-    <Page title="View User">
+    <Page title="User List">
       <Container maxWidth="xl">
         {/* <Typography variant="h4" sx={{ mb: 1 }}>
           User List

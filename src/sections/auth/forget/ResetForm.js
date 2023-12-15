@@ -26,11 +26,11 @@ const ResetForm = ({ showAlert }) => {
   const LoginSchema = Yup.object().shape({
     newpswd: Yup.string()
       .required("Password is required")
-      .min(8, "Password must be at least 8 characters")
-      .matches(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-        "Password must have at least: 1 uppercase, 1 lowercase, 1 number, and 1 special character"
-      ),
+      .min(8, "Password must be at least 8 characters"),
+    // .matches(
+    //   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+    //   "Password must have at least: 1 uppercase, 1 lowercase, 1 number, and 1 special character"
+    // ),
     confirmpswd: Yup.string()
       .required("Confirm password is required")
       .oneOf([Yup.ref("newpswd")], "Confirm password must match"),

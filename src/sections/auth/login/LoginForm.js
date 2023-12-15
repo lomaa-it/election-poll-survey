@@ -40,11 +40,11 @@ const LoginForm = ({ showAlert, authSuccess }) => {
       .required("Phone number is required"),
     password: Yup.string()
       .required("Password is required")
-      .min(8, "Password must be at least 8 characters")
-      .matches(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-        "Password must have at least: 1 uppercase, 1 lowercase, 1 number, and 1 special character."
-      ),
+      .min(8, "Password must be at least 8 characters"),
+    // .matches(
+    //   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+    //   "Password must have at least: 1 uppercase, 1 lowercase, 1 number, and 1 special character."
+    // ),
     captcha: Yup.string().required("Captcha is required"),
   });
 
