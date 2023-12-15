@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/election-poll-survey/static/css/main.0cc4c858.css",
-    "main.js": "/election-poll-survey/static/js/main.e85157c1.js",
+    "main.js": "/election-poll-survey/static/js/main.b6167b35.js",
     "static/js/27.8f8a69dc.chunk.js": "/election-poll-survey/static/js/27.8f8a69dc.chunk.js",
     "static/media/inter-latin-ext-400-normal.woff": "/election-poll-survey/static/media/inter-latin-ext-400-normal.3ccf133441ba225afa51.woff",
     "static/media/inter-latin-400-normal.woff": "/election-poll-survey/static/media/inter-latin-400-normal.662f290710a57b8dfbbd.woff",
@@ -21,6 +21,6 @@
   },
   "entrypoints": [
     "static/css/main.0cc4c858.css",
-    "static/js/main.e85157c1.js"
+    "static/js/main.b6167b35.js"
   ]
 }
