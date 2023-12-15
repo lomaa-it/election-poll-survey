@@ -1,9 +1,16 @@
 import * as Yup from "yup";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Stack, IconButton, InputAdornment, TextField, Typography, Box } from "@mui/material";
+import {
+  Stack,
+  IconButton,
+  InputAdornment,
+  TextField,
+  Typography,
+  Box,
+} from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import { LoadingButton } from "@mui/lab";
 import Iconify from "../../../components/Iconify";
@@ -16,16 +23,24 @@ import instance from "../../../utils/axios";
 import { loginRoute } from "../../../utils/apis";
 import { RHFTextField2 } from "../../../components/hook-form/RHFTextField";
 import { he } from "date-fns/locale";
+import CachedIcon from "@mui/icons-material/Cached";
 
 const LoginForm = ({ showAlert, authSuccess }) => {
   const navigate = useNavigate();
 
   const [isLoading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [captchaText, setCaptchaText] = useState("");
+  const [userInput, setUserInput] = useState("");
+  const canvasRef = useRef(null);
 
   const LoginSchema = Yup.object().shape({
-    phone_no: Yup.string().matches(phoneRegExp, "Phone number is not valid").required("Phone number is required"),
-    password: Yup.string().required("Password is required").min(4, "Password must be at least 4 characters"),
+    phone_no: Yup.string()
+      .matches(phoneRegExp, "Phone number is not valid")
+      .required("Phone number is required"),
+    password: Yup.string()
+      .required("Password is required")
+      .min(4, "Password must be at least 4 characters"),
     captcha: Yup.string().required("Captcha is required"),
   });
 
@@ -39,10 +54,68 @@ const LoginForm = ({ showAlert, authSuccess }) => {
     resolver: yupResolver(LoginSchema),
     defaultValues,
   });
+  /// catpcha code
 
-  const { handleSubmit } = methods;
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    initializeCaptcha(ctx);
+  }, []);
+
+  const generateRandomChar = (min, max) =>
+    String.fromCharCode(Math.floor(Math.random() * (max - min + 1) + min));
+
+  const generateCaptchaText = () => {
+    let captcha = "";
+    for (let i = 0; i < 2; i++) {
+      captcha += generateRandomChar(65, 90);
+      captcha += generateRandomChar(97, 122);
+      captcha += generateRandomChar(48, 57);
+    }
+    return captcha
+      .split("")
+      .sort(() => Math.random() - 0.5)
+      .join("");
+  };
+
+  const drawCaptchaOnCanvas = (ctx, captcha) => {
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    const textColors = ["rgb(0,0,0)", "rgb(130,130,130)"];
+    const letterSpace = 150 / captcha.length;
+    for (let i = 0; i < captcha.length; i++) {
+      const xInitialSpace = 25;
+      ctx.font = "20px Roboto Mono";
+      ctx.fillStyle = textColors[Math.floor(Math.random() * 2)];
+      ctx.fillText(
+        captcha[i],
+        xInitialSpace + i * letterSpace,
+        Math.floor(Math.random() * 16 + 25),
+        100
+      );
+    }
+  };
+
+  const initializeCaptcha = (ctx) => {
+    setUserInput("");
+    const newCaptcha = generateCaptchaText();
+    setCaptchaText(newCaptcha);
+    drawCaptchaOnCanvas(ctx, newCaptcha);
+  };
+
+  ////
+
+  const { handleSubmit, resetField } = methods;
 
   const onSubmit = async (data) => {
+    if (data.captcha !== captchaText) {
+      showAlert({ text: "Incorrect captcha" });
+      resetField("captcha");
+      const canvas = canvasRef.current;
+      const ctx = canvas.getContext("2d");
+      initializeCaptcha(ctx);
+      return;
+    }
+
     setLoading(true);
     try {
       const response = await instance.post(loginRoute, data);
@@ -87,14 +160,43 @@ const LoginForm = ({ showAlert, authSuccess }) => {
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
-                  <Iconify icon={showPassword ? "eva:eye-fill" : "eva:eye-off-fill"} />
+                <IconButton
+                  onClick={() => setShowPassword(!showPassword)}
+                  edge="end"
+                >
+                  <Iconify
+                    icon={showPassword ? "eva:eye-fill" : "eva:eye-off-fill"}
+                  />
                 </IconButton>
               </InputAdornment>
             ),
           }}
         />
-        <Box component="img" src={PUBLIC_URL + "/static/images/captcha.jpg"} sx={{ width: "150px" }} />
+        {/* <Box component="img" src={PUBLIC_URL + "/static/images/captcha.jpg"} sx={{ width: "150px" }} /> */}
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+           
+            gap: "1rem",
+            height: "50px",
+            width: "100%",
+          }}
+        >
+          <Box
+            sx={{
+              border: "2px solid #73B97F",
+              borderRadius: "20px",
+            }}
+          >
+            <canvas ref={canvasRef} width="195" height="46"></canvas>
+          </Box>
+          <CachedIcon
+            onClick={() =>
+              initializeCaptcha(canvasRef.current.getContext("2d"))
+            }
+          />
+        </Box>
         {/* <img
           className="captcha-image"
           src="https://miro.medium.com/v2/resize:fit:1024/0*obnHri9w__4Cmhbj.jpg"
@@ -110,13 +212,24 @@ const LoginForm = ({ showAlert, authSuccess }) => {
         />
       </Stack>
 
-      <Stack direction="row" alignItems="center" justifyContent="end" sx={{ my: 1 }}>
+      <Stack
+        direction="row"
+        alignItems="center"
+        justifyContent="end"
+        sx={{ my: 1 }}
+      >
         <Link to="/forget-password" underline="hover" style={{ fontSize: 16 }}>
           Forgot password?
         </Link>
       </Stack>
 
-      <LoadingButton fullWidth loading={isLoading} size="medium" type="submit" variant="contained">
+      <LoadingButton
+        fullWidth
+        loading={isLoading}
+        size="medium"
+        type="submit"
+        variant="contained"
+      >
         Login
       </LoadingButton>
     </FormProvider>

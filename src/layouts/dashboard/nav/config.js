@@ -14,11 +14,11 @@ const mlaNavConfig = [
     path: "/dashboard",
     icon: <Iconify icon="ic:round-dashboard" width="24px" height="24px" />,
   },
-  {
-    title: "Voting Poll Dashboard",
-    path: "/voting-poll-dashboard",
-    icon: <Iconify icon="ic:round-dashboard" width="24px" height="24px" />,
-  },
+  // {
+  //   title: "Voting Poll Dashboard",
+  //   path: "/voting-poll-dashboard",
+  //   icon: <Iconify icon="ic:round-dashboard" width="24px" height="24px" />,
+  // },
   {
     title: "Opinion Survey ",
     path: "/opinionsurvey",
