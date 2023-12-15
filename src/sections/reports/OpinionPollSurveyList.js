@@ -1,20 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  Card,
-  Stack,
-  Box,
-  CircularProgress,
-  IconButton,
-  TableRow,
-  TableCell,
-  TableContainer,
-  Table,
-  TableHead,
-  TableBody,
-  Paper,
-  Typography,
-} from "@mui/material";
+import { Card, Stack, Box, CircularProgress, IconButton, TableRow, TableCell, TableContainer, Table, TableHead, TableBody, Paper, Typography } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 
 import MUIDataTable from "mui-datatables";
@@ -22,30 +8,12 @@ import { connect } from "react-redux";
 import { showAlert } from "../../actions/alert";
 
 import EditNoteIcon from "@mui/icons-material/EditNote";
-import {
-  PARTY_ID,
-  ROWS_PER_PAGE_OPTION,
-  getMuiTableTheme,
-} from "../../constants";
+import { PARTY_ID, ROWS_PER_PAGE_OPTION, getMuiTableTheme } from "../../constants";
 import { changeOpinionPoll, getAllVotersSurvey } from "../../actions/voter";
-import {
-  BJPRadio,
-  CongressRadio,
-  JSPRadio,
-  NeutralRadio,
-  OthersRadio,
-  TDPRadio,
-  YCPRadio,
-} from "../common/PartyRadioButtons";
+import { BJPRadio, CongressRadio, JSPRadio, NeutralRadio, OthersRadio, TDPRadio, YCPRadio } from "../common/PartyRadioButtons";
 import UpdateVoterDialog from "../common/UpdateVoterDialog";
 
-const OpinionPollSurveyList = ({
-  voter,
-  filterValues,
-  showAlert,
-  changeOpinionPoll,
-  getAllVotersSurvey,
-}) => {
+const OpinionPollSurveyList = ({ voter, filterValues, showAlert, changeOpinionPoll, getAllVotersSurvey }) => {
   const navigate = useNavigate();
   console.log("OpinionPollSurveyListVoter", voter);
   console.log("OpinionPollSurveyListfilterValues", filterValues);
@@ -89,21 +57,20 @@ const OpinionPollSurveyList = ({
           return (
             <Stack direction="row" alignItems="center">
               <Typography>{value ?? "-"}</Typography>
-              {index != -1 && (
-                <UpdateVoterDialog voterData={voter.data[index]} />
-              )}
+              {index != -1 && <UpdateVoterDialog voterData={voter.data[index]} />}
             </Stack>
           );
         },
       },
     },
     {
-      name: "intrested_party",
+      name: "opinionparty",
       label: "Neutral",
       options: {
         customBodyRender: (value, tableMeta, updateValue) => {
           var data = tableMeta.rowData;
           var partyId = PARTY_ID.NEUTRAL;
+          var index = voter.data.findIndex((e) => e.voter_pkk == data[0]);
 
           return (
             <Stack direction="row" alignItems="center">
@@ -115,7 +82,7 @@ const OpinionPollSurveyList = ({
               />
 
               {value == PARTY_ID.NEUTRAL && (
-                <IconButton onClick={() => handleEdit(data)}>
+                <IconButton onClick={() => handleEdit(voter.data[index])}>
                   <EditNoteIcon />
                 </IconButton>
               )}
@@ -125,99 +92,69 @@ const OpinionPollSurveyList = ({
       },
     },
     {
-      name: "intrested_party",
+      name: "opinionparty",
       label: "YCP",
       options: {
         customBodyRender: (value, tableMeta, updateValue) => {
           var data = tableMeta.rowData;
           var partyId = PARTY_ID.YSRCP;
-          return (
-            <YCPRadio
-              checked={value == partyId}
-              onChange={() => handleChange(data[0], partyId)}
-            />
-          );
+          return <YCPRadio checked={value == partyId} onChange={() => handleChange(data[0], partyId)} />;
         },
       },
     },
 
     {
-      name: "intrested_party",
+      name: "opinionparty",
       label: "TDP",
       options: {
         customBodyRender: (value, tableMeta, updateValue) => {
           var data = tableMeta.rowData;
           var partyId = PARTY_ID.TDP;
-          return (
-            <TDPRadio
-              checked={value == partyId}
-              onChange={() => handleChange(data[0], partyId)}
-            />
-          );
+          return <TDPRadio checked={value == partyId} onChange={() => handleChange(data[0], partyId)} />;
         },
       },
     },
     {
-      name: "intrested_party",
+      name: "opinionparty",
       label: "JSP",
       options: {
         customBodyRender: (value, tableMeta, updateValue) => {
           var data = tableMeta.rowData;
           var partyId = PARTY_ID.JANASENA;
-          return (
-            <JSPRadio
-              checked={value == partyId}
-              onChange={() => handleChange(data[0], partyId)}
-            />
-          );
+          return <JSPRadio checked={value == partyId} onChange={() => handleChange(data[0], partyId)} />;
         },
       },
     },
     {
-      name: "intrested_party",
+      name: "opinionparty",
       label: "BJP",
       options: {
         customBodyRender: (value, tableMeta, updateValue) => {
           var data = tableMeta.rowData;
           var partyId = PARTY_ID.BJP;
-          return (
-            <BJPRadio
-              checked={value == partyId}
-              onChange={() => handleChange(data[0], partyId)}
-            />
-          );
+          return <BJPRadio checked={value == partyId} onChange={() => handleChange(data[0], partyId)} />;
         },
       },
     },
     {
-      name: "intrested_party",
+      name: "opinionparty",
       label: "Congress",
       options: {
         customBodyRender: (value, tableMeta, updateValue) => {
           var data = tableMeta.rowData;
           var partyId = PARTY_ID.CONGRESS;
-          return (
-            <CongressRadio
-              checked={value == partyId}
-              onChange={() => handleChange(data[0], partyId)}
-            />
-          );
+          return <CongressRadio checked={value == partyId} onChange={() => handleChange(data[0], partyId)} />;
         },
       },
     },
     {
-      name: "intrested_party",
+      name: "opinionparty",
       label: "Others",
       options: {
         customBodyRender: (value, tableMeta, updateValue) => {
           var data = tableMeta.rowData;
           var partyId = PARTY_ID.OTHERS;
-          return (
-            <OthersRadio
-              checked={value == partyId}
-              onChange={() => handleChange(data[0], partyId)}
-            />
-          );
+          return <OthersRadio checked={value == partyId} onChange={() => handleChange(data[0], partyId)} />;
         },
       },
     },
@@ -305,15 +242,13 @@ const OpinionPollSurveyList = ({
   };
 
   const handleEdit = (data) => {
-    navigate("/add-ticket1", { state: { ...data } });
+    navigate("/view-ticket-history", { state: { data: data } });
   };
 
   const handleRetrieveData = (tableState) => {
     console.log("tableState", tableState);
     getAllVotersSurvey(filterValues, tableState.page, tableState.rowsPerPage);
   };
-
-  console.log("votersssssss", voter);
 
   return (
     <>
@@ -354,24 +289,14 @@ const OpinionPollSurveyList = ({
 
       <Card elevation={1}>
         {voter.isLoading && (
-          <Box
-            minHeight={200}
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-          >
+          <Box minHeight={200} display="flex" justifyContent="center" alignItems="center">
             <CircularProgress />
           </Box>
         )}
 
         {!voter.isLoading && (
           <ThemeProvider theme={getMuiTableTheme()}>
-            <MUIDataTable
-              title="Opinion Poll"
-              columns={columns}
-              data={voter.data}
-              options={options}
-            />
+            <MUIDataTable title="Opinion Poll" columns={columns} data={voter.data} options={options} />
           </ThemeProvider>
         )}
       </Card>

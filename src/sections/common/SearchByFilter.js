@@ -1,32 +1,13 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import {
-  Grid,
-  Container,
-  Typography,
-  Box,
-  TextField,
-  Card,
-  MenuItem,
-} from "@mui/material";
+import { Grid, Container, Typography, Box, TextField, Card, MenuItem } from "@mui/material";
 import { FormProvider, RHFAutoComplete } from "../../components/hook-form";
 import { getAllCommonData } from "../../actions/common";
 import { casteList } from "../../constants";
 import { ageDropdown } from "../../utils/dropdownconstants";
 
-const SearchByFilter = ({
-  account,
-  common,
-  defaultValues,
-  getAllCommonData,
-  reset,
-  onChanged,
-  lg = 2,
-  showPartNo = true,
-  showVillage = true,
-  showOtherFilters = true,
-}) => {
+const SearchByFilter = ({ account, common, defaultValues, getAllCommonData, reset, onChanged, lg = 2, showPartNo = true, showVillage = true, showOtherFilters = true }) => {
   const [formValues, setFormValues] = useState({
     mandal: null,
     division: null,
@@ -56,10 +37,7 @@ const SearchByFilter = ({
       setFormValues((state) => ({ ...state, division: common.divisions[0] }));
     }
 
-    if (
-      common.sachivalayams.length > 0 &&
-      account.user.sachivalayam_pk != null
-    ) {
+    if (common.sachivalayams.length > 0 && account.user.sachivalayam_pk != null) {
       setFormValues((state) => ({
         ...state,
         sachivalayam: common.sachivalayams[0],
@@ -77,22 +55,57 @@ const SearchByFilter = ({
     if (defaultValues) {
       setFormValues((state) => ({
         ...state,
-        mandal: defaultValues.mandal_pk
-          ? common.mandals.find((e) => e.mandal_pk === defaultValues.mandal_pk)
-          : state.mandal,
-        division: defaultValues.division_pk
-          ? common.divisions.find(
-              (e) => e.division_pk === defaultValues.division_pk
-            )
-          : state.division,
-        sachivalayam: defaultValues.sachivalayam_pk
-          ? common.sachivalayams.find(
-              (e) => e.sachivalayam_pk === defaultValues.sachivalayam_pk
-            )
-          : state.sachivalayam,
+        mandal: defaultValues.mandal_pk ? common.mandals.find((e) => e.mandal_pk === defaultValues.mandal_pk) : state.mandal,
+        division: defaultValues.division_pk ? common.divisions.find((e) => e.division_pk === defaultValues.division_pk) : state.division,
+        sachivalayam: defaultValues.sachivalayam_pk ? common.sachivalayams.find((e) => e.sachivalayam_pk === defaultValues.sachivalayam_pk) : state.sachivalayam,
       }));
     }
   }, [common]);
+
+  // useEffect(() => {
+  //   var initialMandal = common.mandals[0];
+  //   if (common.mandals.length > 0) {
+  //     setFormValues((state) => ({ ...state, mandal: initialMandal }));
+  //   }
+
+  //   var initialDivision = common.divisions.filter((e) => e.mandal_id == initialMandal?.mandal_pk)[0];
+  //   if (common.divisions.length > 0) {
+  //     setFormValues((state) => ({ ...state, division: initialDivision ?? null }));
+  //   }
+
+  //   if (common.sachivalayams.length > 0 && account.user.sachivalayam_pk != null) {
+  //     setFormValues((state) => ({
+  //       ...state,
+  //       sachivalayam: common.sachivalayams[0],
+  //     }));
+  //   }
+
+  //   var initialPart = common.parts.filter((e) => e.sachivalayam_id == initialSachivalayam?.sachivalayam_pk)[0];
+  //   if (common.parts.length > 0) {
+  //     setFormValues((state) => ({ ...state, partno: initialPart ?? null }));
+  //   }
+
+  //   var initialVillage = common.villages.filter((e) => e.part_no == initialPart?.part_no)[0];
+  //   if (common.villages.length > 0) {
+  //     setFormValues((state) => ({ ...state, village: initialVillage ?? null }));
+  //   }
+
+  //   if (defaultValues) {
+  //     setFormValues((state) => ({
+  //       ...state,
+  //       mandal: defaultValues.mandal_pk ? common.mandals.find((e) => e.mandal_pk === defaultValues.mandal_pk) : state.mandal,
+  //       division: defaultValues.division_pk ? common.divisions.find((e) => e.division_pk === defaultValues.division_pk) : state.division,
+  //       sachivalayam: defaultValues.sachivalayam_pk ? common.sachivalayams.find((e) => e.sachivalayam_pk === defaultValues.sachivalayam_pk) : state.sachivalayam,
+  //     }));
+  //   }
+
+  //   const delay = 1000;
+  //   if (initialMandal != null && autoSearch != null) {
+  //     setTimeout(() => {
+  //       autoSearch();
+  //     }, delay);
+  //   }
+  // }, [common]);
 
   const handleChange = (name, value) => {
     const values = {};
@@ -196,9 +209,7 @@ const SearchByFilter = ({
           name="division"
           label="Select Division"
           value={formValues.division}
-          options={common.divisions.filter(
-            (e) => e.mandal_id == formValues?.mandal?.mandal_pk
-          )}
+          options={common.divisions.filter((e) => e.mandal_id == formValues?.mandal?.mandal_pk)}
           getOptionLabel={(option) => option.division_name}
           onChange={handleChange}
           disabled={account.user.division_pk != null}
@@ -210,9 +221,7 @@ const SearchByFilter = ({
           name="sachivalayam"
           label="Select Sachivalayam"
           value={formValues.sachivalayam}
-          options={common.sachivalayams.filter(
-            (e) => e.division_id == formValues?.division?.division_pk
-          )}
+          options={common.sachivalayams.filter((e) => e.division_id == formValues?.division?.division_pk)}
           getOptionLabel={(option) => option.sachivalayam_name}
           onChange={handleChange}
           disabled={account.user.sachivalayam_pk != null}
@@ -225,10 +234,7 @@ const SearchByFilter = ({
             name="partno"
             label="Select Part/Booth No"
             value={formValues.partno}
-            options={common.parts.filter(
-              (e) =>
-                e.sachivalayam_id == formValues?.sachivalayam?.sachivalayam_pk
-            )}
+            options={common.parts.filter((e) => e.sachivalayam_id == formValues?.sachivalayam?.sachivalayam_pk)}
             getOptionLabel={(option) => String(option.part_no)}
             onChange={handleChange}
             // disabled={account.user.part_no != null}
@@ -242,9 +248,7 @@ const SearchByFilter = ({
             name="village"
             label="Select Village"
             value={formValues.village}
-            options={common.villages.filter(
-              (e) => e.part_no == formValues?.partno?.part_no
-            )}
+            options={common.villages.filter((e) => e.part_no == formValues?.partno?.part_no)}
             getOptionLabel={(option) => option.village_name}
             onChange={handleChange}
             // disabled={account.user.village_pk != null}
@@ -277,22 +281,10 @@ const SearchByFilter = ({
             />
           </Grid>{" "}
           <Grid item xs={12} md={6} lg={lg}>
-            <RHFAutoComplete
-              name="religion"
-              label="Select Religion"
-              value={formValues.religion}
-              options={common.religion}
-              onChange={handleChange}
-            />
+            <RHFAutoComplete name="religion" label="Select Religion" value={formValues.religion} options={common.religion} onChange={handleChange} />
           </Grid>
           <Grid item xs={12} md={6} lg={lg}>
-            <RHFAutoComplete
-              name="caste"
-              label="Select Caste"
-              value={formValues.caste}
-              options={common.caste}
-              onChange={handleChange}
-            />
+            <RHFAutoComplete name="caste" label="Select Caste" value={formValues.caste} options={common.caste} onChange={handleChange} />
           </Grid>
           <Grid item xs={12} md={6} lg={lg}>
             <RHFAutoComplete
@@ -331,13 +323,7 @@ const SearchByFilter = ({
             />
           </Grid>{" "}
           <Grid item xs={12} md={6} lg={lg}>
-            <RHFAutoComplete
-              name="age"
-              label="Select Age"
-              value={formValues.age}
-              options={ageDropdown}
-              onChange={handleChange}
-            />
+            <RHFAutoComplete name="age" label="Select Age" value={formValues.age} options={ageDropdown} onChange={handleChange} />
           </Grid>
         </>
       )}

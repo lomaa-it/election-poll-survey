@@ -2,64 +2,32 @@ import * as Yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import React, { useEffect, useState } from "react";
-import {
-  Box,
-  IconButton,
-  Dialog,
-  MenuItem,
-  Grid,
-  Radio,
-  DialogContent,
-  DialogTitle,
-  FormControlLabel,
-  DialogActions,
-  Button,
-  Typography,
-  FormLabel,
-} from "@mui/material";
+import { Box, IconButton, Dialog, MenuItem, Grid, Radio, DialogContent, DialogTitle, FormControlLabel, DialogActions, Button, Typography, FormLabel } from "@mui/material";
 import FormControl from "@mui/material/FormControl";
 import RadioGroup from "@mui/material/RadioGroup";
 
-import {
-  PARTY_ID,
-  casteList,
-  phoneRegExp,
-  religionList,
-} from "../../constants";
+import { PARTY_ID, casteList, phoneRegExp, religionList } from "../../constants";
 import { LoadingButton } from "@mui/lab";
 import EditIcon from "@mui/icons-material/Edit";
-import {
-  BJPRadio,
-  CongressRadio,
-  JSPRadio,
-  NeutralRadio,
-  OthersRadio,
-  TDPRadio,
-  YCPRadio,
-} from "./PartyRadioButtons";
-import {
-  FormProvider,
-  RHFRadio,
-  RHFTextField,
-} from "../../components/hook-form";
+import { BJPRadio, CongressRadio, JSPRadio, NeutralRadio, OthersRadio, TDPRadio, YCPRadio } from "./PartyRadioButtons";
+import { FormProvider, RHFRadio, RHFTextField } from "../../components/hook-form";
 import { connect } from "react-redux";
 import { showAlert } from "../../actions/alert";
 import { updateVoterDetails } from "../../actions/voter";
 import { RHFTextField2 } from "../../components/hook-form/RHFTextField";
 
-const UpdateVoterDialog = ({
-  common,
-  voterData,
-  showAlert,
-  updateVoterDetails,
-}) => {
+const UpdateVoterDialog = ({ common, voterData, showAlert, updateVoterDetails }) => {
   const [open, setOpen] = useState(false);
   const [isLoading, setLoading] = useState(false);
 
+  useEffect(() => {
+    if (open) {
+      reset(defaultValues);
+    }
+  }, [open]);
+
   const schema = Yup.object().shape({
-    phone_no: Yup.string()
-      .matches(phoneRegExp, "Phone number is not valid")
-      .required("Phone number is required"),
+    phone_no: Yup.string().matches(phoneRegExp, "Phone number is not valid").required("Phone number is required"),
     is_resident: Yup.string(),
     religion_id: Yup.string(),
     caste_id: Yup.string(),
@@ -79,7 +47,7 @@ const UpdateVoterDialog = ({
     govt_employee: voterData.govt_employee ?? "",
     current_address: voterData.current_address ?? "",
     permenent_address: voterData.permenent_address ?? "",
-    intrested_party: voterData.intrested_party ?? "",
+    intrested_party: voterData.opinionparty ?? "",
   };
 
   const methods = useForm({
@@ -87,7 +55,7 @@ const UpdateVoterDialog = ({
     defaultValues,
   });
 
-  const { handleSubmit, watch } = methods;
+  const { handleSubmit, reset, watch } = methods;
   const residential = watch(["is_resident"]);
 
   const onSubmit = async (data) => {
@@ -101,10 +69,8 @@ const UpdateVoterDialog = ({
     const jsonData = {
       ...data,
       voter_phone_no: data.phone_no,
-      religion_name:
-        common.religion.find((e) => e.value == data.religion_id)?.label ?? "",
-      caste_name:
-        common.caste.find((e) => e.value == data.caste_id)?.label ?? "",
+      religion_name: common.religion.find((e) => e.value == data.religion_id)?.label ?? "",
+      caste_name: common.caste.find((e) => e.value == data.caste_id)?.label ?? "",
     };
 
     var result = await updateVoterDetails(voterData.voter_pkk, jsonData);
@@ -131,20 +97,12 @@ const UpdateVoterDialog = ({
           <DialogTitle>Update Details</DialogTitle>
           <DialogContent>
             <Box py={1}>
-              <Typography sx={{ mb: 1 }}>
-                Voter ID: {voterData.voter_id}
-              </Typography>
-              <Typography sx={{ mb: 3 }}>
-                Name: {voterData.voter_name}
-              </Typography>
+              <Typography sx={{ mb: 1 }}>Voter ID: {voterData.voter_id}</Typography>
+              <Typography sx={{ mb: 3 }}>Name: {voterData.voter_name}</Typography>
 
               <Grid container spacing={3} alignItems="center">
                 <Grid item xs={12} md={12} lg={12}>
-                  <RHFTextField2
-                    name="phone_no"
-                    label="Phone Number"
-                    type="number"
-                  />
+                  <RHFTextField2 name="phone_no" label="Phone Number" type="number" />
                 </Grid>
                 <Grid item xs={12} md={12} lg={12}>
                   <RHFRadio
@@ -157,18 +115,12 @@ const UpdateVoterDialog = ({
                 </Grid>
                 {residential == 0 && (
                   <Grid item xs={12} md={12} lg={12}>
-                    <RHFTextField
-                      name="current_address"
-                      label="Current Address"
-                    />
+                    <RHFTextField name="current_address" label="Current Address" />
                   </Grid>
                 )}
 
                 <Grid item xs={12} md={12} lg={12}>
-                  <RHFTextField
-                    name="permenent_address"
-                    label="Permanent Address"
-                  />
+                  <RHFTextField name="permenent_address" label="Permanent Address" />
                 </Grid>
 
                 <Grid item xs={12} md={6} lg={6}>
@@ -180,6 +132,7 @@ const UpdateVoterDialog = ({
                     ))}
                   </RHFTextField>
                 </Grid>
+
                 <Grid item xs={12} md={6} lg={6}>
                   <RHFTextField name="caste_id" label="Caste" select>
                     {common.caste.map((item, index) => (
@@ -189,6 +142,7 @@ const UpdateVoterDialog = ({
                     ))}
                   </RHFTextField>
                 </Grid>
+
                 <Grid item xs={12} md={6} lg={6}>
                   {/* <RHFTextField name="disability" label="Disability" select>
                     <MenuItem value={1}>Yes</MenuItem>
@@ -196,28 +150,19 @@ const UpdateVoterDialog = ({
                   </RHFTextField> */}
 
                   <FormControl>
-                    <FormLabel id="demo-row-radio-buttons-group-label">
-                      Disability
-                    </FormLabel>
+                    <FormLabel id="demo-row-radio-buttons-group-label">Disability</FormLabel>
                     <RadioGroup
                       row
                       aria-labelledby="demo-row-radio-buttons-group-label"
                       name="row-radio-buttons-group"
                       defaultValue={0} // Set default value here
                     >
-                      <FormControlLabel
-                        value={1}
-                        control={<Radio />}
-                        label="Yes"
-                      />
-                      <FormControlLabel
-                        value={0}
-                        control={<Radio />}
-                        label="No"
-                      />
+                      <FormControlLabel value={1} control={<Radio />} label="Yes" />
+                      <FormControlLabel value={0} control={<Radio />} label="No" />
                     </RadioGroup>
                   </FormControl>
                 </Grid>
+
                 <Grid item xs={12} md={6} lg={6}>
                   {/* <RHFTextField
                     name="govt_employee"
@@ -229,25 +174,15 @@ const UpdateVoterDialog = ({
                   </RHFTextField> */}
 
                   <FormControl>
-                    <FormLabel id="demo-row-radio-buttons-group-label">
-                      Govt Employee
-                    </FormLabel>
+                    <FormLabel id="demo-row-radio-buttons-group-label">Govt Employee</FormLabel>
                     <RadioGroup
                       row
                       aria-labelledby="demo-row-radio-buttons-group-label"
                       name="row-radio-buttons-group"
                       defaultValue={0} // Set default value here
                     >
-                      <FormControlLabel
-                        value={1}
-                        control={<Radio />}
-                        label="Yes"
-                      />
-                      <FormControlLabel
-                        value={0}
-                        control={<Radio />}
-                        label="No"
-                      />
+                      <FormControlLabel value={1} control={<Radio />} label="Yes" />
+                      <FormControlLabel value={0} control={<Radio />} label="No" />
                     </RadioGroup>
                   </FormControl>
                 </Grid>
@@ -310,11 +245,7 @@ const UpdateVoterDialog = ({
               Cancel
             </Button>
 
-            <LoadingButton
-              type="submit"
-              variant="contained"
-              loading={isLoading}
-            >
+            <LoadingButton type="submit" variant="contained" loading={isLoading}>
               Submit
             </LoadingButton>
           </DialogActions>
@@ -330,6 +261,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { showAlert, updateVoterDetails })(
-  UpdateVoterDialog
-);
+export default connect(mapStateToProps, { showAlert, updateVoterDetails })(UpdateVoterDialog);

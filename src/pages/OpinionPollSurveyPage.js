@@ -1,13 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import {
-  Grid,
-  Container,
-  Typography,
-  Box,
-  TextField,
-  Card,
-} from "@mui/material";
+import { Grid, Container, Typography, Box, TextField, Card } from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -38,7 +31,7 @@ const OpinionPollSurveyPage = ({ getAllVotersSurvey, clearVoterReducer }) => {
 
     setLoading(false);
   }, [filterValues, getAllVotersSurvey]);
-  
+
   useEffect(() => {
     onSubmit();
   }, [location, onSubmit]);
@@ -51,10 +44,7 @@ const OpinionPollSurveyPage = ({ getAllVotersSurvey, clearVoterReducer }) => {
 
         <Card sx={{ p: 3, backgroundColor: searchFiltercolor }}>
           <Grid container spacing={2} alignItems="center">
-            <SearchByFilter
-              reset={reset}
-              onChanged={(value) => setFilterValues(value)}
-            />
+            <SearchByFilter reset={reset} onChanged={(value) => setFilterValues(value)} />
 
             {/* <Grid item xs={12} md={6} lg={2}>
               <TextField
@@ -117,14 +107,10 @@ const OpinionPollSurveyPage = ({ getAllVotersSurvey, clearVoterReducer }) => {
               />
             </Grid> */}
             <Grid item xs={12} md={6} lg={2}>
-              <LoadingButton
-                ref={buttonRef}
-                loading={isLoading}
-                variant="contained"
-                onClick={onSubmit}
-              >
+              <LoadingButton ref={buttonRef} loading={isLoading} variant="contained" onClick={onSubmit}>
                 Search
               </LoadingButton>
+
               <LoadingButton
                 loading={isLoading}
                 variant="contained"
@@ -154,6 +140,4 @@ const OpinionPollSurveyPage = ({ getAllVotersSurvey, clearVoterReducer }) => {
   );
 };
 
-export default connect(null, { getAllVotersSurvey, clearVoterReducer })(
-  OpinionPollSurveyPage
-);
+export default connect(null, { getAllVotersSurvey, clearVoterReducer })(OpinionPollSurveyPage);

@@ -1,18 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  Typography,
-  Card,
-  Stack,
-  Grid,
-  Switch,
-  Divider,
-  Box,
-  Chip,
-  TextField,
-  MenuItem,
-  IconButton,
-} from "@mui/material";
+import { Typography, Card, Stack, Grid, Switch, Divider, Box, Chip, TextField, MenuItem, IconButton } from "@mui/material";
 import Checkbox from "@mui/material/Checkbox";
 import Button from "@mui/material/Button";
 import MUIDataTable from "mui-datatables";
@@ -24,13 +12,7 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { searchFiltercolor } from "../../constants";
 import instance from "../../utils/axios";
-import {
-  getAllNavaratnaluRoute,
-  getAllTicketsRoute,
-  getNextLevelUserRoute,
-  getTicketStatusRoute,
-  updateTicketStatusRoute,
-} from "../../utils/apis";
+import { getAllNavaratnaluRoute, getAllTicketsRoute, getNextLevelUserRoute, getTicketStatusRoute, updateTicketStatusRoute } from "../../utils/apis";
 import { set } from "date-fns";
 
 const ViewTicketsList = ({ common, showAlert, account }) => {
@@ -130,6 +112,9 @@ const ViewTicketsList = ({ common, showAlert, account }) => {
       label: "Ticket ID",
     },
     // {
+    //   label: "Created by",
+    // },
+    // {
     //   label: "Volunteer ID",
     // },
     // {
@@ -178,9 +163,7 @@ const ViewTicketsList = ({ common, showAlert, account }) => {
           if (selectedValues.ticketList.includes(ticket.ticket_master_pk)) {
             setSelectedValues((state) => ({
               ...state,
-              ticketList: state.ticketList.filter(
-                (ticketId) => ticketId !== ticket.ticket_master_pk
-              ),
+              ticketList: state.ticketList.filter((ticketId) => ticketId !== ticket.ticket_master_pk),
             }));
           } else {
             setSelectedValues((state) => ({
@@ -220,16 +203,12 @@ const ViewTicketsList = ({ common, showAlert, account }) => {
 
   /// formatdata for MUIDataTable using fechtedData and filter navaratnalu_name in navaratnalu with   navaratnalu_pk in tickets
   const formatData = fechtedData.tickets.map((ticket) => {
-    const navaratnalu = fechtedData.navaratnalu.find(
-      (navaratnalu) => navaratnalu.navaratnalu_pk === ticket.navaratnalu_id
-    );
-    const tickets = fechtedData.tickets.find(
-      (tickets) => tickets.navaratnalu_id === navaratnalu.navaratnalu_pk
-    );
+    const navaratnalu = fechtedData.navaratnalu.find((navaratnalu) => navaratnalu.navaratnalu_pk === ticket.navaratnalu_id);
+    const tickets = fechtedData.tickets.find((tickets) => tickets.navaratnalu_id === navaratnalu.navaratnalu_pk);
     let statename = "";
 
     if (tickets.status_id === 1) {
-      statename= "Open";
+      statename = "Open";
     }
     if (tickets.status_id === 2) {
       statename = "Resolved";
@@ -339,10 +318,7 @@ const ViewTicketsList = ({ common, showAlert, account }) => {
             <LoadingButton
               isLoading={isLoading}
               onClick={handleSubmit}
-              disabled={
-                selectedValues.ticketList.length === 0 ||
-                !selectedValues.status_id
-              }
+              disabled={selectedValues.ticketList.length === 0 || !selectedValues.status_id}
               variant="contained"
               sx={{
                 marginLeft: "10px",
@@ -366,10 +342,7 @@ const ViewTicketsList = ({ common, showAlert, account }) => {
           >
             <TextField size="small" label="Next Level User" fullWidth select>
               {fechtedData.nextLevelUser.map((nextLevelUser) => (
-                <MenuItem
-                  key={nextLevelUser.user_pk}
-                  value={nextLevelUser.user_pk}
-                >
+                <MenuItem key={nextLevelUser.user_pk} value={nextLevelUser.user_pk}>
                   {nextLevelUser.user_displayname}
                 </MenuItem>
               ))}
@@ -385,12 +358,7 @@ const ViewTicketsList = ({ common, showAlert, account }) => {
           </Grid>
         </Grid>
         <ThemeProvider theme={getMuiTheme()}>
-          <MUIDataTable
-            title="Tickets List"
-            columns={columns}
-            data={formatData}
-            options={options}
-          />
+          <MUIDataTable title="Tickets List" columns={columns} data={formatData} options={options} />
         </ThemeProvider>
       </Stack>
     </Card>

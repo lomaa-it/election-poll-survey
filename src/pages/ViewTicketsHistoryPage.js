@@ -2,17 +2,7 @@ import * as Yup from "yup";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import {
-  Grid,
-  Container,
-  Typography,
-  Box,
-  TextField,
-  Card,
-  InputAdornment,
-  IconButton,
-  MenuItem,
-} from "@mui/material";
+import { Grid, Container, Typography, Box, TextField, Card, InputAdornment, IconButton, MenuItem } from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -22,19 +12,20 @@ import { FormProvider, RHFTextField } from "../components/hook-form";
 import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
 import CloudUploadRoundedIcon from "@mui/icons-material/CloudUploadRounded";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { addVoterTicket } from "../actions/voter";
+import { addVoterTicket, updateReplyVoterTicket } from "../actions/voter";
 import { showAlert } from "../actions/alert";
-import {
-  createTicketHistoryRoute,
-  createTicketRoute,
-  getTicketHistoryRoute,
-} from "../utils/apis";
+import { createTicketHistoryRoute, createTicketRoute, getTicketHistoryRoute } from "../utils/apis";
 import instance from "../utils/axios";
 import TicketHistoryList from "../sections/reports/TicketHistoryList";
 
 const ViewTicketsHistoryPage = ({ common, voter, showAlert }) => {
   const navigate = useNavigate();
   const props = useLocation().state;
+
+  console.log(props);
+
+  const isNew = props.data?.ticket_master_pk == null;
+  const isVolunteer = props.data?.status_id == null;
 
   const [isLoading, setLoading] = useState(false);
   const [fechtedData, setFechtedData] = useState({
@@ -44,7 +35,10 @@ const ViewTicketsHistoryPage = ({ common, voter, showAlert }) => {
 
   const schema = Yup.object().shape({
     navaratnalu_id: Yup.string().required("Navaratnalu is required"),
-    status_id: Yup.string().required("Status is required"),
+    status_id: Yup.string().when("navaratnalu_id", {
+      is: isVolunteer != true,
+      then: Yup.string().required("Status id is required"),
+    }),
     reason: Yup.string().required("Reason is required"),
   });
 
@@ -55,37 +49,82 @@ const ViewTicketsHistoryPage = ({ common, voter, showAlert }) => {
   };
 
   useEffect(() => {
-    fetchData();
+    if (!isNew) {
+      fetchData();
+    }
   }, []);
-
-  console.log("props", props);
 
   const methods = useForm({
     resolver: yupResolver(schema),
     defaultValues,
   });
 
-  const { handleSubmit, resetField } = methods;
+  const { handleSubmit, reset, resetField } = methods;
 
-  const onSubmit = async (data) => {
-    var values = {
-      ...data,
-      ticket_master_pk: props.data.ticket_master_pk,
-      ticket_attachment_id: 6,
-    };
+  const onSubmit = (data) => {
+    if (isNew) {
+      handleAddTicket(data);
+    } else {
+      handleUpadateTicket(data);
+    }
+  };
+
+  const handleAddTicket = async (data) => {
     setLoading(true);
+    var result = await addVoterTicket(props.data.voter_pkk, data);
+    setLoading(false);
+    if (result.status) {
+      props.data.ticket_master_pk = result.message;
+      props.data.navaratnalu_id = Number(data.navaratnalu_id);
 
-    try {
-      const result = await instance.post(createTicketHistoryRoute, values);
-      console.log("result", result);
-      setLoading(false);
+      console.log(props.data);
+      console.log(defaultValues);
 
+      showAlert({ text: "Ticket submitted", color: "success" });
+      reset(defaultValues);
+      fetchData();
+    }
+
+    // try {
+    //   const result = await instance.post(createTicketRoute, values);
+    //   console.log("result", result);
+    //   setLoading(false);
+    // } catch (err) {
+    //   console.log(err);
+    // }
+  };
+
+  const handleUpadateTicket = async (data) => {
+    console.log(data);
+    setLoading(true);
+    var result = await updateReplyVoterTicket(props.data.ticket_master_pk, data);
+    setLoading(false);
+    if (result.status) {
       showAlert({ text: "Ticket submitted", color: "success" });
       resetField("reason");
       fetchData();
-    } catch (err) {
-      console.log(err);
     }
+
+    // var values = {
+    //   ...data,
+    //   ticket_master_pk: props.data.ticket_master_pk,
+    //   ticket_attachment_id: 6,
+    //   status_id: data.status_id ?? 1,
+    // };
+
+    // setLoading(true);
+
+    // try {
+    //   const result = await instance.post(createTicketHistoryRoute, values);
+    //   console.log("result", result);
+    //   setLoading(false);
+
+    //   showAlert({ text: "Ticket submitted", color: "success" });
+    //   resetField("reason");
+    //   fetchData();
+    // } catch (err) {
+    //   console.log(err);
+    // }
   };
 
   const fetchData = async () => {
@@ -111,10 +150,7 @@ const ViewTicketsHistoryPage = ({ common, voter, showAlert }) => {
     <Page title="View Ticket History">
       <Container maxWidth="xl">
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-          <Typography
-            variant="h4"
-            sx={{ mb: 1, display: "flex", alignItems: "center" }}
-          >
+          <Typography variant="h4" sx={{ mb: 1, display: "flex", alignItems: "center" }}>
             <IconButton onClick={() => navigate(-1)}>
               <ArrowBackIcon />
             </IconButton>
@@ -122,24 +158,25 @@ const ViewTicketsHistoryPage = ({ common, voter, showAlert }) => {
           </Typography>
 
           <Card sx={{ p: 3 }}>
-            {/* <Typography variant="h6" sx={{ mb: 2 }}>
-              Voter Name : {props[3]}
+            <Typography variant="h6">
+              Voter Name : {props.data?.voter_name}
               <br />
-              (Ph: {props[6]})
+              (Ph: {props.data?.voter_phone_no})
               <br />
-              Voter ID : {props[2]}
-            </Typography> */}
+              Voter ID : {props.data?.voter_id}
+            </Typography>
+
+            {!isNew && (
+              <Typography variant="h6" sx={{ mb: 2 }}>
+                Ticket ID : {props.data?.ticket_master_pk ?? "-"}
+              </Typography>
+            )}
 
             <Typography sx={{ pb: 2 }}>Basic Info</Typography>
 
             <Grid container spacing={2} alignItems="start">
               <Grid item xs={12} md={6} lg={3}>
-                <RHFTextField
-                  name="navaratnalu_id"
-                  label="Navaratnalu ID"
-                  select
-                  disabled
-                >
+                <RHFTextField name="navaratnalu_id" label="Navaratnalu ID" select disabled={!isNew}>
                   {common.navaratnalu.map((item, index) => (
                     <MenuItem key={index} value={item.navaratnalu_pk}>
                       {item.navaratnalu_name}
@@ -147,24 +184,20 @@ const ViewTicketsHistoryPage = ({ common, voter, showAlert }) => {
                   ))}
                 </RHFTextField>
               </Grid>
-              <Grid item xs={12} md={6} lg={3}>
-                <RHFTextField name="status_id" label="Status" select>
-                  {common.ticket.map((item, index) => (
-                    <MenuItem key={index} value={item.value}>
-                      {item.label}
-                    </MenuItem>
-                  ))}
-                </RHFTextField>
-              </Grid>
+              {!isVolunteer && (
+                <Grid item xs={12} md={6} lg={3}>
+                  <RHFTextField name="status_id" label="Status" select>
+                    {common.ticket.map((item, index) => (
+                      <MenuItem key={index} value={item.value}>
+                        {item.label}
+                      </MenuItem>
+                    ))}
+                  </RHFTextField>
+                </Grid>
+              )}
 
               <Grid item xs={12} md={6} lg={9}>
-                <RHFTextField
-                  name="reason"
-                  label="Write Reason..."
-                  fullWidth
-                  multiline
-                  rows={4}
-                />
+                <RHFTextField name="reason" label="Write Reason..." fullWidth multiline rows={4} />
               </Grid>
               <Grid
                 item
@@ -175,11 +208,7 @@ const ViewTicketsHistoryPage = ({ common, voter, showAlert }) => {
                   mt: "55px",
                 }}
               >
-                <LoadingButton
-                  type="submit"
-                  loading={isLoading}
-                  variant="contained"
-                >
+                <LoadingButton type="submit" loading={isLoading} variant="contained">
                   Submit
                 </LoadingButton>
               </Grid>

@@ -1,16 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  Typography,
-  Card,
-  Stack,
-  Grid,
-  Switch,
-  Divider,
-  Box,
-  Chip,
-  TextField,
-  MenuItem,
-} from "@mui/material";
+import { Typography, Card, Stack, Grid, Switch, Divider, Box, Chip, TextField, MenuItem } from "@mui/material";
 import Checkbox from "@mui/material/Checkbox";
 import Button from "@mui/material/Button";
 import MUIDataTable from "mui-datatables";
@@ -22,29 +11,23 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { searchFiltercolor } from "../../constants";
 import instance from "../../utils/axios";
-import {
-  getAllNavaratnaluRoute,
-  getAllTicketsRoute,
-  getNextLevelUserRoute,
-  getTicketStatusRoute,
-  updateTicketStatusRoute,
-  getTicketHistoryRoute,
-} from "../../utils/apis";
+import { getAllNavaratnaluRoute, getAllTicketsRoute, getNextLevelUserRoute, getTicketStatusRoute, updateTicketStatusRoute, getTicketHistoryRoute } from "../../utils/apis";
 
 const TicketHistoryList = ({ data, showAlert, account }) => {
   const columns = [
     {
-      name: "reason",
-      label: "Reason",
+      name: "createdby",
+      label: "Created by",
     },
     {
       name: "createdon",
       label: "Created on",
     },
     {
-      name: "createdby",
-      label: "Created by",
+      name: "reason",
+      label: "Reason",
     },
+
     {
       name: "status_id",
       label: "Status",
@@ -95,12 +78,7 @@ const TicketHistoryList = ({ data, showAlert, account }) => {
         <Divider />
 
         <ThemeProvider theme={getMuiTheme()}>
-          <MUIDataTable
-            title="Ticket History List"
-            columns={columns}
-            data={data.ticketHistory}
-            options={options}
-          />
+          <MUIDataTable title="Ticket History List" columns={columns} data={data.ticketHistory} options={options} />
         </ThemeProvider>
       </Stack>
     </Card>
