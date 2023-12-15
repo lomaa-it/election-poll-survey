@@ -116,6 +116,7 @@ export const addVoterTicket = async (id, data) => {
       navaratnalu_id: data.navaratnalu_id,
       reason: data.reason,
       status_id: 1,
+      volunteer_id: 11,
       createdby: 11,
     };
 
@@ -137,6 +138,7 @@ export const updateReplyVoterTicket = async (id, data) => {
       reason: data.reason,
       status_id: data.status_id != "" ? data.status_id : 1,
       ticket_attachment_id: 6,
+      volunteer_id: 11,
       createdby: 11,
     };
 

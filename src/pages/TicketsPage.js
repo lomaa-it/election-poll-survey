@@ -1,12 +1,5 @@
 import { useState } from "react";
-import {
-  Grid,
-  Container,
-  Typography,
-  Box,
-  TextField,
-  Card,
-} from "@mui/material";
+import { Grid, Container, Typography, Box, TextField, Card } from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -68,12 +61,8 @@ const TicketsPage = ({ dashboard }) => {
           {/* <Typography sx={{ pb: 2 }}>Search by filter</Typography> */}
 
           <Grid container spacing={2} alignItems="center">
-            <SearchByFilter
-              reset={reset}
-              onChanged={(value) => setFilterValues(value)}
-            />
+            <SearchByFilter reset={reset} onChanged={(value) => setFilterValues(value)} />
             <Grid item xs={12} md={6} lg={2}>
-          
               <RHFAutoComplete
                 key={reset} // add this line
                 name="navaratnalu_id"
@@ -122,7 +111,7 @@ const TicketsPage = ({ dashboard }) => {
           </Grid>
         </Card>
 
-        <TableContainer
+        {/* <TableContainer
           component={Paper}
           sx={{
             mt: 1,
@@ -221,7 +210,7 @@ const TicketsPage = ({ dashboard }) => {
               ))}
             </TableBody>
           </Table>
-        </TableContainer>
+        </TableContainer> */}
 
         <Box p={1} />
 
