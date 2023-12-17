@@ -22,36 +22,33 @@ import { fi } from "date-fns/esm/locale";
 import { useLocation } from "react-router-dom";
 
 const UserMappingPage = ({ common, clearUserReducer, getAllUsers }) => {
-  const [filterValues, setFilterValues] = useState(null);
+  const [filterValues1, setFilterValues] = useState(null);
   const [isLoading, setLoading] = useState(false);
   const [reset, setReset] = useState(false);
   let location = useLocation();
   const buttonRef = useRef();
+  const [designation, setDesignation] = useState([]);
 
   useEffect(() => {
     clearUserReducer();
   }, []);
 
-  const onSubmit = useCallback(async () => {
-    setLoading(true);
-    // console.log("filterValues232", filterValues);
-    // console.log("HI im Here");
+  // const onSubmit = useCallback(async () => {
+  //   setLoading(true);
+  //   // console.log("filterValues232", filterValues);
+  //   // console.log("HI im Here");
 
-    await getAllUsers(filterValues);
+  //   await getAllUsers(filterValues);
 
-    setLoading(false);
-  }, [filterValues, getAllUsers]);
+  //   setLoading(false);
+  // }, [filterValues, getAllUsers]);
 
-  useEffect(() => {
-    onSubmit();
-  }, [location, onSubmit]);
-
-  const handleChange = (name, value) => {
-    const values = {};
-
-    values[name] = value;
-
-    setFilterValues((state) => ({ ...state, ...values }));
+  const handleSubmit = async (filterValues) => {
+    var values = {
+      designation_id: designation?.value ?? null,
+      ...filterValues,
+    };
+    await getAllUsers(values);
   };
 
   return (
@@ -66,42 +63,20 @@ const UserMappingPage = ({ common, clearUserReducer, getAllUsers }) => {
 
           <Grid container spacing={2} alignItems="center">
             <SearchByFilter
-              reset={reset}
-              showPartNo={false}
-              showVillage={false}
-              showOtherFilters={false}
-              onChanged={(value) => setFilterValues(value)}
+              onSubmit={handleSubmit}
+              children={
+                <Grid item xs={12} md={6} lg={2}>
+                  <RHFAutoComplete
+                    name="designation"
+                    label="Select Designation"
+                    value={designation}
+                    onChange={(name, value) => setDesignation(value)}
+                    options={common.designation}
+                  />
+                </Grid>
+              }
             />
 
-            <Grid item xs={12} md={6} lg={2}>
-              <TextField
-                name="designation_id"
-                size="small"
-                fullWidth
-                label="Select Designation*"
-                select
-                value={filterValues?.designation?.value ?? ""}
-                onChange={(e) =>
-                  setFilterValues({
-                    ...filterValues,
-                    designation: {
-                      label: e.target.value,
-                      value: e.target.value,
-                    },
-                  })
-                }
-                sx={{
-                  backgroundColor: "white",
-                  borderRadius: "5px",
-                }}
-              >
-                {common.designation?.map((item, index) => (
-                  <MenuItem key={index} value={item.value}>
-                    {item.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </Grid>
             {/* <Grid item xs={12} md={6} lg={2}>
               <RHFAutoComplete
                 key={reset} // add this line
@@ -116,36 +91,12 @@ const UserMappingPage = ({ common, clearUserReducer, getAllUsers }) => {
                 ]}
               />
             </Grid> */}
-
-            <Grid item xs={12} md={6} lg={2}>
-              <LoadingButton
-                ref={buttonRef}
-                loading={isLoading}
-                variant="contained"
-                onClick={onSubmit}
-              >
-                Search
-              </LoadingButton>{" "}
-              <LoadingButton
-                loading={isLoading}
-                variant="contained"
-                sx={{
-                  backgroundColor: "red",
-                  marginLeft: "15px",
-                }}
-                onClick={() => {
-                  setReset(!reset);
-                }}
-              >
-                Clear
-              </LoadingButton>
-            </Grid>
           </Grid>
         </Card>
 
         <Box p={1} />
 
-        <UserMappingList filterValues={filterValues} />
+        <UserMappingList filterValues={filterValues1} />
       </Container>
     </Page>
   );
