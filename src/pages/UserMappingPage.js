@@ -62,7 +62,7 @@ const UserMappingPage = ({ common, clearUserReducer, getAllUsers }) => {
 
         <Box p={1} />
 
-        <UserMappingList filterValues={filterValues1} />
+        <UserMappingList filterValues={filterValues} />
       </Container>
     </Page>
   );
