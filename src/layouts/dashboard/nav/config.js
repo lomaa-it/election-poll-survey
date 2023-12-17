@@ -7,6 +7,18 @@ const userNavConfig = [
     icon: <Iconify icon="ic:round-dashboard" width="24px" height="24px" />,
   },
 ];
+const otherNavConfig = [
+  {
+    title: "Opinion Survey",
+    path: "/opinionsurvey/survey",
+    icon: <Iconify icon="ic:round-dashboard" width="24px" height="24px" />,
+  },
+  {
+    title: "View Tickets",
+    path: "/tickets",
+    icon: <Iconify icon="ion:ticket" width="24px" height="24px" />,
+  },
+];
 
 const mlaNavConfig = [
   {
@@ -221,4 +233,4 @@ const mlaNavConfig = [
   },
 ];
 
-export { userNavConfig, mlaNavConfig };
+export { userNavConfig, mlaNavConfig, otherNavConfig };

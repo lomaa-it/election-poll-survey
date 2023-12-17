@@ -7,9 +7,13 @@
 
 // export const baseServerUrl = "https://e04c-123-201-170-248.ngrok-free.app";
 // export const baseServerUrl = "https://backend.cgrysrcongress.in";/
-// export const baseServerUrl = "http://192.168.137.242:8080";
+export const baseServerUrl = "http://192.168.137.41:8080";
 /// new
-export const baseServerUrl = "https://poll2.onrender.com";
+// export const baseServerUrl = "https://poll2.onrender.com";
+
+// FORGET PASSWORD ROUTE
+export const userValidationwithPhonenoRoute = "/uservalidationwithphoneno";
+export const saveNewPassword = "/savenewpassword";
 
 // Voter Api
 
@@ -33,7 +37,8 @@ export const getAllSachivalayamRoute = "/sachivalayam/getall";
 export const getAllPartsRoute = "/parts/getall";
 export const getAllVillageRoute = "/villages/getall";
 export const getAllDistrictsWithJoinRoute = "/getalldistrictswithjoin";
-export const getAllConstituenciesWithJoinRoute = "/getallconstituencieswithjoin";
+export const getAllConstituenciesWithJoinRoute =
+  "/getallconstituencieswithjoin";
 export const getAllMandalsWithJoinRoute = "/getallmandalswithjoin";
 
 export const getOpinionDashboardRoute = "/getopinionpolldashboard";

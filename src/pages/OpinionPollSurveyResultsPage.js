@@ -27,34 +27,19 @@ import {
   YSRCPColor,
 } from "../utils/constants";
 import { searchFiltercolor } from "../constants";
-import { useLocation } from "react-router-dom";
 
 const OpinionPollSurveyResultsPage = ({
   dashboard,
   getOpinionResults,
   clearDashboardReducer,
 }) => {
-  const [filterValues, setFilterValues] = useState(null);
-  const [isLoading, setLoading] = useState(false);
-  const [reset, setReset] = useState(false);
-  let location = useLocation();
-  const buttonRef = useRef();
-
   useEffect(() => {
     clearDashboardReducer();
   }, []);
 
-  const onSubmit = useCallback(async () => {
-    setLoading(true);
-    console.log("filterValues232", filterValues);
-    console.log("HI im Here");
+  const handleSubmit = async (filterValues) => {
     await getOpinionResults(filterValues);
-    setLoading(false);
-  }, [filterValues, getOpinionResults]);
-
-  useEffect(() => {
-    onSubmit();
-  }, [location, onSubmit]);
+  };
 
   return (
     <Page title=" Opinion Results">
@@ -64,34 +49,7 @@ const OpinionPollSurveyResultsPage = ({
         </Typography> */}
         <Card sx={{ p: 3, backgroundColor: searchFiltercolor }}>
           <Grid container spacing={2} alignItems="center">
-            <SearchByFilter
-              reset={reset}
-              onChanged={(value) => setFilterValues(value)}
-            />
-
-            <Grid item xs={12} md={6} lg={2}>
-              <LoadingButton
-                ref={buttonRef}
-                loading={isLoading}
-                variant="contained"
-                onClick={onSubmit}
-              >
-                Search
-              </LoadingButton>
-              <LoadingButton
-                loading={isLoading}
-                variant="contained"
-                sx={{
-                  backgroundColor: "red",
-                  marginLeft: "15px",
-                }}
-                onClick={() => {
-                  setReset(!reset);
-                }}
-              >
-                Clear
-              </LoadingButton>
-            </Grid>
+            <SearchByFilter onSubmit={handleSubmit} />
           </Grid>
         </Card>
 

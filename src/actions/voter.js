@@ -1,6 +1,13 @@
 import { json } from "react-router-dom";
 import { LIMIT_PER_PAGE } from "../constants";
-import { changeOpinionPollRoute, createTicketHistoryRoute, createTicketRoute, getAllNavaratnaluRoute, getAllVotorsSurveyRoute, saveOrupdatedSurvey } from "../utils/apis";
+import {
+  changeOpinionPollRoute,
+  createTicketHistoryRoute,
+  createTicketRoute,
+  getAllNavaratnaluRoute,
+  getAllVotorsSurveyRoute,
+  saveOrupdatedSurvey,
+} from "../utils/apis";
 import instance from "../utils/axios";
 
 export const clearVoterReducer = () => async (dispatch) => {
@@ -17,30 +24,17 @@ export const getAllVotersSurvey =
     });
 
     try {
-      const jsonData = {
-        state_id: 5,
-        district_id: 6,
-        consistency_id: 3,
-        mandal_id: data.mandal?.mandal_pk ?? null,
-        division_id: data.division?.division_pk ?? null,
-        sachivalayam_id: data.sachivalayam?.sachivalayam_pk ?? null,
-        part_no: data.partno?.part_no ?? null,
-        village_id: data.village?.village_pk ?? null,
-        gender: data.gender?.value ?? null,
-        religion_id: data.religion?.value ?? null,
-        caste_id: data.caste?.value ?? null,
-        disability: data.disability?.value ?? null,
-        govt_employee: data.govt_employee?.value ?? null,
-        age: data.age?.value ?? null,
-      };
-      console.log("jsonData", jsonData);
+      // console.log("jsonData", jsonData);
 
-      const response = await instance.post(`${getAllVotorsSurveyRoute}?page=${pageNo + 1}&&limit=${limit}`, jsonData);
+      const response = await instance.post(
+        `${getAllVotorsSurveyRoute}?page=${pageNo + 1}&&limit=${limit}`,
+        data
+      );
       const responseData = response.data;
       console.log("responseData in voter.js", responseData);
       // const itemsList = responseData?.data ?? [];
       const itemsList = responseData?.message?.data ?? [];
-      console.log("itemsList", itemsList);
+      // console.log("itemsList", itemsList);
 
       dispatch({
         type: "VOTER_LOAD_SUCCESS",

@@ -15,8 +15,8 @@ import UpdateVoterDialog from "../common/UpdateVoterDialog";
 
 const OpinionPollSurveyList = ({ voter, filterValues, showAlert, changeOpinionPoll, getAllVotersSurvey }) => {
   const navigate = useNavigate();
-  console.log("OpinionPollSurveyListVoter", voter);
-  console.log("OpinionPollSurveyListfilterValues", filterValues);
+  // console.log("OpinionPollSurveyListVoter", voter);
+  // console.log("OpinionPollSurveyListfilterValues", filterValues);
 
   const columns = [
     {
@@ -228,8 +228,8 @@ const OpinionPollSurveyList = ({ voter, filterValues, showAlert, changeOpinionPo
           handleRetrieveData(tableState);
           break;
         default:
-          console.log("action not handled.");
-          console.log(action, tableState);
+          // console.log("action not handled.");
+          // console.log(action, tableState);
       }
     },
   };

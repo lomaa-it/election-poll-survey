@@ -19,40 +19,18 @@ import { RHFAutoComplete } from "../components/hook-form";
 import { useLocation } from "react-router-dom";
 
 const ViewUserPage = ({ common, clearUserReducer, getAllUsers }) => {
-  const [filterValues, setFilterValues] = useState(null);
-  const [isLoading, setLoading] = useState(false);
-  const [reset, setReset] = useState(false);
-  let location = useLocation();
-  const buttonRef = useRef();
+  const [designation, setDesignation] = useState([]);
 
   useEffect(() => {
     clearUserReducer();
   }, []);
 
-  useEffect(() => {
-    setFilterValues(null);
-  }, [reset]);
-
-  const onSubmit = useCallback(async () => {
-    setLoading(true);
-    console.log("filterValues232", filterValues);
-    console.log("HI im Here");
-
-    await getAllUsers(filterValues);
-
-    setLoading(false);
-  }, [filterValues, getAllUsers]);
-
-  useEffect(() => {
-    onSubmit();
-  }, [location, onSubmit]);
-
-  const handleChange = (name, value) => {
-    const values = {};
-
-    values[name] = value;
-
-    setFilterValues((state) => ({ ...state, ...values }));
+  const handleSubmit = async (filterValues) => {
+    var values = {
+      designation_id: designation?.value ?? null,
+      ...filterValues,
+    };
+    await getAllUsers(values);
   };
 
   return (
@@ -67,20 +45,19 @@ const ViewUserPage = ({ common, clearUserReducer, getAllUsers }) => {
 
           <Grid container spacing={2} alignItems="center">
             <SearchByFilter
-              reset={reset}
-              onChanged={(value) => setFilterValues(value)}
+              onSubmit={handleSubmit}
+              children={
+                <Grid item xs={12} md={6} lg={2}>
+                  <RHFAutoComplete
+                    name="designation"
+                    label="Select Designation"
+                    value={designation}
+                    onChange={(name, value) => setDesignation(value)}
+                    options={common.designation}
+                  />
+                </Grid>
+              }
             />
-
-            <Grid item xs={12} md={6} lg={2}>
-              <RHFAutoComplete
-                key={reset} // add this line
-                name="designation"
-                label="Select Designation"
-                value={filterValues?.designation}
-                onChange={handleChange}
-                options={common.designation}
-              />
-            </Grid>
 
             {/* <Grid item xs={12} md={6} lg={2}>
               <RHFAutoComplete
@@ -99,30 +76,6 @@ const ViewUserPage = ({ common, clearUserReducer, getAllUsers }) => {
                 // disabled={account.user.part_no != null}
               />
             </Grid> */}
-
-            <Grid item xs={12} md={6} lg={2}>
-              <LoadingButton
-                ref={buttonRef}
-                loading={isLoading}
-                variant="contained"
-                onClick={onSubmit}
-              >
-                Search
-              </LoadingButton>
-              <LoadingButton
-                loading={isLoading}
-                variant="contained"
-                sx={{
-                  backgroundColor: "red",
-                  marginLeft: "15px",
-                }}
-                onClick={() => {
-                  setReset(!reset);
-                }}
-              >
-                Clear
-              </LoadingButton>
-            </Grid>
           </Grid>
         </Card>
 

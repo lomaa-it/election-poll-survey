@@ -64,3 +64,19 @@ export function RHFTextField2({ name, onChange, ...other }) {
     />
   );
 }
+
+export function UncontrolledTextField({ name, onChange, ...other }) {
+  return (
+    <TextField
+      {...other}
+      name={name}
+      size="small"
+      onChange={onChange}
+      fullWidth
+      sx={{
+        backgroundColor: "#fff",
+        borderRadius: "5px",
+      }}
+    />
+  );
+}

@@ -1,12 +1,20 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { styled, alpha } from "@mui/material/styles";
-import { Box, Link, Button, Drawer, Typography, Avatar, Stack } from "@mui/material";
+import {
+  Box,
+  Link,
+  Button,
+  Drawer,
+  Typography,
+  Avatar,
+  Stack,
+} from "@mui/material";
 import useResponsive from "../../../hooks/useResponsive";
 import Logo from "../../../components/logo";
 import Scrollbar from "../../../components/Scrollbar";
 import NavSection from "../../../components/NavSection";
-import { mlaNavConfig, userNavConfig } from "./config";
+import { mlaNavConfig, userNavConfig, otherNavConfig } from "./config";
 import { connect } from "react-redux";
 import { LOGIN_TYPES, PUBLIC_URL } from "../../../constants";
 
@@ -26,12 +34,33 @@ const Nav = ({ type, account, openNav, onCloseNav }) => {
 
   const isDesktop = useResponsive("up", "lg");
 
+  // useEffect(() => {
+  //   let navbar = [];
+  //   if (type == LOGIN_TYPES[6]) {
+  //     navbar = userNavConfig;
+  //   } else {
+  //     navbar = mlaNavConfig;
+  //   }
+
+  //   setNavConfig(navbar);
+  // }, []);
+
+  // console.log("type", type);
+  // console.log("login types", LOGIN_TYPES);
+  const userDesignation = account.user?.desgination_name;
+  // console.log("account111", userDesignation);
+
   useEffect(() => {
     let navbar = [];
-    if (type == LOGIN_TYPES[6]) {
+    if (
+      userDesignation == LOGIN_TYPES[6] ||
+      userDesignation == LOGIN_TYPES[5]
+    ) {
       navbar = userNavConfig;
-    } else {
+    } else if (userDesignation == LOGIN_TYPES[0]) {
       navbar = mlaNavConfig;
+    } else {
+      navbar = otherNavConfig;
     }
 
     setNavConfig(navbar);
@@ -49,8 +78,20 @@ const Nav = ({ type, account, openNav, onCloseNav }) => {
         backgroundImage: "linear-gradient(to bottom, #013157,#013157, #006D4D)",
       }}
     >
-      <Box sx={{ px: 2.5, py: 3, display: "flex", justifyContent: "center", alignItems: "center" }}>
-        <Box component="img" src={PUBLIC_URL + "/static/logo.png"} sx={{ width: "60px", height: "60px" }} />
+      <Box
+        sx={{
+          px: 2.5,
+          py: 3,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Box
+          component="img"
+          src={PUBLIC_URL + "/static/logo.png"}
+          sx={{ width: "60px", height: "60px" }}
+        />
 
         <Typography variant="subtitle1" color="text.white" sx={{ pl: 2 }}>
           CHANDRAGIRI CONSTITUENCY
@@ -67,7 +108,10 @@ const Nav = ({ type, account, openNav, onCloseNav }) => {
                 {account.user?.user_displayname}
               </Typography>
 
-              <Typography variant="body2" sx={{ color: "text.white", fontSize: 10 }}>
+              <Typography
+                variant="body2"
+                sx={{ color: "text.white", fontSize: 10 }}
+              >
                 {account.user?.desgination_name}
               </Typography>
             </Box>

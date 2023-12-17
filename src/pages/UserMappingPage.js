@@ -34,8 +34,8 @@ const UserMappingPage = ({ common, clearUserReducer, getAllUsers }) => {
 
   const onSubmit = useCallback(async () => {
     setLoading(true);
-    console.log("filterValues232", filterValues);
-    console.log("HI im Here");
+    // console.log("filterValues232", filterValues);
+    // console.log("HI im Here");
 
     await getAllUsers(filterValues);
 

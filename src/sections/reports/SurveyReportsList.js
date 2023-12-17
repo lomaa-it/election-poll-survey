@@ -47,19 +47,9 @@ const SurveyReportsList = ({
     clearDashboardReducer();
   }, []);
 
-  const onSubmit = useCallback(async () => {
-    setLoading(true);
-    console.log("filterValues232", filterValues);
-    console.log("HI im Here");
-
+  const handleSubmit = async (filterValues) => {
     await getOpinionResults(filterValues);
-
-    setLoading(false);
-  }, [filterValues, getOpinionResults]);
-
-  useEffect(() => {
-    onSubmit();
-  }, [location, onSubmit]);
+  };
 
   const columns = [
     {
@@ -202,10 +192,7 @@ const SurveyReportsList = ({
     <>
       <Card sx={{ p: 3, backgroundColor: searchFiltercolor }}>
         <Grid container spacing={2} alignItems="center">
-          <SearchByFilter
-            reset={reset}
-            onChanged={(value) => setFilterValues(value)}
-          />
+          <SearchByFilter onSubmit={handleSubmit} />
 
           {/* <Grid item xs={12} md={6} lg={2}>
             <TextField
@@ -232,30 +219,6 @@ const SurveyReportsList = ({
               }}
             />
           </Grid> */}
-
-          <Grid item xs={12} md={6} lg={2}>
-            <LoadingButton
-              ref={buttonRef}
-              loading={isLoading}
-              variant="contained"
-              onClick={onSubmit}
-            >
-              Search
-            </LoadingButton>
-            <LoadingButton
-              loading={isLoading}
-              variant="contained"
-              sx={{
-                backgroundColor: "red",
-                marginLeft: "15px",
-              }}
-              onClick={() => {
-                setReset(!reset);
-              }}
-            >
-              Clear
-            </LoadingButton>
-          </Grid>
         </Grid>
       </Card>
 

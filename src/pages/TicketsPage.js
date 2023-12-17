@@ -1,5 +1,13 @@
 import { useState } from "react";
-import { Grid, Container, Typography, Box, TextField, Card } from "@mui/material";
+import {
+  Grid,
+  Container,
+  Typography,
+  Box,
+  TextField,
+  Card,
+  MenuItem,
+} from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -19,6 +27,7 @@ import ViewTicketsList from "../sections/reports/ViewTicketsList";
 import SearchByFilter from "../sections/common/SearchByFilter";
 import { searchFiltercolor } from "../constants";
 import { RHFAutoComplete } from "../components/hook-form";
+import { UncontrolledTextField } from "../components/hook-form/RHFTextField";
 
 function totalStats(name, ofOpen, OfResolved, ofCancelled, ofEscalated) {
   return { name, ofOpen, OfResolved, ofCancelled, ofEscalated };
@@ -26,7 +35,7 @@ function totalStats(name, ofOpen, OfResolved, ofCancelled, ofEscalated) {
 
 const statsRow = [totalStats("9,999", "10", "100", "5", "10")];
 
-const TicketsPage = ({ dashboard }) => {
+const TicketsPage = ({ common }) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [isLoading, setIsLoading] = useState(false);
@@ -61,53 +70,43 @@ const TicketsPage = ({ dashboard }) => {
           {/* <Typography sx={{ pb: 2 }}>Search by filter</Typography> */}
 
           <Grid container spacing={2} alignItems="center">
-            <SearchByFilter reset={reset} onChanged={(value) => setFilterValues(value)} />
-            <Grid item xs={12} md={6} lg={2}>
-              <RHFAutoComplete
-                key={reset} // add this line
-                name="navaratnalu_id"
-                label="Select Navaratnalu"
-                value={filterValues?.navaratnalu_id}
-                onChange={handleChange}
-                options={[
-                  { value: "1", label: "1" },
-                  { value: "2", label: "2" },
-                  { value: "3", label: "3" },
-                ]}
-              />
-            </Grid>
+            <SearchByFilter
+              reset={reset}
+              onChanged={(value) => setFilterValues(value)}
+              children={
+                <>
+                  <Grid item xs={12} md={6} lg={2}>
+                    <UncontrolledTextField
+                      name="navaratnalu_id"
+                      label="Select Navaratnalu"
+                      value={filterValues?.navaratnalu_id}
+                      onChange={handleChange}
+                      select
+                      options={common.navaratnalu.map((item, index) => (
+                        <MenuItem key={index} value={item.navaratnalu_pk}>
+                          {item.navaratnalu_name}
+                        </MenuItem>
+                      ))}
+                    />
+                  </Grid>
 
-            <Grid item xs={12} md={6} lg={2}>
-              <RHFAutoComplete
-                key={reset} // add this line
-                name="ticket_status"
-                label="Ticket Status"
-                value={filterValues?.ticket_status}
-                onChange={handleChange}
-                options={[
-                  { value: "1", label: "1" },
-                  { value: "2", label: "2" },
-                  { value: "3", label: "3" },
-                ]}
-              />
-            </Grid>
-
-            <Grid item xs={12} md={6} lg={2}>
-              <LoadingButton variant="contained">Search</LoadingButton>{" "}
-              <LoadingButton
-                loading={isLoading}
-                variant="contained"
-                sx={{
-                  backgroundColor: "red",
-                  marginLeft: "15px",
-                }}
-                onClick={() => {
-                  setReset(!reset);
-                }}
-              >
-                Clear
-              </LoadingButton>
-            </Grid>
+                  <Grid item xs={12} md={6} lg={2}>
+                    <RHFAutoComplete
+                      key={reset} // add this line
+                      name="ticket_status"
+                      label="Ticket Status"
+                      value={filterValues?.ticket_status}
+                      onChange={handleChange}
+                      options={[
+                        { value: "1", label: "1" },
+                        { value: "2", label: "2" },
+                        { value: "3", label: "3" },
+                      ]}
+                    />
+                  </Grid>
+                </>
+              }
+            />
           </Grid>
         </Card>
 
@@ -226,7 +225,7 @@ const TicketsPage = ({ dashboard }) => {
 
 const mapStateToProps = (state) => {
   return {
-    dashboard: state.dashboard,
+    common: state.common,
   };
 };
 

@@ -38,6 +38,10 @@ const StyledContent = styled("div")(({ theme }) => ({
 
 export default function ForgetPage() {
   const [otpSent, setOtpSent] = useState(null);
+  const [isVerified, setIsVerified] = useState(false);
+
+
+
   return (
     <Page title="Forget Password">
       <StyledRoot>
@@ -74,7 +78,12 @@ export default function ForgetPage() {
                 </Typography>
               )}
 
-              <ForgetForm otpSent={otpSent} setOtpSent={setOtpSent} />
+              <ForgetForm
+                otpSent={otpSent}
+                setOtpSent={setOtpSent}
+                isVerified={isVerified}
+                setIsVerified={setIsVerified}
+              />
             </Card>
           </StyledContent>
         </Container>

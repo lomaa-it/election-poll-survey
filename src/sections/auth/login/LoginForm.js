@@ -35,7 +35,7 @@ const LoginForm = ({ showAlert, authSuccess }) => {
   const canvasRef = useRef(null);
 
   const LoginSchema = Yup.object().shape({
-    phone_no: Yup.string()
+    username: Yup.string()
       .matches(phoneRegExp, "Phone number is not valid")
       .required("Phone number is required"),
     password: Yup.string()
@@ -49,7 +49,7 @@ const LoginForm = ({ showAlert, authSuccess }) => {
   });
 
   const defaultValues = {
-    phone_no: "",
+    username: "",
     password: "",
     captcha: "",
   };
@@ -155,7 +155,7 @@ const LoginForm = ({ showAlert, authSuccess }) => {
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Stack spacing={1.5}>
-        <RHFTextField2 name="phone_no" label="Phone number" type="number" />
+        <RHFTextField2 name="username" label="User Name" type="number" />
 
         <RHFTextField
           name="password"

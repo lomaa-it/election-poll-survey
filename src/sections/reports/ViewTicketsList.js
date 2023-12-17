@@ -90,10 +90,10 @@ const ViewTicketsList = ({ common, showAlert, account }) => {
     const fetchData = async () => {
       const navaratnaluResponse = await instance.post(getAllNavaratnaluRoute);
       const navaratanaluResponseData = navaratnaluResponse.data?.message ?? [];
-      const ticketsResponse = await instance.post(getAllTicketsRoute);
+      const ticketsResponse = await instance.get(getAllTicketsRoute);
       const ticketsResponseData = ticketsResponse.data?.message ?? [];
 
-      // console.log("ticketsResponseData", ticketsResponseData);
+      console.log("ticketsResponseData", ticketsResponseData);
       // console.log("nvaratanaluResponseData", navaratanaluResponseData);
       setFechtedData((prevState) => ({
         ...prevState,

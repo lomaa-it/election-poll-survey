@@ -28,29 +28,15 @@ const DashboardApp = ({
   getOpinionDashboard,
   clearDashboardReducer,
 }) => {
-  const [filterValues, setFilterValues] = useState(null);
-  const [isLoading, setLoading] = useState(false);
-  const [reset, setReset] = useState(false);
-  let location = useLocation();
-  const buttonRef = useRef();
-
   useEffect(() => {
     clearDashboardReducer();
   }, []);
 
-  const onSubmit = useCallback(async () => {
-    setLoading(true);
-    console.log("filterValues232", filterValues);
-    console.log("HI im Here");
-
+  const handleSubmit = async (filterValues) => {
     await getOpinionDashboard(filterValues);
+  };
 
-    setLoading(false);
-  }, [filterValues, getOpinionDashboard]);
-
-  useEffect(() => {
-    onSubmit();
-  }, [location, onSubmit]);
+  console.log("dashboard.opinion", dashboard.opinion);
 
   return (
     <Page title="Survey Dashboard">
@@ -61,10 +47,7 @@ const DashboardApp = ({
 
         <Card sx={{ p: 3, backgroundColor: searchFiltercolor }}>
           <Grid container spacing={2} alignItems="center">
-            <SearchByFilter
-              reset={reset}
-              onChanged={(value) => setFilterValues(value)}
-            />
+            <SearchByFilter onSubmit={handleSubmit} />
             {/* <Grid item xs={12} md={6} lg={2}>
               <TextField
                 size="small"
@@ -90,29 +73,6 @@ const DashboardApp = ({
                 select
               />
             </Grid> */}
-            <Grid item xs={12} md={6} lg={2}>
-              <LoadingButton
-                ref={buttonRef}
-                loading={isLoading}
-                variant="contained"
-                onClick={onSubmit}
-              >
-                Search
-              </LoadingButton>
-              <LoadingButton
-                loading={isLoading}
-                variant="contained"
-                sx={{
-                  backgroundColor: "red",
-                  marginLeft: "15px",
-                }}
-                onClick={() => {
-                  setReset(!reset);
-                }}
-              >
-                Clear
-              </LoadingButton>
-            </Grid>
           </Grid>
         </Card>
 
@@ -133,7 +93,7 @@ const DashboardApp = ({
           <Grid container spacing={3}>
             <Grid item xs={12} md={6} lg={4}>
               <PieChartWidget
-                title="Total Voters"
+                title={`Total Voters-${dashboard.opinion.totalVoters}`}
                 chartData={[
                   {
                     label: "Male",
@@ -157,7 +117,7 @@ const DashboardApp = ({
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
               <PieChartWidget
-                title="Survey Status"
+                title={`Survey Status -${dashboard.opinion.totalVoters}`}
                 chartData={[
                   {
                     label: "Started",
@@ -173,7 +133,7 @@ const DashboardApp = ({
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
               <PieChartWidget
-                title="Voters Pulse"
+                title={`Voters Pulse -${dashboard.opinion?.survey?.["surveysDone"]}`}
                 chartData={[
                   {
                     label: "YSRCP",
@@ -241,14 +201,27 @@ const DashboardApp = ({
                   "Yerravanipalem",
                   "Tirupathi (Rural)",
                 ]}
-                chartColors={[Colors.completedColor, Colors.pendingColor]}
+                chartColors={[
+                  Colors.OpenColor,
+                  Colors.ResolvedColor,
+                  Colors.CancelColor,
+                  Colors.EscalatedColor,
+                ]}
                 chartData={[
                   {
-                    name: "Completed",
+                    name: "Open",
                     data: [21, 7, 25, 13, 22, 8],
                   },
                   {
-                    name: "Pending",
+                    name: "Resolved",
+                    data: [7, 7, 5, 13, 7, 3],
+                  },
+                  {
+                    name: "Cancel",
+                    data: [21, 7, 25, 13, 22, 8],
+                  },
+                  {
+                    name: "Escalated",
                     data: [7, 7, 5, 13, 7, 3],
                   },
                 ]}
@@ -256,7 +229,7 @@ const DashboardApp = ({
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
               <PieChartWidget
-                title="Age Wise Voters"
+                title={`Age Wise Voters -${dashboard.opinion.totalVoters}`}
                 chartData={[
                   {
                     label: "18-25",
@@ -280,11 +253,11 @@ const DashboardApp = ({
                   },
                   {
                     label: "65-80",
-                    value: dashboard.opinion?.age?.["65-80"] ?? 0,
+                    value: dashboard.opinion?.age?.["66-80"] ?? 0,
                   },
                   {
                     label: "80+",
-                    value: dashboard.opinion?.age?.["80-80+"] ?? 0,
+                    value: dashboard.opinion?.age?.["80+"] ?? 0,
                   },
                 ]}
                 chartColors={[
@@ -299,7 +272,7 @@ const DashboardApp = ({
             </Grid>{" "}
             <Grid item xs={12} md={6} lg={4}>
               <PieChartWidget
-                title="Disability (40% or above)"
+                title={`Disability (40% or above) -${dashboard.opinion?.survey?.["surveysDone"]}`}
                 chartData={[
                   {
                     label: "YES",
@@ -314,7 +287,7 @@ const DashboardApp = ({
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
               <PieChartWidget
-                title="Govt. Employees"
+                title={`Govt. Employees -${dashboard.opinion?.survey?.["surveysDone"]}`}
                 chartData={[
                   {
                     label: "YES",
@@ -329,7 +302,7 @@ const DashboardApp = ({
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
               <PieChartWidget
-                title="Residential Status"
+                title={`Residential Status -${dashboard.opinion?.survey?.["surveysDone"]}`}
                 chartData={[
                   {
                     label: "Residental",
@@ -345,7 +318,7 @@ const DashboardApp = ({
             </Grid>{" "}
             <Grid item xs={12} md={6} lg={4}>
               <PieChartWidget
-                title="Religion Wise"
+                title={`Religion Wise -${dashboard.opinion?.survey?.["surveysDone"]}`}
                 chartData={[
                   {
                     label: "HINDU",
@@ -376,7 +349,7 @@ const DashboardApp = ({
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
               <PieChartWidget
-                title="Caste Wise"
+                title={`Caste Wise -${dashboard.opinion?.survey?.["surveysDone"]}`}
                 chartData={[
                   {
                     label: "Brahmin",

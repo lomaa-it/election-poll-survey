@@ -13,21 +13,9 @@ export const getAllUsers = (data) => async (dispatch) => {
   });
 
   try {
-    const jsonData = {
-      state_id: 5,
-      district_id: 6,
-      consistency_id: 3,
-      mandal_id: data.mandal?.mandal_pk,
-      division_id: data.division?.division_pk,
-      sachivalayam_id: data.sachivalayam?.sachivalayam_pk,
-      part_no: data.partno?.part_no,
-      village_id: data.village?.village_pk,
-      designation_id: data.designation?.value,
-    };
+    // console.log("jsonData", jsonData);
 
-    console.log("jsonData", jsonData);
-
-    const response = await instance.post(getAllUsersRoute, jsonData);
+    const response = await instance.post(getAllUsersRoute, data);
     const responseData = response.data?.message ?? [];
 
     // console.log(responseData);

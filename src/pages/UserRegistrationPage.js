@@ -46,11 +46,13 @@ const UserRegistrationPage = ({ common, showAlert }) => {
 
   const schema = Yup.object().shape({
     user_displayname: Yup.string().required("Full name is required"),
+    username: Yup.string()
+      .matches(phoneRegExp, "User Name is not valid")
+      .required("User Name is required"),
+    // password: Yup.string().required("Password is required").min(8, "Password must be at least 8 characters"),
     phone_no: Yup.string()
       .matches(phoneRegExp, "Phone number is not valid")
       .required("Phone number is required"),
-    // password: Yup.string().required("Password is required").min(8, "Password must be at least 8 characters"),
-    office_phone_no: Yup.string(),
     age: Yup.string(),
     email: Yup.string().email(),
     designation_id: Yup.string().required("Designation id is required"),
@@ -58,9 +60,9 @@ const UserRegistrationPage = ({ common, showAlert }) => {
 
   const defaultValues = {
     user_displayname: props?.userData?.user_displayname ?? "",
-    phone_no: props?.userData?.phone_no ?? "",
+    username: props?.userData?.username ?? "",
     // password: props?.userData?.password ?? "",
-    office_phone_no: props?.userData?.office_phone_no ?? "",
+    phone_no: props?.userData?.phone_no ?? "",
     age: props?.userData?.age ?? "",
     email: props?.userData?.email ?? "",
     designation_id: props?.userData?.designation_id ?? "",
@@ -90,7 +92,6 @@ const UserRegistrationPage = ({ common, showAlert }) => {
     try {
       var jsonData = {
         ...data,
-        username: data.phone_no,
         state_id: 5,
         district_id: 6,
         consistency_id: 3,
@@ -136,7 +137,7 @@ const UserRegistrationPage = ({ common, showAlert }) => {
               </Grid>
 
               <Grid item xs={12} md={6} lg={3}>
-                <RHFTextField name="phone_no" label="Username/Phone Number *" />
+                <RHFTextField name="username" label="Username/Phone Number *" />
               </Grid>
 
               {/* <Grid item xs={12} md={6} lg={3}>
@@ -144,10 +145,7 @@ const UserRegistrationPage = ({ common, showAlert }) => {
               </Grid> */}
 
               <Grid item xs={12} md={6} lg={3}>
-                <RHFTextField
-                  name="office_phone_no"
-                  label="Office Phone Number"
-                />
+                <RHFTextField name="phone_no" label="Office Phone Number" />
               </Grid>
 
               <Grid item xs={12} md={6} lg={3}>
@@ -184,6 +182,7 @@ const UserRegistrationPage = ({ common, showAlert }) => {
                 showPartNo={false}
                 showVillage={false}
                 showOtherFilters={false}
+                showSearchButton={false}
                 onChanged={(value) => setFilterValues(value)}
               />
             </Grid>

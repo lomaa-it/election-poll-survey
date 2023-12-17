@@ -1,6 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { Grid, Container, Typography, Box, TextField, Card } from "@mui/material";
+import {
+  Grid,
+  Container,
+  Typography,
+  Box,
+  TextField,
+  Card,
+} from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -22,19 +29,10 @@ const OpinionPollSurveyPage = ({ getAllVotersSurvey, clearVoterReducer }) => {
     clearVoterReducer();
   }, []);
 
-  const onSubmit = useCallback(async () => {
-    setLoading(true);
-    console.log("filterValues232", filterValues);
-    console.log("HI im Here");
-
+  const handleSubmit = async (filterValues) => {
     await getAllVotersSurvey(filterValues);
+  };
 
-    setLoading(false);
-  }, [filterValues, getAllVotersSurvey]);
-
-  useEffect(() => {
-    onSubmit();
-  }, [location, onSubmit]);
   return (
     <Page title="Opinion Survey">
       <Container maxWidth="xl">
@@ -44,7 +42,7 @@ const OpinionPollSurveyPage = ({ getAllVotersSurvey, clearVoterReducer }) => {
 
         <Card sx={{ p: 3, backgroundColor: searchFiltercolor }}>
           <Grid container spacing={2} alignItems="center">
-            <SearchByFilter reset={reset} onChanged={(value) => setFilterValues(value)} />
+            <SearchByFilter onSubmit={handleSubmit} />
 
             {/* <Grid item xs={12} md={6} lg={2}>
               <TextField
@@ -106,25 +104,6 @@ const OpinionPollSurveyPage = ({ getAllVotersSurvey, clearVoterReducer }) => {
                 }}
               />
             </Grid> */}
-            <Grid item xs={12} md={6} lg={2}>
-              <LoadingButton ref={buttonRef} loading={isLoading} variant="contained" onClick={onSubmit}>
-                Search
-              </LoadingButton>
-
-              <LoadingButton
-                loading={isLoading}
-                variant="contained"
-                sx={{
-                  backgroundColor: "red",
-                  marginLeft: "15px",
-                }}
-                onClick={() => {
-                  setReset(!reset);
-                }}
-              >
-                Clear
-              </LoadingButton>
-            </Grid>
           </Grid>
         </Card>
 
@@ -140,4 +119,6 @@ const OpinionPollSurveyPage = ({ getAllVotersSurvey, clearVoterReducer }) => {
   );
 };
 
-export default connect(null, { getAllVotersSurvey, clearVoterReducer })(OpinionPollSurveyPage);
+export default connect(null, { getAllVotersSurvey, clearVoterReducer })(
+  OpinionPollSurveyPage
+);
