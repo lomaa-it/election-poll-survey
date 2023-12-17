@@ -23,6 +23,7 @@ import {
   userValidationwithPhonenoRoute,
 } from "../../../utils/apis";
 import instance from "../../../utils/axios";
+import OtpSubmitForm from "./OtpSubmitForm";
 
 const ForgetForm = ({
   showAlert,
@@ -89,24 +90,6 @@ const ForgetForm = ({
     setLoading(false);
   };
 
-  // const onOtpSubmit = async () => {
-  //   setOtpError(null);
-
-  //   if (!isOtpValid(otp)) {
-  //     setOtpError("OTP must be 6 characters");
-  //     return;
-  //   }
-
-  //   if (otp != otpSent) {
-  //     setOtpError("Invalid OTP");
-  //     return;
-  //   }
-
-  //   setLoading(true);
-  //   navigate("/forget-reset-password", { replace: true });
-  //   setLoading(false);
-  // };
-
   const onOtpSubmit = async () => {
     setOtpError(null);
 
@@ -141,69 +124,7 @@ const ForgetForm = ({
   };
 
   if (!!otpSent) {
-    return (
-      <Stack spacing={3}>
-        <Typography
-          gutterBottom
-          variant="body2"
-          sx={{ color: "text.secondary" }}
-        >
-          Enter the OTP sent to +91 - {formValues?.username}
-        </Typography>
-
-        <TextField
-          size="small"
-          name="otp"
-          label="OTP"
-          fullWidth
-          error={!!otpError}
-          helperText={otpError}
-          onChange={(e) => setOtp(e.target.value)}
-          required
-        />
-        <TextField
-          size="small"
-          name="new_password"
-          label="New Password"
-          fullWidth
-          type="password"
-          required
-          value={passwordDetails?.new_password}
-          onChange={(e) =>
-            setPasswordDetails({
-              ...passwordDetails,
-              new_password: e.target.value,
-            })
-          }
-        />
-        <TextField
-          size="small"
-          name="confirm_password"
-          label="Confirm Password"
-          fullWidth
-          type="password"
-          required
-          value={passwordDetails?.confirm_password}
-          onChange={(e) =>
-            setPasswordDetails({
-              ...passwordDetails,
-              confirm_password: e.target.value,
-            })
-          }
-        />
-
-        <LoadingButton
-          fullWidth
-          size="large"
-          type="submit"
-          variant="contained"
-          loading={isLoading}
-          onClick={onOtpSubmit}
-        >
-          Submit
-        </LoadingButton>
-      </Stack>
-    );
+    return <OtpSubmitForm formValues={formValues} showAlert={showAlert}/>;
   }
 
   return (

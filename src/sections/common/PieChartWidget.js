@@ -37,7 +37,7 @@ export default function PieChartWidget({
   const chartLabels = chartData.map((i) => i.label);
 
   const chartSeries = chartData.map((i) => i.value);
-  // console.log("chartData", chartData); 
+  // console.log("chartData", chartData);
 
   const chartOptions = useChart({
     colors: chartColors,
@@ -81,19 +81,26 @@ export default function PieChartWidget({
               margin: "0px",
             }}
           >
-            {headerTitle} - &nbsp;
-            <Typography
-              sx={{
-                backgroundColor: "#3890BF",
-                color: "#fff",
-                fontSize: "15px",
-                fontWeight: "bold",
-                borderRadius: "25%",
-                padding: "0px 10px",
-              }}
-            >
-              {totalCount}
-            </Typography>
+            {totalCount === undefined ? (
+              <>{headerTitle}</>
+            ) : (
+              <>
+                {" "}
+                {headerTitle} - &nbsp;
+                <Typography
+                  sx={{
+                    backgroundColor: "#3890BF",
+                    color: "#fff",
+                    fontSize: "15px",
+                    fontWeight: "bold",
+                    borderRadius: "25%",
+                    padding: "0px 10px",
+                  }}
+                >
+                  {totalCount}
+                </Typography>
+              </>
+            )}
           </Typography>
         }
         subheader={subheader}

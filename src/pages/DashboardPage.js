@@ -22,6 +22,8 @@ import {
 } from "../actions/dashboard";
 import { casteList, searchFiltercolor } from "../constants";
 import { useLocation } from "react-router-dom";
+import { da } from "date-fns/locale";
+import { Label } from "@mui/icons-material";
 
 const DashboardApp = ({
   dashboard,
@@ -93,7 +95,7 @@ const DashboardApp = ({
           <Grid container spacing={3}>
             <Grid item xs={12} md={6} lg={4}>
               <PieChartWidget
-                title={`Total Voters-${dashboard.opinion.totalVoters}`}
+                title={`Total Voters-${dashboard.opinion?.totalVoters ?? 0}`}
                 chartData={[
                   {
                     label: "Male",
@@ -117,7 +119,7 @@ const DashboardApp = ({
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
               <PieChartWidget
-                title={`Survey Status -${dashboard.opinion.totalVoters}`}
+                title={`Survey Status -${dashboard.opinion?.totalVoters ?? 0}`}
                 chartData={[
                   {
                     label: "Started",
@@ -133,7 +135,9 @@ const DashboardApp = ({
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
               <PieChartWidget
-                title={`Voters Pulse -${dashboard.opinion?.survey?.["surveysDone"]}`}
+                title={`Voters Pulse -${
+                  dashboard.opinion?.survey?.["surveysDone"] ?? 0
+                }`}
                 chartData={[
                   {
                     label: "YSRCP",
@@ -176,10 +180,22 @@ const DashboardApp = ({
                 title="Ticket Status"
                 type="donut"
                 chartData={[
-                  { label: "Open", value: 6966 },
-                  { label: "Resolved", value: 456 },
-                  { label: "Cancel", value: 876 },
-                  { label: "Escalated", value: 2542 },
+                  {
+                    label: "Open",
+                    value: dashboard.opinion?.ticket_status?.["open"] ?? 0,
+                  },
+                  {
+                    label: "Resolved",
+                    value: dashboard.opinion?.ticket_status?.["resolved"] ?? 0,
+                  },
+                  {
+                    label: "Cancel",
+                    value: dashboard.opinion?.ticket_status?.["cancel"] ?? 0,
+                  },
+                  {
+                    label: "Escalated",
+                    value: dashboard.opinion?.ticket_status?.["escalated"] ?? 0,
+                  },
                 ]}
                 chartColors={[
                   Colors.OpenColor,
@@ -229,7 +245,9 @@ const DashboardApp = ({
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
               <PieChartWidget
-                title={`Age Wise Voters -${dashboard.opinion.totalVoters}`}
+                title={`Age Wise Voters -${
+                  dashboard.opinion?.totalVoters ?? 0
+                }`}
                 chartData={[
                   {
                     label: "18-25",
@@ -272,37 +290,43 @@ const DashboardApp = ({
             </Grid>{" "}
             <Grid item xs={12} md={6} lg={4}>
               <PieChartWidget
-                title={`Disability (40% or above) -${dashboard.opinion?.survey?.["surveysDone"]}`}
+                title={`Disability (40% or above) -${
+                  dashboard.opinion?.survey?.["surveysDone"] ?? 0
+                }`}
                 chartData={[
                   {
                     label: "YES",
-                    value: 45,
+                    value: dashboard.opinion?.disability?.["yes"] ?? 0,
                   },
                   {
                     label: "NO",
-                    value: 55,
+                    value: dashboard.opinion?.disability?.["no"] ?? 0,
                   },
                 ]}
               />
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
               <PieChartWidget
-                title={`Govt. Employees -${dashboard.opinion?.survey?.["surveysDone"]}`}
+                title={`Govt. Employees -${
+                  dashboard.opinion?.survey?.["surveysDone"] ?? 0
+                }`}
                 chartData={[
                   {
                     label: "YES",
-                    value: 30,
+                    value: dashboard.opinion?.govt_employee?.["yes"] ?? 0,
                   },
                   {
                     label: "NO",
-                    value: 70,
+                    value: dashboard.opinion?.govt_employee?.["no"] ?? 0,
                   },
                 ]}
               />
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
               <PieChartWidget
-                title={`Residential Status -${dashboard.opinion?.survey?.["surveysDone"]}`}
+                title={`Residential Status -${
+                  dashboard.opinion?.survey?.["surveysDone"] ?? 0
+                }`}
                 chartData={[
                   {
                     label: "Residental",
@@ -318,62 +342,95 @@ const DashboardApp = ({
             </Grid>{" "}
             <Grid item xs={12} md={6} lg={4}>
               <PieChartWidget
-                title={`Religion Wise -${dashboard.opinion?.survey?.["surveysDone"]}`}
+                title={`Religion Wise -${
+                  dashboard.opinion?.survey?.["surveysDone"] ?? 0
+                }`}
                 chartData={[
                   {
                     label: "HINDU",
-                    value: 58,
+                    value: dashboard.opinion?.religion?.["hindu"] ?? 0,
                   },
                   {
                     label: "MUSLIM",
-                    value: 20,
+                    value: dashboard.opinion?.religion?.["muslim"] ?? 0,
                   },
                   {
                     label: "CHRISTIAN",
-                    value: 30,
+                    value: dashboard.opinion?.religion?.["christian"] ?? 0,
                   },
                   {
                     label: "SIKH",
-                    value: 70,
+                    value: dashboard.opinion?.religion?.["sikh"] ?? 0,
                   },
                   {
                     label: "BUDDHIST",
-                    value: 20,
+                    value: dashboard.opinion?.religion?.["buddhist"] ?? 0,
                   },
                   {
                     label: "JAIN",
-                    value: 45,
+                    value: dashboard.opinion?.religion?.["jain"] ?? 0,
+                  },
+                  {
+                    label: "Other",
+                    value: dashboard.opinion?.religion?.["other"] ?? 0,
                   },
                 ]}
               />
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
               <PieChartWidget
-                title={`Caste Wise -${dashboard.opinion?.survey?.["surveysDone"]}`}
+                title={`Caste Wise -${
+                  dashboard.opinion?.survey?.["surveysDone"] ?? 0
+                }`}
                 chartData={[
                   {
                     label: "Brahmin",
-                    value: 58,
+                    value: dashboard.opinion?.caste?.["brahmin"] ?? 0,
                   },
                   {
                     label: "Kshatriya",
-                    value: 20,
+                    value: dashboard.opinion?.caste?.["kshatriya"] ?? 0,
                   },
                   {
                     label: "Vaishya",
-                    value: 30,
+                    value: dashboard.opinion?.caste?.["vaishya"] ?? 0,
                   },
                   {
                     label: "Reddy",
-                    value: 70,
+                    value: dashboard.opinion?.caste?.["reddy"] ?? 0,
                   },
                   {
                     label: "Raju",
-                    value: 20,
+                    value: dashboard.opinion?.caste?.["raju"] ?? 0,
+                  },
+
+                  {
+                    label: "Kamma",
+                    value: dashboard.opinion?.caste?.["kamma"] ?? 0,
+                  },
+                  {
+                    label: "Kapu",
+                    value: dashboard.opinion?.caste?.["kapu"] ?? 0,
+                  },
+                  {
+                    label: "SC",
+                    value: dashboard.opinion?.caste?.["sc"] ?? 0,
+                  },
+                  {
+                    label: "ST",
+                    value: dashboard.opinion?.caste?.["st"] ?? 0,
+                  },
+                  {
+                    label: "Velama",
+                    value: dashboard.opinion?.caste?.["velama"] ?? 0,
+                  },
+                  {
+                    label: "Komati",
+                    value: dashboard.opinion?.caste?.["komati"] ?? 0,
                   },
                   {
                     label: "Other",
-                    value: 45,
+                    value: dashboard.opinion?.caste?.["other"] ?? 0,
                   },
                 ]}
               />
