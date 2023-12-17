@@ -5,11 +5,11 @@
 // new api for baseServerUrl
 // export const baseServerUrl = "https://6079-123-201-170-56.ngrok-free.app";
 
-export const baseServerUrl = "https://6cd2-183-83-253-245.ngrok-free.app";
+// export const baseServerUrl = "https://6cd2-183-83-253-245.ngrok-free.app";
 // export const baseServerUrl = "https://backend.cgrysrcongress.in";/
 // export const baseServerUrl = "http://192.168.137.41:8080";
 /// new
-// export const baseServerUrl = "https://poll2.onrender.com";
+export const baseServerUrl = "https://poll2.onrender.com";
 
 // FORGET PASSWORD ROUTE
 export const userValidationwithPhonenoRoute = "/uservalidationwithphoneno";
