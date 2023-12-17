@@ -36,13 +36,7 @@ const ViewUserPage = ({ common, clearUserReducer, getAllUsers }) => {
   return (
     <Page title="User List">
       <Container maxWidth="xl">
-        {/* <Typography variant="h4" sx={{ mb: 1 }}>
-          User List
-        </Typography> */}
-
         <Card sx={{ p: 3, backgroundColor: searchFiltercolor }}>
-          {/* <Typography sx={{ pb: 2 }}>Search by filter</Typography> */}
-
           <Grid container spacing={2} alignItems="center">
             <SearchByFilter
               onSubmit={handleSubmit}

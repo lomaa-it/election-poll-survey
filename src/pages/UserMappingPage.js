@@ -17,8 +17,6 @@ import { UncontrolledTextField } from "../components/hook-form/RHFTextField";
 const UserMappingPage = ({ common, clearUserReducer, getAllUsers }) => {
   const [designation, setDesignation] = useState("");
   const [filterValues, setFilterValues] = useState(null);
-  let location = useLocation();
-  const buttonRef = useRef();
 
   useEffect(() => {
     clearUserReducer();
@@ -64,7 +62,7 @@ const UserMappingPage = ({ common, clearUserReducer, getAllUsers }) => {
 
         <Box p={1} />
 
-        <UserMappingList filterValues={filterValues} />
+        <UserMappingList filterValues={filterValues1} />
       </Container>
     </Page>
   );
