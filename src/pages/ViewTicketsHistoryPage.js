@@ -8,30 +8,19 @@ import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FormProvider, RHFTextField } from "../components/hook-form";
-
-import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
-import CloudUploadRoundedIcon from "@mui/icons-material/CloudUploadRounded";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { addVoterTicket, updateReplyVoterTicket } from "../actions/voter";
 import { showAlert } from "../actions/alert";
-import { createTicketHistoryRoute, createTicketRoute, getTicketHistoryRoute } from "../utils/apis";
-import instance from "../utils/axios";
 import TicketHistoryList from "../sections/reports/TicketHistoryList";
+import { addVoterTicket, updateReplyVoterTicket, clearTicketReducer, getVoterTicketHistory } from "../actions/ticket";
 
-const ViewTicketsHistoryPage = ({ account, common, voter, showAlert }) => {
+const ViewTicketsHistoryPage = ({ account, common, ticket, showAlert, getVoterTicketHistory, clearTicketReducer }) => {
   const navigate = useNavigate();
   const props = useLocation().state;
-
-  console.log(props);
 
   const isNew = props.data?.ticket_master_pk == null;
   const isVolunteer = props.data?.status_id == null;
 
   const [isLoading, setLoading] = useState(false);
-  const [fechtedData, setFechtedData] = useState({
-    isLoading: false,
-    ticketHistory: [],
-  });
 
   const schema = Yup.object().shape({
     navaratnalu_id: Yup.string().required("Navaratnalu is required"),
@@ -49,9 +38,11 @@ const ViewTicketsHistoryPage = ({ account, common, voter, showAlert }) => {
   };
 
   useEffect(() => {
-    if (!isNew) {
-      fetchData();
-    }
+    getVoterTicketHistory(props.data.voter_pkk);
+
+    return () => {
+      clearTicketReducer();
+    };
   }, []);
 
   const methods = useForm({
@@ -59,7 +50,7 @@ const ViewTicketsHistoryPage = ({ account, common, voter, showAlert }) => {
     defaultValues,
   });
 
-  const { handleSubmit, reset, resetField } = methods;
+  const { handleSubmit, reset, resetField, setValue } = methods;
 
   const onSubmit = (data) => {
     if (isNew) {
@@ -77,21 +68,13 @@ const ViewTicketsHistoryPage = ({ account, common, voter, showAlert }) => {
       props.data.ticket_master_pk = result.message;
       props.data.navaratnalu_id = Number(data.navaratnalu_id);
 
-      console.log(props.data);
-      console.log(defaultValues);
-
       showAlert({ text: "Ticket submitted", color: "success" });
-      reset(defaultValues);
-      fetchData();
-    }
+      resetField("reason");
 
-    // try {
-    //   const result = await instance.post(createTicketRoute, values);
-    //   console.log("result", result);
-    //   setLoading(false);
-    // } catch (err) {
-    //   console.log(err);
-    // }
+      getVoterTicketHistory(props.data.voter_pkk);
+    } else {
+      showAlert({ text: result.message });
+    }
   };
 
   const handleUpadateTicket = async (data) => {
@@ -101,48 +84,9 @@ const ViewTicketsHistoryPage = ({ account, common, voter, showAlert }) => {
     if (result.status) {
       showAlert({ text: "Ticket submitted", color: "success" });
       resetField("reason");
-      fetchData();
+
+      getVoterTicketHistory(props.data.voter_pkk);
     }
-
-    // var values = {
-    //   ...data,
-    //   ticket_master_pk: props.data.ticket_master_pk,
-    //   ticket_attachment_id: 6,
-    //   status_id: data.status_id ?? 1,
-    // };
-
-    // setLoading(true);
-
-    // try {
-    //   const result = await instance.post(createTicketHistoryRoute, values);
-    //   console.log("result", result);
-    //   setLoading(false);
-
-    //   showAlert({ text: "Ticket submitted", color: "success" });
-    //   resetField("reason");
-    //   fetchData();
-    // } catch (err) {
-    //   console.log(err);
-    // }
-  };
-
-  const fetchData = async () => {
-    setFechtedData((state) => ({
-      ...state,
-      ticketHistory: [],
-      isLoading: true,
-    }));
-
-    const ticketHistoryResponse = await instance.post(getTicketHistoryRoute, {
-      ticket_master_pk: props.data.ticket_master_pk,
-    });
-    console.log("ticketHistoryResponse", ticketHistoryResponse);
-
-    setFechtedData((state) => ({
-      ...state,
-      ticketHistory: ticketHistoryResponse.data.message,
-      isLoading: false,
-    }));
   };
 
   return (
@@ -183,6 +127,7 @@ const ViewTicketsHistoryPage = ({ account, common, voter, showAlert }) => {
                   ))}
                 </RHFTextField>
               </Grid>
+
               {!isVolunteer && (
                 <Grid item xs={12} md={6} lg={3}>
                   <RHFTextField name="status_id" label="Status" select>
@@ -198,15 +143,8 @@ const ViewTicketsHistoryPage = ({ account, common, voter, showAlert }) => {
               <Grid item xs={12} md={6} lg={9}>
                 <RHFTextField name="reason" label="Write Reason..." fullWidth multiline rows={4} />
               </Grid>
-              <Grid
-                item
-                xs={12}
-                md={6}
-                lg={3}
-                sx={{
-                  mt: "55px",
-                }}
-              >
+
+              <Grid item xs={12} md={6} lg={3} sx={{ mt: "auto" }}>
                 <LoadingButton type="submit" loading={isLoading} variant="contained">
                   Submit
                 </LoadingButton>
@@ -215,7 +153,8 @@ const ViewTicketsHistoryPage = ({ account, common, voter, showAlert }) => {
           </Card>
 
           <Box p={1} />
-          <TicketHistoryList data={fechtedData} />
+
+          <TicketHistoryList />
 
           {/* <Card sx={{ p: 3 }}>
             <Typography sx={{ pb: 2 }}>Attachements Info</Typography>
@@ -295,8 +234,8 @@ const mapStateToProps = (state) => {
   return {
     account: state.auth,
     common: state.common,
-    voter: state.voter,
+    ticket: state.ticket,
   };
 };
 
-export default connect(mapStateToProps, { showAlert })(ViewTicketsHistoryPage);
+export default connect(mapStateToProps, { showAlert, getVoterTicketHistory, clearTicketReducer })(ViewTicketsHistoryPage);

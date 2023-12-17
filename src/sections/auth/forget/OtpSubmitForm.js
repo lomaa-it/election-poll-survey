@@ -3,16 +3,8 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { FormProvider } from "../../../components/hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  Stack,
-  IconButton,
-  InputAdornment,
-  TextField,
-  Typography,
-} from "@mui/material";
-import RHFTextField, {
-  RHFTextField2,
-} from "../../../components/hook-form/RHFTextField";
+import { Stack, IconButton, InputAdornment, TextField, Typography } from "@mui/material";
+import RHFTextField, { RHFTextField2 } from "../../../components/hook-form/RHFTextField";
 import { useState } from "react";
 import { LoadingButton } from "@mui/lab";
 import { saveNewPassword } from "../../../utils/apis";
@@ -24,15 +16,11 @@ const OtpSubmitForm = ({ formValues, showAlert }) => {
   const [isLoading, setLoading] = useState(false);
 
   const OtpSubmitSchema = Yup.object().shape({
-    otp: Yup.string()
-      .required("OTP is required")
-      .min(6, "OTP must be at least 6 characters"),
-    new_password: Yup.string()
-      .required("New Password is required")
-      .min(8, "Password must be at least 8 characters"),
+    otp: Yup.string().required("OTP is required").min(6, "OTP must be at least 6 characters"),
+    new_password: Yup.string().required("New Password is required").min(8, "Password must be at least 8 characters"),
     confirm_password: Yup.string()
       .required("Confirm Password is required")
-      .oneOf([Yup.ref("new_password"), null], "Passwords must match"),
+      .oneOf([Yup.ref("new_password")], "Confirm password must be match"),
   });
 
   const defaultValues = {
@@ -73,27 +61,15 @@ const OtpSubmitForm = ({ formValues, showAlert }) => {
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-      <Typography sx={{ color: "text.secondary", mb: 5 }}>
-        Enter OTP sent to your {`+91(${formValues?.username})`}
-      </Typography>
+      <Typography sx={{ color: "text.secondary", mb: 5 }}>Enter OTP sent to your {`+91(${formValues?.username})`}</Typography>
       <Stack spacing={3}>
         <RHFTextField name="otp" label="OTP" />
 
-        <RHFTextField2
-          name="new_password"
-          label="New Password"
-          type="password"
-        />
+        <RHFTextField name="new_password" label="New Password" type="password" />
 
-        <RHFTextField2 name="confirm_password" label="Confirm Password" />
+        <RHFTextField name="confirm_password" label="Confirm Password" />
 
-        <LoadingButton
-          fullWidth
-          size="large"
-          type="submit"
-          variant="contained"
-          loading={isLoading}
-        >
+        <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isLoading}>
           Submit
         </LoadingButton>
       </Stack>

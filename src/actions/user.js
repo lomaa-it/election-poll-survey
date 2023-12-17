@@ -13,12 +13,8 @@ export const getAllUsers = (data) => async (dispatch) => {
   });
 
   try {
-    // console.log("jsonData", jsonData);
-
     const response = await instance.post(getAllUsersRoute, data);
     const responseData = response.data?.message ?? [];
-
-    // console.log(responseData);
 
     dispatch({
       type: "USER_LOAD_SUCCESS",

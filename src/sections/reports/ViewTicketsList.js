@@ -1,148 +1,88 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Typography, Card, Stack, Grid, Switch, Divider, Box, Chip, TextField, MenuItem, IconButton } from "@mui/material";
+import { Typography, Card, Stack, Grid, Switch, Divider, Box, Chip, TextField, MenuItem, IconButton, CircularProgress } from "@mui/material";
 import Checkbox from "@mui/material/Checkbox";
-import Button from "@mui/material/Button";
 import MUIDataTable from "mui-datatables";
 import { connect } from "react-redux";
 import { showAlert } from "../../actions/alert";
-import { LoadingButton } from "@mui/lab";
 import EditNoteIcon from "@mui/icons-material/EditNote";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { searchFiltercolor } from "../../constants";
-import instance from "../../utils/axios";
-import { getAllNavaratnaluRoute, getAllTicketsRoute, getNextLevelUserRoute, getTicketStatusRoute, updateTicketStatusRoute } from "../../utils/apis";
-import { set } from "date-fns";
+import { ThemeProvider } from "@mui/material/styles";
+import { getMuiTableTheme, getTicketStatusById, searchFiltercolor } from "../../constants";
 
-const ViewTicketsList = ({ common, showAlert, account }) => {
+import { checkOrUncheckTicket } from "../../actions/ticket";
+import AnalyticsCard from "../common/AnalyticsCard";
+import { fToNow } from "../../utils/formatTime";
+
+const ViewTicketsList = ({ common, ticket, showAlert, checkOrUncheckTicket }) => {
   const navigate = useNavigate();
   const [isLoading, setLoading] = useState(false);
-  const [fechtedData, setFechtedData] = useState({
-    navaratnalu: [],
-    tickets: [],
-    status: [],
-    nextLevelUser: [],
-  });
-
-  const [refresh, setRefresh] = useState(false);
-  console.log("account", account);
-
-  const [selectedValues, setSelectedValues] = useState({
-    ticketList: [],
+  const [formValues, setFormValues] = useState({
     status_id: "",
+    next_level_user: "",
   });
-
-  useEffect(() => {
-    //next level users api call based on account.user.desgination_name
-    // if (account.user.desgination_name === "VOLUNTEER") {
-    //   const fetchNextLevelUser = async () => {
-    //     const requestBody = {
-    //       designation_name: "VOLUNTEER",
-    //       part_no: account.user.part_no,
-    //     };
-    //     console.log("1requestBody", requestBody);
-    //     const nextLevelUserResponse = await instance.post(
-    //       getNextLevelUserRoute,
-    //       requestBody
-    //     );
-    //     const nextLevelUserResponseData =
-    //       nextLevelUserResponse.data?.message ?? [];
-    //     console.log("nextLevelUserResponseData", nextLevelUserResponseData);
-    //     setFechtedData((prevState) => ({
-    //       ...prevState,
-    //       nextLevelUser: nextLevelUserResponseData,
-    //     }));
-    //   };
-    //   fetchNextLevelUser();
-    // } else if (account.user.desgination_name === "BOOTH_INCHARGE") {
-    //   const fetchNextLevelUser = async () => {
-    //     try {
-    //       const requestBody = {
-    //         designation_name: "BOOTH_INCHARGE",
-    //         sachivalayam_id: account.user.sachivalayam_pk,
-    //       };
-    //       console.log("2requestBody", requestBody);
-    //       const nextLevelUserResponse = await instance.post(
-    //         getNextLevelUserRoute,
-    //         requestBody
-    //       );
-    //       console.log("nextLevelUserResponse", nextLevelUserResponse);
-    //       const nextLevelUserResponseData =
-    //         nextLevelUserResponse.data?.message ?? [];
-    //       console.log("nextLevelUserResponseData", nextLevelUserResponseData);
-    //       setFechtedData((prevState) => ({
-    //         ...prevState,
-    //         nextLevelUser: nextLevelUserResponseData,
-    //       }));
-    //     } catch (error) {
-    //       console.error(
-    //         "An error occurred while fetching the next level user:",
-    //         error
-    //       );
-    //     }
-    //   };
-    //   fetchNextLevelUser();
-    // }
-  }, []);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const navaratnaluResponse = await instance.post(getAllNavaratnaluRoute);
-      const navaratanaluResponseData = navaratnaluResponse.data?.message ?? [];
-      const ticketsResponse = await instance.get(getAllTicketsRoute);
-      const ticketsResponseData = ticketsResponse.data?.message ?? [];
-
-      console.log("ticketsResponseData", ticketsResponseData);
-      // console.log("nvaratanaluResponseData", navaratanaluResponseData);
-      setFechtedData((prevState) => ({
-        ...prevState,
-        navaratnalu: navaratanaluResponseData,
-        tickets: ticketsResponseData,
-      }));
-    };
-    fetchData();
-  }, [refresh]);
 
   const columns = [
     {
+      name: "isCheck",
       label: "Select",
+      options: {
+        customBodyRender: (value, tableMeta, updateValue) => {
+          var data = tableMeta.rowData;
+          return <Checkbox checked={value ?? false} onChange={(e) => checkOrUncheckTicket(data[1], e.target.checked)} />;
+        },
+      },
     },
     {
+      name: "ticket_master_pk",
       label: "Ticket ID",
     },
-    // {
-    //   label: "Created by",
-    // },
-    // {
-    //   label: "Volunteer ID",
-    // },
-    // {
-    //   label: "Volunteer Name",
-    // },
+
+    { name: "voter_id", label: "Voter ID" },
     {
-      label: "Voter ID",
-    },
-    {
+      name: "voter_name",
       label: "Voter Name",
     },
-    // {
-    //   label: "Phone",
-    // },
     {
+      name: "navaratnalu_name",
       label: "Navaratnalu Name",
     },
     {
+      name: "reason",
       label: "Description/Reason",
     },
     {
+      name: "status_id",
       label: "Status",
+      options: {
+        customBodyRender: (value, tableMeta, updateValue) => {
+          return getTicketStatusById(value);
+        },
+      },
     },
     {
-      label: "pending(no of days)",
+      name: "createdon",
+      label: "Pending",
+      options: {
+        customBodyRender: (value, tableMeta, updateValue) => {
+          var data = tableMeta.rowData;
+          return data[6] == 1 ? fToNow(value) : "-";
+        },
+      },
     },
     {
+      name: "ticket_master_pk",
       label: "Action",
+      options: {
+        customBodyRender: (value, tableMeta, updateValue) => {
+          var index = ticket.data.findIndex((e) => e.ticket_master_pk == value);
+
+          return (
+            <IconButton onClick={() => handleEdit(ticket.data[index])}>
+              <EditNoteIcon />
+            </IconButton>
+          );
+        },
+      },
     },
   ];
 
@@ -152,91 +92,6 @@ const ViewTicketsList = ({ common, showAlert, account }) => {
     responsive: "standard",
   };
 
-  // console.log("fechtedData", fechtedData);
-  console.log("selectedValues", selectedValues);
-
-  const renderCheckBox = (ticket) => {
-    return (
-      <Checkbox
-        onClick={() => {
-          // if same ticket is clicked again then remove it from the list
-          if (selectedValues.ticketList.includes(ticket.ticket_master_pk)) {
-            setSelectedValues((state) => ({
-              ...state,
-              ticketList: state.ticketList.filter((ticketId) => ticketId !== ticket.ticket_master_pk),
-            }));
-          } else {
-            setSelectedValues((state) => ({
-              ...state,
-              ticketList: [...state.ticketList, ticket.ticket_master_pk],
-            }));
-          }
-        }}
-        checked={selectedValues.ticketList.includes(ticket.ticket_master_pk)}
-        sx={{
-          color: "primary.main",
-        }}
-      />
-    );
-  };
-
-  const getMuiTheme = () =>
-    createTheme({
-      components: {
-        MUIDataTableHeadCell: {
-          styleOverrides: {
-            root: {
-              backgroundColor: searchFiltercolor,
-            },
-          },
-        },
-      },
-    });
-
-  const renderAction = (data) => {
-    return (
-      <IconButton onClick={() => handleEdit(data)}>
-        <EditNoteIcon />
-      </IconButton>
-    );
-  };
-
-  /// formatdata for MUIDataTable using fechtedData and filter navaratnalu_name in navaratnalu with   navaratnalu_pk in tickets
-  const formatData = fechtedData.tickets.map((ticket) => {
-    const navaratnalu = fechtedData.navaratnalu.find((navaratnalu) => navaratnalu.navaratnalu_pk === ticket.navaratnalu_id);
-    const tickets = fechtedData.tickets.find((tickets) => tickets.navaratnalu_id === navaratnalu.navaratnalu_pk);
-    let statename = "";
-
-    if (tickets.status_id === 1) {
-      statename = "Open";
-    }
-    if (tickets.status_id === 2) {
-      statename = "Resolved";
-    }
-    if (tickets.status_id === 3) {
-      statename = "Cancelled";
-    }
-    if (tickets.status_id === 4) {
-      statename = "Escalated";
-    }
-    console.log(tickets);
-
-    return [
-      renderCheckBox(ticket),
-      ticket.ticket_master_pk,
-      // ticket.volunteer_id || "-",
-      // ticket.volunteer_name || "-",
-      ticket.voter_id || "-",
-      ticket.voter_name || "-",
-      // ticket.phone || "-",
-      navaratnalu.navaratnalu_name || "-",
-      ticket.reason || "-",
-      statename || "-",
-      tickets.pending_days || "1",
-      renderAction(ticket),
-    ];
-  });
-
   const handleEdit = (data) => {
     navigate(`/view-ticket-history`, {
       state: {
@@ -245,133 +100,119 @@ const ViewTicketsList = ({ common, showAlert, account }) => {
     });
   };
 
-  const handleSubmit = async () => {
-    const requestBody = {
-      ticketMasterPKList: selectedValues.ticketList,
-      status_id: selectedValues.status_id,
-    };
-    console.log("requestBody", requestBody);
-    try {
-      setLoading(true);
-      await instance.put(updateTicketStatusRoute, requestBody);
-      showAlert({
-        text: "Ticket status updated successfully",
-        color: "success",
-      });
-      setLoading(false);
-      setSelectedValues((state) => ({
-        ...state,
-        ticketList: [],
-        status_id: "",
-      }));
-      setRefresh((state) => !state);
-    } catch (error) {
-      console.log(error);
-      showAlert({ text: "Something went wrong" });
-      setLoading(false);
-      setRefresh((state) => !state);
-    }
-  };
+  // const handleSubmit = async () => {
+  //   const requestBody = {
+  //     ticketMasterPKList: selectedValues.ticketList,
+  //     status_id: selectedValues.status_id,
+  //   };
+  //   console.log("requestBody", requestBody);
+  //   try {
+  //     setLoading(true);
+  //     await instance.put(updateTicketStatusRoute, requestBody);
+  //     showAlert({
+  //       text: "Ticket status updated successfully",
+  //       color: "success",
+  //     });
+  //     setLoading(false);
+  //     setSelectedValues((state) => ({
+  //       ...state,
+  //       ticketList: [],
+  //       status_id: "",
+  //     }));
+  //     setRefresh((state) => !state);
+  //   } catch (error) {
+  //     console.log(error);
+  //     showAlert({ text: "Something went wrong" });
+  //     setLoading(false);
+  //     setRefresh((state) => !state);
+  //   }
+  // };
 
   return (
-    <Card elevation={1}>
-      <Stack>
-        <Divider />
-        <Grid
-          container
-          spacing={2}
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            margin: "10px 0px",
-          }}
-        >
-          <Grid
-            item
-            xs={12}
-            md={6}
-            lg={3}
-            sx={{
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            <TextField
-              size="small"
-              label="Ticket Status"
-              fullWidth
-              select
-              value={selectedValues.status_id}
-              onChange={(e) => {
-                setSelectedValues((state) => ({
-                  ...state,
-                  status_id: e.target.value,
-                }));
-              }}
-            >
-              {common.ticket.map((item, index) => (
-                <MenuItem key={index} value={item.value}>
-                  {item.label}
-                </MenuItem>
-              ))}
-            </TextField>
-            <LoadingButton
-              isLoading={isLoading}
-              onClick={handleSubmit}
-              disabled={selectedValues.ticketList.length === 0 || !selectedValues.status_id}
-              variant="contained"
-              sx={{
-                marginLeft: "10px",
-              }}
-            >
-              Submit
-            </LoadingButton>
-          </Grid>
+    <>
+      <AnalyticsCard names={["Total", "Open", "Resolved", "Cancelled", "Escalated"]} values={[ticket.analytics?.count, ticket.analytics?.open, ticket.analytics?.resolved, ticket.analytics?.cancelled, ticket.analytics?.escalated]} />
 
-          <Grid
-            item
-            xs={12}
-            md={6}
-            lg={3}
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              marginLeft: "auto",
-              marginRight: "50px",
-            }}
-          >
-            <TextField size="small" label="Next Level User" fullWidth select>
-              {fechtedData.nextLevelUser.map((nextLevelUser) => (
-                <MenuItem key={nextLevelUser.user_pk} value={nextLevelUser.user_pk}>
-                  {nextLevelUser.user_displayname}
-                </MenuItem>
-              ))}
-            </TextField>
-            <LoadingButton
-              variant="contained"
-              sx={{
-                marginLeft: "10px",
-              }}
-            >
-              Escalate
-            </LoadingButton>
-          </Grid>
-        </Grid>
-        <ThemeProvider theme={getMuiTheme()}>
-          <MUIDataTable title="Tickets List" columns={columns} data={formatData} options={options} />
-        </ThemeProvider>
-      </Stack>
-    </Card>
+      <Box p={1} />
+
+      <Card elevation={1}>
+        {ticket.isLoading && (
+          <Box minHeight={200} display="flex" justifyContent="center" alignItems="center">
+            <CircularProgress />
+          </Box>
+        )}
+
+        {!ticket.isLoading && (
+          <>
+            {/* <Box p={4}>
+              <Grid container spacing={2} sx={{ justifyContent: "space-between" }}>
+                <Grid item xs={12} md={6} lg={3}>
+                  <Stack direction="row" spacing={2}>
+                    <UncontrolledTextField
+                      name="status_id"
+                      label="Ticket Status"
+                      select
+                      value={formValues.status_id}
+                      onChange={(e) => {
+                        setFormValues((state) => ({
+                          ...state,
+                          status_id: e.target.value,
+                        }));
+                      }}
+                    >
+                      {common.ticket.map((item, index) => (
+                        <MenuItem key={index} value={item.value}>
+                          {item.label}
+                        </MenuItem>
+                      ))}
+                    </UncontrolledTextField>
+
+                    <LoadingButton
+                      variant="contained"
+                      isLoading={isLoading}
+                      // onClick={handleSubmit}
+                      disabled={ticket.data.filter((e) => e.isCheck == true).length <= 0}
+                    >
+                      Submit
+                    </LoadingButton>
+                  </Stack>
+                </Grid>
+
+                <Grid item xs={12} md={6} lg={3}>
+                  <Stack direction="row" spacing={2}>
+                    <UncontrolledTextField name="next_level_user" label="Next Level User" fullWidth select>
+                      {[].map((item, index) => (
+                        <MenuItem key={index} value={item.user_pk}>
+                          {item.user_displayname}
+                        </MenuItem>
+                      ))}
+                    </UncontrolledTextField>
+
+                    <LoadingButton variant="contained">Escalate</LoadingButton>
+                  </Stack>
+                </Grid>
+              </Grid>
+            </Box>
+
+            <Divider /> */}
+
+            <ThemeProvider theme={getMuiTableTheme()}>
+              <MUIDataTable title="Tickets List" columns={columns} data={ticket.data ?? []} options={options} />
+            </ThemeProvider>
+          </>
+        )}
+      </Card>
+    </>
   );
 };
 
 const mapStateToProps = (state) => {
   return {
     common: state.common,
-    account: state.auth,
+    ticket: state.ticket,
   };
 };
 
 export default connect(mapStateToProps, {
   showAlert,
+  checkOrUncheckTicket,
 })(ViewTicketsList);

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Card, Stack, Box, CircularProgress, IconButton, TableRow, TableCell, TableContainer, Table, TableHead, TableBody, Paper, Typography } from "@mui/material";
+import { Card, Stack, Box, CircularProgress, IconButton, Typography } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 
 import MUIDataTable from "mui-datatables";
@@ -12,11 +12,10 @@ import { PARTY_ID, ROWS_PER_PAGE_OPTION, getMuiTableTheme } from "../../constant
 import { changeOpinionPoll, getAllVotersSurvey } from "../../actions/voter";
 import { BJPRadio, CongressRadio, JSPRadio, NeutralRadio, OthersRadio, TDPRadio, YCPRadio } from "../common/PartyRadioButtons";
 import UpdateVoterDialog from "../common/UpdateVoterDialog";
+import AnalyticsCard from "../common/AnalyticsCard";
 
 const OpinionPollSurveyList = ({ voter, filterValues, showAlert, changeOpinionPoll, getAllVotersSurvey }) => {
   const navigate = useNavigate();
-  // console.log("OpinionPollSurveyListVoter", voter);
-  // console.log("OpinionPollSurveyListfilterValues", filterValues);
 
   const columns = [
     {
@@ -228,8 +227,8 @@ const OpinionPollSurveyList = ({ voter, filterValues, showAlert, changeOpinionPo
           handleRetrieveData(tableState);
           break;
         default:
-          // console.log("action not handled.");
-          // console.log(action, tableState);
+        // console.log("action not handled.");
+        // console.log(action, tableState);
       }
     },
   };
@@ -246,44 +245,12 @@ const OpinionPollSurveyList = ({ voter, filterValues, showAlert, changeOpinionPo
   };
 
   const handleRetrieveData = (tableState) => {
-    console.log("tableState", tableState);
     getAllVotersSurvey(filterValues, tableState.page, tableState.rowsPerPage);
   };
 
   return (
     <>
-      <TableContainer component={Paper} elevation={1}>
-        <Table
-          sx={{
-            "& .MuiTableCell-head": {
-              fontSize: "1.2rem",
-              fontWeight: "bold",
-              textAlign: "center",
-            },
-            "& .MuiTableCell-body": {
-              fontSize: "1.2rem",
-              fontWeight: "bold",
-              textAlign: "center",
-              color: "blue",
-            },
-          }}
-        >
-          <TableHead>
-            <TableRow>
-              <TableCell>Total Voters</TableCell>
-              <TableCell>Survey Completed</TableCell>
-              <TableCell>Pending</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            <TableRow>
-              <TableCell>{voter.count}</TableCell>
-              <TableCell>{voter.completed}</TableCell>
-              <TableCell>{voter.pending}</TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <AnalyticsCard names={["Total Voters", "Survey Completed", "Pending"]} values={[voter.count, voter.completed, voter.pending]} />
 
       <Box p={1} />
 

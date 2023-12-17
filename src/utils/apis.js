@@ -5,9 +5,9 @@
 // new api for baseServerUrl
 // export const baseServerUrl = "https://6079-123-201-170-56.ngrok-free.app";
 
-// export const baseServerUrl = "https://e04c-123-201-170-248.ngrok-free.app";
+export const baseServerUrl = "https://6cd2-183-83-253-245.ngrok-free.app";
 // export const baseServerUrl = "https://backend.cgrysrcongress.in";/
-export const baseServerUrl = "http://192.168.137.41:8080";
+// export const baseServerUrl = "http://192.168.137.41:8080";
 /// new
 // export const baseServerUrl = "https://poll2.onrender.com";
 
@@ -21,9 +21,9 @@ export const loginRoute = "/users-login";
 export const resetPswdRoute = "/updateuserpassword";
 
 // GET ALL DATA
-export const getTicketHistoryRoute = "/getonetickethistory";
+export const getVoterTicketHistoryRoute = "/getvotertickethistory";
 export const getTicketStatusRoute = "/getticketstatus";
-export const getAllTicketsRoute = "/getallticketmasterwithjoin";
+export const getAllTicketsRoute = "/getallticketswithjoinandwhere";
 export const getAllVotersRoute = "/voters/getall";
 export const getAllUsersRoute = "/getalluserswithjoinandwhere";
 export const getAllDesignationsRoute = "/getalldesignations";
@@ -37,8 +37,7 @@ export const getAllSachivalayamRoute = "/sachivalayam/getall";
 export const getAllPartsRoute = "/parts/getall";
 export const getAllVillageRoute = "/villages/getall";
 export const getAllDistrictsWithJoinRoute = "/getalldistrictswithjoin";
-export const getAllConstituenciesWithJoinRoute =
-  "/getallconstituencieswithjoin";
+export const getAllConstituenciesWithJoinRoute = "/getallconstituencieswithjoin";
 export const getAllMandalsWithJoinRoute = "/getallmandalswithjoin";
 
 export const getOpinionDashboardRoute = "/getopinionpolldashboard";

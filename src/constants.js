@@ -20,15 +20,6 @@ export const isOtpValid = (value) => {
   return regex.test(value);
 };
 
-export function fToNow(value) {
-  if (!isValid(parseInt(value))) return "";
-  return value
-    ? formatDistanceToNow(parseInt(value), {
-        addSuffix: true,
-      })
-    : "";
-}
-
 export const getMuiTableTheme = () =>
   createTheme({
     components: {
@@ -50,4 +41,21 @@ export const PARTY_ID = {
   BJP: 26,
   JANASENA: 27,
   OTHERS: 80,
+};
+
+export const getTicketStatusById = (value) => {
+  if (value === 1) {
+    return "Open";
+  }
+  if (value === 2) {
+    return "Resolved";
+  }
+  if (value === 3) {
+    return "Cancelled";
+  }
+  if (value === 4) {
+    return "Escalated";
+  }
+
+  return "-";
 };

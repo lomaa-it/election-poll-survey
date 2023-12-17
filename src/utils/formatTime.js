@@ -24,10 +24,10 @@ export function fAddDays(date, days) {
   return addDays(new Date(date), days);
 }
 
-export function fToNow(date) {
+export function fToNow(date, suffix = false) {
   return date
     ? formatDistanceToNow(new Date(date), {
-        addSuffix: true,
+        addSuffix: suffix,
       })
     : "";
 }

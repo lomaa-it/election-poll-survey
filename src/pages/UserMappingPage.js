@@ -1,13 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import {
-  Grid,
-  Container,
-  Typography,
-  Box,
-  TextField,
-  Card,
-  MenuItem,
-} from "@mui/material";
+import { Grid, Container, Typography, Box, TextField, Card, MenuItem } from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -20,11 +12,11 @@ import { getAllUsers, clearUserReducer } from "../actions/user";
 import { RHFAutoComplete } from "../components/hook-form";
 import { fi } from "date-fns/esm/locale";
 import { useLocation } from "react-router-dom";
+import { UncontrolledTextField } from "../components/hook-form/RHFTextField";
 
 const UserMappingPage = ({ common, clearUserReducer, getAllUsers }) => {
+  const [designation, setDesignation] = useState("");
   const [filterValues, setFilterValues] = useState(null);
-  const [isLoading, setLoading] = useState(false);
-  const [reset, setReset] = useState(false);
   let location = useLocation();
   const buttonRef = useRef();
 
@@ -32,114 +24,41 @@ const UserMappingPage = ({ common, clearUserReducer, getAllUsers }) => {
     clearUserReducer();
   }, []);
 
-  const onSubmit = useCallback(async () => {
-    setLoading(true);
-    // console.log("filterValues232", filterValues);
-    // console.log("HI im Here");
-
-    await getAllUsers(filterValues);
-
-    setLoading(false);
-  }, [filterValues, getAllUsers]);
-
   useEffect(() => {
-    onSubmit();
-  }, [location, onSubmit]);
+    clearUserReducer();
+  }, []);
 
-  const handleChange = (name, value) => {
-    const values = {};
+  const handleChange = (values) => {
+    setFilterValues(values);
+  };
 
-    values[name] = value;
-
-    setFilterValues((state) => ({ ...state, ...values }));
+  const handleSubmit = async (data) => {
+    await getAllUsers(data);
   };
 
   return (
     <Page title="User Mapping">
       <Container maxWidth="xl">
-        {/* <Typography variant="h4" sx={{ mb: 1 }}>
-          User Mapping
-        </Typography> */}
-
         <Card sx={{ p: 3, backgroundColor: searchFiltercolor }}>
-          {/* <Typography sx={{ pb: 2 }}>Search by filter</Typography> */}
-
           <Grid container spacing={2} alignItems="center">
             <SearchByFilter
-              reset={reset}
               showPartNo={false}
               showVillage={false}
               showOtherFilters={false}
-              onChanged={(value) => setFilterValues(value)}
+              onChange={handleChange}
+              onSubmit={handleSubmit}
+              children={
+                <Grid item xs={12} md={6} lg={2}>
+                  <UncontrolledTextField name="designation_id" label="Select Designation*" select value={designation} onChange={(e) => setDesignation(e.target.value)}>
+                    {common.designation?.map((item, index) => (
+                      <MenuItem key={index} value={item.value}>
+                        {item.label}
+                      </MenuItem>
+                    ))}
+                  </UncontrolledTextField>
+                </Grid>
+              }
             />
-
-            <Grid item xs={12} md={6} lg={2}>
-              <TextField
-                name="designation_id"
-                size="small"
-                fullWidth
-                label="Select Designation*"
-                select
-                value={filterValues?.designation?.value ?? ""}
-                onChange={(e) =>
-                  setFilterValues({
-                    ...filterValues,
-                    designation: {
-                      label: e.target.value,
-                      value: e.target.value,
-                    },
-                  })
-                }
-                sx={{
-                  backgroundColor: "white",
-                  borderRadius: "5px",
-                }}
-              >
-                {common.designation?.map((item, index) => (
-                  <MenuItem key={index} value={item.value}>
-                    {item.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </Grid>
-            {/* <Grid item xs={12} md={6} lg={2}>
-              <RHFAutoComplete
-                key={reset} // add this line
-                name="user_id"
-                label="Select User"
-                value={filterValues?.user_id}
-                onChange={handleChange}
-                options={[
-                  { value: "1", label: "1" },
-                  { value: "2", label: "2" },
-                  { value: "3", label: "3" },
-                ]}
-              />
-            </Grid> */}
-
-            <Grid item xs={12} md={6} lg={2}>
-              <LoadingButton
-                ref={buttonRef}
-                loading={isLoading}
-                variant="contained"
-                onClick={onSubmit}
-              >
-                Search
-              </LoadingButton>{" "}
-              <LoadingButton
-                loading={isLoading}
-                variant="contained"
-                sx={{
-                  backgroundColor: "red",
-                  marginLeft: "15px",
-                }}
-                onClick={() => {
-                  setReset(!reset);
-                }}
-              >
-                Clear
-              </LoadingButton>
-            </Grid>
           </Grid>
         </Card>
 
@@ -157,6 +76,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { clearUserReducer, getAllUsers })(
-  UserMappingPage
-);
+export default connect(mapStateToProps, { clearUserReducer, getAllUsers })(UserMappingPage);

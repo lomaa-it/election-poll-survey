@@ -22,6 +22,7 @@ const ReportbySurveyandVotingReasonPage = ({ dashboard }) => {
 
           <Grid container spacing={2} alignItems="center">
             <SearchByFilter />
+
             <Grid item xs={12} md={6} lg={2}>
               <TextField
                 size="small"

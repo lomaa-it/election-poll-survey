@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Typography, Card, Stack, Grid, Switch, Divider, Box, Chip, TextField, MenuItem } from "@mui/material";
+import { Typography, Card, Stack, Grid, Switch, Divider, Box, Chip, TextField, MenuItem, CircularProgress } from "@mui/material";
 import Checkbox from "@mui/material/Checkbox";
 import Button from "@mui/material/Button";
 import MUIDataTable from "mui-datatables";
@@ -9,23 +9,29 @@ import { LoadingButton } from "@mui/lab";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { searchFiltercolor } from "../../constants";
-import instance from "../../utils/axios";
-import { getAllNavaratnaluRoute, getAllTicketsRoute, getNextLevelUserRoute, getTicketStatusRoute, updateTicketStatusRoute, getTicketHistoryRoute } from "../../utils/apis";
+import { getMuiTableTheme, getTicketStatusById, searchFiltercolor } from "../../constants";
+import { fToNow } from "../../utils/formatTime";
 
-const TicketHistoryList = ({ data, showAlert, account }) => {
+const TicketHistoryList = ({ ticket, showAlert }) => {
   const columns = [
+    { name: "ticket_master_pk", label: "Ticket Id" },
     {
-      name: "user_displayname",
+      name: "createdby",
       label: "Created by",
+    },
+
+    {
+      name: "reason",
+      label: "Reason",
     },
     {
       name: "createdon",
       label: "Created on",
-    },
-    {
-      name: "reason",
-      label: "Reason",
+      options: {
+        customBodyRender: (value, tableMeta, updateValue) => {
+          return fToNow(value, true);
+        },
+      },
     },
 
     {
@@ -33,21 +39,7 @@ const TicketHistoryList = ({ data, showAlert, account }) => {
       label: "Status",
       options: {
         customBodyRender: (value, tableMeta, updateValue) => {
-          let statusname = "";
-          if (value === 1) {
-            statusname = "Open";
-          }
-          if (value === 2) {
-            statusname = "Resolved";
-          }
-          if (value === 3) {
-            statusname = "Cancelled";
-          }
-          if (value === 4) {
-            statusname = "Escalated";
-          }
-
-          return statusname;
+          return getTicketStatusById(value);
         },
       },
     },
@@ -59,34 +51,25 @@ const TicketHistoryList = ({ data, showAlert, account }) => {
     responsive: "standard",
   };
 
-  const getMuiTheme = () =>
-    createTheme({
-      components: {
-        MUIDataTableHeadCell: {
-          styleOverrides: {
-            root: {
-              backgroundColor: searchFiltercolor,
-            },
-          },
-        },
-      },
-    });
-
   return (
     <Card elevation={1}>
-      <Stack>
-        <Divider />
+      {ticket.isLoading && (
+        <Box minHeight={200} display="flex" justifyContent="center" alignItems="center">
+          <CircularProgress />
+        </Box>
+      )}
 
-        <ThemeProvider theme={getMuiTheme()}>
-          <MUIDataTable title="Ticket History List" columns={columns} data={data.ticketHistory} options={options} />
+      {!ticket.isLoading && (
+        <ThemeProvider theme={getMuiTableTheme()}>
+          <MUIDataTable title="Ticket History List" columns={columns} data={ticket.history ?? []} options={options} />
         </ThemeProvider>
-      </Stack>
+      )}
     </Card>
   );
 };
 
 const mapStateToProps = (state) => {
-  return {};
+  return { ticket: state.ticket };
 };
 
 export default connect(mapStateToProps, {

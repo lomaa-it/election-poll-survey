@@ -13,8 +13,6 @@ export const getOpinionDashboard = (data) => async (dispatch) => {
   });
 
   try {
-    
-
     const response = await instance.post(getOpinionDashboardRoute, data);
     const responseData = response.data?.message ?? [];
 
@@ -39,8 +37,6 @@ export const getOpinionResults = (data) => async (dispatch) => {
   });
 
   try {
- 
-
     const response = await instance.post(getOpinionResultRoute, data);
     const responseData = response.data?.message ?? [];
 
