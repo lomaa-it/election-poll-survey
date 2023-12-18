@@ -29,6 +29,7 @@ const ViewVoterPage = ({ dashboard }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [reset, setReset] = useState(false);
   const [filterValues, setFilterValues] = useState(null);
+  const [part_slno, setPart_slno] = useState([]);
 
   useEffect(() => {
     clearVoterReducer();
@@ -58,8 +59,7 @@ const ViewVoterPage = ({ dashboard }) => {
 
           <Grid container spacing={2} alignItems="center">
             <SearchByFilter
-              reset={reset}
-              onChanged={(value) => setFilterValues(value)}
+             onSubmit={handleSubmit}
               children={
                 <>
                   <Grid item xs={12} md={6} lg={2}>
@@ -134,6 +134,7 @@ const ViewVoterPage = ({ dashboard }) => {
 const mapStateToProps = (state) => {
   return {
     dashboard: state.dashboard,
+    
   };
 };
 

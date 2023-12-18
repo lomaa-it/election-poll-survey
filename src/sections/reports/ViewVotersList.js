@@ -20,24 +20,22 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { searchFiltercolor } from "../../constants";
 
-const ViewVotersList = ({ showAlert, votersData }) => {
+const ViewVotersList = ({ showAlert, votersData, voter }) => {
   useEffect(() => {}, []);
 
-  console.log("votersDataList", votersData);
+  // console.log("votersDataList", votersData);
 
   const columns = [
+    { name: "voter_id", label: "Voter ID" },
     {
-      label: "Voter ID",
+      name: "part_slno",
+      label: "Part Slno",
     },
     {
-      label: "Part SL No",
-    },
-    {
+      name: "voter_name",
       label: "Voter Name",
     },
-    {
-      label: "Father/Mother/Husband",
-    },
+    { name: "guardian_name", label: "Father/Mother/Husband" },
     {
       label: "Gender",
     },
@@ -105,7 +103,7 @@ const ViewVotersList = ({ showAlert, votersData }) => {
           <MUIDataTable
             title="Voter List"
             columns={columns}
-            data={filterChartData}
+            data={voter.data}
             options={options}
           />
         </ThemeProvider>
@@ -118,6 +116,7 @@ const mapStateToProps = (state) => {
   return {
     batches: state.common,
     students: state.management,
+    voter: state.voter,
   };
 };
 

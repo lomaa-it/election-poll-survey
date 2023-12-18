@@ -14,7 +14,7 @@ import {
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { CheckBox } from "@mui/icons-material";
 import {
   getAllDesignationsRoute,
@@ -40,6 +40,7 @@ const UserRegistrationPage = ({ common, showAlert }) => {
   const props = useLocation().state;
 
   const pageName = props?.userData == null ? "Add User" : "Edit User";
+  const navigate = useNavigate();
 
   const [filterValues, setFilterValues] = useState(null);
   const [isLoading, setLoading] = useState(false);
@@ -99,6 +100,7 @@ const UserRegistrationPage = ({ common, showAlert }) => {
         division_id: filterValues.division.division_pk,
         sachivalayam_id: filterValues.sachivalayam.sachivalayam_pk,
       };
+      console.log("props?.userData", props?.userData);
 
       if (props?.userData != null) {
         await instance.put(
@@ -106,6 +108,10 @@ const UserRegistrationPage = ({ common, showAlert }) => {
           jsonData
         );
         showAlert({ text: "User updated successfully", color: "success" });
+    
+        navigate(-1);
+
+        reset();
       } else {
         await instance.post(createUsersRoute, jsonData);
         showAlert({ text: "User added successfully", color: "success" });
@@ -119,6 +125,8 @@ const UserRegistrationPage = ({ common, showAlert }) => {
       setLoading(false);
     }
   };
+
+  console.log("props?.userData", props?.userData);
 
   return (
     <Page title={pageName}>

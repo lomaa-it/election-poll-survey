@@ -111,11 +111,11 @@ export default function Header({ onOpenNav }) {
 
           <Box p={0.5} />
 
-          <IconButton sx={{ color: "white" }}>
+          {/* <IconButton sx={{ color: "white" }}>
             <Badge badgeContent={4} color="error">
               <NotificationsIcon />
             </Badge>
-          </IconButton>
+          </IconButton> */}
 
           <AccountPopover />
         </Stack>
