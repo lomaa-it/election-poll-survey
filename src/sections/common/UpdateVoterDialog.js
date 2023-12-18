@@ -144,47 +144,25 @@ const UpdateVoterDialog = ({ common, voterData, showAlert, updateVoterDetails })
                 </Grid>
 
                 <Grid item xs={12} md={6} lg={6}>
-                  {/* <RHFTextField name="disability" label="Disability" select>
-                    <MenuItem value={1}>Yes</MenuItem>
-                    <MenuItem value={0}>No</MenuItem>
-                  </RHFTextField> */}
-
-                  <FormControl>
-                    <FormLabel id="demo-row-radio-buttons-group-label">Disability</FormLabel>
-                    <RadioGroup
-                      row
-                      aria-labelledby="demo-row-radio-buttons-group-label"
-                      name="row-radio-buttons-group"
-                      defaultValue={0} // Set default value here
-                    >
-                      <FormControlLabel value={1} control={<Radio />} label="Yes" />
-                      <FormControlLabel value={0} control={<Radio />} label="No" />
-                    </RadioGroup>
-                  </FormControl>
+                  <RHFRadio
+                    name="disability"
+                    filedLabel="Disability"
+                    options={[
+                      { label: "Yes", value: 1 },
+                      { label: "No", value: 0 },
+                    ]}
+                  />
                 </Grid>
 
                 <Grid item xs={12} md={6} lg={6}>
-                  {/* <RHFTextField
+                  <RHFRadio
                     name="govt_employee"
-                    label="Govt Employee"
-                    select
-                  >
-                    <MenuItem value={1}>Yes</MenuItem>
-                    <MenuItem value={0}>No</MenuItem>
-                  </RHFTextField> */}
-
-                  <FormControl>
-                    <FormLabel id="demo-row-radio-buttons-group-label">Govt Employee</FormLabel>
-                    <RadioGroup
-                      row
-                      aria-labelledby="demo-row-radio-buttons-group-label"
-                      name="row-radio-buttons-group"
-                      defaultValue={0} // Set default value here
-                    >
-                      <FormControlLabel value={1} control={<Radio />} label="Yes" />
-                      <FormControlLabel value={0} control={<Radio />} label="No" />
-                    </RadioGroup>
-                  </FormControl>
+                    filedLabel="Govt Employee"
+                    options={[
+                      { label: "Yes", value: 1 },
+                      { label: "No", value: 0 },
+                    ]}
+                  />
                 </Grid>
                 <Grid item xs={12} md={12} lg={12}>
                   <RHFRadio

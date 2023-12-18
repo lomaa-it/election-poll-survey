@@ -3,19 +3,19 @@ import Iconify from "../../../components/Iconify";
 const userNavConfig = [
   {
     title: "Opinion Survey",
-    path: "/opinionsurvey/survey",
+    path: "/volunteer/opinionsurvey/survey",
     icon: <Iconify icon="ic:round-dashboard" width="24px" height="24px" />,
   },
 ];
 const otherNavConfig = [
   {
     title: "Opinion Survey",
-    path: "/opinionsurvey/survey",
+    path: "/booth-incharge/opinionsurvey/survey",
     icon: <Iconify icon="ic:round-dashboard" width="24px" height="24px" />,
   },
   {
     title: "View Tickets",
-    path: "/tickets",
+    path: "/booth-incharge/tickets",
     icon: <Iconify icon="ion:ticket" width="24px" height="24px" />,
   },
 ];

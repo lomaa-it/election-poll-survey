@@ -1,15 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { styled, alpha } from "@mui/material/styles";
-import {
-  Box,
-  Link,
-  Button,
-  Drawer,
-  Typography,
-  Avatar,
-  Stack,
-} from "@mui/material";
+import { Box, Link, Button, Drawer, Typography, Avatar, Stack } from "@mui/material";
 import useResponsive from "../../../hooks/useResponsive";
 import Logo from "../../../components/logo";
 import Scrollbar from "../../../components/Scrollbar";
@@ -52,10 +44,7 @@ const Nav = ({ type, account, openNav, onCloseNav }) => {
 
   useEffect(() => {
     let navbar = [];
-    if (
-      userDesignation == LOGIN_TYPES[6] ||
-      userDesignation == LOGIN_TYPES[5]
-    ) {
+    if (userDesignation == LOGIN_TYPES[6] || userDesignation == LOGIN_TYPES[5]) {
       navbar = userNavConfig;
     } else if (userDesignation == LOGIN_TYPES[0]) {
       navbar = mlaNavConfig;
@@ -87,11 +76,7 @@ const Nav = ({ type, account, openNav, onCloseNav }) => {
           alignItems: "center",
         }}
       >
-        <Box
-          component="img"
-          src={PUBLIC_URL + "/static/logo.png"}
-          sx={{ width: "60px", height: "60px" }}
-        />
+        <Box component="img" src={PUBLIC_URL + "/static/logo.png"} sx={{ width: "60px", height: "60px" }} />
 
         <Typography variant="subtitle1" color="text.white" sx={{ pl: 2 }}>
           CHANDRAGIRI CONSTITUENCY
@@ -108,10 +93,7 @@ const Nav = ({ type, account, openNav, onCloseNav }) => {
                 {account.user?.user_displayname}
               </Typography>
 
-              <Typography
-                variant="body2"
-                sx={{ color: "text.white", fontSize: 10 }}
-              >
+              <Typography variant="body2" sx={{ color: "text.white", fontSize: 10 }}>
                 {account.user?.desgination_name}
               </Typography>
             </Box>

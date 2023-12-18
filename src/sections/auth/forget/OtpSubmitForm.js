@@ -45,12 +45,15 @@ const OtpSubmitForm = ({ formValues, showAlert }) => {
         username: formValues.username,
         password: data.confirm_password,
       });
-      console.log(response);
-      if (response.status === 200) {
-        setLoading(false);
-        showAlert({ text: "Password Updated Successfully", color: "success" });
+      const responseData = response.data;
+      console.log(responseData);
+      setLoading(false);
 
+      if (responseData.status === "success") {
+        showAlert({ text: "Password Updated Successfully", color: "success" });
         navigate("/login");
+      } else {
+        showAlert({ text: responseData.message, color: "error" });
       }
     } catch (error) {
       console.log(error);

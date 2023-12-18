@@ -1,5 +1,5 @@
 import { useFormContext, Controller } from "react-hook-form";
-import { Checkbox, FormControlLabel, FormGroup, RadioGroup, FormControl, Radio } from "@mui/material";
+import { Checkbox, FormControlLabel, FormGroup, RadioGroup, FormControl, Radio, FormLabel } from "@mui/material";
 
 export function RHFCheckbox({ name, onChange, value, disabled, ...other }) {
   const { control } = useFormContext();
@@ -51,11 +51,12 @@ export function RHFMultiCheckbox({ name, options, ...other }) {
   );
 }
 
-export function RHFRadio({ name, options, onChange, ...other }) {
+export function RHFRadio({ name, filedLabel, options, onChange, ...other }) {
   const { control } = useFormContext();
 
   return (
     <FormControl>
+      <FormLabel>{filedLabel}</FormLabel>
       <Controller
         name={name}
         control={control}
