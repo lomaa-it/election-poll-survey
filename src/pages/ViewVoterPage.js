@@ -1,12 +1,4 @@
-import {
-  Grid,
-  Container,
-  Typography,
-  Box,
-  TextField,
-  Card,
-  MenuItem,
-} from "@mui/material";
+import { Grid, Container, Typography, Box, TextField, Card, MenuItem } from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -15,92 +7,59 @@ import CircularProgress from "@mui/material/CircularProgress";
 import ViewVotersList from "../sections/reports/ViewVotersList";
 import Button from "@mui/material/Button";
 import { useState, useEffect } from "react";
-import { getAllVotersRoute } from "../utils/apis";
-import instance from "../utils/axios";
-import { ageDropdown } from "../utils/dropdownconstants";
 import SearchByFilter from "../sections/common/SearchByFilter";
 import { searchFiltercolor } from "../constants";
-import { RHFAutoComplete } from "../components/hook-form";
 import { clearVoterReducer, getAllVotersSurvey } from "../actions/voter";
 import { UncontrolledTextField } from "../components/hook-form/RHFTextField";
 
-const ViewVoterPage = ({ dashboard }) => {
-  const [votersData, setVotersData] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [reset, setReset] = useState(false);
+const ViewVoterPage = ({ getAllVotersSurvey }) => {
   const [filterValues, setFilterValues] = useState(null);
-  const [part_slno, setPart_slno] = useState([]);
+  const [formValues, setFormValues] = useState({ part_slno: "", voter_id: "" });
 
   useEffect(() => {
     clearVoterReducer();
   }, []);
 
   const handleSubmit = async (filterValues) => {
-    await getAllVotersSurvey(filterValues);
+    var values = { ...formValues, ...filterValues };
+    await getAllVotersSurvey(values);
+    setFilterValues(values);
   };
 
-  const handleChange = (name, value) => {
-    const values = {};
+  const handleChange = (e) => {
+    setFormValues((state) => ({ ...state, [e.target.name]: e.target.value }));
+  };
 
-    values[name] = value;
-
-    setFilterValues((state) => ({ ...state, ...values }));
+  const handleReset = () => {
+    setFormValues({ part_slno: "", voter_id: "" });
   };
 
   return (
     <Page title="View Voter">
       <Container maxWidth="xl">
-        {/* <Typography variant="h4" sx={{ mb: 1 }}>
-          Voter List
-        </Typography> */}
-
         <Card sx={{ p: 3, backgroundColor: searchFiltercolor }}>
-          {/* <Typography sx={{ pb: 2 }}>Search by filter</Typography> */}
-
           <Grid container spacing={2} alignItems="center">
             <SearchByFilter
-             onSubmit={handleSubmit}
-              children={
-                <>
-                  <Grid item xs={12} md={6} lg={2}>
-                    <UncontrolledTextField
-                      name="part_slno"
-                      label="Part SLNO"
-                      value={filterValues?.part_slno}
-                      onChange={handleChange}
-                    />
-                  </Grid>
+              onReset={handleReset}
+              onSubmit={handleSubmit}
+              // children={
+              //   <>
+              //     <Grid item xs={12} md={6} lg={2}>
+              //       <UncontrolledTextField name="part_slno" label="Part SLNO" value={formValues?.part_slno} onChange={handleChange} />
+              //     </Grid>
 
-                  <Grid item xs={12} md={6} lg={2}>
-                    <UncontrolledTextField
-                      name="voter_id"
-                      label="Voter ID"
-                      value={filterValues?.voter_id}
-                      onChange={handleChange}
-                    />
-                  </Grid>
-                </>
-              }
+              //     <Grid item xs={12} md={6} lg={2}>
+              //       <UncontrolledTextField name="voter_id" label="Voter ID" value={formValues?.voter_id} onChange={handleChange} />
+              //     </Grid>
+              //   </>
+              // }
             />
           </Grid>
         </Card>
 
         <Box p={1} />
 
-        {isLoading ? (
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-
-              height: "100vh",
-            }}
-          >
-            <CircularProgress />
-          </Box>
-        ) : (
-          <ViewVotersList votersData={votersData} />
-        )}
+        <ViewVotersList filterValues={filterValues} />
 
         <Card sx={{ p: 3, marginTop: "10px" }}>
           <Grid container spacing={2} alignItems="center">
@@ -134,8 +93,7 @@ const ViewVoterPage = ({ dashboard }) => {
 const mapStateToProps = (state) => {
   return {
     dashboard: state.dashboard,
-    
   };
 };
 
-export default connect(mapStateToProps, null)(ViewVoterPage);
+export default connect(mapStateToProps, { getAllVotersSurvey })(ViewVoterPage);

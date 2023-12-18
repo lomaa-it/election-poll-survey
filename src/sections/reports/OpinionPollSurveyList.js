@@ -56,6 +56,7 @@ const OpinionPollSurveyList = ({ voter, filterValues, showAlert, changeOpinionPo
           return (
             <Stack direction="row" alignItems="center">
               <Typography>{value ?? "-"}</Typography>
+
               {index != -1 && <UpdateVoterDialog voterData={voter.data[index]} />}
             </Stack>
           );

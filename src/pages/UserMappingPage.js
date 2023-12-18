@@ -1,13 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import {
-  Grid,
-  Container,
-  Typography,
-  Box,
-  TextField,
-  Card,
-  MenuItem,
-} from "@mui/material";
+import { Grid, Container, Typography, Box, TextField, Card, MenuItem } from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -34,16 +26,11 @@ const UserMappingPage = ({ common, clearUserReducer, getAllUsers }) => {
     clearUserReducer();
   }, []);
 
-  const handleChange = (values) => {
-    setFilterValues(values);
-  };
-
   const handleSubmit = async (data) => {
-    console.log("data", data);
-    await getAllUsers(data);
+    var values = { designation_id: designation, ...data };
+    await getAllUsers(values);
     setFilterValues(data);
   };
-  console.log("filterValues", filterValues);
 
   return (
     <Page title="User Mapping">
@@ -54,17 +41,11 @@ const UserMappingPage = ({ common, clearUserReducer, getAllUsers }) => {
               showPartNo={false}
               showVillage={false}
               showOtherFilters={false}
-              onChange={handleChange}
+              // onChange={handleChange}
               onSubmit={handleSubmit}
               children={
                 <Grid item xs={12} md={6} lg={2}>
-                  <UncontrolledTextField
-                    name="designation_id"
-                    label="Select Designation*"
-                    select
-                    value={designation}
-                    onChange={(e) => setDesignation(e.target.value)}
-                  >
+                  <UncontrolledTextField name="designation_id" label="Select Designation*" select value={designation} onChange={(e) => setDesignation(e.target.value)}>
                     {common.designation?.map((item, index) => (
                       <MenuItem key={index} value={item.value}>
                         {item.label}
@@ -91,6 +72,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { clearUserReducer, getAllUsers })(
-  UserMappingPage
-);
+export default connect(mapStateToProps, { clearUserReducer, getAllUsers })(UserMappingPage);
