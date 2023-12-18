@@ -48,8 +48,8 @@ export default function BarChartWidget({
   if (withCard)
     return (
       <Card
-        sx={{
-          boxShadow: "0px 0px 5px red",
+        style={{
+          boxShadow: "0px 0px 5px #969696",
         }}
         {...other}
       >
