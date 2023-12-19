@@ -84,7 +84,8 @@ const UserRegistrationPage = ({ common, showAlert }) => {
     defaultValues,
   });
 
-  const { handleSubmit, reset } = methods;
+  const { handleSubmit, reset, watch } = methods;
+  const watchedFields = watch();
 
   const onSubmit = async (data) => {
     if (
@@ -134,6 +135,7 @@ const UserRegistrationPage = ({ common, showAlert }) => {
   };
 
   console.log("props?.userData", props?.userData);
+  console.log("watchedFields", watchedFields); // This will log the current form data whenever it changes
 
   return (
     <Page title={pageName}>
@@ -190,6 +192,17 @@ const UserRegistrationPage = ({ common, showAlert }) => {
                   ))}
                 </RHFTextField>
               </Grid>
+              {watchedFields.designation_id == 33 && (
+                <Grid item xs={12} md={6} lg={3}>
+                  <RHFTextField name="mandal_pk" label="Select Mandal*" select>
+                    {common.mandals?.map((item, index) => (
+                      <MenuItem key={index} value={item.mandal_pk}>
+                        {item.mandal_name}
+                      </MenuItem>
+                    ))}
+                  </RHFTextField>
+                </Grid>
+              )}
 
               <SearchByFilter
                 lg={3}
