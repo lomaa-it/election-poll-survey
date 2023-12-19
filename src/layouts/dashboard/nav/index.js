@@ -6,7 +6,7 @@ import useResponsive from "../../../hooks/useResponsive";
 import Logo from "../../../components/logo";
 import Scrollbar from "../../../components/Scrollbar";
 import NavSection from "../../../components/NavSection";
-import { mlaNavConfig, userNavConfig, otherNavConfig } from "./config";
+import { mlaNavConfig, userNavConfig } from "./config";
 import { connect } from "react-redux";
 import { LOGIN_TYPES, PUBLIC_URL } from "../../../constants";
 
@@ -44,12 +44,10 @@ const Nav = ({ type, account, openNav, onCloseNav }) => {
 
   useEffect(() => {
     let navbar = [];
-    if (userDesignation == LOGIN_TYPES[6] || userDesignation == LOGIN_TYPES[5]) {
-      navbar = userNavConfig;
-    } else if (userDesignation == LOGIN_TYPES[0]) {
+    if (userDesignation == LOGIN_TYPES[0]) {
       navbar = mlaNavConfig;
     } else {
-      navbar = otherNavConfig;
+      navbar = userNavConfig;
     }
 
     setNavConfig(navbar);

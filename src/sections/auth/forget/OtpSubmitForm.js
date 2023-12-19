@@ -4,7 +4,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { FormProvider } from "../../../components/hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { Stack, IconButton, InputAdornment, TextField, Typography } from "@mui/material";
-import RHFTextField, { RHFTextField2 } from "../../../components/hook-form/RHFTextField";
+import { RHFTextField } from "../../../components/hook-form";
 import { useState } from "react";
 import { LoadingButton } from "@mui/lab";
 import { saveNewPassword } from "../../../utils/apis";

@@ -8,7 +8,7 @@ import { searchFiltercolor } from "../constants";
 import { UncontrolledTextField } from "../components/hook-form/RHFTextField";
 import { getAllTickets } from "../actions/ticket";
 
-const TicketsPage = ({ common, getAllTickets }) => {
+const TicketsPage = ({ isUser, common, getAllTickets }) => {
   const [navaratnaluId, setNavaratnaluId] = useState("");
   const [ticketStatus, setTicketStatus] = useState("");
 
@@ -59,7 +59,7 @@ const TicketsPage = ({ common, getAllTickets }) => {
 
         <Box p={1} />
 
-        <ViewTicketsList />
+        <ViewTicketsList isUser={isUser} />
       </Container>
     </Page>
   );

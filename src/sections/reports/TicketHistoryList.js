@@ -16,7 +16,7 @@ const TicketHistoryList = ({ ticket, showAlert }) => {
   const columns = [
     { name: "ticket_master_pk", label: "Ticket Id" },
     {
-      name: "createdby",
+      name: "user_displayname",
       label: "Created by",
     },
 

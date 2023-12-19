@@ -14,7 +14,7 @@ import { BJPRadio, CongressRadio, JSPRadio, NeutralRadio, OthersRadio, TDPRadio,
 import UpdateVoterDialog from "../common/UpdateVoterDialog";
 import AnalyticsCard from "../common/AnalyticsCard";
 
-const OpinionPollSurveyList = ({ voter, filterValues, showAlert, changeOpinionPoll, getAllVotersSurvey }) => {
+const OpinionPollSurveyList = ({ isUser, voter, filterValues, showAlert, changeOpinionPoll, getAllVotersSurvey }) => {
   const navigate = useNavigate();
 
   const columns = [
@@ -242,7 +242,11 @@ const OpinionPollSurveyList = ({ voter, filterValues, showAlert, changeOpinionPo
   };
 
   const handleEdit = (data) => {
-    navigate("/view-ticket-history", { state: { data: data } });
+    if (isUser) {
+      navigate("/user/view-ticket-history", { state: { data: data } });
+    } else {
+      navigate("/view-ticket-history", { state: { data: data } });
+    }
   };
 
   const handleRetrieveData = (tableState) => {

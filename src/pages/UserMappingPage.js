@@ -22,12 +22,8 @@ const UserMappingPage = ({ common, clearUserReducer, getAllUsers }) => {
     clearUserReducer();
   }, []);
 
-  useEffect(() => {
-    clearUserReducer();
-  }, []);
-
   const handleSubmit = async (data) => {
-    var values = { designation_id: designation, ...data };
+    var values = { designation_id: designation ?? "", ...data };
     await getAllUsers(values);
     setFilterValues(data);
   };
@@ -43,6 +39,7 @@ const UserMappingPage = ({ common, clearUserReducer, getAllUsers }) => {
               showOtherFilters={false}
               // onChange={handleChange}
               onSubmit={handleSubmit}
+              onReset={() => setDesignation("")}
               children={
                 <Grid item xs={12} md={6} lg={2}>
                   <UncontrolledTextField name="designation_id" label="Select Designation*" select value={designation} onChange={(e) => setDesignation(e.target.value)}>

@@ -14,7 +14,6 @@ import { FormProvider, RHFRadio, RHFTextField } from "../../components/hook-form
 import { connect } from "react-redux";
 import { showAlert } from "../../actions/alert";
 import { updateVoterDetails } from "../../actions/voter";
-import { RHFTextField2 } from "../../components/hook-form/RHFTextField";
 
 const UpdateVoterDialog = ({ common, voterData, showAlert, updateVoterDetails }) => {
   const [open, setOpen] = useState(false);
@@ -102,7 +101,7 @@ const UpdateVoterDialog = ({ common, voterData, showAlert, updateVoterDetails })
 
               <Grid container spacing={3} alignItems="center">
                 <Grid item xs={12} md={12} lg={12}>
-                  <RHFTextField2 name="phone_no" label="Phone Number" type="number" />
+                  <RHFTextField name="phone_no" label="Phone Number" type="number" />
                 </Grid>
                 <Grid item xs={12} md={12} lg={12}>
                   <RHFRadio

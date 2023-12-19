@@ -39,13 +39,37 @@ const ViewUsersList = ({ user, showAlert, checkOrUncheckUser, clearUserReducer }
       name: "user_pk",
       label: "User Id",
     },
-    { name: "user_displayname", label: "User Name" },
+    { name: "user_displayname", label: "Full Name" },
     { name: "lookup_valuename", label: "Designation" },
-    { name: "mandal_name", label: "Mandal Name" },
-    { name: "division_name", label: "Division Name" },
-    { name: "sachivalayam_name", label: "Sachivalyam Name" },
     {
-      name: "parts",
+      name: "mandal_name",
+      label: "Mandal Name",
+      options: {
+        customBodyRender: (value, tableMeta, updateValue) => {
+          return value ?? "-";
+        },
+      },
+    },
+    {
+      name: "division_name",
+      label: "Division Name",
+      options: {
+        customBodyRender: (value, tableMeta, updateValue) => {
+          return value ?? "-";
+        },
+      },
+    },
+    {
+      name: "sachivalayam_name",
+      label: "Sachivalyam Name",
+      options: {
+        customBodyRender: (value, tableMeta, updateValue) => {
+          return value ?? "-";
+        },
+      },
+    },
+    {
+      name: "part_no",
       label: "Part/Booth No",
       options: {
         customBodyRender: (value, tableMeta, updateValue) => {
@@ -109,7 +133,7 @@ const ViewUsersList = ({ user, showAlert, checkOrUncheckUser, clearUserReducer }
       await instance.post(sendCredsToUsersRoute, jsonData);
 
       clearUserReducer();
-      showAlert({ text: "Login credientials successfully", color: "success" });
+      showAlert({ text: "Login credientials send successfully", color: "success" });
       setLoading(false);
     } catch (error) {
       console.error(error);

@@ -52,13 +52,14 @@ const Router = () => {
     <Routes>
       <Route path="/" element={<Navigate to="/login" />} />
       <Route path="/404" element={<NotFound />} />
+
       <Route path="/landing-page" element={<LandingPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/forget-password" element={<ForgetPage />} />
       <Route path="/forget-reset-password" element={<ForgetResetPage />} />
       <Route path="/reset-password" element={<ResetPage />} />
 
-      <Route path="/" element={<ProtectedRoute type={LOGIN_TYPES} />}>
+      <Route path="/" element={<ProtectedRoute type={[LOGIN_TYPES[0]]} />}>
         <Route path="" element={<DashboardLayout type={LOGIN_TYPES[0]} />}>
           <Route path="dashboard" element={<DashboardPage />} />
           <Route path="voting-poll-dashboard" element={<VotingPollDashBoardPage />} />
@@ -98,17 +99,11 @@ const Router = () => {
         </Route>
       </Route>
 
-      <Route path="/" element={<ProtectedRoute type={[LOGIN_TYPES[5], LOGIN_TYPES[6]]} />}>
+      <Route path="/" element={<ProtectedRoute type={LOGIN_TYPES.slice(1)} />}>
         <Route path="" element={<DashboardLayout type={LOGIN_TYPES[5]} />}>
-          <Route path="volunteer/opinionsurvey/survey" element={<OpinionPollSurveyPage />} />
-          <Route path="view-ticket-history" element={<ViewTicketsHistoryPage />} />
-        </Route>
-      </Route>
-
-      <Route path="/" element={<ProtectedRoute type={[LOGIN_TYPES[1], LOGIN_TYPES[2], LOGIN_TYPES[3], LOGIN_TYPES[4]]} />}>
-        <Route path="" element={<DashboardLayout type={LOGIN_TYPES[4]} />}>
-          <Route path="booth-incharge/opinionsurvey/survey" element={<OpinionPollSurveyPage />} />
-          <Route path="booth-incharge/tickets" element={<TicketsPage />} />
+          <Route path="user/opinionsurvey/survey" element={<OpinionPollSurveyPage isUser={true} />} />
+          <Route path="user/tickets" element={<TicketsPage isUser={true} />} />
+          <Route path="user/view-ticket-history" element={<ViewTicketsHistoryPage />} />
         </Route>
       </Route>
 

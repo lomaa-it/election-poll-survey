@@ -11,7 +11,7 @@ import { getAllVotersSurvey, clearVoterReducer } from "../actions/voter";
 import { searchFiltercolor } from "../constants";
 import { useLocation } from "react-router-dom";
 
-const OpinionPollSurveyPage = ({ getAllVotersSurvey, clearVoterReducer }) => {
+const OpinionPollSurveyPage = ({ isUser, getAllVotersSurvey, clearVoterReducer }) => {
   const [filterValues, setFilterValues] = useState(null);
 
   useEffect(() => {
@@ -99,7 +99,7 @@ const OpinionPollSurveyPage = ({ getAllVotersSurvey, clearVoterReducer }) => {
 
         <Box p={1} />
 
-        <OpinionPollSurveyList filterValues={filterValues} />
+        <OpinionPollSurveyList isUser={isUser} filterValues={filterValues} />
       </Container>
     </Page>
   );

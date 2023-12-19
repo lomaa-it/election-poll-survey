@@ -3,35 +3,17 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import {
-  Stack,
-  IconButton,
-  InputAdornment,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Stack, IconButton, InputAdornment, TextField, Typography } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import Iconify from "../../../components/Iconify";
 import { FormProvider, RHFTextField } from "../../../components/hook-form";
 import { connect } from "react-redux";
 import { showAlert } from "../../../actions/alert";
-import { isOtpValid } from "../../../constants";
-import { RHFTextField2 } from "../../../components/hook-form/RHFTextField";
-import {
-  newPasswordUpdateRoute,
-  saveNewPassword,
-  userValidationwithPhonenoRoute,
-} from "../../../utils/apis";
+import { newPasswordUpdateRoute, saveNewPassword, userValidationwithPhonenoRoute } from "../../../utils/apis";
 import instance from "../../../utils/axios";
 import OtpSubmitForm from "./OtpSubmitForm";
 
-const ForgetForm = ({
-  showAlert,
-  otpSent,
-  setOtpSent,
-  isVerified,
-  setIsVerified,
-}) => {
+const ForgetForm = ({ showAlert, otpSent, setOtpSent, isVerified, setIsVerified }) => {
   const navigate = useNavigate();
 
   const [isLoading, setLoading] = useState(false);
@@ -68,10 +50,7 @@ const ForgetForm = ({
         username: data.username,
       };
       console.log("jsondata", jsonData);
-      const response = await instance.post(
-        userValidationwithPhonenoRoute,
-        jsonData
-      );
+      const response = await instance.post(userValidationwithPhonenoRoute, jsonData);
       console.log("phione response", response);
       if (response.status == 200) {
         showAlert({ text: `${response.data?.message}`, color: "success" });
@@ -124,22 +103,16 @@ const ForgetForm = ({
   };
 
   if (!!otpSent) {
-    return <OtpSubmitForm formValues={formValues} showAlert={showAlert}/>;
+    return <OtpSubmitForm formValues={formValues} showAlert={showAlert} />;
   }
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Stack my={3} spacing={3}>
-        <RHFTextField2 name="username" label="User Name/Phone No" />
+        <RHFTextField name="username" label="User Name/Phone No" />
       </Stack>
 
-      <LoadingButton
-        fullWidth
-        loading={isLoading}
-        size="large"
-        type="submit"
-        variant="contained"
-      >
+      <LoadingButton fullWidth loading={isLoading} size="large" type="submit" variant="contained">
         Verify
       </LoadingButton>
     </FormProvider>

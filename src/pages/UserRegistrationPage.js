@@ -1,34 +1,14 @@
 import * as Yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import {
-  Grid,
-  Container,
-  Typography,
-  Box,
-  TextField,
-  Card,
-  FormControlLabel,
-  MenuItem,
-} from "@mui/material";
+import { Grid, Container, Typography, Box, TextField, Card, FormControlLabel, MenuItem } from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
 import { useLocation, useNavigate } from "react-router-dom";
 import { CheckBox } from "@mui/icons-material";
-import {
-  getAllDesignationsRoute,
-  getAllStatesRoute,
-  getAllDistrictsRoute,
-  getAllConstituenciesRoute,
-  getAllMandalRoute,
-  getAllDivisionRoute,
-  getAllSachivalayamRoute,
-  getAllPartsRoute,
-  getAllVillageRoute,
-  createUsersRoute,
-} from "../utils/apis";
-import { useEffect, useState } from "react";
+import { getAllDesignationsRoute, getAllStatesRoute, getAllDistrictsRoute, getAllConstituenciesRoute, getAllMandalRoute, getAllDivisionRoute, getAllSachivalayamRoute, getAllPartsRoute, getAllVillageRoute, createUsersRoute } from "../utils/apis";
+import { useEffect, useRef, useState } from "react";
 import instance from "../utils/axios";
 import { set } from "date-fns";
 import { showAlert } from "../actions/alert";
@@ -38,29 +18,23 @@ import { phoneRegExp } from "../constants";
 
 const UserRegistrationPage = ({ common, showAlert }) => {
   const props = useLocation().state;
-
-  const pageName = props?.userData == null ? "Add User" : "Edit User";
   const navigate = useNavigate();
+  const filterRef = useRef(null);
 
   const [filterValues, setFilterValues] = useState(null);
   const [isLoading, setLoading] = useState(false);
+  const pageName = props?.userData == null ? "Add User" : "Edit User";
 
   const schema = Yup.object().shape({
     user_displayname: Yup.string().required("Full name is required"),
-    username: Yup.string()
-      .matches(phoneRegExp, "User Name is not valid")
-      .required("User Name is required"),
+    username: Yup.string().matches(phoneRegExp, "User Name is not valid").required("User Name is required"),
     // password: Yup.string().required("Password is required").min(8, "Password must be at least 8 characters"),
-    phone_no: Yup.string().test(
-      "phone_no",
-      "Phone number must start with 6, 7, 8, or 9",
-      function (value) {
-        if (!value || value.length === 0) {
-          return true; // bypass the test if the phone number is not provided
-        }
-        return /^[6-9]\d*$/.test(value); // test the phone number if it's provided
+    phone_no: Yup.string().test("phone_no", "Phone number is not valid", function (value) {
+      if (!value || value.length === 0) {
+        return true;
       }
-    ),
+      return phoneRegExp.test(value);
+    }),
     age: Yup.string(),
     email: Yup.string().email(),
     designation_id: Yup.string().required("Designation id is required"),
@@ -77,6 +51,8 @@ const UserRegistrationPage = ({ common, showAlert }) => {
     mandal_pk: props?.userData?.mandal_pk ?? "",
     division_pk: props?.userData?.division_pk ?? "",
     sachivalayam_pk: props?.userData?.sachivalayam_pk ?? "",
+    part_no: props?.userData?.part_no ?? null,
+    village_pk: props?.userData?.village_pk ?? null,
   };
 
   const methods = useForm({
@@ -85,17 +61,33 @@ const UserRegistrationPage = ({ common, showAlert }) => {
   });
 
   const { handleSubmit, reset, watch } = methods;
-  const watchedFields = watch();
+  const designation_id = watch(["designation_id"]);
 
   const onSubmit = async (data) => {
-    if (
-      !filterValues["mandal"] ||
-      !filterValues["division"] ||
-      !filterValues["sachivalayam"]
-    ) {
-      showAlert({ text: "Please select mandal & division & sachivalyam" });
-      return;
+    var hasErrors = false;
+    filterRef.current.setErrors({ mandal: null, division: null, sachivalayam: null, partno: null });
+
+    if (data.designation_id >= 33 && !filterValues["mandal"]) {
+      filterRef.current.setErrors({ mandal: "Mandal is required" });
+      hasErrors = true;
     }
+
+    if (data.designation_id >= 34 && !filterValues["division"]) {
+      filterRef.current.setErrors({ division: "Division is required" });
+      hasErrors = true;
+    }
+
+    if (data.designation_id >= 35 && !filterValues["sachivalayam"]) {
+      filterRef.current.setErrors({ sachivalayam: "Sachivalayam is required" });
+      hasErrors = true;
+    }
+
+    if (data.designation_id >= 36 && !filterValues["partno"]) {
+      filterRef.current.setErrors({ partno: "Part no is required" });
+      hasErrors = true;
+    }
+
+    if (hasErrors) return;
 
     setLoading(true);
     try {
@@ -104,22 +96,17 @@ const UserRegistrationPage = ({ common, showAlert }) => {
         state_id: 5,
         district_id: 6,
         consistency_id: 3,
-        mandal_id: filterValues.mandal.mandal_pk,
-        division_id: filterValues.division.division_pk,
-        sachivalayam_id: filterValues.sachivalayam.sachivalayam_pk,
+        mandal_id: filterValues.mandal?.mandal_pk ?? null,
+        division_id: filterValues.division?.division_pk ?? null,
+        sachivalayam_id: filterValues.sachivalayam?.sachivalayam_pk ?? null,
+        part_no: filterValues.partno?.part_no ?? null,
+        village_id: filterValues.village?.village_pk ?? null,
       };
-      console.log("props?.userData", props?.userData);
 
       if (props?.userData != null) {
-        await instance.put(
-          `${createUsersRoute}/${props.userData.user_pk}`,
-          jsonData
-        );
+        await instance.put(`${createUsersRoute}/${props.userData.user_pk}`, jsonData);
         showAlert({ text: "User updated successfully", color: "success" });
-
         navigate(-1);
-
-        reset();
       } else {
         await instance.post(createUsersRoute, jsonData);
         showAlert({ text: "User added successfully", color: "success" });
@@ -128,14 +115,10 @@ const UserRegistrationPage = ({ common, showAlert }) => {
 
       setLoading(false);
     } catch (error) {
-      console.error(error);
-      showAlert({ text: "Something went wrong" });
+      showAlert({ text: error.response?.data?.error ?? "Something went wrong" });
       setLoading(false);
     }
   };
-
-  console.log("props?.userData", props?.userData);
-  console.log("watchedFields", watchedFields); // This will log the current form data whenever it changes
 
   return (
     <Page title={pageName}>
@@ -180,11 +163,7 @@ const UserRegistrationPage = ({ common, showAlert }) => {
 
             <Grid container spacing={2}>
               <Grid item xs={12} md={6} lg={3}>
-                <RHFTextField
-                  name="designation_id"
-                  label="Select Designation*"
-                  select
-                >
+                <RHFTextField name="designation_id" label="Select Designation*" select>
                   {common.designation?.map((item, index) => (
                     <MenuItem key={index} value={item.value}>
                       {item.label}
@@ -192,22 +171,15 @@ const UserRegistrationPage = ({ common, showAlert }) => {
                   ))}
                 </RHFTextField>
               </Grid>
-              {watchedFields.designation_id == 33 && (
-                <Grid item xs={12} md={6} lg={3}>
-                  <RHFTextField name="mandal_pk" label="Select Mandal*" select>
-                    {common.mandals?.map((item, index) => (
-                      <MenuItem key={index} value={item.mandal_pk}>
-                        {item.mandal_name}
-                      </MenuItem>
-                    ))}
-                  </RHFTextField>
-                </Grid>
-              )}
 
               <SearchByFilter
+                ref={filterRef}
                 lg={3}
                 defaultValues={defaultValues}
-                showPartNo={false}
+                showMandal={designation_id >= 33}
+                showDivision={designation_id >= 34}
+                showSachivalayam={designation_id >= 35}
+                showPartNo={designation_id >= 36}
                 showVillage={false}
                 showOtherFilters={false}
                 showSearchButton={false}
@@ -217,11 +189,7 @@ const UserRegistrationPage = ({ common, showAlert }) => {
           </Card>
 
           <Box sx={{ pt: 2, textAlign: "end" }}>
-            <LoadingButton
-              type="submit"
-              variant="contained"
-              loading={isLoading}
-            >
+            <LoadingButton type="submit" variant="contained" loading={isLoading}>
               Submit
             </LoadingButton>
           </Box>

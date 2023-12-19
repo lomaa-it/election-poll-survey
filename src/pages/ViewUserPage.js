@@ -1,11 +1,4 @@
-import {
-  Grid,
-  Container,
-  Typography,
-  Box,
-  TextField,
-  Card,
-} from "@mui/material";
+import { Grid, Container, Typography, Box, TextField, Card, MenuItem } from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -15,11 +8,10 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import SearchByFilter from "../sections/common/SearchByFilter";
 import { searchFiltercolor } from "../constants";
 import { clearUserReducer, getAllUsers } from "../actions/user";
-import { RHFAutoComplete } from "../components/hook-form";
-import { useLocation } from "react-router-dom";
+import { UncontrolledTextField } from "../components/hook-form/RHFTextField";
 
 const ViewUserPage = ({ common, clearUserReducer, getAllUsers }) => {
-  const [designation, setDesignation] = useState([]);
+  const [designation, setDesignation] = useState("");
 
   useEffect(() => {
     clearUserReducer();
@@ -27,7 +19,7 @@ const ViewUserPage = ({ common, clearUserReducer, getAllUsers }) => {
 
   const handleSubmit = async (filterValues) => {
     var values = {
-      designation_id: designation?.value ?? null,
+      designation_id: designation ?? null,
       ...filterValues,
     };
     await getAllUsers(values);
@@ -39,16 +31,18 @@ const ViewUserPage = ({ common, clearUserReducer, getAllUsers }) => {
         <Card sx={{ p: 3, backgroundColor: searchFiltercolor }}>
           <Grid container spacing={2} alignItems="center">
             <SearchByFilter
+              showOtherFilters={false}
               onSubmit={handleSubmit}
+              onReset={() => setDesignation("")}
               children={
                 <Grid item xs={12} md={6} lg={2}>
-                  <RHFAutoComplete
-                    name="designation"
-                    label="Select Designation"
-                    value={designation}
-                    onChange={(name, value) => setDesignation(value)}
-                    options={common.designation}
-                  />
+                  <UncontrolledTextField name="designation_id" label="Select Designation*" select value={designation} onChange={(e) => setDesignation(e.target.value)}>
+                    {common.designation?.map((item, index) => (
+                      <MenuItem key={index} value={item.value}>
+                        {item.label}
+                      </MenuItem>
+                    ))}
+                  </UncontrolledTextField>
                 </Grid>
               }
             />
@@ -87,6 +81,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { clearUserReducer, getAllUsers })(
-  ViewUserPage
-);
+export default connect(mapStateToProps, { clearUserReducer, getAllUsers })(ViewUserPage);

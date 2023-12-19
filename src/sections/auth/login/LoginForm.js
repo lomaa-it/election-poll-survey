@@ -14,7 +14,6 @@ import { showAlert } from "../../../actions/alert";
 import { LOGIN_TYPES, PUBLIC_URL, phoneRegExp } from "../../../constants";
 import instance from "../../../utils/axios";
 import { loginRoute } from "../../../utils/apis";
-import { RHFTextField2 } from "../../../components/hook-form/RHFTextField";
 import { he } from "date-fns/locale";
 import CachedIcon from "@mui/icons-material/Cached";
 
@@ -117,12 +116,10 @@ const LoginForm = ({ showAlert, authSuccess }) => {
         } else {
           authSuccess(userData);
 
-          if ([LOGIN_TYPES[5], LOGIN_TYPES[6]].includes(userData.desgination_name)) {
-            navigate("/volunteer/opinionsurvey/survey", { replace: true });
-          } else if (LOGIN_TYPES[0] == userData.desgination_name) {
+          if (LOGIN_TYPES[0] == userData.desgination_name) {
             navigate("/dashboard", { replace: true });
           } else {
-            navigate("/booth-incharge/opinionsurvey/survey", { replace: true });
+            navigate("/user/opinionsurvey/survey", { replace: true });
           }
         }
 
@@ -140,7 +137,7 @@ const LoginForm = ({ showAlert, authSuccess }) => {
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Stack spacing={1.5}>
-        <RHFTextField2 name="username" label="User Name" type="number" />
+        <RHFTextField name="username" label="User Name" type="number" />
 
         <RHFTextField
           name="password"

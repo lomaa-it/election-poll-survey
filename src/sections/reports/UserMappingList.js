@@ -16,8 +16,7 @@ import { json } from "react-router-dom";
 const UserMappingList = ({ common, user, filterValues, showAlert, checkOrUncheckUser, clearUserReducer }) => {
   const [isLoading, setLoading] = useState(false);
   const [formValues, setFormValues] = useState({
-    designation_id: "",
-    partno: [],
+    partno: "",
   });
 
   useEffect(() => {
@@ -33,7 +32,10 @@ const UserMappingList = ({ common, user, filterValues, showAlert, checkOrUncheck
       options: {
         customBodyRender: (value, tableMeta, updateValue) => {
           var data = tableMeta.rowData;
-          return <Checkbox checked={value ?? false} onChange={(e) => checkOrUncheckUser(data[1], e.target.checked)} />;
+          if (data[2] == 37 || data[2] == 38) {
+            return <Checkbox checked={value ?? false} onChange={(e) => checkOrUncheckUser(data[1], e.target.checked)} />;
+          }
+          return null;
         },
       },
     },
@@ -41,14 +43,43 @@ const UserMappingList = ({ common, user, filterValues, showAlert, checkOrUncheck
       name: "user_pk",
       label: "User Id",
     },
-    { name: "user_displayname", label: "User Name" },
+    {
+      name: "designation_id",
+      label: "Designation Id",
+      options: { display: false },
+    },
+    { name: "user_displayname", label: "Full Name" },
     { name: "phone_no", label: "Phone" },
     { name: "lookup_valuename", label: "Designation" },
-    { name: "mandal_name", label: "Mandal Name" },
-    { name: "division_name", label: "Division Name" },
-    { name: "sachivalayam_name", label: "Sachivalyam Name" },
     {
-      name: "parts",
+      name: "mandal_name",
+      label: "Mandal Name",
+      options: {
+        customBodyRender: (value, tableMeta, updateValue) => {
+          return value ?? "-";
+        },
+      },
+    },
+    {
+      name: "division_name",
+      label: "Division Name",
+      options: {
+        customBodyRender: (value, tableMeta, updateValue) => {
+          return value ?? "-";
+        },
+      },
+    },
+    {
+      name: "sachivalayam_name",
+      label: "Sachivalyam Name",
+      options: {
+        customBodyRender: (value, tableMeta, updateValue) => {
+          return value ?? "-";
+        },
+      },
+    },
+    {
+      name: "part_no",
       label: "Part/Booth No",
       options: {
         customBodyRender: (value, tableMeta, updateValue) => {
@@ -74,14 +105,13 @@ const UserMappingList = ({ common, user, filterValues, showAlert, checkOrUncheck
   };
 
   const handleChange = (name, value) => {
-    console.log(value);
     setFormValues((state) => ({ ...state, [name]: value }));
   };
 
   const handleSubmit = async () => {
     var userList = user.data.filter((e) => e.isCheck == true).map((e) => e.user_pk);
     if (!formValues["partno"]) {
-      showAlert({ text: "Please select designation & partno" });
+      showAlert({ text: "Please select partno" });
       return;
     }
 
@@ -92,13 +122,8 @@ const UserMappingList = ({ common, user, filterValues, showAlert, checkOrUncheck
 
     setLoading(true);
     try {
-      // var jsonData = {
-      //   designation_id: formValues.designation_id,
-      //   part_no_List: formValues.partno.map((e) => e.part_no),
-      //   usersPkList: userList,
-      // };
       var jsonData = {
-        part_no_List: formValues.partno.map((e) => e.part_no),
+        part_no_List: [formValues.partno],
         usersPkList: userList,
       };
 
@@ -119,7 +144,7 @@ const UserMappingList = ({ common, user, filterValues, showAlert, checkOrUncheck
   };
 
   const resetFormValues = () => {
-    setFormValues({ designation_id: "", partno: [] });
+    setFormValues({ partno: "" });
   };
 
   return (
@@ -139,26 +164,16 @@ const UserMappingList = ({ common, user, filterValues, showAlert, checkOrUncheck
 
             <Grid container spacing={2} alignItems="center">
               <Grid item xs={12} md={6} lg={3}>
-                <RHFAutoComplete
-                  name="partno"
-                  multiple={true}
-                  label="Select Part/Booth No"
-                  value={formValues.partno}
-                  options={common.parts.filter((e) => e.sachivalayam_id == filterValues?.sachivalayam_id)}
-                  getOptionLabel={(option) => String(option.part_no)}
-                  onChange={handleChange}
-                />
-              </Grid>
-
-              {/* <Grid item xs={12} md={6} lg={3}>
-                <TextField name="designation_id" value={formValues.designation_id} size="small" fullWidth label="Select Designation*" select onChange={(e) => handleChange(e.target.name, e.target.value)}>
-                  {common.designation?.map((item, index) => (
-                    <MenuItem key={index} value={item.value}>
-                      {item.label}
-                    </MenuItem>
-                  ))}
+                <TextField name="partno" value={formValues.partno} size="small" fullWidth label="Select Part/Booth No" select onChange={(e) => handleChange(e.target.name, e.target.value)}>
+                  {common.parts
+                    .filter((e) => e.sachivalayam_id == filterValues?.sachivalayam_id)
+                    ?.map((item, index) => (
+                      <MenuItem key={index} value={item.part_no}>
+                        {item.part_no}
+                      </MenuItem>
+                    ))}
                 </TextField>
-              </Grid> */}
+              </Grid>
 
               <Grid item xs={12} md={6} lg={3}>
                 <LoadingButton loading={isLoading} variant="outlined" onClick={handleSubmit}>

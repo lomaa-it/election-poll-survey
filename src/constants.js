@@ -13,7 +13,8 @@ export const ROWS_PER_PAGE_OPTION = [50, 100, 200];
 
 export const PUBLIC_URL = process.env.PUBLIC_URL;
 
-export const phoneRegExp = /^\d+$/;
+// export const phoneRegExp = /\d{10}$/;
+export const phoneRegExp = /^[6-9]\d{9}$/;
 
 export const isOtpValid = (value) => {
   var regex = /\b\d{6}\b/;

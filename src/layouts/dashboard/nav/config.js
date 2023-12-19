@@ -3,22 +3,28 @@ import Iconify from "../../../components/Iconify";
 const userNavConfig = [
   {
     title: "Opinion Survey",
-    path: "/volunteer/opinionsurvey/survey",
-    icon: <Iconify icon="ic:round-dashboard" width="24px" height="24px" />,
-  },
-];
-const otherNavConfig = [
-  {
-    title: "Opinion Survey",
-    path: "/booth-incharge/opinionsurvey/survey",
+    path: "/user/opinionsurvey/survey",
     icon: <Iconify icon="ic:round-dashboard" width="24px" height="24px" />,
   },
   {
     title: "View Tickets",
-    path: "/booth-incharge/tickets",
+    path: "/user/tickets",
     icon: <Iconify icon="ion:ticket" width="24px" height="24px" />,
   },
 ];
+
+// const otherNavConfig = [
+//   {
+//     title: "Opinion Survey",
+//     path: "/user/opinionsurvey/survey",
+//     icon: <Iconify icon="ic:round-dashboard" width="24px" height="24px" />,
+//   },
+//   {
+//     title: "View Tickets",
+//     path: "/user/tickets",
+//     icon: <Iconify icon="ion:ticket" width="24px" height="24px" />,
+//   },
+// ];
 //xyz
 
 const mlaNavConfig = [
@@ -234,4 +240,4 @@ const mlaNavConfig = [
   },
 ];
 
-export { userNavConfig, mlaNavConfig, otherNavConfig };
+export { userNavConfig, mlaNavConfig };

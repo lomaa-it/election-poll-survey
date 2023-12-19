@@ -13,7 +13,7 @@ import { checkOrUncheckTicket } from "../../actions/ticket";
 import AnalyticsCard from "../common/AnalyticsCard";
 import { fToNow } from "../../utils/formatTime";
 
-const ViewTicketsList = ({ common, ticket, showAlert, checkOrUncheckTicket }) => {
+const ViewTicketsList = ({ isUser, common, ticket, showAlert, checkOrUncheckTicket }) => {
   const navigate = useNavigate();
   const [isLoading, setLoading] = useState(false);
   const [formValues, setFormValues] = useState({
@@ -93,11 +93,19 @@ const ViewTicketsList = ({ common, ticket, showAlert, checkOrUncheckTicket }) =>
   };
 
   const handleEdit = (data) => {
-    navigate(`/view-ticket-history`, {
-      state: {
-        data: data,
-      },
-    });
+    if (isUser) {
+      navigate(`/user/view-ticket-history`, {
+        state: {
+          data: data,
+        },
+      });
+    } else {
+      navigate(`/view-ticket-history`, {
+        state: {
+          data: data,
+        },
+      });
+    }
   };
 
   // const handleSubmit = async () => {

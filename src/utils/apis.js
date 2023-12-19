@@ -3,13 +3,13 @@
 // export const baseServerUrl = "https://cd30-123-201-175-198.ngrok-free.app";
 
 // new api for baseServerUrl
-// export const baseServerUrl = "https://2b9a-203-109-75-89.ngrok-free.app";
+// export const baseServerUrl = "https://940b-219-91-202-227.ngrok-free.app";
 
 // export const baseServerUrl = "https://6cd2-183-83-253-245.ngrok-free.app";
 // export const baseServerUrl = "https://backend.cgrysrcongress.in";/
-export const baseServerUrl = "http://192.168.137.220:8080";
+// export const baseServerUrl = "http://192.168.137.220:8080";
 /// new
-// export const baseServerUrl = "https://poll2.onrender.com";
+export const baseServerUrl = "https://poll2.onrender.com";
 
 // FORGET PASSWORD ROUTE
 export const userValidationwithPhonenoRoute = "/uservalidationwithphoneno";

@@ -1,16 +1,7 @@
 import React, { forwardRef, useImperativeHandle } from "react";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import {
-  Grid,
-  Container,
-  Typography,
-  Box,
-  TextField,
-  Card,
-  MenuItem,
-  Stack,
-} from "@mui/material";
+import { Grid, Container, Typography, Box, TextField, Card, MenuItem, Stack } from "@mui/material";
 import { FormProvider, RHFAutoComplete } from "../../components/hook-form";
 import { LoadingButton } from "@mui/lab";
 import { getAllCommonData } from "../../actions/common";
@@ -28,6 +19,9 @@ const SearchByFilter = forwardRef(
       onSubmit,
       onReset,
       lg = 2,
+      showMandal = true,
+      showDivision = true,
+      showSachivalayam = true,
       showPartNo = true,
       showVillage = true,
       showOtherFilters = true,
@@ -49,11 +43,18 @@ const SearchByFilter = forwardRef(
       govt_employee: null,
       age: null,
     });
+    const [errors, setErrors] = useState({
+      mandal: null,
+      division: null,
+      sachivalayam: null,
+      partno: null,
+    });
     const [isLoading, setLoading] = useState(false);
+    const [submitFlag, setSubmitFlag] = useState(false);
 
     useEffect(() => {
-      if (common.mandals.length == 0) {
-        getAllCommonData(account.user);
+      if (common?.mandals.length == 0) {
+        getAllCommonData(account?.user);
       }
     }, []);
 
@@ -61,20 +62,18 @@ const SearchByFilter = forwardRef(
       setIntialDefaultValues(true);
     }, [common]);
 
-    const setIntialDefaultValues = (submitFlag) => {
-      if (common.mandals.length > 0) {
-        if (account.user.mandal_pk != null) {
-          var initialMandal = common.mandals[0];
-          if (common.mandals.length > 0) {
+    const setIntialDefaultValues = (allowSubmit) => {
+      if (common?.mandals.length > 0) {
+        if (account?.user.mandal_pk != null) {
+          var initialMandal = common?.mandals[0];
+          if (common?.mandals.length > 0) {
             setFormValues((state) => ({ ...state, mandal: initialMandal }));
           }
         }
 
-        if (account.user.division_pk != null) {
-          var initialDivision = common.divisions.filter(
-            (e) => e.mandal_id == initialMandal?.mandal_pk
-          )[0];
-          if (common.divisions.length > 0) {
+        if (account?.user.division_pk != null) {
+          var initialDivision = common?.divisions.filter((e) => e.mandal_id == initialMandal?.mandal_pk)[0];
+          if (common?.divisions.length > 0) {
             setFormValues((state) => ({
               ...state,
               division: initialDivision ?? null,
@@ -82,11 +81,9 @@ const SearchByFilter = forwardRef(
           }
         }
 
-        if (account.user.sachivalayam_pk != null) {
-          var initialSachivalayam = common.sachivalayams.filter(
-            (e) => e.division_id == initialDivision?.division_pk
-          )[0];
-          if (common.sachivalayams.length > 0) {
+        if (account?.user.sachivalayam_pk != null) {
+          var initialSachivalayam = common?.sachivalayams.filter((e) => e.division_id == initialDivision?.division_pk)[0];
+          if (common?.sachivalayams.length > 0) {
             setFormValues((state) => ({
               ...state,
               sachivalayam: initialSachivalayam ?? null,
@@ -94,17 +91,15 @@ const SearchByFilter = forwardRef(
           }
         }
 
-        // var initialPart = common.parts.filter(
-        //   (e) => e.sachivalayam_id == initialSachivalayam?.sachivalayam_pk
-        // )[0];
-        // if (common.parts.length > 0) {
-        //   setFormValues((state) => ({ ...state, partno: initialPart ?? null }));
-        // }
+        var initialPart = common?.parts.filter((e) => e.sachivalayam_id == initialSachivalayam?.sachivalayam_pk)[0];
+        if (common?.parts.length > 0) {
+          setFormValues((state) => ({ ...state, partno: initialPart ?? null }));
+        }
 
-        // var initialVillage = common.villages.filter(
+        // var initialVillage = common?.villages.filter(
         //   (e) => e.part_no == initialPart?.part_no
         // )[0];
-        // if (common.villages.length > 0) {
+        // if (common?.villages.length > 0) {
         //   setFormValues((state) => ({
         //     ...state,
         //     village: initialVillage ?? null,
@@ -112,27 +107,19 @@ const SearchByFilter = forwardRef(
         // }
 
         if (defaultValues) {
+          console.log(defaultValues);
           setFormValues((state) => ({
             ...state,
-            mandal: defaultValues.mandal_pk
-              ? common.mandals.find(
-                  (e) => e.mandal_pk === defaultValues.mandal_pk
-                )
-              : state.mandal,
-            division: defaultValues.division_pk
-              ? common.divisions.find(
-                  (e) => e.division_pk === defaultValues.division_pk
-                )
-              : state.division,
-            sachivalayam: defaultValues.sachivalayam_pk
-              ? common.sachivalayams.find(
-                  (e) => e.sachivalayam_pk === defaultValues.sachivalayam_pk
-                )
-              : state.sachivalayam,
+            mandal: defaultValues.mandal_pk ? common?.mandals.find((e) => e.mandal_pk === defaultValues.mandal_pk) : state.mandal,
+            division: defaultValues.division_pk ? common?.divisions.find((e) => e.division_pk === defaultValues.division_pk) : state.division,
+            sachivalayam: defaultValues.sachivalayam_pk ? common?.sachivalayams.find((e) => e.sachivalayam_pk === defaultValues.sachivalayam_pk) : state.sachivalayam,
+            partno: defaultValues.part_no ? common?.parts.find((e) => e.part_no === defaultValues.part_no) : state.partno,
           }));
         }
 
-        if (submitFlag) handleSubmit();
+        if (allowSubmit) {
+          setSubmitFlag(true);
+        }
       }
     };
 
@@ -155,7 +142,7 @@ const SearchByFilter = forwardRef(
         govt_employee: formValues.govt_employee?.value ?? null,
         age: formValues.age?.value ?? "",
       };
-      console.log("jsonData", jsonData);
+
       setLoading(true);
       await onSubmit(jsonData);
       setLoading(false);
@@ -163,7 +150,6 @@ const SearchByFilter = forwardRef(
 
     const handleChange = (name, value) => {
       const values = {};
-
       values[name] = value;
 
       if (name == "mandal") {
@@ -193,6 +179,11 @@ const SearchByFilter = forwardRef(
 
     useEffect(() => {
       if (onChanged != null) onChanged(formValues);
+
+      if (submitFlag) {
+        handleSubmit();
+        setSubmitFlag(false);
+      }
     }, [formValues]);
 
     const handleReset = () => {
@@ -216,52 +207,65 @@ const SearchByFilter = forwardRef(
       setIntialDefaultValues();
     };
 
-    useImperativeHandle(ref, () => ({}));
-
-    console.log("formValues", formValues);
+    useImperativeHandle(ref, () => ({
+      setErrors: (newErrors) => {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          ...newErrors,
+        }));
+      },
+    }));
 
     return (
       <>
-        <Grid item xs={12} md={6} lg={lg}>
-          <RHFAutoComplete
-            name="mandal"
-            label="Select Mandal"
-            value={formValues.mandal}
-            options={common.mandals}
-            getOptionLabel={(option) => option.mandal_name}
-            onChange={handleChange}
-            loading={common.isLoading}
-            disabled={account.user.mandal_pk != null}
-          />
-        </Grid>
+        {showMandal && (
+          <Grid item xs={12} md={6} lg={lg}>
+            <RHFAutoComplete
+              name="mandal"
+              label="Select Mandal"
+              value={formValues.mandal}
+              options={common?.mandals}
+              getOptionLabel={(option) => option.mandal_name}
+              onChange={handleChange}
+              loading={common?.isLoading}
+              disabled={account?.user.mandal_pk != null}
+              error={!!errors.mandal}
+              helperText={errors.mandal}
+            />
+          </Grid>
+        )}
 
-        <Grid item xs={12} md={6} lg={lg}>
-          <RHFAutoComplete
-            name="division"
-            label="Select Division"
-            value={formValues.division}
-            options={common.divisions.filter(
-              (e) => e.mandal_id == formValues?.mandal?.mandal_pk
-            )}
-            getOptionLabel={(option) => option.division_name}
-            onChange={handleChange}
-            disabled={account.user.division_pk != null}
-          />
-        </Grid>
+        {showDivision && (
+          <Grid item xs={12} md={6} lg={lg}>
+            <RHFAutoComplete
+              name="division"
+              label="Select Division"
+              value={formValues.division}
+              options={common?.divisions.filter((e) => e.mandal_id == formValues?.mandal?.mandal_pk)}
+              getOptionLabel={(option) => option.division_name}
+              onChange={handleChange}
+              disabled={account?.user.division_pk != null}
+              error={!!errors.division}
+              helperText={errors.division}
+            />
+          </Grid>
+        )}
 
-        <Grid item xs={12} md={6} lg={lg}>
-          <RHFAutoComplete
-            name="sachivalayam"
-            label="Select Sachivalayam"
-            value={formValues.sachivalayam}
-            options={common.sachivalayams.filter(
-              (e) => e.division_id == formValues?.division?.division_pk
-            )}
-            getOptionLabel={(option) => option.sachivalayam_name}
-            onChange={handleChange}
-            disabled={account.user.sachivalayam_pk != null}
-          />
-        </Grid>
+        {showSachivalayam && (
+          <Grid item xs={12} md={6} lg={lg}>
+            <RHFAutoComplete
+              name="sachivalayam"
+              label="Select Sachivalayam"
+              value={formValues.sachivalayam}
+              options={common?.sachivalayams.filter((e) => e.division_id == formValues?.division?.division_pk)}
+              getOptionLabel={(option) => option.sachivalayam_name}
+              onChange={handleChange}
+              disabled={account?.user.sachivalayam_pk != null}
+              error={!!errors.sachivalayam}
+              helperText={errors.sachivalayam}
+            />
+          </Grid>
+        )}
 
         {showPartNo && (
           <Grid item xs={12} md={6} lg={lg}>
@@ -269,13 +273,12 @@ const SearchByFilter = forwardRef(
               name="partno"
               label="Select Part/Booth No"
               value={formValues.partno}
-              options={common.parts.filter(
-                (e) =>
-                  e.sachivalayam_id == formValues?.sachivalayam?.sachivalayam_pk
-              )}
+              options={common?.parts.filter((e) => e.sachivalayam_id == formValues?.sachivalayam?.sachivalayam_pk)}
               getOptionLabel={(option) => String(option.part_no)}
               onChange={handleChange}
-              // disabled={account.user.part_no != null}
+              disabled={account.user.part_no != null}
+              error={!!errors.partno}
+              helperText={errors.partno}
             />
           </Grid>
         )}
@@ -286,9 +289,7 @@ const SearchByFilter = forwardRef(
               name="village"
               label="Select Village"
               value={formValues.village}
-              options={common.villages.filter(
-                (e) => e.part_no == formValues?.partno?.part_no
-              )}
+              options={common?.villages.filter((e) => e.part_no == formValues?.partno?.part_no)}
               getOptionLabel={(option) => option.village_name}
               onChange={handleChange}
               // disabled={account.user.village_pk != null}
@@ -321,22 +322,10 @@ const SearchByFilter = forwardRef(
               />
             </Grid>{" "}
             <Grid item xs={12} md={6} lg={lg}>
-              <RHFAutoComplete
-                name="religion"
-                label="Select Religion"
-                value={formValues.religion}
-                options={common.religion}
-                onChange={handleChange}
-              />
+              <RHFAutoComplete name="religion" label="Select Religion" value={formValues.religion} options={common?.religion} onChange={handleChange} />
             </Grid>
             <Grid item xs={12} md={6} lg={lg}>
-              <RHFAutoComplete
-                name="caste"
-                label="Select Caste"
-                value={formValues.caste}
-                options={common.caste}
-                onChange={handleChange}
-              />
+              <RHFAutoComplete name="caste" label="Select Caste" value={formValues.caste} options={common?.caste} onChange={handleChange} />
             </Grid>
             <Grid item xs={12} md={6} lg={lg}>
               <RHFAutoComplete
@@ -375,13 +364,7 @@ const SearchByFilter = forwardRef(
               />
             </Grid>{" "}
             <Grid item xs={12} md={6} lg={lg}>
-              <RHFAutoComplete
-                name="age"
-                label="Select Age"
-                value={formValues.age}
-                options={ageDropdown}
-                onChange={handleChange}
-              />
+              <RHFAutoComplete name="age" label="Select Age" value={formValues.age} options={ageDropdown} onChange={handleChange} />
             </Grid>
           </>
         )}
@@ -392,19 +375,10 @@ const SearchByFilter = forwardRef(
           <>
             <Grid item xs={12} md={6} lg={2}>
               <Stack direction="row" spacing={1}>
-                <LoadingButton
-                  loading={isLoading}
-                  variant="contained"
-                  onClick={handleSubmit}
-                >
+                <LoadingButton loading={isLoading} variant="contained" onClick={handleSubmit}>
                   Search
                 </LoadingButton>
-                <LoadingButton
-                  loading={isLoading}
-                  variant="contained"
-                  color="error"
-                  onClick={handleReset}
-                >
+                <LoadingButton loading={isLoading} variant="contained" color="error" onClick={handleReset}>
                   Clear
                 </LoadingButton>
               </Stack>
@@ -423,6 +397,11 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, {
-  getAllCommonData,
-})(SearchByFilter);
+export default connect(
+  mapStateToProps,
+  {
+    getAllCommonData,
+  },
+  null,
+  { forwardRef: true }
+)(SearchByFilter);
