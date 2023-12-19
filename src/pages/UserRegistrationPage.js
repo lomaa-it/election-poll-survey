@@ -51,9 +51,16 @@ const UserRegistrationPage = ({ common, showAlert }) => {
       .matches(phoneRegExp, "User Name is not valid")
       .required("User Name is required"),
     // password: Yup.string().required("Password is required").min(8, "Password must be at least 8 characters"),
-    phone_no: Yup.string()
-      .matches(phoneRegExp, "Phone number is not valid")
-      .required("Phone number is required"),
+    phone_no: Yup.string().test(
+      "phone_no",
+      "Phone number must start with 6, 7, 8, or 9",
+      function (value) {
+        if (!value || value.length === 0) {
+          return true; // bypass the test if the phone number is not provided
+        }
+        return /^[6-9]\d*$/.test(value); // test the phone number if it's provided
+      }
+    ),
     age: Yup.string(),
     email: Yup.string().email(),
     designation_id: Yup.string().required("Designation id is required"),
@@ -108,7 +115,7 @@ const UserRegistrationPage = ({ common, showAlert }) => {
           jsonData
         );
         showAlert({ text: "User updated successfully", color: "success" });
-    
+
         navigate(-1);
 
         reset();
