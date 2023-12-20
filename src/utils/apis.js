@@ -11,6 +11,26 @@
 /// new
 export const baseServerUrl = "https://poll2.onrender.com";
 
+
+
+
+
+// Survey Dashboard Apis
+export const getDashBoardbyTotalVoters = "/getdashboardbytotalvoters"
+export const getDashBoardbyGenderCount = "/getdashboardbygendercount"
+export const getDashBoardbyStatusCount = "/getdashboardbystatuscount"
+export const getDashBoardbyVoterPulse = "/getdashboardbyvoterpulse"
+export const getDashBoardbyTicketStatus = "/getdashboardbyticketstatus"
+export const getDashBoardbyCasteCount = "/getdashboardbycastecount"
+export const getDashBoardbyReligionCount = "/getdashboardbyreligioncount"
+export const getDashBoardbyDisabilityCount  = "/getdashboardbydisabilitycount"
+export const getDashBoardbyGovtEmployeeCount = "/getdashboardbygovtemployeecount"
+export const getDashBoardbyResidentialStatus = "/getdashboardbyresidentialstatus"
+export const getDashBoardbyageGroup = "/getdashboardbyagegroup"
+
+
+
+
 // FORGET PASSWORD ROUTE
 export const userValidationwithPhonenoRoute = "/uservalidationwithphoneno";
 export const saveNewPassword = "/savenewpassword";
