@@ -10,7 +10,7 @@
 // export const baseServerUrl = "http://192.168.137.220:8080";
 /// new
 export const baseServerUrl = "https://poll2.onrender.com";
-// export const baseServerUrl = "http://192.168.101.177:8080";
+// export const baseServerUrl = "http://172.20.10.4:8080";
 
 // Survey Dashboard Apis
 export const getDashBoardbyTotalVoters = "/getdashboardbytotalvoters";

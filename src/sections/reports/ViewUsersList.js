@@ -324,7 +324,7 @@ const ViewUsersList = ({
       .map((e) => ({
         user_pk: e.user_pk,
         user_displayname: e.user_displayname,
-        phone_no: e.phone_no,
+        phone_no: e.username,
       }));
     if (userList.length <= 0) {
       showAlert({ text: "No user selected" });
