@@ -1,21 +1,67 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Typography, Card, Stack, Grid, Switch, Divider, Box, Chip, TextField, Button, CircularProgress, Checkbox, IconButton } from "@mui/material";
+import {
+  Typography,
+  Card,
+  Stack,
+  Grid,
+  Switch,
+  Divider,
+  Box,
+  Chip,
+  TextField,
+  Button,
+  CircularProgress,
+  Checkbox,
+  IconButton,
+} from "@mui/material";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import MUIDataTable from "mui-datatables";
 import { connect } from "react-redux";
 import { showAlert } from "../../actions/alert";
 import { getMuiTableTheme } from "../../constants";
-import { checkOrUncheckUser, clearUserReducer } from "../../actions/user";
+import {
+  checkOrUncheckUser,
+  clearUserReducer,
+  deleteUserInRedux,
+} from "../../actions/user";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import { LoadingButton } from "@mui/lab";
 import instance from "../../utils/axios";
-import { sendCredsToUsersRoute } from "../../utils/apis";
+import { deleteUserById, sendCredsToUsersRoute } from "../../utils/apis";
 
-const ViewUsersList = ({ user, showAlert, checkOrUncheckUser, clearUserReducer }) => {
+// pop up
+
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+
+//
+
+const ViewUsersList = ({
+  user,
+  showAlert,
+  checkOrUncheckUser,
+  deleteUserInRedux,
+  clearUserReducer,
+  account,
+}) => {
   const navigate = useNavigate();
 
   const [isLoading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [deleteUserPk, setDeleteUserPk] = useState(null);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const columns = [
     {
@@ -31,7 +77,12 @@ const ViewUsersList = ({ user, showAlert, checkOrUncheckUser, clearUserReducer }
       options: {
         customBodyRender: (value, tableMeta, updateValue) => {
           var data = tableMeta.rowData;
-          return data[0] ? <Checkbox checked={value ?? false} onChange={(e) => checkOrUncheckUser(data[2], e.target.checked)} /> : null;
+          return data[0] ? (
+            <Checkbox
+              checked={value ?? false}
+              onChange={(e) => checkOrUncheckUser(data[2], e.target.checked)}
+            />
+          ) : null;
         },
       },
     },
@@ -93,9 +144,136 @@ const ViewUsersList = ({ user, showAlert, checkOrUncheckUser, clearUserReducer }
       options: {
         customBodyRender: (value, tableMeta, updateValue) => {
           return (
-            <IconButton color="primary" onClick={() => handleEdit(value)}>
-              <EditNoteIcon />
-            </IconButton>
+            <Box
+              sx={{
+                display: "flex",
+              }}
+            >
+              <>
+                <IconButton color="primary" onClick={() => handleEdit(value)}>
+                  <EditNoteIcon />
+                </IconButton>
+                <>
+                  {/* {!value == 124 && (
+                    <IconButton
+                      color="error"
+                      onClick={() => {
+                        setDeleteUserPk(value);
+                        handleClickOpen();
+                      }}
+                    >
+                      <DeleteForeverIcon />
+                    </IconButton>
+                  )} */}
+                  {tableMeta.rowData[4] !== "MLA" ? (
+                    <IconButton
+                      color="error"
+                      onClick={() => {
+                        setDeleteUserPk(value);
+                        handleClickOpen();
+                      }}
+                    >
+                      <DeleteForeverIcon />
+                    </IconButton>
+                  ) : null}
+
+                  <Dialog
+                    sx={{
+                      opacity: 0.7,
+                    }}
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                  >
+                    <DialogTitle id="alert-dialog-title">
+                      {"Are You Sure you want to Delete This User?"}
+                    </DialogTitle>
+                    <DialogContent>
+                      <DialogContentText id="alert-dialog-description">
+                        {user.data.map((item) => {
+                          if (deleteUserPk === item.user_pk) {
+                            return (
+                              <>
+                                <Typography
+                                  sx={{
+                                    display: "flex",
+                                  }}
+                                >
+                                  <Typography
+                                    sx={{
+                                      fontWeight: "bold",
+                                    }}
+                                  >
+                                    User ID:{" "}
+                                  </Typography>
+                                  {item.user_pk}
+                                </Typography>
+                                <Typography
+                                  sx={{
+                                    display: "flex",
+                                  }}
+                                >
+                                  <Typography
+                                    sx={{
+                                      fontWeight: "bold",
+                                    }}
+                                  >
+                                    Name:
+                                  </Typography>
+                                  {item.user_displayname}
+                                </Typography>
+                                <Typography
+                                  sx={{
+                                    display: "flex",
+                                  }}
+                                >
+                                  <Typography
+                                    sx={{
+                                      fontWeight: "bold",
+                                    }}
+                                  >
+                                    Designation:
+                                  </Typography>
+                                  {item.designation_name}
+                                </Typography>
+                              </>
+                            );
+                          }
+
+                          return null;
+                        })}
+                      </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                      {/* <Button onClick={handleClose}>Disagree</Button> */}
+                      <LoadingButton
+                        variant="outlined"
+                        sx={{
+                          color: "red",
+                          borderColor: "red",
+                        }}
+                        onClick={handleClose}
+                      >
+                        Cancel
+                      </LoadingButton>
+
+                      {/* <Button onClick={handleDelete} autoFocus>
+
+                        Agree
+                      </Button> */}
+                      <LoadingButton
+                        loading={isLoading}
+                        variant="outlined"
+                        onClick={handleDelete}
+                      >
+                        Delete
+                      </LoadingButton>
+                    </DialogActions>
+                  </Dialog>
+                </>
+              </>
+            </Box>
           );
         },
       },
@@ -116,9 +294,38 @@ const ViewUsersList = ({ user, showAlert, checkOrUncheckUser, clearUserReducer }
       });
     }
   };
+  console.log("account", account);
+
+  const handleDelete = async () => {
+    try {
+      setLoading(true);
+      console.log(deleteUserPk);
+      // var index = user.data.findIndex((e) => e.user_pk == deleteUserPk);
+
+      const response = await instance.delete(
+        `${deleteUserById + deleteUserPk}`
+      );
+      console.log(response);
+      showAlert({ text: "User Deleted Successfully", color: "success" });
+      deleteUserInRedux(deleteUserPk, user);
+      setLoading(false);
+    } catch (error) {
+      console.error(error);
+      showAlert({ text: "Failed to delete user", color: "danger" });
+      setLoading(false);
+    } finally {
+      handleClose();
+    }
+  };
 
   const handleSubmit = async () => {
-    var userList = user.data.filter((e) => e.isCheck == true).map((e) => ({ user_pk: e.user_pk, user_displayname: e.user_displayname, phone_no: e.phone_no }));
+    var userList = user.data
+      .filter((e) => e.isCheck == true)
+      .map((e) => ({
+        user_pk: e.user_pk,
+        user_displayname: e.user_displayname,
+        phone_no: e.phone_no,
+      }));
     if (userList.length <= 0) {
       showAlert({ text: "No user selected" });
       return;
@@ -133,7 +340,10 @@ const ViewUsersList = ({ user, showAlert, checkOrUncheckUser, clearUserReducer }
       await instance.post(sendCredsToUsersRoute, jsonData);
 
       clearUserReducer();
-      showAlert({ text: "Login credientials send successfully", color: "success" });
+      showAlert({
+        text: "Login credientials send successfully",
+        color: "success",
+      });
       setLoading(false);
     } catch (error) {
       console.error(error);
@@ -145,7 +355,12 @@ const ViewUsersList = ({ user, showAlert, checkOrUncheckUser, clearUserReducer }
   return (
     <Card elevation={1}>
       {user.isLoading && (
-        <Box minHeight={200} display="flex" justifyContent="center" alignItems="center">
+        <Box
+          minHeight={200}
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+        >
           <CircularProgress />
         </Box>
       )}
@@ -159,7 +374,11 @@ const ViewUsersList = ({ user, showAlert, checkOrUncheckUser, clearUserReducer }
 
             <Grid container spacing={2} alignItems="center">
               <Grid item xs={12} md={6} lg={6}>
-                <LoadingButton loading={isLoading} variant="outlined" onClick={handleSubmit}>
+                <LoadingButton
+                  loading={isLoading}
+                  variant="outlined"
+                  onClick={handleSubmit}
+                >
                   Send Login Credentials
                 </LoadingButton>
               </Grid>
@@ -169,7 +388,12 @@ const ViewUsersList = ({ user, showAlert, checkOrUncheckUser, clearUserReducer }
           <Divider />
 
           <ThemeProvider theme={getMuiTableTheme()}>
-            <MUIDataTable title="Users List" columns={columns} data={user.data} options={options} />
+            <MUIDataTable
+              title="Users List"
+              columns={columns}
+              data={user.data}
+              options={options}
+            />
           </ThemeProvider>
         </>
       )}
@@ -180,11 +404,13 @@ const ViewUsersList = ({ user, showAlert, checkOrUncheckUser, clearUserReducer }
 const mapStateToProps = (state) => {
   return {
     user: state.user,
+    account: state.auth,
   };
 };
 
 export default connect(mapStateToProps, {
   showAlert,
   checkOrUncheckUser,
+  deleteUserInRedux,
   clearUserReducer,
 })(ViewUsersList);

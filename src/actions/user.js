@@ -35,3 +35,16 @@ export const checkOrUncheckUser = (id, value) => async (dispatch) => {
     payload: { id: id, value: value },
   });
 };
+
+export const deleteUserInRedux = (id, user) => async (dispatch) => {
+  console.log("data", user);
+  const newData = user.data.filter((item) => {
+    return item.user_pk !== id;
+  });
+  console.log(newData);
+  console.log("id", id);
+  dispatch({
+    type: "USER_LOAD_SUCCESS",
+    payload: newData,
+  });
+};

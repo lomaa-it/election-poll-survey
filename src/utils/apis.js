@@ -10,26 +10,25 @@
 // export const baseServerUrl = "http://192.168.137.220:8080";
 /// new
 export const baseServerUrl = "https://poll2.onrender.com";
-
-
-
-
+// export const baseServerUrl = "http://192.168.101.177:8080";
 
 // Survey Dashboard Apis
-export const getDashBoardbyTotalVoters = "/getdashboardbytotalvoters"
-export const getDashBoardbyGenderCount = "/getdashboardbygendercount"
-export const getDashBoardbyStatusCount = "/getdashboardbystatuscount"
-export const getDashBoardbyVoterPulse = "/getdashboardbyvoterpulse"
-export const getDashBoardbyTicketStatus = "/getdashboardbyticketstatus"
-export const getDashBoardbyCasteCount = "/getdashboardbycastecount"
-export const getDashBoardbyReligionCount = "/getdashboardbyreligioncount"
-export const getDashBoardbyDisabilityCount  = "/getdashboardbydisabilitycount"
-export const getDashBoardbyGovtEmployeeCount = "/getdashboardbygovtemployeecount"
-export const getDashBoardbyResidentialStatus = "/getdashboardbyresidentialstatus"
-export const getDashBoardbyageGroup = "/getdashboardbyagegroup"
+export const getDashBoardbyTotalVoters = "/getdashboardbytotalvoters";
+export const getDashBoardbyGenderCount = "/getdashboardbygendercount";
+export const getDashBoardbyStatusCount = "/getdashboardbystatuscount";
+export const getDashBoardbyVoterPulse = "/getdashboardbyvoterpulse";
+export const getDashBoardbyTicketStatus = "/getdashboardbyticketstatus";
+export const getDashBoardbyCasteCount = "/getdashboardbycastecount";
+export const getDashBoardbyReligionCount = "/getdashboardbyreligioncount";
+export const getDashBoardbyDisabilityCount = "/getdashboardbydisabilitycount";
+export const getDashBoardbyGovtEmployeeCount =
+  "/getdashboardbygovtemployeecount";
+export const getDashBoardbyResidentialStatus =
+  "/getdashboardbyresidentialstatus";
+export const getDashBoardbyageGroup = "/getdashboardbyagegroup";
 
-
-
+/// View User
+export const deleteUserById = "/users/";
 
 // FORGET PASSWORD ROUTE
 export const userValidationwithPhonenoRoute = "/uservalidationwithphoneno";
@@ -57,7 +56,8 @@ export const getAllSachivalayamRoute = "/sachivalayam/getall";
 export const getAllPartsRoute = "/parts/getall";
 export const getAllVillageRoute = "/villages/getall";
 export const getAllDistrictsWithJoinRoute = "/getalldistrictswithjoin";
-export const getAllConstituenciesWithJoinRoute = "/getallconstituencieswithjoin";
+export const getAllConstituenciesWithJoinRoute =
+  "/getallconstituencieswithjoin";
 export const getAllMandalsWithJoinRoute = "/getallmandalswithjoin";
 
 export const getOpinionDashboardRoute = "/getopinionpolldashboard";
