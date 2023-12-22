@@ -279,12 +279,26 @@ const ViewUsersList = ({
       },
     },
   ];
+  let options = {};
 
-  const options = {
-    elevation: 0,
-    selectableRows: "none",
-    responsive: "standard",
-  };
+  if (account.user?.desgination_name === "MLA") {
+    options = {
+      elevation: 0,
+      selectableRows: "none",
+      responsive: "standard",
+    };
+  } else {
+    options = {
+      elevation: 0,
+      selectableRows: "none",
+      responsive: "standard",
+      filter: false,
+      search: false,
+      download: false,
+      print: false,
+      viewColumns: false,
+    };
+  }
 
   const handleEdit = (id) => {
     var index = user.data.findIndex((e) => e.user_pk == id);

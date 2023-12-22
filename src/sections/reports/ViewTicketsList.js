@@ -1,19 +1,43 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Typography, Card, Stack, Grid, Switch, Divider, Box, Chip, TextField, MenuItem, IconButton, CircularProgress } from "@mui/material";
+import {
+  Typography,
+  Card,
+  Stack,
+  Grid,
+  Switch,
+  Divider,
+  Box,
+  Chip,
+  TextField,
+  MenuItem,
+  IconButton,
+  CircularProgress,
+} from "@mui/material";
 import Checkbox from "@mui/material/Checkbox";
 import MUIDataTable from "mui-datatables";
 import { connect } from "react-redux";
 import { showAlert } from "../../actions/alert";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import { ThemeProvider } from "@mui/material/styles";
-import { getMuiTableTheme, getTicketStatusById, searchFiltercolor } from "../../constants";
+import {
+  getMuiTableTheme,
+  getTicketStatusById,
+  searchFiltercolor,
+} from "../../constants";
 
 import { checkOrUncheckTicket } from "../../actions/ticket";
 import AnalyticsCard from "../common/AnalyticsCard";
 import { fToNow } from "../../utils/formatTime";
 
-const ViewTicketsList = ({ isUser, common, ticket, showAlert, checkOrUncheckTicket }) => {
+const ViewTicketsList = ({
+  isUser,
+  common,
+  ticket,
+  showAlert,
+  checkOrUncheckTicket,
+  account,
+}) => {
   const navigate = useNavigate();
   const [isLoading, setLoading] = useState(false);
   const [formValues, setFormValues] = useState({
@@ -28,7 +52,12 @@ const ViewTicketsList = ({ isUser, common, ticket, showAlert, checkOrUncheckTick
       options: {
         customBodyRender: (value, tableMeta, updateValue) => {
           var data = tableMeta.rowData;
-          return <Checkbox checked={value ?? false} onChange={(e) => checkOrUncheckTicket(data[1], e.target.checked)} />;
+          return (
+            <Checkbox
+              checked={value ?? false}
+              onChange={(e) => checkOrUncheckTicket(data[1], e.target.checked)}
+            />
+          );
         },
       },
     },
@@ -86,11 +115,26 @@ const ViewTicketsList = ({ isUser, common, ticket, showAlert, checkOrUncheckTick
     },
   ];
 
-  const options = {
-    elevation: 0,
-    selectableRows: "none",
-    responsive: "standard",
-  };
+  let options = {};
+
+  if (account.user?.desgination_name === "MLA") {
+    options = {
+      elevation: 0,
+      selectableRows: "none",
+      responsive: "standard",
+    };
+  } else {
+    options = {
+      elevation: 0,
+      selectableRows: "none",
+      responsive: "standard",
+      filter: false,
+      search: false,
+      download: false,
+      print: false,
+      viewColumns: false,
+    };
+  }
 
   const handleEdit = (data) => {
     if (isUser) {
@@ -138,13 +182,27 @@ const ViewTicketsList = ({ isUser, common, ticket, showAlert, checkOrUncheckTick
 
   return (
     <>
-      <AnalyticsCard names={["Total", "Open", "Resolved", "Cancelled", "Escalated"]} values={[ticket.analytics?.count, ticket.analytics?.open, ticket.analytics?.resolved, ticket.analytics?.cancelled, ticket.analytics?.escalated]} />
+      <AnalyticsCard
+        names={["Total", "Open", "Resolved", "Cancelled", "Escalated"]}
+        values={[
+          ticket.analytics?.count,
+          ticket.analytics?.open,
+          ticket.analytics?.resolved,
+          ticket.analytics?.cancelled,
+          ticket.analytics?.escalated,
+        ]}
+      />
 
       <Box p={1} />
 
       <Card elevation={1}>
         {ticket.isLoading && (
-          <Box minHeight={200} display="flex" justifyContent="center" alignItems="center">
+          <Box
+            minHeight={200}
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+          >
             <CircularProgress />
           </Box>
         )}
@@ -204,7 +262,12 @@ const ViewTicketsList = ({ isUser, common, ticket, showAlert, checkOrUncheckTick
             <Divider /> */}
 
             <ThemeProvider theme={getMuiTableTheme()}>
-              <MUIDataTable title="Tickets List" columns={columns} data={ticket.data ?? []} options={options} />
+              <MUIDataTable
+                title="Tickets List"
+                columns={columns}
+                data={ticket.data ?? []}
+                options={options}
+              />
             </ThemeProvider>
           </>
         )}
@@ -217,6 +280,7 @@ const mapStateToProps = (state) => {
   return {
     common: state.common,
     ticket: state.ticket,
+    account: state.auth,
   };
 };
 

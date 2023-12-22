@@ -122,12 +122,12 @@ const DashboardApp = ({
                 title={`Survey Status -${dashboard.opinion?.totalVoters ?? 0}`}
                 chartData={[
                   {
-                    label: "Started",
+                    label: "Completed",
                     value: dashboard.opinion?.survey_completed ?? 0,
                     // value: 100,
                   },
                   {
-                    label: "Not Started",
+                    label: "Not Completed",
                     value: dashboard.opinion?.survey_not_completed ?? 0,
                   },
                 ]}
@@ -214,14 +214,24 @@ const DashboardApp = ({
               <BarChartWidget
                 title="Tickets"
                 sx={{ height: "100%" }}
-                chartLabels={[
-                  "Pakala",
-                  "Ramchandrapuram",
-                  "Chinnagottigallu",
-                  "Chandragiri",
-                  "Yerravanipalem",
-                  "Tirupathi (Rural)",
-                ]}
+                // chartLabels={[
+                //   dashboard.opinion?.ticket_status_by_mandal?.[0]
+                //     ?.mandal_name ?? "Mandal 1",
+                //   dashboard.opinion?.ticket_status_by_mandal?.[1]
+                //     ?.mandal_name ?? "Mandal 2",
+                //   dashboard.opinion?.ticket_status_by_mandal?.[2]
+                //     ?.mandal_name ?? "Mandal 3",
+                //   dashboard.opinion?.ticket_status_by_mandal?.[3]
+                //     ?.mandal_name ?? "Mandal 4",
+                //   dashboard.opinion?.ticket_status_by_mandal?.[4]
+                //     ?.mandal_name ?? "Mandal 5",
+                //   dashboard.opinion?.ticket_status_by_mandal?.[5]
+                //     ?.mandal_name ?? "Mandal 6",
+                // ]}
+
+                chartLabels={(
+                  dashboard.opinion?.ticket_status_by_mandal || []
+                ).map((item) => item.mandal_name ?? "Mandal")}
                 chartColors={[
                   Colors.OpenColor,
                   Colors.ResolvedColor,
@@ -231,19 +241,30 @@ const DashboardApp = ({
                 chartData={[
                   {
                     name: "Open",
-                    data: [21, 7, 25, 13, 22, 8],
+                    data: dashboard.opinion?.ticket_status_by_mandal?.map(
+                      (item) =>
+                        item.open !== null && item.open !== undefined
+                          ? parseInt(item.open)
+                          : 0
+                    ),
                   },
                   {
                     name: "Resolved",
-                    data: [7, 7, 5, 13, 7, 3],
+                    data: dashboard.opinion?.ticket_status_by_mandal?.map(
+                      (item) => parseInt(item.resolved) ?? 0
+                    ),
                   },
                   {
                     name: "Cancel",
-                    data: [21, 7, 25, 13, 22, 8],
+                    data: dashboard.opinion?.ticket_status_by_mandal?.map(
+                      (item) => parseInt(item.canceled) ?? 0
+                    ),
                   },
                   {
                     name: "Escalated",
-                    data: [7, 7, 5, 13, 7, 3],
+                    data: dashboard.opinion?.ticket_status_by_mandal?.map(
+                      (item) => parseInt(item.escalated) ?? 0
+                    ),
                   },
                 ]}
               />
@@ -310,6 +331,7 @@ const DashboardApp = ({
                       dashboard.opinion?.disability_status?.[1]?.count ?? 0,
                   },
                 ]}
+                chartColors={[Colors.OpenColor, Colors.CancelColor]}
               />
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
@@ -329,6 +351,7 @@ const DashboardApp = ({
                       dashboard.opinion?.govt_employee_status?.[1]?.count ?? 0,
                   },
                 ]}
+                chartColors={[Colors.OpenColor, Colors.CancelColor]}
               />
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
@@ -348,6 +371,7 @@ const DashboardApp = ({
                       dashboard.opinion?.residential_status?.[1]?.count ?? 0,
                   },
                 ]}
+                chartColors={[Colors.OpenColor, Colors.CancelColor]}
               />
             </Grid>{" "}
             <Grid item xs={12} md={6} lg={4}>

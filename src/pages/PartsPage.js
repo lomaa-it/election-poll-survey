@@ -30,7 +30,7 @@ import {
 import { set } from "date-fns";
 import { showAlert } from "../actions/alert";
 
-const PartsPage = ({ dashboard }) => {
+const PartsPage = ({ dashboard, common }) => {
   const [refresh, setRefresh] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -445,6 +445,7 @@ const PartsPage = ({ dashboard }) => {
 const mapStateToProps = (state) => {
   return {
     dashboard: state.dashboard,
+    common: state.common,
   };
 };
 

@@ -8,6 +8,7 @@ import {
   getDashBoardbyResidentialStatus,
   getDashBoardbyStatusCount,
   getDashBoardbyTicketStatus,
+  getDashBoardbyTicketbarChart,
   getDashBoardbyTotalVoters,
   getDashBoardbyVoterPulse,
   getDashBoardbyageGroup,
@@ -38,6 +39,7 @@ export const getOpinionDashboard = (data) => async (dispatch, getState) => {
     instance.post(getDashBoardbyGovtEmployeeCount, data),
     instance.post(getDashBoardbyResidentialStatus, data),
     instance.post(getDashBoardbyageGroup, data),
+    instance.post(getDashBoardbyTicketbarChart, data),
     // instance.post(apiUrl2, data),
     // ... add more API calls as needed
   ];
@@ -195,6 +197,19 @@ export const getOpinionDashboard = (data) => async (dispatch, getState) => {
             console.log("Previous state:", previousState.dashboard);
             const { name, ...rest } = responseData;
             console.log("age_wise", rest);
+            dispatch({
+              type: `OPINION_DB_LOAD_SUCCESS`,
+              payload: {
+                ...previousState.dashboard.opinion,
+                ...rest,
+              },
+            });
+          }
+          if (responseData.name === "ticket_status_by_mandal") {
+            const previousState = getState();
+            console.log("Previous state:", previousState.dashboard);
+            const { name, ...rest } = responseData;
+            console.log("ticket_status_bar_chart", rest);
             dispatch({
               type: `OPINION_DB_LOAD_SUCCESS`,
               payload: {

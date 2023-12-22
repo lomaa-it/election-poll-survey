@@ -1,6 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Card, Stack, Box, CircularProgress, IconButton, Typography } from "@mui/material";
+import {
+  Card,
+  Stack,
+  Box,
+  CircularProgress,
+  IconButton,
+  Typography,
+} from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 
 import MUIDataTable from "mui-datatables";
@@ -8,13 +15,33 @@ import { connect } from "react-redux";
 import { showAlert } from "../../actions/alert";
 
 import EditNoteIcon from "@mui/icons-material/EditNote";
-import { PARTY_ID, ROWS_PER_PAGE_OPTION, getMuiTableTheme } from "../../constants";
+import {
+  PARTY_ID,
+  ROWS_PER_PAGE_OPTION,
+  getMuiTableTheme,
+} from "../../constants";
 import { changeOpinionPoll, getAllVotersSurvey } from "../../actions/voter";
-import { BJPRadio, CongressRadio, JSPRadio, NeutralRadio, OthersRadio, TDPRadio, YCPRadio } from "../common/PartyRadioButtons";
+import {
+  BJPRadio,
+  CongressRadio,
+  JSPRadio,
+  NeutralRadio,
+  OthersRadio,
+  TDPRadio,
+  YCPRadio,
+} from "../common/PartyRadioButtons";
 import UpdateVoterDialog from "../common/UpdateVoterDialog";
 import AnalyticsCard from "../common/AnalyticsCard";
 
-const OpinionPollSurveyList = ({ isUser, voter, filterValues, showAlert, changeOpinionPoll, getAllVotersSurvey }) => {
+const OpinionPollSurveyList = ({
+  isUser,
+  voter,
+  account,
+  filterValues,
+  showAlert,
+  changeOpinionPoll,
+  getAllVotersSurvey,
+}) => {
   const navigate = useNavigate();
 
   const columns = [
@@ -23,44 +50,6 @@ const OpinionPollSurveyList = ({ isUser, voter, filterValues, showAlert, changeO
       label: "Voter PK",
       options: {
         display: false,
-      },
-    },
-    {
-      name: "part_slno",
-      label: "Part Slno",
-    },
-    {
-      name: "voter_id",
-      label: "Voter ID",
-    },
-    {
-      name: "voter_name",
-      label: "Voter Name",
-    },
-    {
-      name: "guardian_name",
-      label: "Guardian Name",
-    },
-    {
-      name: "voter_age",
-      label: "Age",
-    },
-    {
-      name: "voter_phone_no",
-      label: "Phone",
-      options: {
-        customBodyRender: (value, tableMeta, updateValue) => {
-          var data = tableMeta.rowData;
-          var index = voter.data.findIndex((e) => e.voter_pkk == data[0]);
-
-          return (
-            <Stack direction="row" alignItems="center">
-              <Typography>{value ?? "-"}</Typography>
-
-              {index != -1 && <UpdateVoterDialog voterData={voter.data[index]} />}
-            </Stack>
-          );
-        },
       },
     },
     {
@@ -98,7 +87,12 @@ const OpinionPollSurveyList = ({ isUser, voter, filterValues, showAlert, changeO
         customBodyRender: (value, tableMeta, updateValue) => {
           var data = tableMeta.rowData;
           var partyId = PARTY_ID.YSRCP;
-          return <YCPRadio checked={value == partyId} onChange={() => handleChange(data[0], partyId)} />;
+          return (
+            <YCPRadio
+              checked={value == partyId}
+              onChange={() => handleChange(data[0], partyId)}
+            />
+          );
         },
       },
     },
@@ -110,7 +104,12 @@ const OpinionPollSurveyList = ({ isUser, voter, filterValues, showAlert, changeO
         customBodyRender: (value, tableMeta, updateValue) => {
           var data = tableMeta.rowData;
           var partyId = PARTY_ID.TDP;
-          return <TDPRadio checked={value == partyId} onChange={() => handleChange(data[0], partyId)} />;
+          return (
+            <TDPRadio
+              checked={value == partyId}
+              onChange={() => handleChange(data[0], partyId)}
+            />
+          );
         },
       },
     },
@@ -121,7 +120,12 @@ const OpinionPollSurveyList = ({ isUser, voter, filterValues, showAlert, changeO
         customBodyRender: (value, tableMeta, updateValue) => {
           var data = tableMeta.rowData;
           var partyId = PARTY_ID.JANASENA;
-          return <JSPRadio checked={value == partyId} onChange={() => handleChange(data[0], partyId)} />;
+          return (
+            <JSPRadio
+              checked={value == partyId}
+              onChange={() => handleChange(data[0], partyId)}
+            />
+          );
         },
       },
     },
@@ -132,7 +136,12 @@ const OpinionPollSurveyList = ({ isUser, voter, filterValues, showAlert, changeO
         customBodyRender: (value, tableMeta, updateValue) => {
           var data = tableMeta.rowData;
           var partyId = PARTY_ID.BJP;
-          return <BJPRadio checked={value == partyId} onChange={() => handleChange(data[0], partyId)} />;
+          return (
+            <BJPRadio
+              checked={value == partyId}
+              onChange={() => handleChange(data[0], partyId)}
+            />
+          );
         },
       },
     },
@@ -143,7 +152,12 @@ const OpinionPollSurveyList = ({ isUser, voter, filterValues, showAlert, changeO
         customBodyRender: (value, tableMeta, updateValue) => {
           var data = tableMeta.rowData;
           var partyId = PARTY_ID.CONGRESS;
-          return <CongressRadio checked={value == partyId} onChange={() => handleChange(data[0], partyId)} />;
+          return (
+            <CongressRadio
+              checked={value == partyId}
+              onChange={() => handleChange(data[0], partyId)}
+            />
+          );
         },
       },
     },
@@ -154,10 +168,79 @@ const OpinionPollSurveyList = ({ isUser, voter, filterValues, showAlert, changeO
         customBodyRender: (value, tableMeta, updateValue) => {
           var data = tableMeta.rowData;
           var partyId = PARTY_ID.OTHERS;
-          return <OthersRadio checked={value == partyId} onChange={() => handleChange(data[0], partyId)} />;
+          var index = voter.data.findIndex((e) => e.voter_pkk == data[0]);
+          return (
+            <Stack direction="row" alignItems="center">
+              <OthersRadio
+                checked={value == partyId}
+                onChange={() => handleChange(data[0], partyId)}
+              />
+              {index != -1 && (
+                <UpdateVoterDialog voterData={voter.data[index]} />
+              )}
+            </Stack>
+          );
         },
       },
     },
+    {
+      name: "part_no",
+      label: "Part No",
+    },
+    {
+      name: "part_slno",
+      label: "Part Slno",
+    },
+
+    {
+      name: "voter_id",
+      label: "Voter ID",
+    },
+    {
+      name: "voter_name",
+      label: "Voter Name",
+    },
+    {
+      name: "guardian_type",
+      label: "Guardian",
+    },
+    {
+      name: "guardian_name",
+      label: "Guardian Name",
+    },
+    {
+      name: "gender_type",
+      label: "Gender",
+    },
+    {
+      name: "voter_age",
+      label: "Age",
+    },
+    {
+      name: "current_address",
+      label: "Current Address",
+    },
+    {
+      name: "voter_phone_no",
+      label: "Phone",
+      options: {
+        customBodyRender: (value, tableMeta, updateValue) => {
+          var data = tableMeta.rowData;
+          var index = voter.data.findIndex((e) => e.voter_pkk == data[0]);
+
+          return (
+            <Stack direction="row" alignItems="center">
+              <Typography>{value ?? "-"}</Typography>
+
+              {/* {index != -1 && (
+                <UpdateVoterDialog voterData={voter.data[index]} />
+              )} */}
+            </Stack>
+          );
+        },
+      },
+    },
+
     {
       name: "religion_name",
       label: "Religion",
@@ -193,10 +276,7 @@ const OpinionPollSurveyList = ({ isUser, voter, filterValues, showAlert, changeO
         },
       },
     },
-    {
-      name: "current_address",
-      label: "Current Address",
-    },
+
     {
       name: "volunteer_id",
       label: "Volunteer",
@@ -209,33 +289,97 @@ const OpinionPollSurveyList = ({ isUser, voter, filterValues, showAlert, changeO
       label: "Permanent Address",
     },
   ];
+  let options = {};
 
-  const options = {
-    elevation: 0,
-    selectableRows: "none",
-    responsive: "standard",
-    serverSide: true,
-    count: voter.count,
-    page: voter.page,
-    rowsPerPage: voter.limit,
-    rowsPerPageOptions: ROWS_PER_PAGE_OPTION,
-    onTableChange: (action, tableState) => {
-      switch (action) {
-        case "changePage":
-          handleRetrieveData(tableState);
-          break;
-        case "changeRowsPerPage":
-          handleRetrieveData(tableState);
-          break;
-        default:
-        // console.log("action not handled.");
-        // console.log(action, tableState);
-      }
-    },
-  };
+  if (account.user?.desgination_name === "MLA") {
+    options = {
+      rowHeight: "100px",
+      elevation: 0,
+      selectableRows: "none",
+      responsive: "standard",
+      serverSide: true,
+      count: voter.count,
+      page: voter.page,
+      rowsPerPage: voter.limit,
+      rowsPerPageOptions: ROWS_PER_PAGE_OPTION,
+      onTableChange: (action, tableState) => {
+        switch (action) {
+          case "changePage":
+            handleRetrieveData(tableState);
+            break;
+          case "changeRowsPerPage":
+            handleRetrieveData(tableState);
+            break;
+          default:
+          // console.log("action not handled.");
+          // console.log(action, tableState);
+        }
+      },
+    };
+  } else {
+    options = {
+      rowHeight: "100px",
+      elevation: 0,
+      selectableRows: "none",
+      responsive: "standard",
+      serverSide: true,
+      filter: false,
+      search: false,
+      download: false,
+      print: false,
+      viewColumns: false,
+      count: voter.count,
+      page: voter.page,
+      rowsPerPage: voter.limit,
+      rowsPerPageOptions: ROWS_PER_PAGE_OPTION,
+      onTableChange: (action, tableState) => {
+        switch (action) {
+          case "changePage":
+            handleRetrieveData(tableState);
+            break;
+          case "changeRowsPerPage":
+            handleRetrieveData(tableState);
+            break;
+          default:
+          // console.log("action not handled.");
+          // console.log(action, tableState);
+        }
+      },
+    };
+  }
+
+  // const options = {
+  //   elevation: 0,
+  //   selectableRows: "none",
+  //   responsive: "standard",
+  //   serverSide: true,
+  //   filter: false,
+  //   search: false,
+  //   download: false,
+  //   print: false,
+  //   viewColumns: false,
+  //   count: voter.count,
+  //   page: voter.page,
+  //   rowsPerPage: voter.limit,
+  //   rowsPerPageOptions: ROWS_PER_PAGE_OPTION,
+  //   onTableChange: (action, tableState) => {
+  //     switch (action) {
+  //       case "changePage":
+  //         handleRetrieveData(tableState);
+  //         break;
+  //       case "changeRowsPerPage":
+  //         handleRetrieveData(tableState);
+  //         break;
+  //       default:
+  //       // console.log("action not handled.");
+  //       // console.log(action, tableState);
+  //     }
+  //   },
+  // };
 
   const handleChange = async (id, value) => {
-    var result = await changeOpinionPoll(id, value);
+    const volunteer_id = account.user?.user_pk;
+    var result = await changeOpinionPoll(id, value, volunteer_id);
     if (result) {
       showAlert({ text: "Opinion Submitted", color: "success" });
     }
@@ -255,20 +399,33 @@ const OpinionPollSurveyList = ({ isUser, voter, filterValues, showAlert, changeO
 
   return (
     <>
-      <AnalyticsCard names={["Total Voters", "Survey Completed", "Pending"]} values={[voter.count, voter.completed, voter.pending]} />
+      <AnalyticsCard
+        names={["Total Voters", "Survey Completed", "Pending"]}
+        values={[voter.count, voter.completed, voter.pending]}
+      />
 
       <Box p={1} />
 
       <Card elevation={1}>
         {voter.isLoading && (
-          <Box minHeight={200} display="flex" justifyContent="center" alignItems="center">
+          <Box
+            minHeight={200}
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+          >
             <CircularProgress />
           </Box>
         )}
 
         {!voter.isLoading && (
           <ThemeProvider theme={getMuiTableTheme()}>
-            <MUIDataTable title="Opinion Poll" columns={columns} data={voter.data} options={options} />
+            <MUIDataTable
+              title="Opinion Poll"
+              columns={columns}
+              data={voter.data}
+              options={options}
+            />
           </ThemeProvider>
         )}
       </Card>
@@ -279,6 +436,7 @@ const OpinionPollSurveyList = ({ isUser, voter, filterValues, showAlert, changeO
 const mapStateToProps = (state) => {
   return {
     voter: state.voter,
+    account: state.auth,
   };
 };
 

@@ -36,6 +36,7 @@ const SurveyReportsList = ({
   dashboard,
   getOpinionResults,
   clearDashboardReducer,
+  account,
 }) => {
   const [filterValues, setFilterValues] = useState(null);
   const [isLoading, setLoading] = useState(false);
@@ -168,12 +169,26 @@ const SurveyReportsList = ({
       },
     },
   ];
+  let options = {};
 
-  const options = {
-    elevation: 0,
-    selectableRows: "none",
-    responsive: "standard",
-  };
+  if (account.user?.desgination_name === "MLA") {
+    options = {
+      elevation: 0,
+      selectableRows: "none",
+      responsive: "standard",
+    };
+  } else {
+    options = {
+      elevation: 0,
+      selectableRows: "none",
+      responsive: "standard",
+      filter: false,
+      search: false,
+      download: false,
+      print: false,
+      viewColumns: false,
+    };
+  }
 
   const getMuiTheme = () =>
     createTheme({
@@ -317,6 +332,7 @@ const SurveyReportsList = ({
 const mapStateToProps = (state) => {
   return {
     dashboard: state.dashboard,
+    account: state.auth,
   };
 };
 

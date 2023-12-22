@@ -19,7 +19,7 @@ import KeyboardDoubleArrowUpIcon from "@mui/icons-material/KeyboardDoubleArrowUp
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { searchFiltercolor } from "../../constants";
 
-const OpinionPollSurveyResultsList = ({ dashboard, showAlert }) => {
+const OpinionPollSurveyResultsList = ({ dashboard, showAlert, account }) => {
   useEffect(() => {}, []);
 
   const columns = [
@@ -77,11 +77,31 @@ const OpinionPollSurveyResultsList = ({ dashboard, showAlert }) => {
     },
   ];
 
-  const options = {
-    elevation: 0,
-    selectableRows: "none",
-    responsive: "standard",
-  };
+  // const options = {
+  //   elevation: 0,
+  //   selectableRows: "none",
+  //   responsive: "standard",
+  // };
+  let options = {};
+
+  if (account.user?.desgination_name === "MLA") {
+    options = {
+      elevation: 0,
+      selectableRows: "none",
+      responsive: "standard",
+    };
+  } else {
+    options = {
+      elevation: 0,
+      selectableRows: "none",
+      responsive: "standard",
+      filter: false,
+      search: false,
+      download: false,
+      print: false,
+      viewColumns: false,
+    };
+  }
 
   const renderHighVote = () => {
     return (
@@ -225,6 +245,7 @@ const OpinionPollSurveyResultsList = ({ dashboard, showAlert }) => {
 const mapStateToProps = (state) => {
   return {
     dashboard: state.dashboard,
+    account: state.auth,
   };
 };
 

@@ -2,9 +2,23 @@ import { createTheme } from "@mui/material";
 import { format, isValid, formatDistanceToNow } from "date-fns";
 
 export const bgColors = ["#F79256", "#FBD1A2", "#7DCFB6", "#00B2CA", "#1D4E89"];
-export const bgColors1 = ["#d44c2c", "#e9c474", "#1c717c", "#8f834b", "#d6742b"];
+export const bgColors1 = [
+  "#d44c2c",
+  "#e9c474",
+  "#1c717c",
+  "#8f834b",
+  "#d6742b",
+];
 
-export const LOGIN_TYPES = ["MLA", "MANDAL_CONVENER/CPRO", "PRO", "APRO", "BOOTH_INCHARGE", "VOLUNTEER", "GRUHASARATHI"];
+export const LOGIN_TYPES = [
+  "MLA",
+  "MANDAL_CONVENER/CPRO",
+  "PRO",
+  "APRO",
+  "BOOTH_INCHARGE",
+  "VOLUNTEER",
+  "GRUHASARATHI",
+];
 
 export const searchFiltercolor = "#D3F0E3";
 
@@ -28,6 +42,20 @@ export const getMuiTableTheme = () =>
         styleOverrides: {
           root: {
             backgroundColor: searchFiltercolor,
+          },
+        },
+      },
+      MuiTableCell: {
+        styleOverrides: {
+          root: {
+            padding: "10px 15px", // adjust as needed
+          },
+        },
+      },
+      MuiTableRow: {
+        styleOverrides: {
+          root: {
+            height: "40px", // adjust as needed
           },
         },
       },

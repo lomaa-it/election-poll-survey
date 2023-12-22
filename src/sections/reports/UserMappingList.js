@@ -1,5 +1,20 @@
 import { useEffect, useState } from "react";
-import { Card, Stack, Grid, Switch, Divider, Box, Chip, TextField, FormControlLabel, Typography, Checkbox, CircularProgress, Button, MenuItem } from "@mui/material";
+import {
+  Card,
+  Stack,
+  Grid,
+  Switch,
+  Divider,
+  Box,
+  Chip,
+  TextField,
+  FormControlLabel,
+  Typography,
+  Checkbox,
+  CircularProgress,
+  Button,
+  MenuItem,
+} from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { CheckBox } from "@mui/icons-material";
 import MUIDataTable from "mui-datatables";
@@ -13,7 +28,15 @@ import { designationMappingRoute } from "../../utils/apis";
 import { LoadingButton } from "@mui/lab";
 import { json } from "react-router-dom";
 
-const UserMappingList = ({ common, user, filterValues, showAlert, checkOrUncheckUser, clearUserReducer }) => {
+const UserMappingList = ({
+  common,
+  user,
+  filterValues,
+  showAlert,
+  checkOrUncheckUser,
+  clearUserReducer,
+  account,
+}) => {
   const [isLoading, setLoading] = useState(false);
   const [formValues, setFormValues] = useState({
     partno: "",
@@ -33,7 +56,12 @@ const UserMappingList = ({ common, user, filterValues, showAlert, checkOrUncheck
         customBodyRender: (value, tableMeta, updateValue) => {
           var data = tableMeta.rowData;
           if (data[2] == 37 || data[2] == 38) {
-            return <Checkbox checked={value ?? false} onChange={(e) => checkOrUncheckUser(data[1], e.target.checked)} />;
+            return (
+              <Checkbox
+                checked={value ?? false}
+                onChange={(e) => checkOrUncheckUser(data[1], e.target.checked)}
+              />
+            );
           }
           return null;
         },
@@ -97,19 +125,35 @@ const UserMappingList = ({ common, user, filterValues, showAlert, checkOrUncheck
       },
     },
   ];
+  let options = {};
 
-  const options = {
-    elevation: 0,
-    selectableRows: "none",
-    responsive: "standard",
-  };
+  if (account.user?.desgination_name === "MLA") {
+    options = {
+      elevation: 0,
+      selectableRows: "none",
+      responsive: "standard",
+    };
+  } else {
+    options = {
+      elevation: 0,
+      selectableRows: "none",
+      responsive: "standard",
+      filter: false,
+      search: false,
+      download: false,
+      print: false,
+      viewColumns: false,
+    };
+  }
 
   const handleChange = (name, value) => {
     setFormValues((state) => ({ ...state, [name]: value }));
   };
 
   const handleSubmit = async () => {
-    var userList = user.data.filter((e) => e.isCheck == true).map((e) => e.user_pk);
+    var userList = user.data
+      .filter((e) => e.isCheck == true)
+      .map((e) => e.user_pk);
     if (!formValues["partno"]) {
       showAlert({ text: "Please select partno" });
       return;
@@ -150,7 +194,12 @@ const UserMappingList = ({ common, user, filterValues, showAlert, checkOrUncheck
   return (
     <Card elevation={1}>
       {user.isLoading && (
-        <Box minHeight={200} display="flex" justifyContent="center" alignItems="center">
+        <Box
+          minHeight={200}
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+        >
           <CircularProgress />
         </Box>
       )}
@@ -164,9 +213,19 @@ const UserMappingList = ({ common, user, filterValues, showAlert, checkOrUncheck
 
             <Grid container spacing={2} alignItems="center">
               <Grid item xs={12} md={6} lg={3}>
-                <TextField name="partno" value={formValues.partno} size="small" fullWidth label="Select Part/Booth No" select onChange={(e) => handleChange(e.target.name, e.target.value)}>
+                <TextField
+                  name="partno"
+                  value={formValues.partno}
+                  size="small"
+                  fullWidth
+                  label="Select Part/Booth No"
+                  select
+                  onChange={(e) => handleChange(e.target.name, e.target.value)}
+                >
                   {common.parts
-                    .filter((e) => e.sachivalayam_id == filterValues?.sachivalayam_id)
+                    .filter(
+                      (e) => e.sachivalayam_id == filterValues?.sachivalayam_id
+                    )
                     ?.map((item, index) => (
                       <MenuItem key={index} value={item.part_no}>
                         {item.part_no}
@@ -176,7 +235,11 @@ const UserMappingList = ({ common, user, filterValues, showAlert, checkOrUncheck
               </Grid>
 
               <Grid item xs={12} md={6} lg={3}>
-                <LoadingButton loading={isLoading} variant="outlined" onClick={handleSubmit}>
+                <LoadingButton
+                  loading={isLoading}
+                  variant="outlined"
+                  onClick={handleSubmit}
+                >
                   Assign Part No
                 </LoadingButton>
               </Grid>
@@ -186,7 +249,12 @@ const UserMappingList = ({ common, user, filterValues, showAlert, checkOrUncheck
           <Divider />
 
           <ThemeProvider theme={getMuiTableTheme()}>
-            <MUIDataTable title="Users List" columns={columns} data={user.data} options={options} />
+            <MUIDataTable
+              title="Users List"
+              columns={columns}
+              data={user.data}
+              options={options}
+            />
           </ThemeProvider>
         </>
       )}
@@ -198,6 +266,7 @@ const mapStateToProps = (state) => {
   return {
     common: state.common,
     user: state.user,
+    account: state.auth,
   };
 };
 

@@ -1,5 +1,16 @@
 import { useEffect, useState } from "react";
-import { Typography, Card, Stack, Grid, Switch, Divider, Box, Chip, TextField, CircularProgress } from "@mui/material";
+import {
+  Typography,
+  Card,
+  Stack,
+  Grid,
+  Switch,
+  Divider,
+  Box,
+  Chip,
+  TextField,
+  CircularProgress,
+} from "@mui/material";
 import { CheckBox } from "@mui/icons-material";
 import MUIDataTable from "mui-datatables";
 import { connect } from "react-redux";
@@ -8,24 +19,47 @@ import { LoadingButton } from "@mui/lab";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { ROWS_PER_PAGE_OPTION, getMuiTableTheme, searchFiltercolor } from "../../constants";
+import {
+  ROWS_PER_PAGE_OPTION,
+  getMuiTableTheme,
+  searchFiltercolor,
+} from "../../constants";
 import { getAllVotersSurvey } from "../../actions/voter";
 
-const ViewVotersList = ({ voter, filterValues, showAlert, getAllVotersSurvey }) => {
+const ViewVotersList = ({
+  voter,
+  filterValues,
+  showAlert,
+  getAllVotersSurvey,
+  account,
+}) => {
   const columns = [
-    { name: "voter_id", label: "Voter ID" },
+    {
+      name: "part_no",
+      label: "Part No",
+    },
     {
       name: "part_slno",
       label: "Part Slno",
     },
+    { name: "voter_id", label: "Voter ID" },
     {
       name: "voter_name",
       label: "Voter Name",
     },
-    { name: "guardian_name", label: "Father/Mother/Husband" },
+    { name: "guardian_name", label: "Guardian Name" },
+    { name: "guardian_type", label: "Guardian" },
     {
       name: "gender_type",
       label: "Gender",
+    },
+    {
+      name: "age",
+      label: "Age",
+    },
+    {
+      name: "current_address",
+      label: "Current Address",
     },
     {
       name: "is_resident",
@@ -42,10 +76,6 @@ const ViewVotersList = ({ voter, filterValues, showAlert, getAllVotersSurvey }) 
     },
 
     {
-      name: "age",
-      label: "Age",
-    },
-    {
       name: "voter_pkk",
       label: "Edit/Delete",
       options: {
@@ -61,29 +91,62 @@ const ViewVotersList = ({ voter, filterValues, showAlert, getAllVotersSurvey }) 
     },
   ];
 
-  const options = {
-    elevation: 0,
-    selectableRows: "none",
-    responsive: "standard",
-    serverSide: true,
-    count: voter.count,
-    page: voter.page,
-    rowsPerPage: voter.limit,
-    rowsPerPageOptions: ROWS_PER_PAGE_OPTION,
-    onTableChange: (action, tableState) => {
-      switch (action) {
-        case "changePage":
-          handleRetrieveData(tableState);
-          break;
-        case "changeRowsPerPage":
-          handleRetrieveData(tableState);
-          break;
-        default:
-        // console.log("action not handled.");
-        // console.log(action, tableState);
-      }
-    },
-  };
+  let options = {};
+
+  if (account.user?.desgination_name === "MLA") {
+    options = {
+      elevation: 0,
+      selectableRows: "none",
+      responsive: "standard",
+      serverSide: true,
+      count: voter.count,
+      page: voter.page,
+      rowsPerPage: voter.limit,
+      rowsPerPageOptions: ROWS_PER_PAGE_OPTION,
+      onTableChange: (action, tableState) => {
+        switch (action) {
+          case "changePage":
+            handleRetrieveData(tableState);
+            break;
+          case "changeRowsPerPage":
+            handleRetrieveData(tableState);
+            break;
+          default:
+          // console.log("action not handled.");
+          // console.log(action, tableState);
+        }
+      },
+    };
+  } else {
+    options = {
+      elevation: 0,
+      selectableRows: "none",
+      responsive: "standard",
+      serverSide: true,
+      filter: false,
+      search: false,
+      download: false,
+      print: false,
+      viewColumns: false,
+      count: voter.count,
+      page: voter.page,
+      rowsPerPage: voter.limit,
+      rowsPerPageOptions: ROWS_PER_PAGE_OPTION,
+      onTableChange: (action, tableState) => {
+        switch (action) {
+          case "changePage":
+            handleRetrieveData(tableState);
+            break;
+          case "changeRowsPerPage":
+            handleRetrieveData(tableState);
+            break;
+          default:
+          // console.log("action not handled.");
+          // console.log(action, tableState);
+        }
+      },
+    };
+  }
 
   const handleRetrieveData = (tableState) => {
     getAllVotersSurvey(filterValues, tableState.page, tableState.rowsPerPage);
@@ -110,14 +173,24 @@ const ViewVotersList = ({ voter, filterValues, showAlert, getAllVotersSurvey }) 
   return (
     <Card elevation={1}>
       {voter.isLoading && (
-        <Box minHeight={200} display="flex" justifyContent="center" alignItems="center">
+        <Box
+          minHeight={200}
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+        >
           <CircularProgress />
         </Box>
       )}
 
       {!voter.isLoading && (
         <ThemeProvider theme={getMuiTableTheme()}>
-          <MUIDataTable title="Voter List" columns={columns} data={voter.data} options={options} />
+          <MUIDataTable
+            title="Voter List"
+            columns={columns}
+            data={voter.data}
+            options={options}
+          />
         </ThemeProvider>
       )}
     </Card>
@@ -127,6 +200,7 @@ const ViewVotersList = ({ voter, filterValues, showAlert, getAllVotersSurvey }) 
 const mapStateToProps = (state) => {
   return {
     voter: state.voter,
+    account: state.auth,
   };
 };
 
