@@ -9,8 +9,8 @@
 // export const baseServerUrl = "https://backend.cgrysrcongress.in";/
 // export const baseServerUrl = "http://192.168.137.220:8080";
 /// new
-// export const baseServerUrl = "https://poll2.onrender.com";
-export const baseServerUrl = "http://192.168.0.102:8080";
+export const baseServerUrl = "https://poll2.onrender.com";
+// export const baseServerUrl = "http://192.168.0.102:8080";
 
 // Survey Dashboard Apis
 export const getDashBoardbyTotalVoters = "/getdashboardbytotalvoters";
