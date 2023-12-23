@@ -27,6 +27,7 @@ export const ROWS_PER_PAGE_OPTION = [50, 100, 200];
 
 export const PUBLIC_URL = process.env.PUBLIC_URL;
 
+export const numRegExp = /^[0-9]+$/;
 // export const phoneRegExp = /\d{10}$/;
 export const phoneRegExp = /^[6-9]\d{9}$/;
 
@@ -42,20 +43,6 @@ export const getMuiTableTheme = () =>
         styleOverrides: {
           root: {
             backgroundColor: searchFiltercolor,
-          },
-        },
-      },
-      MuiTableCell: {
-        styleOverrides: {
-          root: {
-            padding: "10px 15px", // adjust as needed
-          },
-        },
-      },
-      MuiTableRow: {
-        styleOverrides: {
-          root: {
-            height: "40px", // adjust as needed
           },
         },
       },

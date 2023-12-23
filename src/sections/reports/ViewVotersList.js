@@ -91,62 +91,36 @@ const ViewVotersList = ({
     },
   ];
 
-  let options = {};
-
-  if (account.user?.desgination_name === "MLA") {
-    options = {
-      elevation: 0,
-      selectableRows: "none",
-      responsive: "standard",
-      serverSide: true,
-      count: voter.count,
-      page: voter.page,
-      rowsPerPage: voter.limit,
-      rowsPerPageOptions: ROWS_PER_PAGE_OPTION,
-      onTableChange: (action, tableState) => {
-        switch (action) {
-          case "changePage":
-            handleRetrieveData(tableState);
-            break;
-          case "changeRowsPerPage":
-            handleRetrieveData(tableState);
-            break;
-          default:
-          // console.log("action not handled.");
-          // console.log(action, tableState);
-        }
-      },
-    };
-  } else {
-    options = {
-      elevation: 0,
-      selectableRows: "none",
-      responsive: "standard",
-      serverSide: true,
+  const options = {
+    elevation: 0,
+    selectableRows: "none",
+    responsive: "standard",
+    serverSide: true,
+    ...(account.user?.desgination_name != "MLA" && {
       filter: false,
       search: false,
       download: false,
       print: false,
       viewColumns: false,
-      count: voter.count,
-      page: voter.page,
-      rowsPerPage: voter.limit,
-      rowsPerPageOptions: ROWS_PER_PAGE_OPTION,
-      onTableChange: (action, tableState) => {
-        switch (action) {
-          case "changePage":
-            handleRetrieveData(tableState);
-            break;
-          case "changeRowsPerPage":
-            handleRetrieveData(tableState);
-            break;
-          default:
-          // console.log("action not handled.");
-          // console.log(action, tableState);
-        }
-      },
-    };
-  }
+    }),
+    count: voter.count,
+    page: voter.page,
+    rowsPerPage: voter.limit,
+    rowsPerPageOptions: ROWS_PER_PAGE_OPTION,
+    onTableChange: (action, tableState) => {
+      switch (action) {
+        case "changePage":
+          handleRetrieveData(tableState);
+          break;
+        case "changeRowsPerPage":
+          handleRetrieveData(tableState);
+          break;
+        default:
+        // console.log("action not handled.");
+        // console.log(action, tableState);
+      }
+    },
+  };
 
   const handleRetrieveData = (tableState) => {
     getAllVotersSurvey(filterValues, tableState.page, tableState.rowsPerPage);

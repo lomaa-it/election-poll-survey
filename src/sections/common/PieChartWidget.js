@@ -4,9 +4,10 @@ import { Card, CardHeader } from "@mui/material";
 import { useChart } from "../../components/chart";
 import { fNumber } from "../../utils/formatNumber";
 import { Typography } from "@mui/material";
+import { VerticalAlignBottom } from "@mui/icons-material";
 
 const CHART_HEIGHT = 352;
-const LEGEND_HEIGHT = 72;
+const LEGEND_HEIGHT = 80;
 
 const StyledChartWrapper = styled("div")(({ theme }) => ({
   height: CHART_HEIGHT,
@@ -44,8 +45,17 @@ export default function PieChartWidget({
     labels: chartData.map((item) => item.label + ` (${fNumber(item.value)})`),
     // labels: chartLabels,
     stroke: { colors: [theme.palette.background.paper] },
-    legend: { floating: true, horizontalAlign: "center" },
-    dataLabels: { enabled: true, dropShadow: { enabled: false } },
+    legend: {
+      floating: true,
+      horizontalAlign: "center",
+      verticalAlign: "center",
+      fontSize: "10px",
+    },
+    dataLabels: {
+      enabled: true,
+      minAngleToShowLabel: 0,
+      dropShadow: { enabled: false },
+    },
     tooltip: {
       fillSeriesColor: false,
       y: {
@@ -56,7 +66,14 @@ export default function PieChartWidget({
       },
     },
     plotOptions: {
-      pie: { donut: { labels: { show: false } } },
+      pie: {
+        donut: {
+          labels: { show: false },
+        },
+        dataLabels: {
+          minAngleToShowLabel: 0,
+        },
+      },
     },
   });
 

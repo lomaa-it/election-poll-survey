@@ -3,7 +3,14 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Stack, IconButton, InputAdornment, TextField, Typography, Box } from "@mui/material";
+import {
+  Stack,
+  IconButton,
+  InputAdornment,
+  TextField,
+  Typography,
+  Box,
+} from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import { LoadingButton } from "@mui/lab";
 import Iconify from "../../../components/Iconify";
@@ -27,8 +34,12 @@ const LoginForm = ({ showAlert, authSuccess }) => {
   const canvasRef = useRef(null);
 
   const LoginSchema = Yup.object().shape({
-    username: Yup.string().matches(phoneRegExp, "Phone number is not valid").required("Phone number is required"),
-    password: Yup.string().required("Password is required").min(8, "Password must be at least 8 characters"),
+    username: Yup.string()
+      .matches(phoneRegExp, "Phone number is not valid")
+      .required("Phone number is required"),
+    password: Yup.string()
+      .required("Password is required")
+      .min(8, "Password must be at least 8 characters"),
     // .matches(
     //   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
     //   "Password must have at least: 1 uppercase, 1 lowercase, 1 number, and 1 special character."
@@ -54,7 +65,8 @@ const LoginForm = ({ showAlert, authSuccess }) => {
     initializeCaptcha(ctx);
   }, []);
 
-  const generateRandomChar = (min, max) => String.fromCharCode(Math.floor(Math.random() * (max - min + 1) + min));
+  const generateRandomChar = (min, max) =>
+    String.fromCharCode(Math.floor(Math.random() * (max - min + 1) + min));
 
   const generateCaptchaText = () => {
     let captcha = "";
@@ -77,7 +89,12 @@ const LoginForm = ({ showAlert, authSuccess }) => {
       const xInitialSpace = 25;
       ctx.font = "20px Roboto Mono";
       ctx.fillStyle = textColors[Math.floor(Math.random() * 2)];
-      ctx.fillText(captcha[i], xInitialSpace + i * letterSpace, Math.floor(Math.random() * 16 + 25), 100);
+      ctx.fillText(
+        captcha[i],
+        xInitialSpace + i * letterSpace,
+        Math.floor(Math.random() * 16 + 25),
+        100
+      );
     }
   };
 
@@ -106,7 +123,7 @@ const LoginForm = ({ showAlert, authSuccess }) => {
     try {
       const response = await instance.post(loginRoute, data);
       const responseData = response.data?.message ?? [];
-      console.log(responseData);
+      console.log("responseData", responseData);
       setLoading(false);
 
       if (responseData.length == 1) {
@@ -146,8 +163,13 @@ const LoginForm = ({ showAlert, authSuccess }) => {
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
-                  <Iconify icon={showPassword ? "eva:eye-fill" : "eva:eye-off-fill"} />
+                <IconButton
+                  onClick={() => setShowPassword(!showPassword)}
+                  edge="end"
+                >
+                  <Iconify
+                    icon={showPassword ? "eva:eye-fill" : "eva:eye-off-fill"}
+                  />
                 </IconButton>
               </InputAdornment>
             ),
@@ -172,7 +194,11 @@ const LoginForm = ({ showAlert, authSuccess }) => {
           >
             <canvas ref={canvasRef} width="195" height="46"></canvas>
           </Box>
-          <CachedIcon onClick={() => initializeCaptcha(canvasRef.current.getContext("2d"))} />
+          <CachedIcon
+            onClick={() =>
+              initializeCaptcha(canvasRef.current.getContext("2d"))
+            }
+          />
         </Box>
         {/* <img
           className="captcha-image"
@@ -189,13 +215,24 @@ const LoginForm = ({ showAlert, authSuccess }) => {
         />
       </Stack>
 
-      <Stack direction="row" alignItems="center" justifyContent="end" sx={{ my: 1 }}>
+      <Stack
+        direction="row"
+        alignItems="center"
+        justifyContent="end"
+        sx={{ my: 1 }}
+      >
         <Link to="/forget-password" underline="hover" style={{ fontSize: 16 }}>
           Forgot password?
         </Link>
       </Stack>
 
-      <LoadingButton fullWidth loading={isLoading} size="medium" type="submit" variant="contained">
+      <LoadingButton
+        fullWidth
+        loading={isLoading}
+        size="medium"
+        type="submit"
+        variant="contained"
+      >
         Login
       </LoadingButton>
     </FormProvider>

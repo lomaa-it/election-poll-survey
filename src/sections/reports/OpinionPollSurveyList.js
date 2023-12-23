@@ -62,8 +62,11 @@ const OpinionPollSurveyList = ({
           var index = voter.data.findIndex((e) => e.voter_pkk == data[0]);
 
           return (
-            <Stack direction="row" alignItems="center">
+            <Stack direction="row" alignItems="center" spacing={2}>
               <NeutralRadio
+                sx={{
+                  p: 0,
+                }}
                 checked={value == partyId}
                 onChange={() => {
                   handleChange(data[0], partyId);
@@ -71,7 +74,12 @@ const OpinionPollSurveyList = ({
               />
 
               {value == PARTY_ID.NEUTRAL && (
-                <IconButton onClick={() => handleEdit(voter.data[index])}>
+                <IconButton
+                  onClick={() => handleEdit(voter.data[index])}
+                  sx={{
+                    p: 0,
+                  }}
+                >
                   <EditNoteIcon />
                 </IconButton>
               )}
@@ -89,6 +97,9 @@ const OpinionPollSurveyList = ({
           var partyId = PARTY_ID.YSRCP;
           return (
             <YCPRadio
+              sx={{
+                p: 0,
+              }}
               checked={value == partyId}
               onChange={() => handleChange(data[0], partyId)}
             />
@@ -106,6 +117,9 @@ const OpinionPollSurveyList = ({
           var partyId = PARTY_ID.TDP;
           return (
             <TDPRadio
+              sx={{
+                p: 0,
+              }}
               checked={value == partyId}
               onChange={() => handleChange(data[0], partyId)}
             />
@@ -122,6 +136,9 @@ const OpinionPollSurveyList = ({
           var partyId = PARTY_ID.JANASENA;
           return (
             <JSPRadio
+              sx={{
+                p: 0,
+              }}
               checked={value == partyId}
               onChange={() => handleChange(data[0], partyId)}
             />
@@ -138,6 +155,9 @@ const OpinionPollSurveyList = ({
           var partyId = PARTY_ID.BJP;
           return (
             <BJPRadio
+              sx={{
+                p: 0,
+              }}
               checked={value == partyId}
               onChange={() => handleChange(data[0], partyId)}
             />
@@ -154,6 +174,9 @@ const OpinionPollSurveyList = ({
           var partyId = PARTY_ID.CONGRESS;
           return (
             <CongressRadio
+              sx={{
+                p: 0,
+              }}
               checked={value == partyId}
               onChange={() => handleChange(data[0], partyId)}
             />
@@ -170,8 +193,11 @@ const OpinionPollSurveyList = ({
           var partyId = PARTY_ID.OTHERS;
           var index = voter.data.findIndex((e) => e.voter_pkk == data[0]);
           return (
-            <Stack direction="row" alignItems="center">
+            <Stack direction="row" alignItems="center" spacing={2}>
               <OthersRadio
+                sx={{
+                  p: 0,
+                }}
                 checked={value == partyId}
                 onChange={() => handleChange(data[0], partyId)}
               />
@@ -289,64 +315,37 @@ const OpinionPollSurveyList = ({
       label: "Permanent Address",
     },
   ];
-  let options = {};
 
-  if (account.user?.desgination_name === "MLA") {
-    options = {
-      rowHeight: "100px",
-      elevation: 0,
-      selectableRows: "none",
-      responsive: "standard",
-      serverSide: true,
-      count: voter.count,
-      page: voter.page,
-      rowsPerPage: voter.limit,
-      rowsPerPageOptions: ROWS_PER_PAGE_OPTION,
-      onTableChange: (action, tableState) => {
-        switch (action) {
-          case "changePage":
-            handleRetrieveData(tableState);
-            break;
-          case "changeRowsPerPage":
-            handleRetrieveData(tableState);
-            break;
-          default:
-          // console.log("action not handled.");
-          // console.log(action, tableState);
-        }
-      },
-    };
-  } else {
-    options = {
-      rowHeight: "100px",
-      elevation: 0,
-      selectableRows: "none",
-      responsive: "standard",
-      serverSide: true,
+  const options = {
+    elevation: 0,
+    selectableRows: "none",
+    responsive: "standard",
+    serverSide: true,
+    ...(account.user?.desgination_name != "MLA" && {
       filter: false,
       search: false,
       download: false,
       print: false,
       viewColumns: false,
-      count: voter.count,
-      page: voter.page,
-      rowsPerPage: voter.limit,
-      rowsPerPageOptions: ROWS_PER_PAGE_OPTION,
-      onTableChange: (action, tableState) => {
-        switch (action) {
-          case "changePage":
-            handleRetrieveData(tableState);
-            break;
-          case "changeRowsPerPage":
-            handleRetrieveData(tableState);
-            break;
-          default:
-          // console.log("action not handled.");
-          // console.log(action, tableState);
-        }
-      },
-    };
-  }
+    }),
+    count: voter.count,
+    page: voter.page,
+    rowsPerPage: voter.limit,
+    rowsPerPageOptions: ROWS_PER_PAGE_OPTION,
+    onTableChange: (action, tableState) => {
+      switch (action) {
+        case "changePage":
+          handleRetrieveData(tableState);
+          break;
+        case "changeRowsPerPage":
+          handleRetrieveData(tableState);
+          break;
+        default:
+        // console.log("action not handled.");
+        // console.log(action, tableState);
+      }
+    },
+  };
 
   // const options = {
   //   elevation: 0,

@@ -131,7 +131,12 @@ const UpdateVoterDialog = ({
 
   return (
     <>
-      <IconButton onClick={() => setOpen(true)}>
+      <IconButton
+        onClick={() => setOpen(true)}
+        sx={{
+          p: 0,
+        }}
+      >
         <EditIcon />
       </IconButton>
 
@@ -235,7 +240,7 @@ const UpdateVoterDialog = ({
                   />
                 </Grid>
                 <Grid item xs={12} md={12} lg={12}>
-                  <RHFRadio
+                  <RHFRadio filedLabel="interested party"
                     required
                     name="intrested_party"
                     labelPlacement="top"

@@ -363,12 +363,12 @@ const DashboardApp = ({
                   {
                     label: "Residental",
                     value:
-                      dashboard.opinion?.residential_status?.[0]?.count ?? 0,
+                      dashboard.opinion?.residential_status?.[1]?.count ?? 0,
                   },
                   {
                     label: "Non Residental",
                     value:
-                      dashboard.opinion?.residential_status?.[1]?.count ?? 0,
+                      dashboard.opinion?.residential_status?.[0]?.count ?? 0,
                   },
                 ]}
                 chartColors={[Colors.OpenColor, Colors.CancelColor]}

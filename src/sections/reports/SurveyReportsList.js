@@ -169,26 +169,18 @@ const SurveyReportsList = ({
       },
     },
   ];
-  let options = {};
-
-  if (account.user?.desgination_name === "MLA") {
-    options = {
-      elevation: 0,
-      selectableRows: "none",
-      responsive: "standard",
-    };
-  } else {
-    options = {
-      elevation: 0,
-      selectableRows: "none",
-      responsive: "standard",
+  const options = {
+    elevation: 0,
+    selectableRows: "none",
+    responsive: "standard",
+    ...(account.user?.desgination_name != "MLA" && {
       filter: false,
       search: false,
       download: false,
       print: false,
       viewColumns: false,
-    };
-  }
+    }),
+  };
 
   const getMuiTheme = () =>
     createTheme({
