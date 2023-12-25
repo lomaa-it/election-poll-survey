@@ -5,12 +5,12 @@
 // new api for baseServerUrl
 // export const baseServerUrl = "https://940b-219-91-202-227.ngrok-free.app";
 
-export const baseServerUrl = "https://2b72-183-83-253-245.ngrok-free.app";
+// export const baseServerUrl = "https://2b72-183-83-253-245.ngrok-free.app";
 // export const baseServerUrl = "https://mumbaiapi.cgrysrcongress.in";
 // export const baseServerUrl = "http://192.168.137.220:8080";
 /// new
 // export const baseServerUrl = "https://poll2.onrender.com";
-// export const baseServerUrl = "http://192.168.0.102:8080";
+export const baseServerUrl = "http://192.168.0.102:8080";
 
 // Survey Dashboard Apis
 export const getDashBoardbyTotalVoters = "/getdashboardbytotalvoters";
