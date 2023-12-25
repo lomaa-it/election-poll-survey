@@ -182,7 +182,12 @@ const DashboardApp = ({
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
               <PieChartWidget
-                title="Ticket Status"
+                title={`Ticket Status-${
+                  (dashboard.opinion?.ticket_status?.[0]?.count ?? 0) +
+                  (dashboard.opinion?.ticket_status?.[1]?.count ?? 0) +
+                  (dashboard.opinion?.ticket_status?.[2]?.count ?? 0) +
+                  (dashboard.opinion?.ticket_status?.[3]?.count ?? 0)
+                }`}
                 type="donut"
                 chartData={[
                   {
@@ -343,15 +348,24 @@ const DashboardApp = ({
                   {
                     label: "YES",
                     value:
-                      dashboard.opinion?.govt_employee_status?.[0]?.count ?? 0,
+                      dashboard.opinion?.govt_employee_status?.[1]?.count ?? 0,
                   },
                   {
                     label: "NO",
                     value:
-                      dashboard.opinion?.govt_employee_status?.[1]?.count ?? 0,
+                      dashboard.opinion?.govt_employee_status?.[2]?.count ?? 0,
+                  },
+                  {
+                    label: "Unknown",
+                    value:
+                      dashboard.opinion?.govt_employee_status?.[0]?.count ?? 0,
                   },
                 ]}
-                chartColors={[Colors.OpenColor, Colors.CancelColor]}
+                chartColors={[
+                  Colors.OpenColor,
+                  Colors.CancelColor,
+                  Colors.EscalatedColor,
+                ]}
               />
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
@@ -361,12 +375,12 @@ const DashboardApp = ({
                 }`}
                 chartData={[
                   {
-                    label: "Residental",
+                    label: "Residential",
                     value:
                       dashboard.opinion?.residential_status?.[1]?.count ?? 0,
                   },
                   {
-                    label: "Non Residental",
+                    label: "Non Residential",
                     value:
                       dashboard.opinion?.residential_status?.[0]?.count ?? 0,
                   },
@@ -392,13 +406,8 @@ const DashboardApp = ({
                   Colors.Age4Color,
                   Colors.Age5Color,
                   Colors.Age6Color,
-                  Colors.YSRCPColor,
-                  Colors.NETURALColor,
-                  Colors.TDPColor,
+
                   Colors.JSPColor,
-                  Colors.BJPColor,
-                  Colors.CONGRESSColor,
-                  Colors.OTHERColor,
                 ]}
               />
             </Grid>
@@ -422,7 +431,7 @@ const DashboardApp = ({
                   Colors.Age6Color,
                   Colors.YSRCPColor,
                   Colors.NETURALColor,
-                  Colors.TDPColor,
+                  "#800080",
                   Colors.JSPColor,
                   Colors.BJPColor,
                   Colors.CONGRESSColor,

@@ -11,6 +11,7 @@
 /// new
 // export const baseServerUrl = "https://poll2.onrender.com";
 export const baseServerUrl = "http://192.168.0.102:8080";
+// export const baseServerUrl = "http://192.168.132.177:8080";
 
 // Survey Dashboard Apis
 export const getDashBoardbyTotalVoters = "/getdashboardbytotalvoters";
@@ -45,9 +46,6 @@ export const resetPswdRoute = "/updateuserpassword";
 // Parts Page Api
 export const getallpartsbysachivalayamidRoute = "/getallpartsbysachivalayamid";
 export const sachivalayammappingtopartsRoute = "/sachivalayammappingtoparts";
-
-
-
 
 // GET ALL DATA
 export const getVoterTicketHistoryRoute = "/getvotertickethistory";
