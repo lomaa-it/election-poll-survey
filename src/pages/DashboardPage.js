@@ -364,7 +364,7 @@ const DashboardApp = ({
                 chartColors={[
                   Colors.OpenColor,
                   Colors.CancelColor,
-                  Colors.EscalatedColor,
+                  Colors.NETURALColor,
                 ]}
               />
             </Grid>
@@ -407,7 +407,7 @@ const DashboardApp = ({
                   Colors.Age5Color,
                   Colors.Age6Color,
 
-                  Colors.JSPColor,
+                  Colors.NETURALColor,
                 ]}
               />
             </Grid>
@@ -430,11 +430,11 @@ const DashboardApp = ({
                   Colors.Age5Color,
                   Colors.Age6Color,
                   Colors.YSRCPColor,
-                  Colors.NETURALColor,
+                  "#3E01A4",
                   "#800080",
                   Colors.JSPColor,
                   Colors.BJPColor,
-                  Colors.CONGRESSColor,
+                  Colors.NETURALColor,
                   Colors.OTHERColor,
                 ]}
               />
