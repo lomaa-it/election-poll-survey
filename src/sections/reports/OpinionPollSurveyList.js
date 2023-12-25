@@ -134,156 +134,156 @@ const OpinionPollSurveyList = ({ isUser, voter, account, filterValues, showAlert
         setCellProps: () => ({ style: { minWidth: "200px" } }),
       },
     },
-    // {
-    //   name: "opinionparty",
-    //   label: "Neutral",
-    //   options: {
-    //     customBodyRender: (value, tableMeta, updateValue) => {
-    //       var data = tableMeta.rowData;
-    //       var partyId = PARTY_ID.NEUTRAL;
-    //       var index = voter.data.findIndex((e) => e.voter_pkk == data[0]);
+    {
+      name: "opinionparty",
+      label: "Neutral",
+      options: {
+        customBodyRender: (value, tableMeta, updateValue) => {
+          var data = tableMeta.rowData;
+          var partyId = PARTY_ID.NEUTRAL;
+          var index = voter.data.findIndex((e) => e.voter_pkk == data[0]);
 
-    //       return (
-    //         <Stack direction="row" alignItems="center" spacing={2}>
-    //           <NeutralRadio
-    //             sx={{
-    //               p: 0,
-    //             }}
-    //             checked={value == partyId}
-    //             onChange={() => {
-    //               handleChange(data[0], partyId);
-    //             }}
-    //           />
+          return (
+            <Stack direction="row" alignItems="center" spacing={2}>
+              <NeutralRadio
+                sx={{
+                  p: 0,
+                }}
+                checked={value == partyId}
+                onChange={() => {
+                  handleChange(data[0], partyId);
+                }}
+              />
 
-    //           {value == PARTY_ID.NEUTRAL && (
-    //             <IconButton
-    //               onClick={() => handleEdit(voter.data[index])}
-    //               sx={{
-    //                 p: 0,
-    //               }}
-    //             >
-    //               <EditNoteIcon />
-    //             </IconButton>
-    //           )}
-    //         </Stack>
-    //       );
-    //     },
-    //   },
-    // },
-    // {
-    //   name: "opinionparty",
-    //   label: "YCP",
-    //   options: {
-    //     customBodyRender: (value, tableMeta, updateValue) => {
-    //       var data = tableMeta.rowData;
-    //       var partyId = PARTY_ID.YSRCP;
-    //       return (
-    //         <YCPRadio
-    //           sx={{
-    //             p: 0,
-    //           }}
-    //           checked={value == partyId}
-    //           onChange={() => handleChange(data[0], partyId)}
-    //         />
-    //       );
-    //     },
-    //   },
-    // },
-    // {
-    //   name: "opinionparty",
-    //   label: "TDP",
-    //   options: {
-    //     customBodyRender: (value, tableMeta, updateValue) => {
-    //       var data = tableMeta.rowData;
-    //       var partyId = PARTY_ID.TDP;
-    //       return (
-    //         <TDPRadio
-    //           sx={{
-    //             p: 0,
-    //           }}
-    //           checked={value == partyId}
-    //           onChange={() => handleChange(data[0], partyId)}
-    //         />
-    //       );
-    //     },
-    //   },
-    // },
-    // {
-    //   name: "opinionparty",
-    //   label: "JSP",
-    //   options: {
-    //     customBodyRender: (value, tableMeta, updateValue) => {
-    //       var data = tableMeta.rowData;
-    //       var partyId = PARTY_ID.JANASENA;
-    //       return (
-    //         <JSPRadio
-    //           sx={{
-    //             p: 0,
-    //           }}
-    //           checked={value == partyId}
-    //           onChange={() => handleChange(data[0], partyId)}
-    //         />
-    //       );
-    //     },
-    //   },
-    // },
-    // {
-    //   name: "opinionparty",
-    //   label: "BJP",
-    //   options: {
-    //     customBodyRender: (value, tableMeta, updateValue) => {
-    //       var data = tableMeta.rowData;
-    //       var partyId = PARTY_ID.BJP;
-    //       return (
-    //         <BJPRadio
-    //           sx={{
-    //             p: 0,
-    //           }}
-    //           checked={value == partyId}
-    //           onChange={() => handleChange(data[0], partyId)}
-    //         />
-    //       );
-    //     },
-    //   },
-    // },
-    // {
-    //   name: "opinionparty",
-    //   label: "INC",
-    //   options: {
-    //     customBodyRender: (value, tableMeta, updateValue) => {
-    //       var data = tableMeta.rowData;
-    //       var partyId = PARTY_ID.CONGRESS;
-    //       return (
-    //         <CongressRadio
-    //           sx={{
-    //             p: 0,
-    //           }}
-    //           checked={value == partyId}
-    //           onChange={() => handleChange(data[0], partyId)}
-    //         />
-    //       );
-    //     },
-    //   },
-    // },
-    // {
-    //   name: "opinionparty",
-    //   label: "Others",
-    //   options: {
-    //     customBodyRender: (value, tableMeta, updateValue) => {
-    //       var data = tableMeta.rowData;
-    //       var partyId = PARTY_ID.OTHERS;
-    //       return (
-    //         <OthersRadio
-    //           sx={{
-    //             p: 0,
-    //           }}
-    //           checked={value == partyId}
-    //           onChange={() => handleChange(data[0], partyId)}
-    //         />
-    //       );
-    //     },
-    //   },
-    // },
+              {value == PARTY_ID.NEUTRAL && (
+                <IconButton
+                  onClick={() => handleEdit(voter.data[index])}
+                  sx={{
+                    p: 0,
+                  }}
+                >
+                  <EditNoteIcon />
+                </IconButton>
+              )}
+            </Stack>
+          );
+        },
+      },
+    },
+    {
+      name: "opinionparty",
+      label: "YCP",
+      options: {
+        customBodyRender: (value, tableMeta, updateValue) => {
+          var data = tableMeta.rowData;
+          var partyId = PARTY_ID.YSRCP;
+          return (
+            <YCPRadio
+              sx={{
+                p: 0,
+              }}
+              checked={value == partyId}
+              onChange={() => handleChange(data[0], partyId)}
+            />
+          );
+        },
+      },
+    },
+    {
+      name: "opinionparty",
+      label: "TDP",
+      options: {
+        customBodyRender: (value, tableMeta, updateValue) => {
+          var data = tableMeta.rowData;
+          var partyId = PARTY_ID.TDP;
+          return (
+            <TDPRadio
+              sx={{
+                p: 0,
+              }}
+              checked={value == partyId}
+              onChange={() => handleChange(data[0], partyId)}
+            />
+          );
+        },
+      },
+    },
+    {
+      name: "opinionparty",
+      label: "JSP",
+      options: {
+        customBodyRender: (value, tableMeta, updateValue) => {
+          var data = tableMeta.rowData;
+          var partyId = PARTY_ID.JANASENA;
+          return (
+            <JSPRadio
+              sx={{
+                p: 0,
+              }}
+              checked={value == partyId}
+              onChange={() => handleChange(data[0], partyId)}
+            />
+          );
+        },
+      },
+    },
+    {
+      name: "opinionparty",
+      label: "BJP",
+      options: {
+        customBodyRender: (value, tableMeta, updateValue) => {
+          var data = tableMeta.rowData;
+          var partyId = PARTY_ID.BJP;
+          return (
+            <BJPRadio
+              sx={{
+                p: 0,
+              }}
+              checked={value == partyId}
+              onChange={() => handleChange(data[0], partyId)}
+            />
+          );
+        },
+      },
+    },
+    {
+      name: "opinionparty",
+      label: "INC",
+      options: {
+        customBodyRender: (value, tableMeta, updateValue) => {
+          var data = tableMeta.rowData;
+          var partyId = PARTY_ID.CONGRESS;
+          return (
+            <CongressRadio
+              sx={{
+                p: 0,
+              }}
+              checked={value == partyId}
+              onChange={() => handleChange(data[0], partyId)}
+            />
+          );
+        },
+      },
+    },
+    {
+      name: "opinionparty",
+      label: "Others",
+      options: {
+        customBodyRender: (value, tableMeta, updateValue) => {
+          var data = tableMeta.rowData;
+          var partyId = PARTY_ID.OTHERS;
+          return (
+            <OthersRadio
+              sx={{
+                p: 0,
+              }}
+              checked={value == partyId}
+              onChange={() => handleChange(data[0], partyId)}
+            />
+          );
+        },
+      },
+    },
   ];
 
   const searchFields = [
