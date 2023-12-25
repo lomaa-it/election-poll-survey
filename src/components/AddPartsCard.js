@@ -1,12 +1,4 @@
-import {
-  Grid,
-  Container,
-  Typography,
-  Box,
-  TextField,
-  Card,
-  MenuItem,
-} from "@mui/material";
+import { Grid, Container, Typography, Box, TextField, Card, MenuItem } from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -21,12 +13,7 @@ import SearchByFilter from "../sections/common/SearchByFilter";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
-import {
-  FormProvider,
-  RHFCheckbox,
-  RHFRadio,
-  RHFTextField,
-} from "../components/hook-form";
+import { FormProvider, RHFCheckbox, RHFRadio, RHFTextField } from "../components/hook-form";
 import { createPartsRoute } from "../utils/apis";
 
 const AddPartsCard = ({ dashboard, common, showAlert, reFecthData }) => {
@@ -111,41 +98,30 @@ const AddPartsCard = ({ dashboard, common, showAlert, reFecthData }) => {
   };
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-      <Card sx={{ p: 3, mb: 3 }}>
+      <Card sx={{ p: 3 }}>
         <Typography sx={{ pb: 2 }}>Add Parts</Typography>
 
-        <Grid container spacing={2} alignItems="center">
-          <SearchByFilter
-            ref={filterRef}
-            showPartNo={false}
-            showVillage={false}
-            showOtherFilters={false}
-            onChanged={(value) => setFilterValues(value)}
-            showSearchButton={false}
-          />
+        <Grid container spacing={2} alignItems="start">
+          <SearchByFilter ref={filterRef} showPartNo={false} showVillage={false} showOtherFilters={false} onChanged={(value) => setFilterValues(value)} showSearchButton={false} />
+
           <Grid item xs={12} md={6} lg={2}>
             <RHFTextField name="part_no" label="Part No" type="number" />
           </Grid>
+
           <Grid item xs={12} md={6} lg={2}>
             <RHFTextField name="male_votes" label="Male Votes" type="number" />
           </Grid>
+
           <Grid item xs={12} md={6} lg={2}>
-            <RHFTextField
-              name="female_votes"
-              label="Female Votes"
-              type="number"
-            />
+            <RHFTextField name="female_votes" label="Female Votes" type="number" />
           </Grid>
+
           <Grid item xs={12} md={6} lg={2}>
             <RHFTextField name="other_votes" label="Tg Votes" type="number" />
           </Grid>
+
           <Grid item xs={12} md={6} lg={2}>
-            <LoadingButton
-              type="submit"
-              loading={isLoading}
-              onClick={handleSubmit}
-              variant="contained"
-            >
+            <LoadingButton type="submit" loading={isLoading} onClick={handleSubmit} variant="contained">
               Add
             </LoadingButton>
           </Grid>

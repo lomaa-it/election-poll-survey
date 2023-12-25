@@ -6,7 +6,7 @@ import useResponsive from "../../../hooks/useResponsive";
 import Logo from "../../../components/logo";
 import Scrollbar from "../../../components/Scrollbar";
 import NavSection from "../../../components/NavSection";
-import { mlaNavConfig, userNavConfig } from "./config";
+import { mlaNavConfig, operatorNavConfig, userNavConfig } from "./config";
 import { connect } from "react-redux";
 import { LOGIN_TYPES, PUBLIC_URL } from "../../../constants";
 
@@ -20,32 +20,20 @@ const StyledAccount = styled("div")(({ theme }) => ({
   backgroundColor: alpha(theme.palette.grey[500], 0.12),
 }));
 
-const Nav = ({ type, account, openNav, onCloseNav }) => {
+const Nav = ({ account, openNav, onCloseNav }) => {
   const { pathname } = useLocation();
   const [navConfig, setNavConfig] = useState([]);
 
   const isDesktop = useResponsive("up", "lg");
 
-  // useEffect(() => {
-  //   let navbar = [];
-  //   if (type == LOGIN_TYPES[6]) {
-  //     navbar = userNavConfig;
-  //   } else {
-  //     navbar = mlaNavConfig;
-  //   }
-
-  //   setNavConfig(navbar);
-  // }, []);
-
-  // console.log("type", type);
-  // console.log("login types", LOGIN_TYPES);
   const userDesignation = account.user?.desgination_name;
-  // console.log("account111", userDesignation);
 
   useEffect(() => {
     let navbar = [];
     if (userDesignation == LOGIN_TYPES[0]) {
       navbar = mlaNavConfig;
+    } else if (userDesignation == LOGIN_TYPES[8]) {
+      navbar = operatorNavConfig;
     } else {
       navbar = userNavConfig;
     }

@@ -16,6 +16,11 @@ import { FormProvider, RHFTextField } from "../components/hook-form";
 import SearchByFilter from "../sections/common/SearchByFilter";
 import { phoneRegExp } from "../constants";
 
+const PRIORITY1 = [33, 34, 35, 36, 37, 38];
+const PRIORITY2 = [34, 35, 36, 37, 38];
+const PRIORITY3 = [35, 36, 37, 38];
+const PRIORITY4 = [36, 37, 38];
+
 const UserRegistrationPage = ({ common, showAlert }) => {
   const props = useLocation().state;
   const navigate = useNavigate();
@@ -61,28 +66,28 @@ const UserRegistrationPage = ({ common, showAlert }) => {
   });
 
   const { handleSubmit, reset, watch } = methods;
-  const designation_id = watch(["designation_id"]);
+  const designation_id = watch("designation_id");
 
   const onSubmit = async (data) => {
     var hasErrors = false;
     filterRef.current.setErrors({ mandal: null, division: null, sachivalayam: null, partno: null });
 
-    if (data.designation_id >= 33 && !filterValues["mandal"]) {
+    if (PRIORITY1.includes(data.designation_id) && !filterValues["mandal"]) {
       filterRef.current.setErrors({ mandal: "Mandal is required" });
       hasErrors = true;
     }
 
-    if (data.designation_id >= 34 && !filterValues["division"]) {
+    if (PRIORITY2.includes(data.designation_id) && !filterValues["division"]) {
       filterRef.current.setErrors({ division: "Division is required" });
       hasErrors = true;
     }
 
-    if (data.designation_id >= 35 && !filterValues["sachivalayam"]) {
+    if (PRIORITY3.includes(data.designation_id) && !filterValues["sachivalayam"]) {
       filterRef.current.setErrors({ sachivalayam: "Sachivalayam is required" });
       hasErrors = true;
     }
 
-    if (data.designation_id >= 36 && !filterValues["partno"]) {
+    if (PRIORITY4.includes(data.designation_id) && !filterValues["partno"]) {
       filterRef.current.setErrors({ partno: "Part no is required" });
       hasErrors = true;
     }
@@ -176,10 +181,10 @@ const UserRegistrationPage = ({ common, showAlert }) => {
                 ref={filterRef}
                 lg={3}
                 defaultValues={defaultValues}
-                showMandal={designation_id >= 33}
-                showDivision={designation_id >= 34}
-                showSachivalayam={designation_id >= 35}
-                showPartNo={designation_id >= 36}
+                showMandal={PRIORITY1.includes(designation_id)}
+                showDivision={PRIORITY2.includes(designation_id)}
+                showSachivalayam={PRIORITY3.includes(designation_id)}
+                showPartNo={PRIORITY4.includes(designation_id)}
                 showVillage={false}
                 showOtherFilters={false}
                 showSearchButton={false}

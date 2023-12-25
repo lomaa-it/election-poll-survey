@@ -1,18 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import {
-  Typography,
-  Card,
-  Stack,
-  Grid,
-  Switch,
-  Divider,
-  Box,
-  Chip,
-  TextField,
-  FormControlLabel,
-  CircularProgress,
-  Checkbox,
-} from "@mui/material";
+import { Typography, Card, Stack, Grid, Switch, Divider, Box, Chip, TextField, FormControlLabel, CircularProgress, Checkbox } from "@mui/material";
 import * as Yup from "yup";
 import { CheckBox } from "@mui/icons-material";
 import MUIDataTable from "mui-datatables";
@@ -33,15 +20,7 @@ import { checkOrUncheckUser } from "../../actions/user";
 import { set } from "date-fns";
 import { sachivalayammappingtopartsRoute } from "../../utils/apis";
 
-const PartsList = ({
-  showAlert,
-  partsList,
-  common,
-  account,
-  checkOrUncheckUser,
-  reFecthData,
-  isFetching,
-}) => {
+const PartsList = ({ showAlert, partsList, common, account, checkOrUncheckUser, reFecthData, isFetching }) => {
   const filterRef = useRef(null);
   const [isLoading, setLoading] = useState(false);
   const [filterValues, setFilterValues] = useState({
@@ -55,23 +34,22 @@ const PartsList = ({
   const [checkedValues, setCheckedValues] = useState([]);
 
   const columns = [
+    { name: "part_pk", label: "Part Pk", options: { display: false } },
     {
       name: "isCheck",
       label: "Select",
       options: {
         customBodyRender: (value, tableMeta, updateValue) => {
-          const isChecked = checkedValues.includes(tableMeta.rowData[1]);
+          const isChecked = checkedValues.includes(tableMeta.rowData[0]);
 
           return (
             <Checkbox
               checked={isChecked}
               onChange={(e) => {
                 if (e.target.checked) {
-                  setCheckedValues([...checkedValues, tableMeta.rowData[1]]);
+                  setCheckedValues([...checkedValues, tableMeta.rowData[0]]);
                 } else {
-                  setCheckedValues(
-                    checkedValues.filter((item) => item != tableMeta.rowData[1])
-                  );
+                  setCheckedValues(checkedValues.filter((item) => item != tableMeta.rowData[1]));
                 }
               }}
             />
@@ -94,8 +72,7 @@ const PartsList = ({
       options: {
         customBodyRender: (value, tableMeta, updateValue) => {
           // console.log("tableMeta", tableMeta.rowData);
-          const totalVotel =
-            tableMeta.rowData[2] + tableMeta.rowData[3] + tableMeta.rowData[4];
+          const totalVotel = tableMeta.rowData[2] + tableMeta.rowData[3] + tableMeta.rowData[4];
           return totalVotel;
         },
       },
@@ -175,7 +152,7 @@ const PartsList = ({
     try {
       var jsonData = {
         partsPkList: checkedValues,
-        sachivalayam_id: filterValues.sachivalayam.sachivalayam_pk,
+        new_sachivalayam_id: filterValues.sachivalayam.sachivalayam_pk,
       };
       console.log("jsonData", jsonData);
       await instance.post(sachivalayammappingtopartsRoute, jsonData);
@@ -201,60 +178,31 @@ const PartsList = ({
     <Card elevation={1}>
       <>
         <Stack>
-          <Divider />
-          <Card
-            sx={{
-              p: 3,
-              backgroundColor: "#f5f5f5",
-              border: "1px solid #e0e0e0",
-              borderRadius: "5px",
-            }}
-          >
+          <Box p={3}>
             <Typography variant="body1" sx={{ mb: 2 }}>
               {checkedValues.length} parts selected
             </Typography>
 
             <Grid container spacing={2} alignItems="center">
-              <SearchByFilter
-                ref={filterRef}
-                showPartNo={false}
-                showVillage={false}
-                showOtherFilters={false}
-                onChanged={(value) => setFilterValues(value)}
-                showSearchButton={false}
-              />
+              <SearchByFilter ref={filterRef} showPartNo={false} showVillage={false} showOtherFilters={false} onChanged={(value) => setFilterValues(value)} showSearchButton={false} />
 
               <Grid item xs={12} md={6} lg={2}>
-                <LoadingButton
-                  type="submit"
-                  loading={isLoading}
-                  onClick={handleSubmit}
-                  variant="contained"
-                >
+                <LoadingButton type="submit" loading={isLoading} onClick={handleSubmit} variant="contained">
                   Assign Part
                 </LoadingButton>
               </Grid>
             </Grid>
-          </Card>
+          </Box>
+
+          <Divider />
+
           {isFetching && (
-            <Box
-              minHeight={200}
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-            >
+            <Box minHeight={200} display="flex" justifyContent="center" alignItems="center">
               <CircularProgress />
             </Box>
           )}
 
-          {!isFetching && (
-            <MUIDataTable
-              title=""
-              columns={columns}
-              data={partsList}
-              options={options}
-            />
-          )}
+          {!isFetching && <MUIDataTable title="" columns={columns} data={partsList} options={options} />}
         </Stack>
       </>
     </Card>
@@ -264,7 +212,6 @@ const PartsList = ({
 const mapStateToProps = (state) => {
   return {
     common: state.common,
-    students: state.management,
     account: state.auth,
   };
 };

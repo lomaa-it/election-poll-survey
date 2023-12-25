@@ -15,11 +15,13 @@ const OpinionPollSurveyPage = ({ isUser, getAllVotersSurvey, clearVoterReducer }
   const [filterValues, setFilterValues] = useState(null);
 
   useEffect(() => {
-    clearVoterReducer();
+    return () => {
+      clearVoterReducer();
+    };
   }, []);
 
   const handleSubmit = async (filterValues) => {
-    await getAllVotersSurvey(filterValues);
+    await getAllVotersSurvey({ ...filterValues, fieldname: null, fieldvalue: null });
     setFilterValues(filterValues);
   };
 

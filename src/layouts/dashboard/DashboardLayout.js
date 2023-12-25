@@ -30,14 +30,14 @@ const Main = styled("div")(({ theme }) => ({
   },
 }));
 
-export default function DashboardLayout({ type }) {
+export default function DashboardLayout() {
   const [open, setOpen] = useState(false);
 
   return (
     <StyledRoot>
       <Header onOpenNav={() => setOpen(true)} />
 
-      <Nav type={type} openNav={open} onCloseNav={() => setOpen(false)} />
+      <Nav openNav={open} onCloseNav={() => setOpen(false)} />
 
       <Main>
         <Outlet />

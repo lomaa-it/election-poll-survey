@@ -18,6 +18,29 @@ const userNavConfig = [
   },
 ];
 
+const operatorNavConfig = [
+  {
+    title: "User Management",
+    path: "/user-management",
+    icon: <Iconify icon="ic:baseline-people" width="24px" height="24px" />,
+    children: [
+      {
+        title: "View User",
+        path: "/user-management/view-user",
+      },
+      {
+        title: "Add User",
+        path: "/user-management/user-registration",
+      },
+    ],
+  },
+  {
+    title: "Parts",
+    path: "/parts",
+    icon: <Iconify icon="formkit:people" width="24px" height="24px" />,
+  },
+];
+
 // const otherNavConfig = [
 //   {
 //     title: "Opinion Survey",
@@ -245,4 +268,4 @@ const mlaNavConfig = [
   },
 ];
 
-export { userNavConfig, mlaNavConfig };
+export { userNavConfig, operatorNavConfig, mlaNavConfig };

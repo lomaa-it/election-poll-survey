@@ -1,12 +1,4 @@
-import {
-  Grid,
-  Container,
-  Typography,
-  Box,
-  TextField,
-  Card,
-  MenuItem,
-} from "@mui/material";
+import { Grid, Container, Typography, Box, TextField, Card, MenuItem } from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -17,17 +9,7 @@ import VoterAndVolunteerMappingList from "../sections/reports/VoterAndVolunteerM
 import PartsList from "../sections/reports/PartsList";
 import { useEffect, useState } from "react";
 import instance from "../utils/axios";
-import {
-  getAllConstituenciesRoute,
-  getAllDistrictsRoute,
-  getAllDivisionRoute,
-  getAllMandalRoute,
-  getAllSachivalayamRoute,
-  getAllStatesRoute,
-  getAllPartsRoute,
-  createPartsRoute,
-  getallpartsbysachivalayamidRoute,
-} from "../utils/apis";
+import { getAllConstituenciesRoute, getAllDistrictsRoute, getAllDivisionRoute, getAllMandalRoute, getAllSachivalayamRoute, getAllStatesRoute, getAllPartsRoute, createPartsRoute, getallpartsbysachivalayamidRoute } from "../utils/apis";
 import { set } from "date-fns";
 import { showAlert } from "../actions/alert";
 import SearchByFilter from "../sections/common/SearchByFilter";
@@ -45,10 +27,7 @@ const PartsPage = ({ dashboard, common }) => {
     console.log("HI Im Recalled");
     setIsFetching(true);
     try {
-      const response = await instance.post(
-        getallpartsbysachivalayamidRoute,
-        initialValues
-      );
+      const response = await instance.post(getallpartsbysachivalayamidRoute, initialValues);
       console.log("response", response.data.message);
       setFetchedData(response.data.message);
       setIsFetching(false);
@@ -63,10 +42,7 @@ const PartsPage = ({ dashboard, common }) => {
     console.log("searchFiltersData sa", data.sachivalayam_id);
     setIsFetching(true);
     try {
-      const response = await instance.post(
-        getallpartsbysachivalayamidRoute,
-        data
-      );
+      const response = await instance.post(getallpartsbysachivalayamidRoute, data);
       console.log("response", response.data.message);
       setFetchedData(response.data.message);
       setIsFetching(false);
@@ -84,24 +60,17 @@ const PartsPage = ({ dashboard, common }) => {
         </Typography> */}
         <Card sx={{ p: 3, backgroundColor: searchFiltercolor }}>
           <Grid container spacing={2} alignItems="center">
-            <SearchByFilter
-              showPartNo={false}
-              showVillage={false}
-              showOtherFilters={false}
-              onSubmit={handleSubmit}
-            />
+            <SearchByFilter showPartNo={false} showVillage={false} showOtherFilters={false} onSubmit={handleSubmit} />
           </Grid>
         </Card>
+
         <Box p={1} />
         {/* add part card section */}
         <AddPartsCard reFecthData={reFecthData} />
 
         <Box p={1} />
-        <PartsList
-          partsList={fetchedData}
-          reFecthData={reFecthData}
-          isFetching={isFetching}
-        />
+
+        <PartsList partsList={fetchedData} reFecthData={reFecthData} isFetching={isFetching} />
       </Container>
     </Page>
   );
