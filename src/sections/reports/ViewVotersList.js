@@ -106,20 +106,12 @@ const ViewVotersList = ({ voter, filterValues, showAlert, getAllVotersSurvey, ac
       label: "Voter Name",
     },
     {
-      name: "guardian_type",
-      label: "Guardian",
-    },
-    {
       name: "guardian_name",
       label: "Guardian Name",
     },
     {
       name: "current_address",
       label: "Current Address",
-    },
-    {
-      name: "permenent_address",
-      label: "Permanent Address",
     },
     {
       name: "phone_no",
