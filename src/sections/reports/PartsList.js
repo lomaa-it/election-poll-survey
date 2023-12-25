@@ -71,7 +71,7 @@ const PartsList = ({
                   setCheckedValues([...checkedValues, tableMeta.rowData[0]]);
                 } else {
                   setCheckedValues(
-                    checkedValues.filter((item) => item != tableMeta.rowData[1])
+                    checkedValues.filter((item) => item != tableMeta.rowData[0])
                   );
                 }
               }}
@@ -79,6 +79,10 @@ const PartsList = ({
           );
         },
       },
+    },
+    {
+      name: "sachivalayam_name",
+      label: "Sachivalayam Name",
     },
     { name: "part_no", label: "Part Number" },
 
@@ -96,7 +100,7 @@ const PartsList = ({
         customBodyRender: (value, tableMeta, updateValue) => {
           // console.log("tableMeta", tableMeta.rowData);
           const totalVotel =
-            tableMeta.rowData[3] + tableMeta.rowData[4] + tableMeta.rowData[5];
+            tableMeta.rowData[4] + tableMeta.rowData[5] + tableMeta.rowData[6];
           return totalVotel;
         },
       },
