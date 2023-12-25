@@ -302,7 +302,7 @@ const SearchByFilter = forwardRef(
           </Grid>
         )}
 
-        {showPartNo && (
+        {showPartNo && formValues?.mandal !== null && (
           <Grid item xs={12} md={6} lg={lg}>
             <RHFAutoComplete
               name="partno"
@@ -320,6 +320,24 @@ const SearchByFilter = forwardRef(
             />
           </Grid>
         )}
+
+        {/* /// show in mla login and it shoukd display all part no's */}
+        {showPartNo &&
+          account?.user?.desgination_name == "MLA" &&
+          formValues?.mandal === null && (
+            <Grid item xs={12} md={6} lg={lg}>
+              <RHFAutoComplete
+                name="partno"
+                label="Select Part/Booth No"
+                value={formValues.partno}
+                options={common?.parts}
+                getOptionLabel={(option) => String(option.part_no)}
+                onChange={handleChange}
+                error={!!errors.partno}
+                helperText={errors.partno}
+              />
+            </Grid>
+          )}
 
         {showVillage && (
           <Grid item xs={12} md={6} lg={lg}>

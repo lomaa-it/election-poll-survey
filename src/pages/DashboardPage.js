@@ -385,6 +385,21 @@ const DashboardApp = ({
                     value: item.count,
                   })
                 )}
+                chartColors={[
+                  Colors.Age1Color,
+                  Colors.Age2Color,
+                  Colors.Age3Color,
+                  Colors.Age4Color,
+                  Colors.Age5Color,
+                  Colors.Age6Color,
+                  Colors.YSRCPColor,
+                  Colors.NETURALColor,
+                  Colors.TDPColor,
+                  Colors.JSPColor,
+                  Colors.BJPColor,
+                  Colors.CONGRESSColor,
+                  Colors.OTHERColor,
+                ]}
               />
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
@@ -398,6 +413,21 @@ const DashboardApp = ({
                     value: item.count,
                   })
                 )}
+                chartColors={[
+                  Colors.Age1Color,
+                  Colors.Age2Color,
+                  Colors.Age3Color,
+                  Colors.Age4Color,
+                  Colors.Age5Color,
+                  Colors.Age6Color,
+                  Colors.YSRCPColor,
+                  Colors.NETURALColor,
+                  Colors.TDPColor,
+                  Colors.JSPColor,
+                  Colors.BJPColor,
+                  Colors.CONGRESSColor,
+                  Colors.OTHERColor,
+                ]}
               />
             </Grid>
             {/* <Grid item xs={12} md={6} lg={4}>

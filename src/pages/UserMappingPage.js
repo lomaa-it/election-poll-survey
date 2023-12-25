@@ -1,5 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Grid, Container, Typography, Box, TextField, Card, MenuItem } from "@mui/material";
+import {
+  Grid,
+  Container,
+  Typography,
+  Box,
+  TextField,
+  Card,
+  MenuItem,
+} from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -15,7 +23,7 @@ import { useLocation } from "react-router-dom";
 import { UncontrolledTextField } from "../components/hook-form/RHFTextField";
 
 const UserMappingPage = ({ common, clearUserReducer, getAllUsers }) => {
-  const [designation, setDesignation] = useState("");
+  const [designation, setDesignation] = useState(null);
   const [filterValues, setFilterValues] = useState(null);
 
   useEffect(() => {
@@ -23,7 +31,7 @@ const UserMappingPage = ({ common, clearUserReducer, getAllUsers }) => {
   }, []);
 
   const handleSubmit = async (data) => {
-    var values = { designation_id: designation ?? "", ...data };
+    var values = { designation_id: designation ?? null, ...data };
     await getAllUsers(values);
     setFilterValues(data);
   };
@@ -39,10 +47,16 @@ const UserMappingPage = ({ common, clearUserReducer, getAllUsers }) => {
               showOtherFilters={false}
               // onChange={handleChange}
               onSubmit={handleSubmit}
-              onReset={() => setDesignation("")}
+              onReset={() => setDesignation(null)}
               children={
                 <Grid item xs={12} md={6} lg={2}>
-                  <UncontrolledTextField name="designation_id" label="Select Designation*" select value={designation} onChange={(e) => setDesignation(e.target.value)}>
+                  <UncontrolledTextField
+                    name="designation_id"
+                    label="Select Designation*"
+                    select
+                    value={designation}
+                    onChange={(e) => setDesignation(e.target.value)}
+                  >
                     {common.designation?.map((item, index) => (
                       <MenuItem key={index} value={item.value}>
                         {item.label}
@@ -69,4 +83,6 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { clearUserReducer, getAllUsers })(UserMappingPage);
+export default connect(mapStateToProps, { clearUserReducer, getAllUsers })(
+  UserMappingPage
+);

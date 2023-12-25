@@ -11,6 +11,11 @@ const userNavConfig = [
     path: "/user/tickets",
     icon: <Iconify icon="ion:ticket" width="24px" height="24px" />,
   },
+  {
+    title: "Add Voter",
+    path: "/user/voter-registration",
+    icon: <Iconify icon="formkit:people" width="24px" height="24px" />,
+  },
 ];
 
 // const otherNavConfig = [
@@ -134,10 +139,10 @@ const mlaNavConfig = [
         title: "View Voter",
         path: "/view-voter",
       },
-      {
-        title: "Add Voter",
-        path: "/voter-registration",
-      },
+      // {
+      //   title: "Add Voter",
+      //   path: "/voter-registration",
+      // },
     ],
   },
   {

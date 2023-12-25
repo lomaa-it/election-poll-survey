@@ -1,4 +1,12 @@
-import { Grid, Container, Typography, Box, TextField, Card, MenuItem } from "@mui/material";
+import {
+  Grid,
+  Container,
+  Typography,
+  Box,
+  TextField,
+  Card,
+  MenuItem,
+} from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -11,7 +19,7 @@ import { clearUserReducer, getAllUsers } from "../actions/user";
 import { UncontrolledTextField } from "../components/hook-form/RHFTextField";
 
 const ViewUserPage = ({ common, clearUserReducer, getAllUsers }) => {
-  const [designation, setDesignation] = useState("");
+  const [designation, setDesignation] = useState(null);
 
   useEffect(() => {
     clearUserReducer();
@@ -33,10 +41,16 @@ const ViewUserPage = ({ common, clearUserReducer, getAllUsers }) => {
             <SearchByFilter
               showOtherFilters={false}
               onSubmit={handleSubmit}
-              onReset={() => setDesignation("")}
+              onReset={() => setDesignation(null)}
               children={
                 <Grid item xs={12} md={6} lg={2}>
-                  <UncontrolledTextField name="designation_id" label="Select Designation*" select value={designation} onChange={(e) => setDesignation(e.target.value)}>
+                  <UncontrolledTextField
+                    name="designation_id"
+                    label="Select Designation*"
+                    select
+                    value={designation}
+                    onChange={(e) => setDesignation(e.target.value)}
+                  >
                     {common.designation?.map((item, index) => (
                       <MenuItem key={index} value={item.value}>
                         {item.label}
@@ -81,4 +95,6 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { clearUserReducer, getAllUsers })(ViewUserPage);
+export default connect(mapStateToProps, { clearUserReducer, getAllUsers })(
+  ViewUserPage
+);
