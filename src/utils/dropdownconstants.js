@@ -4,24 +4,24 @@ export const ageDropdown = [
     value: "18-25",
   },
   {
-    label: "25-35",
-    value: "25-35",
+    label: "26-35",
+    value: "26-35",
   },
   {
-    label: "35-45",
-    value: "35-45",
+    label: "36-45",
+    value: "36-45",
   },
   {
-    label: "45-55",
-    value: "45-55",
+    label: "46-55",
+    value: "46-55",
   },
   {
-    label: "55-65",
-    value: "55-65",
+    label: "56-65",
+    value: "56-65",
   },
   {
-    label: "65-80",
-    value: "65-80",
+    label: "66-80",
+    value: "66-80",
   },
   {
     label: "80+",

@@ -277,36 +277,42 @@ const DashboardApp = ({
             <Grid item xs={12} md={6} lg={4}>
               <PieChartWidget
                 title={`Age Wise Voters -${
-                  dashboard.opinion?.survey_completed ?? 0
+                  (dashboard.opinion?.age_wise?.["18-25"] ?? 0) +
+                  (dashboard.opinion?.age_wise?.["26-35"] ?? 0) +
+                  (dashboard.opinion?.age_wise?.["36-45"] ?? 0) +
+                  (dashboard.opinion?.age_wise?.["46-55"] ?? 0) +
+                  (dashboard.opinion?.age_wise?.["56-65"] ?? 0) +
+                  (dashboard.opinion?.age_wise?.["66-80"] ?? 0) +
+                  (dashboard.opinion?.age_wise?.["80+"] ?? 0)
                 }`}
                 chartData={[
                   {
                     label: "18-25",
-                    value: dashboard.opinion?.age_wise?.[0].survey_count ?? 0,
+                    value: dashboard.opinion?.age_wise?.["18-25"] ?? 0,
                   },
                   {
-                    label: "25-35",
-                    value: dashboard.opinion?.age_wise?.[1].survey_count ?? 0,
+                    label: "26-35",
+                    value: dashboard.opinion?.age_wise?.["26-35"] ?? 0,
                   },
                   {
-                    label: "35-45",
-                    value: dashboard.opinion?.age_wise?.[2].survey_count ?? 0,
+                    label: "36-45",
+                    value: dashboard.opinion?.age_wise?.["36-45"] ?? 0,
                   },
                   {
-                    label: "45-55",
-                    value: dashboard.opinion?.age_wise?.[3].survey_count ?? 0,
+                    label: "46-55",
+                    value: dashboard.opinion?.age_wise?.["46-55"] ?? 0,
                   },
                   {
-                    label: "55-65",
-                    value: dashboard.opinion?.age_wise?.[4].survey_count ?? 0,
+                    label: "56-65",
+                    value: dashboard.opinion?.age_wise?.["56-65"] ?? 0,
                   },
                   {
-                    label: "65-80",
-                    value: dashboard.opinion?.age_wise?.[5].survey_count ?? 0,
+                    label: "66-80",
+                    value: dashboard.opinion?.age_wise?.["66-80"] ?? 0,
                   },
                   {
                     label: "80+",
-                    value: dashboard.opinion?.age_wise?.[6].survey_count ?? 0,
+                    value: dashboard.opinion?.age_wise?.["80+"] ?? 0,
                   },
                 ]}
                 chartColors={[

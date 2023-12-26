@@ -1,6 +1,14 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { Grid, Container, Typography, Box, TextField, Card, MenuItem } from "@mui/material";
+import {
+  Grid,
+  Container,
+  Typography,
+  Box,
+  TextField,
+  Card,
+  MenuItem,
+} from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -13,7 +21,12 @@ import { useLocation } from "react-router-dom";
 import { RHFAutoComplete } from "../components/hook-form";
 import { UncontrolledTextField } from "../components/hook-form/RHFTextField";
 
-const OpinionPollSurveyPage = ({ isUser, getAllVotersSurvey, clearVoterReducer, common }) => {
+const OpinionPollSurveyPage = ({
+  isUser,
+  getAllVotersSurvey,
+  clearVoterReducer,
+  common,
+}) => {
   const [filterValues, setFilterValues] = useState(null);
   const [otherFilterValues, setOtherFilterValues] = useState({
     intrested_party: "",
@@ -29,10 +42,17 @@ const OpinionPollSurveyPage = ({ isUser, getAllVotersSurvey, clearVoterReducer, 
   const handleSubmit = async (filterValues) => {
     var values = {
       ...filterValues,
-      intrested_party: otherFilterValues.intrested_party == "" ? null : otherFilterValues.intrested_party,
-      is_resident: otherFilterValues.is_resident == "" ? null : otherFilterValues.is_resident,
+      intrested_party:
+        otherFilterValues.intrested_party == ""
+          ? null
+          : otherFilterValues.intrested_party,
+      is_resident:
+        otherFilterValues.is_resident == ""
+          ? null
+          : otherFilterValues.is_resident,
       fieldname: null,
       fieldvalue: null,
+      isSurveyed: null,
     };
 
     await getAllVotersSurvey(values);
