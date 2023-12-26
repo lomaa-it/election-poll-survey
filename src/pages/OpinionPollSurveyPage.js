@@ -33,6 +33,8 @@ const OpinionPollSurveyPage = ({
     is_resident: "",
   });
 
+  const [radioValue, setRadioValue] = useState("null");
+
   useEffect(() => {
     return () => {
       clearVoterReducer();
@@ -52,7 +54,7 @@ const OpinionPollSurveyPage = ({
           : otherFilterValues.is_resident,
       fieldname: null,
       fieldvalue: null,
-      isSurveyed: null,
+      isSurveyed: radioValue == "null" ? null : radioValue,
     };
 
     await getAllVotersSurvey(values);
@@ -198,7 +200,12 @@ const OpinionPollSurveyPage = ({
 
         <Box p={1} />
 
-        <OpinionPollSurveyList isUser={isUser} filterValues={filterValues} />
+        <OpinionPollSurveyList
+          isUser={isUser}
+          filterValues={filterValues}
+          radioValue={radioValue}
+          setRadioValue={setRadioValue}
+        />
       </Container>
     </Page>
   );

@@ -57,11 +57,12 @@ const OpinionPollSurveyList = ({
   showAlert,
   changeOpinionPoll,
   getAllVotersSurvey,
+  radioValue,
+  setRadioValue,
 }) => {
   const navigate = useNavigate();
   const fieldname = useRef();
   const fieldvalue = useRef();
-  const [radioValue, setRadioValue] = useState("null");
 
   const columns = [
     {
