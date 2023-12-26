@@ -99,15 +99,15 @@ const DashboardApp = ({
                 chartData={[
                   {
                     label: "Male",
-                    value: dashboard.opinion?.gender?.["MALE"] ?? 0,
+                    value: dashboard.opinion?.gender?.["Male"] ?? 0,
                   },
                   {
                     label: "Female",
-                    value: dashboard.opinion?.gender?.["FEMALE"] ?? 0,
+                    value: dashboard.opinion?.gender?.["Female"] ?? 0,
                   },
                   {
                     label: "Transgender",
-                    value: dashboard.opinion?.gender?.["THIRD"] ?? 0,
+                    value: dashboard.opinion?.gender?.["Third"] ?? 0,
                   },
                 ]}
                 chartColors={[

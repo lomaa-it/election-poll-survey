@@ -26,8 +26,12 @@ const OpinionPollSurveyList = ({ isUser, voter, account, filterValues, showAlert
       label: "Survey",
       options: {
         customBodyRender: (value, tableMeta, updateValue) => {
+          // console.log("tableMeta", tableMeta.rowData[18])
+          // console.log("value", value)
+          const isActive  = tableMeta.rowData[18] !== null ? true : false;
+          
           var index = voter.data.findIndex((e) => e.voter_pkk == value);
-          return <UpdateVoterDialog voterData={voter.data[index]} />;
+          return <UpdateVoterDialog voterData={voter.data[index]} isActive={isActive}/>;
         },
       },
     },

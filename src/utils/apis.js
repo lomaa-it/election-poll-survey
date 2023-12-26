@@ -21,8 +21,10 @@ export const getDashBoardbyTicketStatus = "/getdashboardbyticketstatus";
 export const getDashBoardbyCasteCount = "/getdashboardbycastecount";
 export const getDashBoardbyReligionCount = "/getdashboardbyreligioncount";
 export const getDashBoardbyDisabilityCount = "/getdashboardbydisabilitycount";
-export const getDashBoardbyGovtEmployeeCount = "/getdashboardbygovtemployeecount";
-export const getDashBoardbyResidentialStatus = "/getdashboardbyresidentialstatus";
+export const getDashBoardbyGovtEmployeeCount =
+  "/getdashboardbygovtemployeecount";
+export const getDashBoardbyResidentialStatus =
+  "/getdashboardbyresidentialstatus";
 export const getDashBoardbyageGroup = "/getdashboardbyagegroup";
 export const getDashBoardbyTicketbarChart = "/getdashboardbyticketbarchart";
 
@@ -61,7 +63,8 @@ export const getAllSachivalayamRoute = "/sachivalayam/getall";
 export const getAllPartsRoute = "/parts/getall";
 export const getAllVillageRoute = "/villages/getall";
 export const getAllDistrictsWithJoinRoute = "/getalldistrictswithjoin";
-export const getAllConstituenciesWithJoinRoute = "/getallconstituencieswithjoin";
+export const getAllConstituenciesWithJoinRoute =
+  "/getallconstituencieswithjoin";
 export const getAllMandalsWithJoinRoute = "/getallmandalswithjoin";
 
 export const getOpinionDashboardRoute = "/getopinionpolldashboard";

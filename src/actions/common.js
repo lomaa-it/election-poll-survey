@@ -1,4 +1,16 @@
-import { getAllDivisionRoute, getAllMandalRoute, getAllSachivalayamRoute, getAllPartsRoute, getAllVillageRoute, getAllNavaratnaluRoute, getAllCastesRoute, getAllReligionRoute, getAllDesignationsRoute, getTicketStatusRoute } from "../utils/apis";
+import {
+  getAllDivisionRoute,
+  getAllMandalRoute,
+  getAllSachivalayamRoute,
+  getAllPartsRoute,
+  getAllVillageRoute,
+  getAllNavaratnaluRoute,
+  getAllCastesRoute,
+  getAllReligionRoute,
+  getAllDesignationsRoute,
+  getTicketStatusRoute,
+  getAllPartiesRoute,
+} from "../utils/apis";
 import instance from "../utils/axios";
 
 export const getAllCommonData = (user) => async (dispatch) => {
@@ -36,6 +48,10 @@ export const getAllCommonData = (user) => async (dispatch) => {
 
     const ticketStatusResponse = await instance.post(getTicketStatusRoute);
     const ticketStatusResponseData = ticketStatusResponse.data?.message ?? [];
+
+    const partiesResponse = await instance.post(getAllPartiesRoute);
+    const partiesResponseData = partiesResponse.data?.message ?? [];
+
     // console.log("statusResponseData", statusResponseData);
 
     const filtersData = {
@@ -61,22 +77,34 @@ export const getAllCommonData = (user) => async (dispatch) => {
         label: e.ticket_status,
         value: e.lookup_pk,
       })),
+      parties: partiesResponseData.map((e) => ({
+        label: e.party_name,
+        value: e.lookup_pk,
+      })),
     };
 
     if (user.mandal_pk != null) {
-      filtersData["mandals"] = mandalsResponseData.filter((e) => e.mandal_pk == user.mandal_pk);
+      filtersData["mandals"] = mandalsResponseData.filter(
+        (e) => e.mandal_pk == user.mandal_pk
+      );
     }
 
     if (user.division_pk != null) {
-      filtersData["divisions"] = divisionsResponseData.filter((e) => e.division_pk == user.division_pk);
+      filtersData["divisions"] = divisionsResponseData.filter(
+        (e) => e.division_pk == user.division_pk
+      );
     }
 
     if (user.sachivalayam_pk != null) {
-      filtersData["sachivalayams"] = sachivalayamResponseData.filter((e) => e.sachivalayam_pk == user.sachivalayam_pk);
+      filtersData["sachivalayams"] = sachivalayamResponseData.filter(
+        (e) => e.sachivalayam_pk == user.sachivalayam_pk
+      );
     }
 
     if (user.part_no != null) {
-      filtersData["parts"] = partsResponseData.filter((e) => e.part_no == user.part_no);
+      filtersData["parts"] = partsResponseData.filter(
+        (e) => e.part_no == user.part_no
+      );
     }
 
     // if (user.village_pk != null) {

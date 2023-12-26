@@ -1,6 +1,7 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 import {
+  Link,
   NavLink as RouterLink,
   matchPath,
   useLocation,
@@ -63,7 +64,6 @@ function NavItem({ item, active }) {
     // ),
     // bgcolor:alpha("#00AF01", theme.palette.action.selectedOpacity),
     bgcolor: "#00AF01",
-    
   };
 
   const activeRootStyle2 = {
@@ -73,7 +73,6 @@ function NavItem({ item, active }) {
       theme.palette.text.white,
       theme.palette.action.selectedOpacity
     ),
-    
   };
 
   const activeSubStyle = {
@@ -89,9 +88,9 @@ function NavItem({ item, active }) {
           onClick={handleOpen}
           sx={{
             ...(isActiveRoot && activeRootStyle2),
-            "&:hover":{
-              bgcolor: "#00AF01"
-            }
+            "&:hover": {
+              bgcolor: "#00AF01",
+            },
           }}
         >
           <ListItemIconStyle>{icon && icon}</ListItemIconStyle>
@@ -116,13 +115,14 @@ function NavItem({ item, active }) {
               return (
                 <ListItemStyle
                   key={title}
-                  component={RouterLink}
+                  component={isActiveSub ? Box : RouterLink}
                   to={path}
+                  onClick={isActiveSub ? () => window.location.reload() : null}
                   sx={{
                     ...(isActiveSub && activeSubStyle),
-                    "&:hover":{
-                      bgcolor: "#00AF01"
-                    }
+                    "&:hover": {
+                      bgcolor: "#00AF01",
+                    },
                   }}
                 >
                   <ListItemIconStyle>
@@ -157,13 +157,14 @@ function NavItem({ item, active }) {
 
   return (
     <ListItemStyle
-      component={RouterLink}
+      component={isActiveRoot ? Box : RouterLink}
       to={path}
+      onClick={isActiveRoot ? () => window.location.reload() : null}
       sx={{
         ...(isActiveRoot && activeRootStyle),
-        "&:hover":{
-          bgcolor: "#00AF01"
-        }
+        "&:hover": {
+          bgcolor: "#00AF01",
+        },
       }}
     >
       <ListItemIconStyle>{icon && icon}</ListItemIconStyle>
