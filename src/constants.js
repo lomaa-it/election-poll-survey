@@ -69,3 +69,20 @@ export const getTicketStatusById = (value) => {
 
   return "-";
 };
+
+export const getTicketColorByValue = (value) => {
+  if (value === 1) {
+    return "primary.main";
+  }
+  if (value === 2) {
+    return "success.main";
+  }
+  if (value === 3) {
+    return "error.main";
+  }
+  if (value === 4) {
+    return "#DC582A";
+  }
+
+  return "grey";
+};

@@ -59,7 +59,7 @@ const Router = () => {
       <Route path="/forget-reset-password" element={<ForgetResetPage />} />
       <Route path="/reset-password" element={<ResetPage />} />
 
-      <Route path="/" element={<ProtectedRoute type={[LOGIN_TYPES[0]]} />}>
+      <Route path="/" element={<ProtectedRoute type={[LOGIN_TYPES[0], LOGIN_TYPES[7]]} />}>
         <Route path="" element={<DashboardLayout />}>
           <Route path="dashboard" element={<DashboardPage />} />
           <Route path="voting-poll-dashboard" element={<VotingPollDashBoardPage />} />
@@ -73,9 +73,8 @@ const Router = () => {
           <Route path="/voting-poll-survey/reports" element={<VotingSurveyReportsPage />} />
           <Route path="voting-polling-reports" element={<VotingPollingReportsPage />} />
           <Route path="/voting-poll-survey/report-by-survey-and-voting-reason" element={<ReportbySurveyandVotingReasonPage />} />
+
           <Route path="tickets" element={<TicketsPage />} />
-          <Route path="view-voter" element={<ViewVoterPage />} />
-          <Route path="voter-registration" element={<VoterRegistrationPage />} />
           <Route path="voting-poll-results" element={<VotingPollResultsPage />} />
           <Route path="polling-results-by-state" element={<VotingPollingResultsbyStatePage />} />
           <Route path="add-ticket1" element={<AddTicketPage />} />
@@ -83,7 +82,9 @@ const Router = () => {
           <Route path="absent-ticket" element={<AbsentTicketPage />} />
           <Route path="voter-and-volunteer-mapping" element={<VoterAndVolunteerMappingPage />} />
           <Route path="user-mapping" element={<UserMappingPage />} />
-          <Route path="divisions" element={<DivisionPage />} /> <Route path="mandals" element={<MandalPage />} />
+
+          <Route path="divisions" element={<DivisionPage />} />
+          <Route path="mandals" element={<MandalPage />} />
           <Route path="constituencies" element={<ConstituenciesPage />} />
           <Route path="districts" element={<DistrictsPage />} />
           <Route path="states" element={<StatesPage />} />
@@ -94,12 +95,19 @@ const Router = () => {
         </Route>
       </Route>
 
-      <Route path="/" element={<ProtectedRoute type={[LOGIN_TYPES[0], LOGIN_TYPES[8]]} />}>
+      <Route path="/" element={<ProtectedRoute type={[LOGIN_TYPES[0], LOGIN_TYPES[7], LOGIN_TYPES[8]]} />}>
         <Route path="" element={<DashboardLayout />}>
           <Route path="/user-management/user-registration" element={<UserRegistrationPage />} />
           <Route path="/user-management/view-user" element={<ViewUserPage />} />
 
           <Route path="parts" element={<PartsPage />} />
+        </Route>
+      </Route>
+
+      <Route path="/" element={<ProtectedRoute type={[LOGIN_TYPES[7], LOGIN_TYPES[8]]} />}>
+        <Route path="" element={<DashboardLayout />}>
+          <Route path="voter-registration" element={<VoterRegistrationPage />} />
+          <Route path="view-voter" element={<ViewVoterPage />} />
         </Route>
       </Route>
 

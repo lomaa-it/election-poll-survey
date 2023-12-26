@@ -1,14 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import {
-  Grid,
-  Container,
-  Typography,
-  Box,
-  TextField,
-  Card,
-  MenuItem,
-} from "@mui/material";
+import { Grid, Container, Typography, Box, TextField, Card, MenuItem } from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -21,16 +13,11 @@ import { useLocation } from "react-router-dom";
 import { RHFAutoComplete } from "../components/hook-form";
 import { UncontrolledTextField } from "../components/hook-form/RHFTextField";
 
-const OpinionPollSurveyPage = ({
-  isUser,
-  getAllVotersSurvey,
-  clearVoterReducer,
-  common,
-}) => {
+const OpinionPollSurveyPage = ({ isUser, getAllVotersSurvey, clearVoterReducer, common }) => {
   const [filterValues, setFilterValues] = useState(null);
   const [otherFilterValues, setOtherFilterValues] = useState({
-    interested_party: "",
-    residence: "",
+    intrested_party: "",
+    is_resident: "",
   });
 
   useEffect(() => {
@@ -40,22 +27,25 @@ const OpinionPollSurveyPage = ({
   }, []);
 
   const handleSubmit = async (filterValues) => {
-    await getAllVotersSurvey({
+    var values = {
       ...filterValues,
+      intrested_party: otherFilterValues.intrested_party == "" ? null : otherFilterValues.intrested_party,
+      is_resident: otherFilterValues.is_resident == "" ? null : otherFilterValues.is_resident,
       fieldname: null,
       fieldvalue: null,
-    });
-    setFilterValues(filterValues);
+    };
+
+    await getAllVotersSurvey(values);
+    setFilterValues(values);
   };
+
   const handleReset = () => {
     setOtherFilterValues({
-      interested_party: "",
-      residence: "",
+      intrested_party: "",
+      is_resident: "",
     });
   };
 
-  console.log("otherFilterValues", otherFilterValues);
-  
   return (
     <Page title="Opinion Survey">
       <Container maxWidth="xl">
@@ -72,13 +62,13 @@ const OpinionPollSurveyPage = ({
                 <>
                   <Grid item xs={12} md={6} lg={2}>
                     <UncontrolledTextField
-                      name="interested_party"
+                      name="intrested_party"
                       label="Select Party"
-                      value={otherFilterValues.interested_party}
+                      value={otherFilterValues.intrested_party}
                       onChange={(e) =>
                         setOtherFilterValues({
                           ...otherFilterValues,
-                          interested_party: e.target.value,
+                          intrested_party: e.target.value,
                         })
                       }
                       select
@@ -93,13 +83,13 @@ const OpinionPollSurveyPage = ({
 
                   <Grid item xs={12} md={6} lg={2}>
                     <UncontrolledTextField
-                      name="residence"
+                      name="is_resident"
                       label="Select Residence"
-                      value={otherFilterValues.residence}
+                      value={otherFilterValues.is_resident}
                       onChange={(e) =>
                         setOtherFilterValues({
                           ...otherFilterValues,
-                          residence: e.target.value,
+                          is_resident: e.target.value,
                         })
                       }
                       select

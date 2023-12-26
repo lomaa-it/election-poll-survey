@@ -35,6 +35,21 @@ const operatorNavConfig = [
     ],
   },
   {
+    title: "Voter Management",
+    path: "/reports",
+    icon: <Iconify icon="formkit:people" width="24px" height="24px" />,
+    children: [
+      {
+        title: "View Voter",
+        path: "/view-voter",
+      },
+      {
+        title: "Add Voter",
+        path: "/voter-registration",
+      },
+    ],
+  },
+  {
     title: "Parts",
     path: "/parts",
     icon: <Iconify icon="formkit:people" width="24px" height="24px" />,
@@ -53,7 +68,6 @@ const operatorNavConfig = [
 //     icon: <Iconify icon="ion:ticket" width="24px" height="24px" />,
 //   },
 // ];
-//xyz
 
 const mlaNavConfig = [
   {
@@ -153,21 +167,21 @@ const mlaNavConfig = [
   },
 
   // Voter Management with Sub Menu
-  {
-    title: "Voter Management",
-    path: "/reports",
-    icon: <Iconify icon="formkit:people" width="24px" height="24px" />,
-    children: [
-      {
-        title: "View Voter",
-        path: "/view-voter",
-      },
-      // {
-      //   title: "Add Voter",
-      //   path: "/voter-registration",
-      // },
-    ],
-  },
+  // {
+  //   title: "Voter Management",
+  //   path: "/reports",
+  //   icon: <Iconify icon="formkit:people" width="24px" height="24px" />,
+  //   children: [
+  //     {
+  //       title: "View Voter",
+  //       path: "/view-voter",
+  //     },
+  //     // {
+  //     //   title: "Add Voter",
+  //     //   path: "/voter-registration",
+  //     // },
+  //   ],
+  // },
   {
     title: "Ticket Management",
     path: "/reports",
@@ -267,4 +281,97 @@ const mlaNavConfig = [
   // },
 ];
 
-export { userNavConfig, operatorNavConfig, mlaNavConfig };
+const adminNavConfig = [
+  {
+    title: "Survey Dashboard",
+    path: "/dashboard",
+    icon: <Iconify icon="ic:round-dashboard" width="24px" height="24px" />,
+  },
+  {
+    title: "Opinion Survey ",
+    path: "/opinionsurvey",
+    icon: <Iconify icon="mdi:report-box-outline" width="24px" height="24px" />,
+    children: [
+      {
+        title: "Opinion Survey",
+        path: "/opinionsurvey/survey",
+        icon: <Iconify icon="ic:round-person" width="24px" height="24px" />,
+      },
+      {
+        title: "Opinion Results",
+        path: "/opinionsurvey/results",
+        icon: <Iconify icon="ic:round-person" width="24px" height="24px" />,
+      },
+      {
+        title: "Opinion Reports",
+        path: "/opinionsurvey/reports",
+      },
+    ],
+  },
+
+  {
+    title: "User Management",
+    path: "/user-management",
+    icon: <Iconify icon="ic:baseline-people" width="24px" height="24px" />,
+    children: [
+      {
+        title: "View User",
+        path: "/user-management/view-user",
+      },
+      {
+        title: "Add User",
+        path: "/user-management/user-registration",
+      },
+    ],
+  },
+  {
+    title: "Voter Management",
+    path: "/reports",
+    icon: <Iconify icon="formkit:people" width="24px" height="24px" />,
+    children: [
+      {
+        title: "View Voter",
+        path: "/view-voter",
+      },
+      {
+        title: "Add Voter",
+        path: "/voter-registration",
+      },
+    ],
+  },
+  {
+    title: "Ticket Management",
+    path: "/reports",
+    icon: <Iconify icon="ion:ticket" width="24px" height="24px" />,
+    children: [
+      {
+        title: "View Tickets",
+        path: "/tickets",
+      },
+    ],
+  },
+  {
+    title: "Configuration",
+    path: "/reports",
+    icon: <Iconify icon="ri:mind-map" width="24px" height="24px" />,
+    children: [
+      {
+        title: "User Mapping",
+        path: "/user-mapping",
+      },
+    ],
+  },
+  {
+    title: "Administration",
+    path: "/admin",
+    icon: <Iconify icon="eos-icons:admin" width="24px" height="24px" />,
+    children: [
+      {
+        title: "Parts",
+        path: "/parts",
+      },
+    ],
+  },
+];
+
+export { userNavConfig, operatorNavConfig, mlaNavConfig, adminNavConfig };

@@ -6,7 +6,7 @@ import useResponsive from "../../../hooks/useResponsive";
 import Logo from "../../../components/logo";
 import Scrollbar from "../../../components/Scrollbar";
 import NavSection from "../../../components/NavSection";
-import { mlaNavConfig, operatorNavConfig, userNavConfig } from "./config";
+import { adminNavConfig, mlaNavConfig, operatorNavConfig, userNavConfig } from "./config";
 import { connect } from "react-redux";
 import { LOGIN_TYPES, PUBLIC_URL } from "../../../constants";
 
@@ -32,6 +32,8 @@ const Nav = ({ account, openNav, onCloseNav }) => {
     let navbar = [];
     if (userDesignation == LOGIN_TYPES[0]) {
       navbar = mlaNavConfig;
+    } else if (userDesignation == LOGIN_TYPES[7]) {
+      navbar = adminNavConfig;
     } else if (userDesignation == LOGIN_TYPES[8]) {
       navbar = operatorNavConfig;
     } else {

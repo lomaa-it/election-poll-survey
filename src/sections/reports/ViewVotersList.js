@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Typography, Card, Stack, Grid, Switch, Divider, Box, Chip, TextField, CircularProgress, MenuItem, Button } from "@mui/material";
 import { CheckBox } from "@mui/icons-material";
 import MUIDataTable from "mui-datatables";
@@ -14,7 +14,8 @@ import { UncontrolledTextField } from "../../components/hook-form/RHFTextField";
 import SearchIcon from "@mui/icons-material/Search";
 
 const ViewVotersList = ({ voter, filterValues, showAlert, getAllVotersSurvey, account }) => {
-  const [searchForm, setSearchForm] = useState({ fieldname: "", fieldvalue: "" });
+  const fieldname = useRef();
+  const fieldvalue = useRef();
 
   const columns = [
     {
@@ -151,6 +152,7 @@ const ViewVotersList = ({ voter, filterValues, showAlert, getAllVotersSurvey, ac
   };
 
   const handleRetrieveData = (tableState) => {
+    var searchForm = { fieldname: fieldname.current.value, fieldvalue: fieldvalue.current.value };
     getAllVotersSurvey({ ...filterValues, ...searchForm }, tableState.page, tableState.rowsPerPage);
   };
 
@@ -174,6 +176,32 @@ const ViewVotersList = ({ voter, filterValues, showAlert, getAllVotersSurvey, ac
 
   return (
     <Card elevation={1}>
+      <Box p={3}>
+        <Grid container spacing={2} alignItems="center">
+          <Grid item xs={2}>
+            <UncontrolledTextField inputRef={fieldname} label="Search by" select>
+              {searchFields.map((item, index) => (
+                <MenuItem key={index} value={item.name}>
+                  {item.label}
+                </MenuItem>
+              ))}
+            </UncontrolledTextField>
+          </Grid>
+
+          <Grid item xs={3}>
+            <UncontrolledTextField inputRef={fieldvalue} label="Search..." />
+          </Grid>
+
+          <Grid item xs={3}>
+            <Button disabled={voter.isLoading} variant="contained" onClick={handleRetrieveData}>
+              <SearchIcon />
+            </Button>
+          </Grid>
+        </Grid>
+      </Box>
+
+      <Divider />
+
       {voter.isLoading && (
         <Box minHeight={200} display="flex" justifyContent="center" alignItems="center">
           <CircularProgress />
@@ -182,29 +210,6 @@ const ViewVotersList = ({ voter, filterValues, showAlert, getAllVotersSurvey, ac
 
       {!voter.isLoading && (
         <>
-          <Box p={3}>
-            <Grid container spacing={2} alignItems="center">
-              <Grid item xs={2}>
-                <UncontrolledTextField name="fieldname" label="Search by" value={searchForm.fieldname} onChange={(e) => setSearchForm((state) => ({ ...state, fieldname: e.target.value }))} select>
-                  {searchFields.map((item, index) => (
-                    <MenuItem key={index} value={item.name}>
-                      {item.label}
-                    </MenuItem>
-                  ))}
-                </UncontrolledTextField>
-              </Grid>
-              <Grid item xs={3}>
-                <UncontrolledTextField name="fieldvalue" label="Search..." value={searchForm.fieldvalue} onChange={(e) => setSearchForm((state) => ({ ...state, fieldvalue: e.target.value }))} />
-              </Grid>
-              <Grid item xs={3}>
-                <Button variant="contained" onClick={handleRetrieveData}>
-                  <SearchIcon />
-                </Button>
-              </Grid>
-            </Grid>
-          </Box>
-
-          <Divider />
           <ThemeProvider theme={getMuiTableTheme()}>
             <MUIDataTable title="Voter List" columns={columns} data={voter.data} options={options} />
           </ThemeProvider>

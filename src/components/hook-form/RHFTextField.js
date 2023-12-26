@@ -1,5 +1,5 @@
 import { useFormContext, Controller } from "react-hook-form";
-import { TextField } from "@mui/material";
+import { Select, TextField } from "@mui/material";
 
 export default function RHFTextField({ name, onChange, ...other }) {
   const { control } = useFormContext();
@@ -27,12 +27,13 @@ export default function RHFTextField({ name, onChange, ...other }) {
   );
 }
 
-export function UncontrolledTextField({ name, onChange, ...other }) {
+export function UncontrolledTextField({ name, inputRef, onChange, ...other }) {
   return (
     <TextField
       {...other}
       name={name}
       size="small"
+      inputRef={inputRef}
       onChange={onChange}
       fullWidth
       sx={{

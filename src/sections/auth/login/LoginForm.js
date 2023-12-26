@@ -118,6 +118,8 @@ const LoginForm = ({ showAlert, authSuccess }) => {
 
           if (LOGIN_TYPES[0] == userData.desgination_name) {
             navigate("/dashboard", { replace: true });
+          } else if (LOGIN_TYPES[7] == userData.desgination_name) {
+            navigate("/dashboard", { replace: true });
           } else if (LOGIN_TYPES[8] == userData.desgination_name) {
             navigate("/user-management/view-user", { replace: true });
           } else {

@@ -21,13 +21,16 @@ const ViewVoterPage = ({ getAllVotersSurvey }) => {
   }, []);
 
   const handleSubmit = async (filterValues) => {
-    var values = { ...formValues, ...filterValues };
+    var values = {
+      ...filterValues,
+      intrested_party: null,
+      is_resident: null,
+      fieldname: null,
+      fieldvalue: null,
+    };
+
     await getAllVotersSurvey(values);
     setFilterValues(values);
-  };
-
-  const handleChange = (e) => {
-    setFormValues((state) => ({ ...state, [e.target.name]: e.target.value }));
   };
 
   const handleReset = () => {

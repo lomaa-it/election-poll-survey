@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, Stack, Box, CircularProgress, IconButton, Typography, Divider, TextField, Grid, MenuItem, Button } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
@@ -8,17 +8,18 @@ import { connect } from "react-redux";
 import { showAlert } from "../../actions/alert";
 
 import EditNoteIcon from "@mui/icons-material/EditNote";
-import { PARTY_ID, ROWS_PER_PAGE_OPTION, getMuiTableTheme } from "../../constants";
+import { PARTY_ID, ROWS_PER_PAGE_OPTION, getMuiTableTheme, getTicketColorByValue } from "../../constants";
 import { changeOpinionPoll, getAllVotersSurvey } from "../../actions/voter";
 import { BJPRadio, CongressRadio, JSPRadio, NeutralRadio, OthersRadio, TDPRadio, YCPRadio } from "../common/PartyRadioButtons";
 import UpdateVoterDialog from "../common/UpdateVoterDialog";
 import AnalyticsCard from "../common/AnalyticsCard";
-import { UncontrolledTextField } from "../../components/hook-form/RHFTextField";
+import { UncontrolledSelectField, UncontrolledTextField } from "../../components/hook-form/RHFTextField";
 import SearchIcon from "@mui/icons-material/Search";
 
 const OpinionPollSurveyList = ({ isUser, voter, account, filterValues, showAlert, changeOpinionPoll, getAllVotersSurvey }) => {
   const navigate = useNavigate();
-  const [searchForm, setSearchForm] = useState({ fieldname: "", fieldvalue: "" });
+  const fieldname = useRef();
+  const fieldvalue = useRef();
 
   const columns = [
     {
@@ -28,10 +29,26 @@ const OpinionPollSurveyList = ({ isUser, voter, account, filterValues, showAlert
         customBodyRender: (value, tableMeta, updateValue) => {
           // console.log("tableMeta", tableMeta.rowData[18])
           // console.log("value", value)
-          const isActive  = tableMeta.rowData[18] !== null ? true : false;
-          
+          const isActive = tableMeta.rowData[18] !== null ? true : false;
+
           var index = voter.data.findIndex((e) => e.voter_pkk == value);
-          return <UpdateVoterDialog voterData={voter.data[index]} isActive={isActive}/>;
+          return (
+            <Stack direction="row" spacing={1}>
+              <UpdateVoterDialog voterData={voter.data[index]} isActive={isActive} />
+
+              {tableMeta.rowData[18] == PARTY_ID.NEUTRAL && (
+                <IconButton
+                  onClick={() => handleEdit(voter.data[index])}
+                  sx={{
+                    p: 0,
+                    color: getTicketColorByValue(voter.data[index]?.status_id),
+                  }}
+                >
+                  <EditNoteIcon />
+                </IconButton>
+              )}
+            </Stack>
+          );
         },
       },
     },
@@ -74,8 +91,8 @@ const OpinionPollSurveyList = ({ isUser, voter, account, filterValues, showAlert
       label: "Age",
     },
     {
-      name: "current_address",
-      label: "Current Address",
+      name: "permenent_address",
+      label: "Permanent Address",
       options: {
         setCellProps: () => ({ style: { minWidth: "200px" } }),
       },
@@ -131,9 +148,10 @@ const OpinionPollSurveyList = ({ isUser, voter, account, filterValues, showAlert
         display: false,
       },
     },
+
     {
-      name: "permenent_address",
-      label: "Permanent Address",
+      name: "current_address",
+      label: "Current Address",
       options: {
         setCellProps: () => ({ style: { minWidth: "200px" } }),
       },
@@ -145,31 +163,17 @@ const OpinionPollSurveyList = ({ isUser, voter, account, filterValues, showAlert
         customBodyRender: (value, tableMeta, updateValue) => {
           var data = tableMeta.rowData;
           var partyId = PARTY_ID.NEUTRAL;
-          var index = voter.data.findIndex((e) => e.voter_pkk == data[0]);
-
           return (
-            <Stack direction="row" alignItems="center" spacing={2}>
-              <NeutralRadio
-                sx={{
-                  p: 0,
-                }}
-                checked={value == partyId}
-                onChange={() => {
-                  handleChange(data[0], partyId);
-                }}
-              />
-
-              {value == PARTY_ID.NEUTRAL && (
-                <IconButton
-                  onClick={() => handleEdit(voter.data[index])}
-                  sx={{
-                    p: 0,
-                  }}
-                >
-                  <EditNoteIcon />
-                </IconButton>
-              )}
-            </Stack>
+            <NeutralRadio
+              sx={{
+                p: 0,
+              }}
+              disabled={account.user?.desgination_name == "MLA"}
+              checked={value == partyId}
+              onChange={() => {
+                handleChange(data[0], partyId);
+              }}
+            />
           );
         },
       },
@@ -186,6 +190,7 @@ const OpinionPollSurveyList = ({ isUser, voter, account, filterValues, showAlert
               sx={{
                 p: 0,
               }}
+              disabled={account.user?.desgination_name == "MLA"}
               checked={value == partyId}
               onChange={() => handleChange(data[0], partyId)}
             />
@@ -205,6 +210,7 @@ const OpinionPollSurveyList = ({ isUser, voter, account, filterValues, showAlert
               sx={{
                 p: 0,
               }}
+              disabled={account.user?.desgination_name == "MLA"}
               checked={value == partyId}
               onChange={() => handleChange(data[0], partyId)}
             />
@@ -224,6 +230,7 @@ const OpinionPollSurveyList = ({ isUser, voter, account, filterValues, showAlert
               sx={{
                 p: 0,
               }}
+              disabled={account.user?.desgination_name == "MLA"}
               checked={value == partyId}
               onChange={() => handleChange(data[0], partyId)}
             />
@@ -243,6 +250,7 @@ const OpinionPollSurveyList = ({ isUser, voter, account, filterValues, showAlert
               sx={{
                 p: 0,
               }}
+              disabled={account.user?.desgination_name == "MLA"}
               checked={value == partyId}
               onChange={() => handleChange(data[0], partyId)}
             />
@@ -262,6 +270,7 @@ const OpinionPollSurveyList = ({ isUser, voter, account, filterValues, showAlert
               sx={{
                 p: 0,
               }}
+              disabled={account.user?.desgination_name == "MLA"}
               checked={value == partyId}
               onChange={() => handleChange(data[0], partyId)}
             />
@@ -281,6 +290,7 @@ const OpinionPollSurveyList = ({ isUser, voter, account, filterValues, showAlert
               sx={{
                 p: 0,
               }}
+              disabled={account.user?.desgination_name == "MLA"}
               checked={value == partyId}
               onChange={() => handleChange(data[0], partyId)}
             />
@@ -365,6 +375,7 @@ const OpinionPollSurveyList = ({ isUser, voter, account, filterValues, showAlert
   };
 
   const handleRetrieveData = (tableState) => {
+    var searchForm = { fieldname: fieldname.current.value, fieldvalue: fieldvalue.current.value };
     getAllVotersSurvey({ ...filterValues, ...searchForm }, tableState.page, tableState.rowsPerPage);
   };
 
@@ -375,6 +386,32 @@ const OpinionPollSurveyList = ({ isUser, voter, account, filterValues, showAlert
       <Box p={1} />
 
       <Card elevation={1}>
+        <Box p={3}>
+          <Grid container spacing={2} alignItems="center">
+            <Grid item xs={2}>
+              <UncontrolledTextField inputRef={fieldname} label="Search by" select>
+                {searchFields.map((item, index) => (
+                  <MenuItem key={index} value={item.name}>
+                    {item.label}
+                  </MenuItem>
+                ))}
+              </UncontrolledTextField>
+            </Grid>
+
+            <Grid item xs={3}>
+              <UncontrolledTextField inputRef={fieldvalue} label="Search..." />
+            </Grid>
+
+            <Grid item xs={3}>
+              <Button disabled={voter.isLoading} variant="contained" onClick={handleRetrieveData}>
+                <SearchIcon />
+              </Button>
+            </Grid>
+          </Grid>
+        </Box>
+
+        <Divider />
+
         {voter.isLoading && (
           <Box minHeight={200} display="flex" justifyContent="center" alignItems="center">
             <CircularProgress />
@@ -383,30 +420,6 @@ const OpinionPollSurveyList = ({ isUser, voter, account, filterValues, showAlert
 
         {!voter.isLoading && (
           <>
-            <Box p={3}>
-              <Grid container spacing={2} alignItems="center">
-                <Grid item xs={2}>
-                  <UncontrolledTextField name="fieldname" label="Search by" value={searchForm.fieldname} onChange={(e) => setSearchForm((state) => ({ ...state, fieldname: e.target.value }))} select>
-                    {searchFields.map((item, index) => (
-                      <MenuItem key={index} value={item.name}>
-                        {item.label}
-                      </MenuItem>
-                    ))}
-                  </UncontrolledTextField>
-                </Grid>
-                <Grid item xs={3}>
-                  <UncontrolledTextField name="fieldvalue" label="Search..." value={searchForm.fieldvalue} onChange={(e) => setSearchForm((state) => ({ ...state, fieldvalue: e.target.value }))} />
-                </Grid>
-                <Grid item xs={3}>
-                  <Button variant="contained" onClick={handleRetrieveData}>
-                    <SearchIcon />
-                  </Button>
-                </Grid>
-              </Grid>
-            </Box>
-
-            <Divider />
-
             <ThemeProvider theme={getMuiTableTheme()}>
               <MUIDataTable title="Opinion Poll" columns={columns} data={voter.data} options={options} />
             </ThemeProvider>
