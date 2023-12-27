@@ -31,6 +31,13 @@ export default function RHFAutoComplete({ name, value, options, getOptionLabel, 
           {...other}
         />
       )}
+      slotProps={{
+        popper: {
+          sx: {
+            zIndex: 1000,
+          },
+        },
+      }}
       onChange={(e, value) => onChange(name, value)}
     />
   );

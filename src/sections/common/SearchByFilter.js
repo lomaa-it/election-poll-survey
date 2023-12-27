@@ -284,7 +284,8 @@ const SearchByFilter = forwardRef(
             />
           </Grid>
         )}
-{showPartNo && formValues?.mandal !== null && account?.user?.desgination_name == "MLA" &&(
+
+        {showPartNo && formValues?.mandal !== null && account?.user?.desgination_name == "MLA" && (
           <Grid item xs={12} md={6} lg={lg}>
             <RHFAutoComplete
               name="partno"

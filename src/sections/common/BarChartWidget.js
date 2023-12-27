@@ -3,16 +3,7 @@ import { Box, Card, CardHeader } from "@mui/material";
 import { fNumber } from "../../utils/formatNumber";
 import { useChart } from "../../components/chart";
 
-export default function BarChartWidget({
-  title,
-  subheader,
-  chartLabels,
-  chartData,
-  chartColors,
-  distributed = false,
-  withCard = true,
-  ...other
-}) {
+export default function BarChartWidget({ title, subheader, chartLabels, chartData, chartColors, distributed = false, withCard = true, ...other }) {
   const chartOptions = useChart({
     chart: { stacked: true },
     colors: chartColors,
@@ -33,11 +24,11 @@ export default function BarChartWidget({
     },
     xaxis: {
       categories: chartLabels,
-      tickAmount: 6, // reduce this number to create more space for each label  
+      tickAmount: 6,
       labels: {
-        rotate: 0, // this will prevent the labels from rotating
+        rotate: 0,
         style: {
-          fontSize: "8px", // specify your desired font size here
+          fontSize: "10px",
         },
       },
     },
@@ -57,14 +48,7 @@ export default function BarChartWidget({
   // window.addEventListener("resize", updateFontSize);
   // // initial font size update
   // updateFontSize();
-  const chartComponent = (
-    <ReactApexChart
-      type="bar"
-      series={chartData}
-      options={chartOptions}
-      height={352}
-    />
-  );
+  const chartComponent = <ReactApexChart type="bar" series={chartData} options={chartOptions} height={352} />;
 
   if (withCard)
     return (

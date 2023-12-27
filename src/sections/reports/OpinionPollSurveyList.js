@@ -1,18 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import * as Yup from "yup";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  Card,
-  Stack,
-  Box,
-  CircularProgress,
-  IconButton,
-  Typography,
-  Divider,
-  TextField,
-  Grid,
-  MenuItem,
-  Button,
-} from "@mui/material";
+import { Card, Stack, Box, CircularProgress, IconButton, Typography, Divider, TextField, Grid, MenuItem, Button } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 
 import MUIDataTable from "mui-datatables";
@@ -20,49 +11,33 @@ import { connect } from "react-redux";
 import { showAlert } from "../../actions/alert";
 
 import EditNoteIcon from "@mui/icons-material/EditNote";
-import {
-  PARTY_ID,
-  ROWS_PER_PAGE_OPTION,
-  getMuiTableTheme,
-  getTicketColorByValue,
-} from "../../constants";
+import { PARTY_ID, ROWS_PER_PAGE_OPTION, getMuiTableTheme, getTicketColorByValue } from "../../constants";
 import { changeOpinionPoll, getAllVotersSurvey } from "../../actions/voter";
-import {
-  BJPRadio,
-  CongressRadio,
-  JSPRadio,
-  NeutralRadio,
-  OthersRadio,
-  TDPRadio,
-  YCPRadio,
-} from "../common/PartyRadioButtons";
+import { BJPRadio, CongressRadio, JSPRadio, NeutralRadio, OthersRadio, TDPRadio, YCPRadio } from "../common/PartyRadioButtons";
 import UpdateVoterDialog from "../common/UpdateVoterDialog";
 import AnalyticsCard from "../common/AnalyticsCard";
-import {
-  UncontrolledSelectField,
-  UncontrolledTextField,
-} from "../../components/hook-form/RHFTextField";
 import SearchIcon from "@mui/icons-material/Search";
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormControl from "@mui/material/FormControl";
-import FormLabel from "@mui/material/FormLabel";
+import { FormProvider, RHFTextField, RHFRadio } from "../../components/hook-form";
 
-const OpinionPollSurveyList = ({
-  isUser,
-  voter,
-  account,
-  filterValues,
-  showAlert,
-  changeOpinionPoll,
-  getAllVotersSurvey,
-  radioValue,
-  setRadioValue,
-}) => {
+const OpinionPollSurveyList = forwardRef(({ isUser, voter, account, filterValues, showAlert, changeOpinionPoll, getAllVotersSurvey }, ref) => {
   const navigate = useNavigate();
-  const fieldname = useRef();
-  const fieldvalue = useRef();
+
+  const schema = Yup.object().shape({
+    fieldname: Yup.string(),
+    fieldvalue: Yup.string(),
+  });
+
+  const defaultValues = {
+    fieldname: "",
+    fieldvalue: "",
+  };
+
+  const methods = useForm({
+    resolver: yupResolver(schema),
+    defaultValues,
+  });
+
+  const { getValues, reset } = methods;
 
   const columns = [
     {
@@ -77,10 +52,7 @@ const OpinionPollSurveyList = ({
           var index = voter.data.findIndex((e) => e.voter_pkk == value);
           return (
             <Stack direction="row" spacing={1}>
-              <UpdateVoterDialog
-                voterData={voter.data[index]}
-                isActive={isActive}
-              />
+              <UpdateVoterDialog voterData={voter.data[index]} isActive={isActive} />
 
               {tableMeta.rowData[18] == PARTY_ID.NEUTRAL && (
                 <IconButton
@@ -420,98 +392,72 @@ const OpinionPollSurveyList = ({
     }
   };
 
-  const handleRetrieveData = (tableState) => {
-    var searchForm = {
-      fieldname: fieldname.current.value,
-      fieldvalue: fieldvalue.current.value,
+  const getSearchData = () => {
+    var fieldname = getValues("fieldname");
+    var fieldvalue = getValues("fieldvalue");
+
+    var searchData = {
+      fieldname: fieldname === "" ? null : fieldname,
+      fieldvalue: fieldvalue === "" ? null : fieldvalue,
     };
 
-    console.log("Hi", radioValue);
+    return searchData;
+  };
 
+  const handleRetrieveData = (tableState) => {
+    var serachData = getSearchData();
     getAllVotersSurvey(
       {
         ...filterValues,
-        ...searchForm,
-        isSurveyed: radioValue == "null" ? null : radioValue,
+        ...serachData,
       },
-      tableState.page,
-      tableState.rowsPerPage
+      tableState?.page,
+      tableState?.rowsPerPage
     );
   };
-  console.log("radioValue", radioValue);
+
+  useImperativeHandle(ref, () => ({
+    getSearchData: getSearchData,
+    reset: reset,
+  }));
+
   return (
     <>
-      <AnalyticsCard
-        names={["Total Voters", "Survey Completed", "Pending"]}
-        values={[voter.count, voter.completed, voter.pending]}
-      />
+      <AnalyticsCard names={["Total Voters", "Survey Completed", "Pending"]} values={[voter.count, voter.completed, voter.pending]} />
 
       <Box p={1} />
 
       <Card elevation={1}>
-        <Box p={3}>
-          <Grid container spacing={2} alignItems="center">
-            <Grid item xs={2}>
-              <UncontrolledTextField
-                inputRef={fieldname}
-                label="Search by"
-                select
-              >
-                {searchFields.map((item, index) => (
-                  <MenuItem key={index} value={item.name}>
-                    {item.label}
-                  </MenuItem>
-                ))}
-              </UncontrolledTextField>
-            </Grid>
+        <FormProvider methods={methods}>
+          <Box p={3}>
+            <Grid container spacing={2} alignItems="center">
+              <Grid item xs={2}>
+                <RHFTextField name="fieldname" label="Search by" select>
+                  {searchFields.map((item, index) => (
+                    <MenuItem key={index} value={item.name}>
+                      {item.label}
+                    </MenuItem>
+                  ))}
+                </RHFTextField>
+              </Grid>
 
-            <Grid item xs={3}>
-              <UncontrolledTextField inputRef={fieldvalue} label="Search..." />
-            </Grid>
-            <Grid item xs={3}>
-              <FormControl>
-                {/* <FormLabel id="demo-row-radio-buttons-group-label">
-                  Gender
-                </FormLabel> */}
-                <RadioGroup
-                  onChange={(e) => setRadioValue(e.target.value)}
-                  value={radioValue}
-                  row
-                  aria-labelledby="demo-row-radio-buttons-group-label"
-                  name="row-radio-buttons-group"
-                >
-                  <FormControlLabel
-                    value="null"
-                    control={<Radio />}
-                    label="All"
-                  />
-                  <FormControlLabel value="Y" control={<Radio />} label="Yes" />
-                  <FormControlLabel value="N" control={<Radio />} label="No" />
-                </RadioGroup>
-              </FormControl>
-            </Grid>
+              <Grid item xs={3}>
+                <RHFTextField name="fieldvalue" label="Search..." />
+              </Grid>
 
-            <Grid item xs={3}>
-              <Button
-                disabled={voter.isLoading}
-                variant="contained"
-                onClick={handleRetrieveData}
-              >
-                <SearchIcon />
-              </Button>
+              <Grid item xs={3}>
+                <Button disabled={voter.isLoading} variant="contained" onClick={handleRetrieveData}>
+                  <SearchIcon />
+                </Button>
+              </Grid>
             </Grid>
-          </Grid>
-        </Box>
+          </Box>
+        </FormProvider>
 
         <Divider />
 
         {voter.isLoading && (
-          <Box
-            minHeight={200}
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-          >
+          <Box minHeight={200} display="flex" justifyContent="center" alignItems="center">
             <CircularProgress />
           </Box>
         )}
@@ -519,19 +465,14 @@ const OpinionPollSurveyList = ({
         {!voter.isLoading && (
           <>
             <ThemeProvider theme={getMuiTableTheme()}>
-              <MUIDataTable
-                title="Opinion Poll"
-                columns={columns}
-                data={voter.data}
-                options={options}
-              />
+              <MUIDataTable title="Opinion Poll" columns={columns} data={voter.data} options={options} />
             </ThemeProvider>
           </>
         )}
       </Card>
     </>
   );
-};
+});
 
 const mapStateToProps = (state) => {
   return {
@@ -540,8 +481,13 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, {
-  showAlert,
-  changeOpinionPoll,
-  getAllVotersSurvey,
-})(OpinionPollSurveyList);
+export default connect(
+  mapStateToProps,
+  {
+    showAlert,
+    changeOpinionPoll,
+    getAllVotersSurvey,
+  },
+  null,
+  { forwardRef: true }
+)(OpinionPollSurveyList);

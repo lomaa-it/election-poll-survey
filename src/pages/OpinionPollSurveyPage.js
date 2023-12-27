@@ -1,14 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import {
-  Grid,
-  Container,
-  Typography,
-  Box,
-  TextField,
-  Card,
-  MenuItem,
-} from "@mui/material";
+import { Grid, Container, Typography, Box, TextField, Card, MenuItem, IconButton } from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -20,20 +12,17 @@ import { searchFiltercolor } from "../constants";
 import { useLocation } from "react-router-dom";
 import { RHFAutoComplete } from "../components/hook-form";
 import { UncontrolledTextField } from "../components/hook-form/RHFTextField";
+import { ClearAllOutlined } from "@mui/icons-material";
 
-const OpinionPollSurveyPage = ({
-  isUser,
-  getAllVotersSurvey,
-  clearVoterReducer,
-  common,
-}) => {
+const OpinionPollSurveyPage = ({ isUser, getAllVotersSurvey, clearVoterReducer, common }) => {
+  const searchRef = useRef(null);
+
   const [filterValues, setFilterValues] = useState(null);
   const [otherFilterValues, setOtherFilterValues] = useState({
-    intrested_party: "",
-    is_resident: "",
+    intrested_party: null,
+    is_resident: null,
+    isSurveyed: null,
   });
-
-  const [radioValue, setRadioValue] = useState("null");
 
   useEffect(() => {
     return () => {
@@ -44,17 +33,11 @@ const OpinionPollSurveyPage = ({
   const handleSubmit = async (filterValues) => {
     var values = {
       ...filterValues,
-      intrested_party:
-        otherFilterValues.intrested_party == ""
-          ? null
-          : otherFilterValues.intrested_party,
-      is_resident:
-        otherFilterValues.is_resident == ""
-          ? null
-          : otherFilterValues.is_resident,
+      intrested_party: otherFilterValues.intrested_party?.value ?? null,
+      is_resident: otherFilterValues.is_resident?.value ?? null,
+      isSurveyed: otherFilterValues.isSurveyed?.value ?? null,
       fieldname: null,
       fieldvalue: null,
-      isSurveyed: radioValue == "null" ? null : radioValue,
     };
 
     await getAllVotersSurvey(values);
@@ -63,9 +46,12 @@ const OpinionPollSurveyPage = ({
 
   const handleReset = () => {
     setOtherFilterValues({
-      intrested_party: "",
-      is_resident: "",
+      intrested_party: null,
+      is_resident: null,
+      isSurveyed: null,
     });
+
+    searchRef.current.reset();
   };
 
   return (
@@ -83,40 +69,27 @@ const OpinionPollSurveyPage = ({
               children={
                 <>
                   <Grid item xs={12} md={6} lg={2}>
-                    <UncontrolledTextField
+                    <RHFAutoComplete
                       name="intrested_party"
                       label="Select Party"
                       value={otherFilterValues.intrested_party}
-                      onChange={(e) =>
-                        setOtherFilterValues({
-                          ...otherFilterValues,
-                          intrested_party: e.target.value,
-                        })
+                      options={common?.parties}
+                      getOptionLabel={(option) => option.label}
+                      onChange={(name, value) =>
+                        setOtherFilterValues((state) => ({
+                          ...state,
+                          [name]: value,
+                        }))
                       }
-                      select
-                    >
-                      {common?.parties?.map((item, index) => (
-                        <MenuItem key={index} value={item.value}>
-                          {item.label}
-                        </MenuItem>
-                      )) || null}
-                    </UncontrolledTextField>
+                    />
                   </Grid>
 
                   <Grid item xs={12} md={6} lg={2}>
-                    <UncontrolledTextField
+                    <RHFAutoComplete
                       name="is_resident"
                       label="Select Residence"
                       value={otherFilterValues.is_resident}
-                      onChange={(e) =>
-                        setOtherFilterValues({
-                          ...otherFilterValues,
-                          is_resident: e.target.value,
-                        })
-                      }
-                      select
-                    >
-                      {[
+                      options={[
                         {
                           label: "Resident",
                           value: 1,
@@ -125,12 +98,34 @@ const OpinionPollSurveyPage = ({
                           label: "Non-Resident",
                           value: 0,
                         },
-                      ].map((item, index) => (
-                        <MenuItem key={index} value={item.value}>
-                          {item.label}
-                        </MenuItem>
-                      ))}
-                    </UncontrolledTextField>
+                      ]}
+                      getOptionLabel={(option) => option.label}
+                      onChange={(name, value) =>
+                        setOtherFilterValues((state) => ({
+                          ...state,
+                          [name]: value,
+                        }))
+                      }
+                    />
+                  </Grid>
+
+                  <Grid item xs={12} md={6} lg={2}>
+                    <RHFAutoComplete
+                      name="isSurveyed"
+                      label="Survey Status"
+                      value={otherFilterValues.isSurveyed}
+                      options={[
+                        { label: "Completed", value: "Y" },
+                        { label: "Not Completed", value: "N" },
+                      ]}
+                      getOptionLabel={(option) => option.label}
+                      onChange={(name, value) =>
+                        setOtherFilterValues((state) => ({
+                          ...state,
+                          [name]: value,
+                        }))
+                      }
+                    />
                   </Grid>
                 </>
               }
@@ -200,12 +195,7 @@ const OpinionPollSurveyPage = ({
 
         <Box p={1} />
 
-        <OpinionPollSurveyList
-          isUser={isUser}
-          filterValues={filterValues}
-          radioValue={radioValue}
-          setRadioValue={setRadioValue}
-        />
+        <OpinionPollSurveyList ref={searchRef} isUser={isUser} filterValues={filterValues} />
       </Container>
     </Page>
   );
