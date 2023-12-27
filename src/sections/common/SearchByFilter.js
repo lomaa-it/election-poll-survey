@@ -284,9 +284,24 @@ const SearchByFilter = forwardRef(
             />
           </Grid>
         )}
+{showPartNo && formValues?.mandal !== null && account?.user?.desgination_name == "MLA" &&(
+          <Grid item xs={12} md={6} lg={lg}>
+            <RHFAutoComplete
+              name="partno"
+              label="Select Part/Booth No"
+              value={formValues.partno}
+              options={common?.parts.filter((e) => e.sachivalayam_id == formValues?.sachivalayam?.sachivalayam_pk)}
+              getOptionLabel={(option) => String(option.part_no)}
+              onChange={handleChange}
+              disabled={account.user.part_no != null}
+              error={!!errors.partno}
+              helperText={errors.partno}
+            />
+          </Grid>
+        )}
 
         {/* /// show in mla login and it shoukd display all part no's */}
-        {showPartNo && account?.user?.desgination_name == "MLA" && (
+        {showPartNo && account?.user?.desgination_name == "MLA" && formValues?.mandal === null && (
           <Grid item xs={12} md={6} lg={lg}>
             <RHFAutoComplete
               name="partno"

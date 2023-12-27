@@ -33,9 +33,30 @@ export default function BarChartWidget({
     },
     xaxis: {
       categories: chartLabels,
+      tickAmount: 6, // reduce this number to create more space for each label  
+      labels: {
+        rotate: 0, // this will prevent the labels from rotating
+        style: {
+          fontSize: "8px", // specify your desired font size here
+        },
+      },
     },
   });
 
+  // function updateFontSize() {
+  //   if (window.innerWidth < 600) {
+  //     chartOptions.xaxis.labels.style.fontSize = "8px";
+  //   } else if (window.innerWidth < 900) {
+  //     chartOptions.xaxis.labels.style.fontSize = "10px";
+  //   } else {
+  //     chartOptions.xaxis.labels.style.fontSize = "12px";
+  //   }
+  // }
+
+  // // listen for window resize events
+  // window.addEventListener("resize", updateFontSize);
+  // // initial font size update
+  // updateFontSize();
   const chartComponent = (
     <ReactApexChart
       type="bar"
