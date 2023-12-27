@@ -5,6 +5,7 @@ import {
   createTicketRoute,
   getAllNavaratnaluRoute,
   getAllVotorsSurveyRoute,
+  getVotersListTotals,
   saveOrupdatedSurvey,
 } from "../utils/apis";
 import instance from "../utils/axios";
@@ -33,14 +34,19 @@ export const getAllVotersSurvey =
       // const itemsList = responseData?.data ?? [];
       const itemsList = responseData?.message?.data ?? [];
       // console.log("itemsList", itemsList);
+      const cardResponse = await instance.post(getVotersListTotals, data);
+      const cardResponseData = cardResponse.data;
+      const cardData = cardResponseData?.message?.data[0] ?? [];
+
+      console.log(cardData);
 
       dispatch({
         type: "VOTER_LOAD_SUCCESS",
         payload: {
           data: itemsList,
-          count: responseData.message.count,
-          completed: responseData.message.completed,
-          pending: responseData.message.pending,
+          count: cardData.voters_count,
+          completed: cardData.surveyed_count,
+          pending: cardData.not_surveyed_count,
           page: pageNo,
           limit: limit,
         },

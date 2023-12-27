@@ -7,10 +7,9 @@
 
 // export const baseServerUrl = "https://d1ef-123-201-174-192.ngrok-free.app";
 export const baseServerUrl = "https://mumbaiapi.cgrysrcongress.in";
-// export const baseServerUrl = "http://192.168.137.220:8080";
+// export const baseServerUrl = "http://192.168.137.28:8080";
 /// new
 // export const baseServerUrl = "https://poll2.onrender.com";
-
 
 // Survey Dashboard Apis
 export const getDashBoardbyTotalVoters = "/getdashboardbytotalvoters";
@@ -21,10 +20,15 @@ export const getDashBoardbyTicketStatus = "/getdashboardbyticketstatus";
 export const getDashBoardbyCasteCount = "/getdashboardbycastecount";
 export const getDashBoardbyReligionCount = "/getdashboardbyreligioncount";
 export const getDashBoardbyDisabilityCount = "/getdashboardbydisabilitycount";
-export const getDashBoardbyGovtEmployeeCount = "/getdashboardbygovtemployeecount";
-export const getDashBoardbyResidentialStatus = "/getdashboardbyresidentialstatus";
+export const getDashBoardbyGovtEmployeeCount =
+  "/getdashboardbygovtemployeecount";
+export const getDashBoardbyResidentialStatus =
+  "/getdashboardbyresidentialstatus";
 export const getDashBoardbyageGroup = "/getdashboardbyagegroup";
 export const getDashBoardbyTicketbarChart = "/getdashboardbyticketbarchart";
+
+// opinion survey
+export const getVotersListTotals = "/getvoterslisttotals";
 
 /// View User
 export const deleteUserById = "/users/";
@@ -61,7 +65,8 @@ export const getAllSachivalayamRoute = "/sachivalayam/getall";
 export const getAllPartsRoute = "/parts/getall";
 export const getAllVillageRoute = "/villages/getall";
 export const getAllDistrictsWithJoinRoute = "/getalldistrictswithjoin";
-export const getAllConstituenciesWithJoinRoute = "/getallconstituencieswithjoin";
+export const getAllConstituenciesWithJoinRoute =
+  "/getallconstituencieswithjoin";
 export const getAllMandalsWithJoinRoute = "/getallmandalswithjoin";
 
 export const getOpinionDashboardRoute = "/getopinionpolldashboard";
