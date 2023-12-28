@@ -215,6 +215,7 @@ const SearchByFilter = forwardRef(
           ...newErrors,
         }));
       },
+      submit: handleSubmit,
       reset: handleReset,
     }));
 

@@ -1,15 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import {
-  Grid,
-  Container,
-  Typography,
-  Box,
-  TextField,
-  Card,
-  MenuItem,
-  IconButton,
-} from "@mui/material";
+import { Grid, Container, Typography, Box, TextField, Card, MenuItem, IconButton } from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -23,12 +14,8 @@ import { RHFAutoComplete } from "../components/hook-form";
 import { UncontrolledTextField } from "../components/hook-form/RHFTextField";
 import { ClearAllOutlined } from "@mui/icons-material";
 
-const OpinionPollSurveyPage = ({
-  isUser,
-  getAllVotersSurvey,
-  clearVoterReducer,
-  common,
-}) => {
+const OpinionPollSurveyPage = ({ isUser, getAllVotersSurvey, clearVoterReducer, common }) => {
+  const filterRef = useRef(null);
   const searchRef = useRef(null);
 
   const [filterValues, setFilterValues] = useState(null);
@@ -44,18 +31,27 @@ const OpinionPollSurveyPage = ({
     };
   }, []);
 
-  const handleSubmit = async (filterValues) => {
+  const handleSubmit = async (data) => {
+    var searchData = searchRef.current.getSearchData();
     var values = {
-      ...filterValues,
+      ...data,
       intrested_party: otherFilterValues.intrested_party?.value ?? null,
       is_resident: otherFilterValues.is_resident?.value ?? null,
       isSurveyed: otherFilterValues.isSurveyed?.value ?? null,
-      fieldname: null,
-      fieldvalue: null,
+      ...searchData,
     };
 
     await getAllVotersSurvey(values);
     setFilterValues(values);
+    console.log(values);
+  };
+
+  const handleSearchSubmit = () => {
+    filterRef.current.submit();
+  };
+
+  const handlePaginationSubmit = async (tableState) => {
+    await getAllVotersSurvey(filterValues, tableState?.page, tableState?.rowsPerPage);
   };
 
   const handleReset = () => {
@@ -78,6 +74,7 @@ const OpinionPollSurveyPage = ({
         <Card sx={{ p: 3, backgroundColor: searchFiltercolor }}>
           <Grid container spacing={2} alignItems="center">
             <SearchByFilter
+              ref={filterRef}
               onSubmit={handleSubmit}
               onReset={handleReset}
               children={
@@ -209,11 +206,7 @@ const OpinionPollSurveyPage = ({
 
         <Box p={1} />
 
-        <OpinionPollSurveyList
-          ref={searchRef}
-          isUser={isUser}
-          filterValues={filterValues}
-        />
+        <OpinionPollSurveyList ref={searchRef} isUser={isUser} handleSubmit={handleSearchSubmit} handlePaginationSubmit={handlePaginationSubmit} />
       </Container>
     </Page>
   );
