@@ -436,12 +436,22 @@ const DashboardApp = ({
                   {
                     label: "YES",
                     value:
-                      dashboard.opinion?.govt_employee_status?.[1]?.count ?? 0,
+                      dashboard.opinion?.govt_employee_status?.[1]
+                        ?.govt_employee == 1
+                        ? dashboard.opinion?.govt_employee_status?.[1]?.count ??
+                          0
+                        : dashboard.opinion?.govt_employee_status?.[0]?.count ??
+                          0,
                   },
                   {
                     label: "NO",
                     value:
-                      dashboard.opinion?.govt_employee_status?.[0]?.count ?? 0,
+                      dashboard.opinion?.govt_employee_status?.[0]
+                        ?.govt_employee == 0
+                        ? dashboard.opinion?.govt_employee_status?.[0]?.count ??
+                          0
+                        : dashboard.opinion?.govt_employee_status?.[1]?.count ??
+                          0,
                   },
                 ]}
                 chartColors={[
