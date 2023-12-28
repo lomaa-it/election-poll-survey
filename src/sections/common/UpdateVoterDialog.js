@@ -239,7 +239,6 @@ const UpdateVoterDialog = ({
                     options={[
                       { label: "Yes", value: 1 },
                       { label: "No", value: 0 },
-                      { label: "Unknown", value: 2 },
                     ]}
                   />
                 </Grid>
@@ -280,11 +279,11 @@ const UpdateVoterDialog = ({
                         value: PARTY_ID.CONGRESS,
                         custom: <CongressRadio fontSize={22} />,
                       },
-                      {
-                        label: "Others",
-                        value: PARTY_ID.OTHERS,
-                        custom: <OthersRadio fontSize={22} />,
-                      },
+                      // {
+                      //   label: "Others",
+                      //   value: PARTY_ID.OTHERS,
+                      //   custom: <OthersRadio fontSize={22} />,
+                      // },
                     ]}
                     sx={{
                       ".MuiFormControlLabel-label": {

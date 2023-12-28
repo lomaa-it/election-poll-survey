@@ -24,18 +24,32 @@ import { casteList, searchFiltercolor } from "../constants";
 import { useLocation } from "react-router-dom";
 import { da } from "date-fns/locale";
 import { Label } from "@mui/icons-material";
+import { RHFAutoComplete } from "../components/hook-form";
 
 const DashboardApp = ({
   dashboard,
   getOpinionDashboard,
   clearDashboardReducer,
+  common,
 }) => {
   useEffect(() => {
     clearDashboardReducer();
   }, []);
 
+  const [otherFilterValues, setOtherFilterValues] = useState({
+    intrested_party: null,
+    is_resident: null,
+    isSurveyed: null,
+  });
+
   const handleSubmit = async (filterValues) => {
-    await getOpinionDashboard(filterValues);
+    var values = {
+      ...filterValues,
+      intrested_party: otherFilterValues.intrested_party?.value ?? null,
+      is_resident: otherFilterValues.is_resident?.value ?? null,
+      isSurveyed: otherFilterValues.isSurveyed?.value ?? null,
+    };
+    await getOpinionDashboard(values);
   };
 
   console.log("dashboard.opinion", dashboard.opinion);
@@ -49,7 +63,71 @@ const DashboardApp = ({
 
         <Card sx={{ p: 3, backgroundColor: searchFiltercolor }}>
           <Grid container spacing={2} alignItems="center">
-            <SearchByFilter onSubmit={handleSubmit} />
+            <SearchByFilter
+              onSubmit={handleSubmit}
+              children={
+                <>
+                  <Grid item xs={12} md={6} lg={2}>
+                    <RHFAutoComplete
+                      name="intrested_party"
+                      label="Select Party"
+                      value={otherFilterValues.intrested_party}
+                      options={common?.parties}
+                      getOptionLabel={(option) => option.label}
+                      onChange={(name, value) =>
+                        setOtherFilterValues((state) => ({
+                          ...state,
+                          [name]: value,
+                        }))
+                      }
+                    />
+                  </Grid>
+
+                  <Grid item xs={12} md={6} lg={2}>
+                    <RHFAutoComplete
+                      name="is_resident"
+                      label="Select Residence"
+                      value={otherFilterValues.is_resident}
+                      options={[
+                        {
+                          label: "Resident",
+                          value: 1,
+                        },
+                        {
+                          label: "Non-Resident",
+                          value: 0,
+                        },
+                      ]}
+                      getOptionLabel={(option) => option.label}
+                      onChange={(name, value) =>
+                        setOtherFilterValues((state) => ({
+                          ...state,
+                          [name]: value,
+                        }))
+                      }
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={6} lg={2}>
+                    <RHFAutoComplete
+                      name="isSurveyed"
+                      label="Survey Status"
+                      value={otherFilterValues.isSurveyed}
+                      options={[
+                        { label: "Completed", value: "Y" },
+                        { label: "Pending", value: "N" },
+                      ]}
+                      getOptionLabel={(option) => option.label}
+                      onChange={(name, value) =>
+                        setOtherFilterValues((state) => ({
+                          ...state,
+                          [name]: value,
+                        }))
+                      }
+                    />
+                  </Grid>
+                </>
+              }
+            />
             {/* <Grid item xs={12} md={6} lg={2}>
               <TextField
                 size="small"
@@ -123,12 +201,14 @@ const DashboardApp = ({
                 chartData={[
                   {
                     label: "Completed",
-                    value: dashboard.opinion?.survey_completed ?? 0,
+                    value:
+                      dashboard.opinion?.survey_status?.surveyed_count ?? 0,
                     // value: 100,
                   },
                   {
                     label: "Not Completed",
-                    value: dashboard.opinion?.survey_not_completed ?? 0,
+                    value:
+                      dashboard.opinion?.survey_status?.not_surveyed_count ?? 0,
                   },
                 ]}
                 chartColors={[Colors.StartedColor, Colors.NotStartedColor]}
@@ -137,7 +217,12 @@ const DashboardApp = ({
             <Grid item xs={12} md={6} lg={4}>
               <PieChartWidget
                 title={`Voters Pulse -${
-                  dashboard.opinion?.survey_completed ?? 0
+                  (dashboard.opinion?.voter_pulse?.[1]?.count ?? 0) +
+                  (dashboard.opinion?.voter_pulse?.[0]?.count ?? 0) +
+                  (dashboard.opinion?.voter_pulse?.[2]?.count ?? 0) +
+                  (dashboard.opinion?.voter_pulse?.[3]?.count ?? 0) +
+                  (dashboard.opinion?.voter_pulse?.[4]?.count ?? 0) +
+                  (dashboard.opinion?.voter_pulse?.[5]?.count ?? 0)
                 }`}
                 chartData={[
                   {
@@ -163,10 +248,6 @@ const DashboardApp = ({
                   {
                     label: "CONGRESS",
                     value: dashboard.opinion?.voter_pulse?.[3]?.count ?? 0,
-                  },
-                  {
-                    label: "OTHERS",
-                    value: dashboard.opinion?.voter_pulse?.[6]?.count ?? 0,
                   },
                 ]}
                 chartColors={[
@@ -328,7 +409,7 @@ const DashboardApp = ({
             <Grid item xs={12} md={6} lg={4}>
               <PieChartWidget
                 title={`Disability (40% or above) -${
-                  dashboard.opinion?.survey_completed ?? 0
+                  dashboard.opinion?.disability_status?.[0]?.count ?? 0
                 }`}
                 chartData={[
                   {
@@ -342,13 +423,14 @@ const DashboardApp = ({
                       dashboard.opinion?.disability_status?.[1]?.count ?? 0,
                   },
                 ]}
-                chartColors={[Colors.OpenColor, Colors.CancelColor]}
+                chartColors={[Colors.OpenColor, Colors.NETURALColor]}
               />
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
               <PieChartWidget
                 title={`Govt. Employees -${
-                  dashboard.opinion?.survey_completed ?? 0
+                  (dashboard.opinion?.govt_employee_status?.[0]?.count ?? 0) +
+                  (dashboard.opinion?.govt_employee_status?.[1]?.count ?? 0)
                 }`}
                 chartData={[
                   {
@@ -358,11 +440,6 @@ const DashboardApp = ({
                   },
                   {
                     label: "NO",
-                    value:
-                      dashboard.opinion?.govt_employee_status?.[2]?.count ?? 0,
-                  },
-                  {
-                    label: "Unknown",
                     value:
                       dashboard.opinion?.govt_employee_status?.[0]?.count ?? 0,
                   },
@@ -377,7 +454,8 @@ const DashboardApp = ({
             <Grid item xs={12} md={6} lg={4}>
               <PieChartWidget
                 title={`Residential Status -${
-                  dashboard.opinion?.survey_completed ?? 0
+                  (dashboard.opinion?.residential_status?.[0]?.count ?? 0) +
+                  (dashboard.opinion?.residential_status?.[1]?.count ?? 0)
                 }`}
                 chartData={[
                   {
@@ -397,7 +475,10 @@ const DashboardApp = ({
             <Grid item xs={12} md={6} lg={4}>
               <PieChartWidget
                 title={`Religion Wise -${
-                  dashboard.opinion?.survey_completed ?? 0
+                  (dashboard.opinion?.religion_wise ?? []).reduce(
+                    (a, b) => a + b.count,
+                    0
+                  ) ?? 0
                 }`}
                 chartData={(dashboard.opinion?.religion_wise ?? []).map(
                   (item) => ({
@@ -420,7 +501,10 @@ const DashboardApp = ({
             <Grid item xs={12} md={6} lg={4}>
               <PieChartWidget
                 title={`Caste Wise -${
-                  dashboard.opinion?.survey_completed ?? 0
+                  (dashboard.opinion?.caste_wise ?? []).reduce(
+                    (a, b) => a + b.count,
+                    0
+                  ) ?? 0
                 }`}
                 chartData={(dashboard.opinion?.caste_wise ?? []).map(
                   (item) => ({
@@ -474,6 +558,7 @@ const DashboardApp = ({
 const mapStateToProps = (state) => {
   return {
     dashboard: state.dashboard,
+    common: state.common,
   };
 };
 

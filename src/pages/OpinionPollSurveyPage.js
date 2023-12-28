@@ -1,6 +1,15 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { Grid, Container, Typography, Box, TextField, Card, MenuItem, IconButton } from "@mui/material";
+import {
+  Grid,
+  Container,
+  Typography,
+  Box,
+  TextField,
+  Card,
+  MenuItem,
+  IconButton,
+} from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -14,7 +23,12 @@ import { RHFAutoComplete } from "../components/hook-form";
 import { UncontrolledTextField } from "../components/hook-form/RHFTextField";
 import { ClearAllOutlined } from "@mui/icons-material";
 
-const OpinionPollSurveyPage = ({ isUser, getAllVotersSurvey, clearVoterReducer, common }) => {
+const OpinionPollSurveyPage = ({
+  isUser,
+  getAllVotersSurvey,
+  clearVoterReducer,
+  common,
+}) => {
   const searchRef = useRef(null);
 
   const [filterValues, setFilterValues] = useState(null);
@@ -116,7 +130,7 @@ const OpinionPollSurveyPage = ({ isUser, getAllVotersSurvey, clearVoterReducer, 
                       value={otherFilterValues.isSurveyed}
                       options={[
                         { label: "Completed", value: "Y" },
-                        { label: "Not Completed", value: "N" },
+                        { label: "Pending", value: "N" },
                       ]}
                       getOptionLabel={(option) => option.label}
                       onChange={(name, value) =>
@@ -195,7 +209,11 @@ const OpinionPollSurveyPage = ({ isUser, getAllVotersSurvey, clearVoterReducer, 
 
         <Box p={1} />
 
-        <OpinionPollSurveyList ref={searchRef} isUser={isUser} filterValues={filterValues} />
+        <OpinionPollSurveyList
+          ref={searchRef}
+          isUser={isUser}
+          filterValues={filterValues}
+        />
       </Container>
     </Page>
   );
