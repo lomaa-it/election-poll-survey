@@ -288,8 +288,8 @@ const UpdateVoterDialog = ({
                     sx={{
                       ".MuiFormControlLabel-label": {
                         marginLeft: "8px",
-                        fontSize: "10px",
-                        fontWeight: "bold",
+                        fontSize: "1rem",
+        
                       },
                     }}
                   />
