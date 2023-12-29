@@ -206,7 +206,7 @@ const DashboardApp = ({
                     // value: 100,
                   },
                   {
-                    label: "Not Completed",
+                    label: "Pending",
                     value:
                       dashboard.opinion?.survey_status?.not_surveyed_count ?? 0,
                   },
@@ -429,8 +429,7 @@ const DashboardApp = ({
             <Grid item xs={12} md={6} lg={4}>
               <PieChartWidget
                 title={`Govt. Employees -${
-                  (dashboard.opinion?.govt_employee_status?.[0]?.count ?? 0) +
-                  (dashboard.opinion?.govt_employee_status?.[1]?.count ?? 0)
+                  dashboard.opinion?.govt_employee_status?.[1]?.count ?? 0
                 }`}
                 chartData={[
                   {

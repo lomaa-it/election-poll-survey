@@ -63,6 +63,23 @@ const UpdateVoterDialog = ({
     }
   }, [open]);
 
+  // const schema = Yup.object().shape({
+  //   phone_no: Yup.string()
+  //     .matches(phoneRegExp, "Phone number is not valid")
+  //     .min(10, "Phone number must be at least 10 digits")
+  //     .required("Phone number is required"),
+  //   is_resident: Yup.string().required("Resident status is required"),
+  //   religion_id: Yup.string().required("Religion is required"),
+  //   caste_id: Yup.string().required("Caste is required"),
+  //   disability: Yup.string().required("Disability status is required"),
+  //   govt_employee: Yup.string().required(
+  //     "Government employee status is required"
+  //   ),
+  //   current_address: Yup.string().required("Current address is required"),
+  //   permenent_address: Yup.string().required("Permanent address is required"),
+  //   intrested_party: Yup.string().required("Interested party is required"),
+  // });
+
   const schema = Yup.object().shape({
     phone_no: Yup.string()
       .matches(phoneRegExp, "Phone number is not valid")
@@ -75,7 +92,7 @@ const UpdateVoterDialog = ({
     govt_employee: Yup.string().required(
       "Government employee status is required"
     ),
-    current_address: Yup.string().required("Current address is required"),
+    current_address: Yup.string(),
     permenent_address: Yup.string().required("Permanent address is required"),
     intrested_party: Yup.string().required("Interested party is required"),
   });
@@ -131,6 +148,8 @@ const UpdateVoterDialog = ({
   const handleClose = () => {
     setOpen(false);
   };
+
+  console.log("voterData", voterData);
 
   return (
     <>
@@ -289,7 +308,6 @@ const UpdateVoterDialog = ({
                       ".MuiFormControlLabel-label": {
                         marginLeft: "8px",
                         fontSize: "1rem",
-        
                       },
                     }}
                   />
