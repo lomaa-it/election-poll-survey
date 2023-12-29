@@ -409,18 +409,21 @@ const DashboardApp = ({
             <Grid item xs={12} md={6} lg={4}>
               <PieChartWidget
                 title={`Disability (40% or above) -${
-                  dashboard.opinion?.disability_status?.[0]?.count ?? 0
+                  dashboard.opinion?.disability_status?.[0]
+                    ?.disability_yes_count ?? 0
                 }`}
                 chartData={[
                   {
                     label: "YES",
                     value:
-                      dashboard.opinion?.disability_status?.[0]?.count ?? 0,
+                      dashboard.opinion?.disability_status?.[0]
+                        ?.disability_yes_count ?? 0,
                   },
                   {
                     label: "NO",
                     value:
-                      dashboard.opinion?.disability_status?.[1]?.count ?? 0,
+                      dashboard.opinion?.disability_status?.[1]
+                        ?.disability_no_count ?? 0,
                   },
                 ]}
                 chartColors={[Colors.OpenColor, Colors.NETURALColor]}
@@ -429,32 +432,51 @@ const DashboardApp = ({
             <Grid item xs={12} md={6} lg={4}>
               <PieChartWidget
                 title={`Govt. Employees -${
-                  dashboard.opinion?.govt_employee_status?.[0]?.count ?? 0
+                  dashboard.opinion?.govt_employee_status?.length > 1
+                    ? dashboard.opinion?.govt_employee_status?.[1]
+                        ?.govt_employee == 1
+                      ? parseInt(
+                          dashboard.opinion?.govt_employee_status?.[1]?.count ??
+                            0
+                        )
+                      : parseInt(
+                          dashboard.opinion?.govt_employee_status?.[0]?.count ??
+                            0
+                        )
+                    : 0
                 }`}
                 chartData={[
                   {
                     label: "YES",
                     value:
-                      dashboard.opinion?.govt_employee_status?.[1]
-                        ?.govt_employee == 1
-                        ? parseInt(
-                            dashboard.opinion?.govt_employee_status?.[1]?.count
-                          ) ?? 0
-                        : parseInt(
-                            dashboard.opinion?.govt_employee_status?.[0]?.count
-                          ) ?? 0,
+                      dashboard.opinion?.govt_employee_status?.length > 1
+                        ? dashboard.opinion?.govt_employee_status?.[1]
+                            ?.govt_employee == 1
+                          ? parseInt(
+                              dashboard.opinion?.govt_employee_status?.[1]
+                                ?.count ?? 0
+                            )
+                          : parseInt(
+                              dashboard.opinion?.govt_employee_status?.[0]
+                                ?.count ?? 0
+                            )
+                        : 0,
                   },
                   {
                     label: "NO",
                     value:
-                      dashboard.opinion?.govt_employee_status?.[0]
-                        ?.govt_employee == 0
-                        ? parseInt(
-                            dashboard.opinion?.govt_employee_status?.[0]?.count
-                          ) ?? 0
-                        : parseInt(
-                            dashboard.opinion?.govt_employee_status?.[1]?.count
-                          ) ?? 0,
+                      dashboard.opinion?.govt_employee_status?.length > 1
+                        ? dashboard.opinion?.govt_employee_status?.[0]
+                            ?.govt_employee == 0
+                          ? parseInt(
+                              dashboard.opinion?.govt_employee_status?.[0]
+                                ?.count ?? 0
+                            )
+                          : parseInt(
+                              dashboard.opinion?.govt_employee_status?.[1]
+                                ?.count ?? 0
+                            )
+                        : 0,
                   },
                 ]}
                 chartColors={[
@@ -466,38 +488,50 @@ const DashboardApp = ({
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
               <PieChartWidget
-                title={`Residential Status -${
-                  parseInt(
-                    dashboard.opinion?.residential_status?.[0]?.count ?? 0
-                  ) +
-                  parseInt(
-                    dashboard.opinion?.residential_status?.[1]?.count ?? 0
-                  )
+                title={`Non Residential -${
+                  dashboard.opinion?.residential_status?.length > 1
+                    ? dashboard.opinion?.residential_status?.[1]?.residential ==
+                      0
+                      ? parseInt(
+                          dashboard.opinion?.residential_status?.[1]?.count ?? 0
+                        )
+                      : parseInt(
+                          dashboard.opinion?.residential_status?.[0]?.count ?? 0
+                        )
+                    : 0
                 }`}
                 chartData={[
                   {
                     label: "Residential",
                     value:
-                      dashboard.opinion?.residential_status?.[0]?.residential ==
-                      1
-                        ? parseInt(
-                            dashboard.opinion?.residential_status?.[0]?.count
-                          ) ?? 0
-                        : parseInt(
-                            dashboard.opinion?.residential_status?.[1]?.count
-                          ) ?? 0,
+                      dashboard.opinion?.residential_status?.length > 1
+                        ? dashboard.opinion?.residential_status?.[0]
+                            ?.residential == 1
+                          ? parseInt(
+                              dashboard.opinion?.residential_status?.[0]
+                                ?.count ?? 0
+                            )
+                          : parseInt(
+                              dashboard.opinion?.residential_status?.[1]
+                                ?.count ?? 0
+                            )
+                        : 0,
                   },
                   {
                     label: "Non Residential",
                     value:
-                      dashboard.opinion?.residential_status?.[1]?.residential ==
-                      0
-                        ? parseInt(
-                            dashboard.opinion?.residential_status?.[1]?.count
-                          ) ?? 0
-                        : parseInt(
-                            dashboard.opinion?.residential_status?.[0]?.count
-                          ) ?? 0,
+                      dashboard.opinion?.residential_status?.length > 1
+                        ? dashboard.opinion?.residential_status?.[1]
+                            ?.residential == 0
+                          ? parseInt(
+                              dashboard.opinion?.residential_status?.[1]
+                                ?.count ?? 0
+                            )
+                          : parseInt(
+                              dashboard.opinion?.residential_status?.[0]
+                                ?.count ?? 0
+                            )
+                        : 0,
                   },
                 ]}
                 chartColors={[Colors.OpenColor, Colors.CancelColor]}
