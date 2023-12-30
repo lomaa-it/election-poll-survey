@@ -21,7 +21,7 @@ const PRIORITY2 = [34, 35, 36, 37, 38];
 const PRIORITY3 = [35, 36, 37, 38];
 const PRIORITY4 = [36, 37, 38];
 
-const UserRegistrationPage = ({ common, showAlert }) => {
+const UserRegistrationPage = ({ account, common, showAlert }) => {
   const props = useLocation().state;
   const navigate = useNavigate();
   const filterRef = useRef(null);
@@ -115,11 +115,11 @@ const UserRegistrationPage = ({ common, showAlert }) => {
       };
 
       if (props?.userData != null) {
-        await instance.put(`${createUsersRoute}/${props.userData.user_pk}`, jsonData);
+        await instance.put(`${createUsersRoute}/${props.userData.user_pk}`, { ...jsonData, updatedby: account.user?.user_pk });
         showAlert({ text: "User updated successfully", color: "success" });
         navigate(-1);
       } else {
-        await instance.post(createUsersRoute, jsonData);
+        await instance.post(createUsersRoute, { ...jsonData, createdby: account.user?.user_pk });
         showAlert({ text: "User added successfully", color: "success" });
         reset();
         filterRef.current.reset();
@@ -274,6 +274,7 @@ const UserRegistrationPage = ({ common, showAlert }) => {
 
 const mapStateToProps = (state) => {
   return {
+    account: state.auth,
     common: state.common,
   };
 };

@@ -3,10 +3,10 @@
 // export const baseServerUrl = "https://cd30-123-201-175-198.ngrok-free.app";
 
 // new api for baseServerUrl
-// export const baseServerUrl = "https://940b-219-91-202-227.ngrok-free.app";
+export const baseServerUrl = "https://b080-123-201-175-33.ngrok-free.app";
 
 // export const baseServerUrl = "https://d1ef-123-201-174-192.ngrok-free.app";
-export const baseServerUrl = "https://mumbaiapi.cgrysrcongress.in";
+// export const baseServerUrl = "https://mumbaiapi.cgrysrcongress.in";
 // export const baseServerUrl = "http://192.168.0.102:8080";
 /// new
 // export const baseServerUrl = "https://poll2.onrender.com";
@@ -20,10 +20,8 @@ export const getDashBoardbyTicketStatus = "/getdashboardbyticketstatus";
 export const getDashBoardbyCasteCount = "/getdashboardbycastecount";
 export const getDashBoardbyReligionCount = "/getdashboardbyreligioncount";
 export const getDashBoardbyDisabilityCount = "/getdashboardbydisabilitycount";
-export const getDashBoardbyGovtEmployeeCount =
-  "/getdashboardbygovtemployeecount";
-export const getDashBoardbyResidentialStatus =
-  "/getdashboardbyresidentialstatus";
+export const getDashBoardbyGovtEmployeeCount = "/getdashboardbygovtemployeecount";
+export const getDashBoardbyResidentialStatus = "/getdashboardbyresidentialstatus";
 export const getDashBoardbyageGroup = "/getdashboardbyagegroup";
 export const getDashBoardbyTicketbarChart = "/getdashboardbyticketbarchart";
 
@@ -37,7 +35,7 @@ export const deleteUserById = "/users/";
 export const addVoters = "/voters";
 
 // View Voters
-export const sachivalayamMappingtoVotersRoute= "/sachivalayammappingtovoters"
+export const sachivalayamMappingtoVotersRoute = "/sachivalayammappingtovoters";
 
 // FORGET PASSWORD ROUTE
 export const userValidationwithPhonenoRoute = "/uservalidationwithphoneno";
@@ -68,8 +66,7 @@ export const getAllSachivalayamRoute = "/sachivalayam/getall";
 export const getAllPartsRoute = "/parts/getall";
 export const getAllVillageRoute = "/villages/getall";
 export const getAllDistrictsWithJoinRoute = "/getalldistrictswithjoin";
-export const getAllConstituenciesWithJoinRoute =
-  "/getallconstituencieswithjoin";
+export const getAllConstituenciesWithJoinRoute = "/getallconstituencieswithjoin";
 export const getAllMandalsWithJoinRoute = "/getallmandalswithjoin";
 
 export const getOpinionDashboardRoute = "/getopinionpolldashboard";
