@@ -16,10 +16,13 @@ import { connect } from "react-redux";
 import { showAlert } from "../../../actions/alert";
 import instance from "../../../utils/axios";
 import { resetPswdRoute } from "../../../utils/apis";
+import Iconify from "../../../components/Iconify";
 
 const ResetForm = ({ showAlert }) => {
   const navigate = useNavigate();
   const props = useLocation().state;
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [isLoading, setLoading] = useState(false);
 
@@ -74,9 +77,49 @@ const ResetForm = ({ showAlert }) => {
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Stack my={3} spacing={3}>
-        <RHFTextField name="newpswd" label="New Password" type="password" />
+        <RHFTextField
+          name="newpswd"
+          label="New Password"
+          type={showPassword ? "text" : "password"}
+          inputProps={{ maxLength: 10 }}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  onClick={() => setShowPassword(!showPassword)}
+                  edge="end"
+                >
+                  <Iconify
+                    icon={showPassword ? "eva:eye-fill" : "eva:eye-off-fill"}
+                  />
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        />
 
-        <RHFTextField name="confirmpswd" label="Confirm New Password" />
+        <RHFTextField
+          name="confirmpswd"
+          label="Confirm New Password"
+          type={showConfirmPassword ? "text" : "password"}
+          inputProps={{ maxLength: 10 }}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  edge="end"
+                >
+                  <Iconify
+                    icon={
+                      showConfirmPassword ? "eva:eye-fill" : "eva:eye-off-fill"
+                    }
+                  />
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        />
       </Stack>
 
       <LoadingButton

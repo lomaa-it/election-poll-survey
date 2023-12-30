@@ -52,7 +52,7 @@ const OpinionPollSurveyList = forwardRef(({ isUser, voter, account, showAlert, c
           var index = voter.data.findIndex((e) => e.voter_pkk == value);
           const isActive = voter.data[index].opinionparty !== null ? true : false;
 
-          console.log("voter.data[index]", voter.data[index]);
+          // console.log("voter.data[index]", voter.data[index]);
           return (
             <Stack direction="row" spacing={1}>
               <UpdateVoterDialog voterData={voter.data[index]} isActive={isActive} />

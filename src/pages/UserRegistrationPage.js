@@ -70,24 +70,30 @@ const UserRegistrationPage = ({ common, showAlert }) => {
 
   const onSubmit = async (data) => {
     var hasErrors = false;
-    filterRef.current.setErrors({ mandal: null, division: null, sachivalayam: null, partno: null });
+    filterRef.current.setErrors({
+      mandal: null,
+      division: null,
+      sachivalayam: null,
+      partno: null,
+    });
+    const designationId = Number(data.designation_id);
 
-    if (PRIORITY1.includes(data.designation_id) && !filterValues["mandal"]) {
+    if (PRIORITY1.includes(designationId) && !filterValues["mandal"]) {
       filterRef.current.setErrors({ mandal: "Mandal is required" });
       hasErrors = true;
     }
 
-    if (PRIORITY2.includes(data.designation_id) && !filterValues["division"]) {
+    if (PRIORITY2.includes(designation_id) && !filterValues["division"]) {
       filterRef.current.setErrors({ division: "Division is required" });
       hasErrors = true;
     }
 
-    if (PRIORITY3.includes(data.designation_id) && !filterValues["sachivalayam"]) {
+    if (PRIORITY3.includes(designation_id) && !filterValues["sachivalayam"]) {
       filterRef.current.setErrors({ sachivalayam: "Sachivalayam is required" });
       hasErrors = true;
     }
 
-    if (PRIORITY4.includes(data.designation_id) && !filterValues["partno"]) {
+    if (PRIORITY4.includes(designation_id) && !filterValues["partno"]) {
       filterRef.current.setErrors({ partno: "Part no is required" });
       hasErrors = true;
     }
@@ -116,6 +122,8 @@ const UserRegistrationPage = ({ common, showAlert }) => {
         await instance.post(createUsersRoute, jsonData);
         showAlert({ text: "User added successfully", color: "success" });
         reset();
+        filterRef.current.reset();
+        setFilterValues(null);
       }
 
       setLoading(false);
@@ -168,7 +176,15 @@ const UserRegistrationPage = ({ common, showAlert }) => {
 
             <Grid container spacing={2}>
               <Grid item xs={12} md={6} lg={3}>
-                <RHFTextField name="designation_id" label="Select Designation*" select>
+                <RHFTextField
+                  name="designation_id"
+                  label="Select Designation*"
+                  select
+                  onChange={() => {
+                    setFilterValues(null);
+                    filterRef.current.reset();
+                  }}
+                >
                   {common.designation?.map((item, index) => (
                     <MenuItem key={index} value={item.value}>
                       {item.label}
