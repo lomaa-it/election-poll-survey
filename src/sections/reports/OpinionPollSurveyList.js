@@ -308,10 +308,10 @@ const OpinionPollSurveyList = forwardRef(({ isUser, voter, account, showAlert, c
       name: "surveyed_by",
       label: "Surveyed By",
     },
-    {
-      name: "updatedby",
-      label: "Updated By",
-    },
+    // {
+    //   name: "updatedby",
+    //   label: "Updated By",
+    // },
   ];
 
   const searchFields = [
