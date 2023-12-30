@@ -1,7 +1,6 @@
-import { useEffect, useRef, useState } from "react";
-import { Typography, Card, Stack, Grid, Switch, Divider, Box, Chip, TextField, CircularProgress, MenuItem, Button, Checkbox } from "@mui/material";
-import { CheckBox } from "@mui/icons-material";
-import MUIDataTable from "mui-datatables";
+import { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Typography, Card, Stack, Grid, Divider, Box, CircularProgress, IconButton, MenuItem, Button, Checkbox } from "@mui/material";
 import { connect } from "react-redux";
 import { showAlert } from "../../actions/alert";
 import { LoadingButton } from "@mui/lab";
@@ -20,6 +19,8 @@ const ViewVotersList = ({ voter, filterValues, showAlert, getAllVotersSurvey, ac
   const fieldname = useRef();
   const fieldvalue = useRef();
   const filterRef = useRef(null);
+  const navigate = useNavigate();
+
   const [isLoading, setLoading] = useState(false);
   const [checkedValues, setCheckedValues] = useState([]);
 
@@ -119,9 +120,14 @@ const ViewVotersList = ({ voter, filterValues, showAlert, getAllVotersSurvey, ac
       options: {
         customBodyRender: (value, tableMeta, updateValue) => {
           return (
-            <Stack direction="row" spacing={1}>
-              <EditNoteIcon color="primary" />
-              <DeleteForeverIcon color="error" />
+            <Stack direction="row">
+              <IconButton color="primary">
+                <EditNoteIcon />
+              </IconButton>
+
+              <IconButton color="error">
+                <DeleteForeverIcon />
+              </IconButton>
             </Stack>
           );
         },
@@ -192,25 +198,17 @@ const ViewVotersList = ({ voter, filterValues, showAlert, getAllVotersSurvey, ac
       fieldname: fieldname.current.value,
       fieldvalue: fieldvalue.current.value,
     };
+
     getAllVotersSurvey({ ...filterValues, ...searchForm }, tableState.page, tableState.rowsPerPage);
   };
 
-  const renderEditAndDelete = () => {
-    return (
-      <Box>
-        <EditNoteIcon
-          sx={{
-            color: "#1976d2",
-          }}
-        />
-        <DeleteForeverIcon
-          sx={{
-            color: "#f44336",
-            marginLeft: "10px",
-          }}
-        />
-      </Box>
-    );
+  const handleEdit = (id) => {
+    var index = voter.data.findIndex((e) => e.voter_pkk == id);
+    if (index != -1) {
+      navigate("/voter-registration", {
+        state: { voterData: voter.data[index] },
+      });
+    }
   };
 
   const handleSubmit = async () => {

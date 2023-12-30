@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
 import { useLocation, useNavigate } from "react-router-dom";
 import { CheckBox } from "@mui/icons-material";
-import { getAllDesignationsRoute, getAllStatesRoute, getAllDistrictsRoute, getAllConstituenciesRoute, getAllMandalRoute, getAllDivisionRoute, getAllSachivalayamRoute, getAllPartsRoute, getAllVillageRoute, createUsersRoute } from "../utils/apis";
+import { createUsersRoute } from "../utils/apis";
 import { useEffect, useRef, useState } from "react";
 import instance from "../utils/axios";
 import { set } from "date-fns";

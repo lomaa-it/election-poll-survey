@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Typography, Card, Stack, Grid, Switch, Divider, Box, Chip, TextField, Button, CircularProgress, Checkbox, IconButton } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import MUIDataTable from "mui-datatables";
 import { connect } from "react-redux";
 import { showAlert } from "../../actions/alert";
 import { checkOrUncheckUser, clearUserReducer, deleteUserInRedux } from "../../actions/user";
@@ -123,17 +122,6 @@ const ViewUsersList = ({ user, showAlert, checkOrUncheckUser, deleteUserInRedux,
                   <EditNoteIcon />
                 </IconButton>
                 <>
-                  {/* {!value == 124 && (
-                    <IconButton
-                      color="error"
-                      onClick={() => {
-                        setDeleteUserPk(value);
-                        handleClickOpen();
-                      }}
-                    >
-                      <DeleteForeverIcon />
-                    </IconButton>
-                  )} */}
                   {tableMeta.rowData[4] !== "MLA" ? (
                     <IconButton
                       color="error"
@@ -242,6 +230,7 @@ const ViewUsersList = ({ user, showAlert, checkOrUncheckUser, deleteUserInRedux,
       },
     },
   ];
+
   const options = {
     elevation: 0,
     selectableRows: "none",

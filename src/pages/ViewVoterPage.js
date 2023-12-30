@@ -1,4 +1,4 @@
-import { Grid, Container, Typography, Box, TextField, Card, MenuItem } from "@mui/material";
+import { Grid, Container, Typography, Box, TextField, Card, MenuItem, Stack } from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -65,28 +65,11 @@ const ViewVoterPage = ({ getAllVotersSurvey }) => {
         <ViewVotersList filterValues={filterValues} />
 
         <Card sx={{ p: 3, marginTop: "10px" }}>
-          <Grid container spacing={2} alignItems="center">
-            <Grid
-              item
-              xs={12}
-              md={6}
-              lg={3}
-              sx={{
-                display: "flex",
-              }}
-            >
-              <Button
-                variant="outlined"
-                sx={{
-                  marginRight: "10px",
-                  padding: "10px 35px",
-                }}
-              >
-                Add
-              </Button>
-              <Button variant="outlined">Upload</Button>
-            </Grid>
-          </Grid>
+          <Stack direction="row" spacing={2}>
+            <Button variant="outlined">Add</Button>
+
+            <Button variant="outlined">Upload</Button>
+          </Stack>
         </Card>
       </Container>
     </Page>

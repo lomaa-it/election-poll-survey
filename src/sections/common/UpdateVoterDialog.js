@@ -15,7 +15,7 @@ import { connect } from "react-redux";
 import { showAlert } from "../../actions/alert";
 import { updateVoterDetails } from "../../actions/voter";
 
-const UpdateVoterDialog = ({ common, voterData, showAlert, updateVoterDetails, account, isActive }) => {
+const UpdateVoterDialog = ({ account, common, voterData, showAlert, updateVoterDetails, isActive }) => {
   const [open, setOpen] = useState(false);
   const [isLoading, setLoading] = useState(false);
 
@@ -89,6 +89,8 @@ const UpdateVoterDialog = ({ common, voterData, showAlert, updateVoterDetails, a
       govt_employee: data.govt_employee == 2 ? null : data.govt_employee,
       religion_name: common.religion.find((e) => e.value == data.religion_id)?.label ?? "",
       caste_name: common.caste.find((e) => e.value == data.caste_id)?.label ?? "",
+      createdby: account.user.user_pk,
+      updatedby: account.user.user_pk,
     };
 
     var result = await updateVoterDetails(voterData.voter_pkk, jsonData);

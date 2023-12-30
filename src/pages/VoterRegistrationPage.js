@@ -1,13 +1,4 @@
-import {
-  Grid,
-  Container,
-  Typography,
-  Box,
-  TextField,
-  Card,
-  FormControlLabel,
-  MenuItem,
-} from "@mui/material";
+import { Grid, Container, Typography, Box, TextField, Card, FormControlLabel, MenuItem } from "@mui/material";
 import * as Yup from "yup";
 
 import { useForm } from "react-hook-form";
@@ -19,21 +10,18 @@ import { LoadingButton } from "@mui/lab";
 import { useRef, useState } from "react";
 import SearchByFilter from "../sections/common/SearchByFilter";
 import { numRegExp, phoneRegExp } from "../constants";
-import {
-  FormProvider,
-  RHFCheckbox,
-  RHFRadio,
-  RHFTextField,
-} from "../components/hook-form";
+import { FormProvider, RHFCheckbox, RHFRadio, RHFTextField } from "../components/hook-form";
 import instance from "../utils/axios";
 import { showAlert } from "../actions/alert";
 import { addVoters } from "../utils/apis";
-import { set } from "date-fns";
+import { useLocation, useNavigate } from "react-router-dom";
 
-const VoterRegistrationPage = ({ dashboard, showAlert }) => {
+const VoterRegistrationPage = ({ account, showAlert }) => {
+  const props = useLocation().state;
+  const navigate = useNavigate();
   const filterRef = useRef(null);
-  const [isLoading, setLoading] = useState(false);
 
+  const [isLoading, setLoading] = useState(false);
   const [filterValues, setFilterValues] = useState({
     mandal: null,
     division: null,
@@ -42,16 +30,15 @@ const VoterRegistrationPage = ({ dashboard, showAlert }) => {
     village: null,
   });
 
+  const pageName = props?.voterData == null ? "Add Voter" : "Edit Voter";
+
   const schema = Yup.object().shape({
     voter_name: Yup.string().required("Voter name is required"),
     guardian: Yup.string().required("Voter name is required"),
     guardian_name: Yup.string().required("Guardian name is required"),
     isnewvoter: Yup.boolean(),
     voter_id: Yup.string(),
-    age: Yup.string()
-      .matches(numRegExp, "Must be only digits")
-      .max(2, "Age should be less than 100")
-      .required("Age is required"),
+    age: Yup.string().matches(numRegExp, "Must be only digits").max(2, "Age should be less than 100").required("Age is required"),
     phone_no: Yup.string().matches(phoneRegExp, "Phone number is not valid"),
     resident: Yup.boolean(),
     permenent_address: Yup.string(),
@@ -60,19 +47,28 @@ const VoterRegistrationPage = ({ dashboard, showAlert }) => {
     gender: Yup.string().required("Gender is required"),
   });
 
+  console.log(props?.voterData);
   const defaultValues = {
-    voter_name: "",
-    guardian: "16",
-    guardian_name: "",
-    voter_id: "",
-    age: "",
-    phone_no: "",
-    permenent_address: "",
-    current_address: "",
-    part_slno: "",
-    gender: "",
+    voter_name: props?.voterData?.voter_name ?? "",
+    guardian: props?.voterData?.guardian ?? "16",
+    guardian_name: props?.voterData?.guardian_name ?? "",
+    voter_id: props?.voterData?.voter_id ?? "",
+    age: props?.voterData?.age ?? "",
+    phone_no: props?.voterData?.phone_no ?? "",
+    permenent_address: props?.voterData?.permenent_address ?? "",
+    current_address: props?.voterData?.current_address ?? "",
+    part_slno: props?.voterData?.part_slno ?? "",
+    gender: props?.voterData?.gender ?? "",
     isnewvoter: false,
     resident: false,
+  };
+
+  const filterDefaultValues = {
+    mandal_pk: props?.voterData?.mandal_pk ?? "",
+    division_pk: props?.voterData?.division_pk ?? "",
+    sachivalayam_pk: props?.voterData?.sachivalayam_pk ?? "",
+    part_no: props?.voterData?.part_no ?? null,
+    village_pk: props?.voterData?.village_pk ?? null,
   };
 
   const methods = useForm({
@@ -104,6 +100,7 @@ const VoterRegistrationPage = ({ dashboard, showAlert }) => {
     }
 
     var hasErrors = false;
+
     filterRef.current.setErrors({
       mandal: null,
       division: null,
@@ -137,8 +134,7 @@ const VoterRegistrationPage = ({ dashboard, showAlert }) => {
     }
 
     if (hasErrors) return;
-    console.log(data);
-    console.log("filterValues", filterValues);
+
     setLoading(true);
     try {
       var jsonData = {
@@ -151,6 +147,7 @@ const VoterRegistrationPage = ({ dashboard, showAlert }) => {
         sachivalayam_id: filterValues.sachivalayam?.sachivalayam_pk ?? null,
         part_no: filterValues.partno?.part_no ?? null,
         village_id: filterValues.village?.village_pk ?? null,
+        createdby: account.user.user_pk,
       };
 
       await instance.post(addVoters, jsonData);
@@ -168,7 +165,7 @@ const VoterRegistrationPage = ({ dashboard, showAlert }) => {
   };
 
   return (
-    <Page title="Add Voter">
+    <Page title={pageName}>
       <Container maxWidth="xl">
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
           {/* <Typography variant="h4" sx={{ mb: 1 }}>
@@ -178,13 +175,7 @@ const VoterRegistrationPage = ({ dashboard, showAlert }) => {
             <Typography sx={{ pb: 2 }}>Assign Authority</Typography>
 
             <Grid container spacing={2} alignItems="start">
-              <SearchByFilter
-                ref={filterRef}
-                showOtherFilters={false}
-                showSearchButton={false}
-                onChanged={(value) => setFilterValues(value)}
-                lg={3}
-              />
+              <SearchByFilter ref={filterRef} defaultValues={filterDefaultValues} showOtherFilters={false} showSearchButton={false} onChanged={(value) => setFilterValues(value)} lg={3} />
 
               <Grid item xs={12} md={6} lg={3}>
                 <RHFTextField name="part_slno" label="Part SL No" />
@@ -199,10 +190,12 @@ const VoterRegistrationPage = ({ dashboard, showAlert }) => {
               <Grid item xs={12} md={6} lg={3}>
                 <RHFCheckbox name="isnewvoter" label="is New Voter?" />
               </Grid>
+
               <Grid item xs={12} md={6} lg={3}>
                 <TextField
                   name="file"
                   type="file"
+                  size="small"
                   label="Upload Proof"
                   InputLabelProps={{
                     shrink: true,
@@ -213,6 +206,7 @@ const VoterRegistrationPage = ({ dashboard, showAlert }) => {
               <Grid item xs={12} md={6} lg={3}>
                 <RHFTextField name="voter_name" label="Voter Name" />
               </Grid>
+
               {isNewVoter == false && (
                 <Grid item xs={12} md={6} lg={3}>
                   <RHFTextField name="voter_id" label="Voter ID" />
@@ -222,7 +216,20 @@ const VoterRegistrationPage = ({ dashboard, showAlert }) => {
               <Grid item xs={12} md={6} lg={3}>
                 <RHFTextField name="age" label="Age" />
               </Grid>
+
               <Grid item xs={12} md={6} lg={3}>
+                <RHFTextField name="gender" label="Gender" select>
+                  <MenuItem value={13}>Male</MenuItem>
+                  <MenuItem value={14}>Female</MenuItem>
+                  <MenuItem value={15}>Transgender</MenuItem>
+                </RHFTextField>
+              </Grid>
+
+              <Grid item xs={12} md={6} lg={3}>
+                <RHFTextField name="phone_no" label="Phone Number" inputProps={{ maxLength: 10 }} />
+              </Grid>
+
+              <Grid item xs={12} md={12} lg={3}>
                 <RHFRadio
                   name="guardian"
                   filedLabel="Guardian"
@@ -242,57 +249,25 @@ const VoterRegistrationPage = ({ dashboard, showAlert }) => {
                   ]}
                 />
               </Grid>
+
               <Grid item xs={12} md={6} lg={3}>
                 <RHFTextField name="guardian_name" label="Guardian Name" />
               </Grid>
 
-              <Grid item xs={12} md={6} lg={3}>
-                <RHFTextField name="gender" label="Gender" select>
-                  <MenuItem value={13}>Male</MenuItem>
-                  <MenuItem value={14}>Female</MenuItem>
-                  <MenuItem value={15}>Transgender</MenuItem>
-                </RHFTextField>
-              </Grid>
-
-              <Grid item xs={12} md={6} lg={3}>
-                <RHFTextField
-                  name="phone_no"
-                  label="Phone Number"
-                  inputProps={{ maxLength: 10 }}
-                />
-              </Grid>
-              <Grid
-                item
-                xs={12}
-                md={6}
-                lg={3}
-                sx={{
-                  marginLeft: "14px",
-                }}
-              >
+              <Grid item xs={12} md={12} lg={12}>
                 <RHFCheckbox name="resident" label="Resident" />
               </Grid>
+
               {resident == true && (
                 <Grid item xs={12} md={6} lg={6}>
-                  <RHFTextField
-                    name="permenent_address"
-                    label="Permenent Address"
-                    multiline
-                    rows={4}
-                    fullWidth
-                  />
+                  <RHFTextField name="permenent_address" label="Permenent Address" multiline rows={4} fullWidth />
                 </Grid>
               )}
 
-              <Grid item xs={12} md={6} lg={5}>
-                <RHFTextField
-                  name="current_address"
-                  label="Current Address"
-                  multiline
-                  rows={4}
-                  fullWidth
-                />
+              <Grid item xs={12} md={6} lg={6}>
+                <RHFTextField name="current_address" label="Current Address" multiline rows={4} fullWidth />
               </Grid>
+
               <Grid
                 item
                 xs={12}
@@ -325,7 +300,7 @@ const VoterRegistrationPage = ({ dashboard, showAlert }) => {
 
 const mapStateToProps = (state) => {
   return {
-    dashboard: state.dashboard,
+    account: state.auth,
   };
 };
 
