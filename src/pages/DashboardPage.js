@@ -1,14 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import {
-  Grid,
-  Container,
-  Typography,
-  Box,
-  TextField,
-  Card,
-  MenuItem,
-  CircularProgress,
-} from "@mui/material";
+import { Grid, Container, Typography, Box, TextField, Card, MenuItem, CircularProgress } from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { BarChartWidget, PieChartWidget } from "../sections/common";
@@ -16,22 +7,14 @@ import * as Colors from "../utils/constants";
 import SearchByFilter from "../sections/common/SearchByFilter";
 import { LoadingButton } from "@mui/lab";
 import { ageDropdown } from "../utils/dropdownconstants";
-import {
-  getOpinionDashboard,
-  clearDashboardReducer,
-} from "../actions/dashboard";
+import { getOpinionDashboard, clearDashboardReducer } from "../actions/dashboard";
 import { casteList, searchFiltercolor } from "../constants";
 import { useLocation } from "react-router-dom";
 import { da } from "date-fns/locale";
 import { Label } from "@mui/icons-material";
 import { RHFAutoComplete } from "../components/hook-form";
 
-const DashboardApp = ({
-  dashboard,
-  getOpinionDashboard,
-  clearDashboardReducer,
-  common,
-}) => {
+const DashboardApp = ({ dashboard, getOpinionDashboard, clearDashboardReducer, common }) => {
   useEffect(() => {
     clearDashboardReducer();
   }, []);
@@ -159,12 +142,7 @@ const DashboardApp = ({
         <Box p={1} />
 
         {dashboard.isLoading && (
-          <Box
-            minHeight={200}
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-          >
+          <Box minHeight={200} display="flex" justifyContent="center" alignItems="center">
             <CircularProgress />
           </Box>
         )}
@@ -188,11 +166,7 @@ const DashboardApp = ({
                     value: dashboard.opinion?.gender?.["Third"] ?? 0,
                   },
                 ]}
-                chartColors={[
-                  Colors.MaleColor,
-                  Colors.FemaleColor,
-                  Colors.TransgenderColor,
-                ]}
+                chartColors={[Colors.MaleColor, Colors.FemaleColor, Colors.TransgenderColor]}
               />
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
@@ -201,14 +175,12 @@ const DashboardApp = ({
                 chartData={[
                   {
                     label: "Completed",
-                    value:
-                      dashboard.opinion?.survey_status?.surveyed_count ?? 0,
+                    value: dashboard.opinion?.survey_status?.surveyed_count ?? 0,
                     // value: 100,
                   },
                   {
                     label: "Pending",
-                    value:
-                      dashboard.opinion?.survey_status?.not_surveyed_count ?? 0,
+                    value: dashboard.opinion?.survey_status?.not_surveyed_count ?? 0,
                   },
                 ]}
                 chartColors={[Colors.StartedColor, Colors.NotStartedColor]}
@@ -216,58 +188,44 @@ const DashboardApp = ({
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
               <PieChartWidget
-                title={`Voters Pulse -${
-                  (dashboard.opinion?.voter_pulse?.[1]?.count ?? 0) +
-                  (dashboard.opinion?.voter_pulse?.[0]?.count ?? 0) +
-                  (dashboard.opinion?.voter_pulse?.[2]?.count ?? 0) +
-                  (dashboard.opinion?.voter_pulse?.[3]?.count ?? 0) +
-                  (dashboard.opinion?.voter_pulse?.[4]?.count ?? 0) +
-                  (dashboard.opinion?.voter_pulse?.[5]?.count ?? 0)
-                }`}
-                chartData={[
-                  {
-                    label: "YSRCP",
-                    value: dashboard.opinion?.voter_pulse?.[1]?.count ?? 0,
-                  },
-                  {
-                    label: "NETURAL",
-                    value: dashboard.opinion?.voter_pulse?.[0]?.count ?? 0,
-                  },
-                  {
-                    label: "TDP",
-                    value: dashboard.opinion?.voter_pulse?.[2]?.count ?? 0,
-                  },
-                  {
-                    label: "JANASENA",
-                    value: dashboard.opinion?.voter_pulse?.[5]?.count ?? 0,
-                  },
-                  {
-                    label: "BJP",
-                    value: dashboard.opinion?.voter_pulse?.[4]?.count ?? 0,
-                  },
-                  {
-                    label: "CONGRESS",
-                    value: dashboard.opinion?.voter_pulse?.[3]?.count ?? 0,
-                  },
-                ]}
-                chartColors={[
-                  Colors.YSRCPColor,
-                  Colors.NETURALColor,
-                  Colors.TDPColor,
-                  Colors.JSPColor,
-                  Colors.BJPColor,
-                  Colors.CONGRESSColor,
-                  Colors.OTHERColor,
-                ]}
+                title={`Voters Pulse -${dashboard.opinion?.voter_pulse?.map((item) => item.count).reduce((a, b) => a + b, 0) ?? 0}`}
+                // chartData={[
+                //   {
+                //     label: "YSRCP",
+                //     value: dashboard.opinion?.voter_pulse?.[1]?.count ?? 0,
+                //   },
+                //   {
+                //     label: "NETURAL",
+                //     value: dashboard.opinion?.voter_pulse?.[0]?.count ?? 0,
+                //   },
+                //   {
+                //     label: "TDP",
+                //     value: dashboard.opinion?.voter_pulse?.[2]?.count ?? 0,
+                //   },
+                //   {
+                //     label: "JANASENA",
+                //     value: dashboard.opinion?.voter_pulse?.[5]?.count ?? 0,
+                //   },
+                //   {
+                //     label: "BJP",
+                //     value: dashboard.opinion?.voter_pulse?.[4]?.count ?? 0,
+                //   },
+                //   {
+                //     label: "CONGRESS",
+                //     value: dashboard.opinion?.voter_pulse?.[3]?.count ?? 0,
+                //   },
+                // ]}
+                chartData={(dashboard.opinion?.voter_pulse ?? []).map((item) => ({
+                  label: item.party_name,
+                  value: item.count,
+                }))}
+                chartColors={[Colors.NETURALColor, Colors.YSRCPColor, Colors.TDPColor, Colors.OTHERColor, Colors.CONGRESSColor, Colors.JSPColor]}
               />
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
               <PieChartWidget
                 title={`Ticket Status-${
-                  (dashboard.opinion?.ticket_status?.[0]?.count ?? 0) +
-                  (dashboard.opinion?.ticket_status?.[1]?.count ?? 0) +
-                  (dashboard.opinion?.ticket_status?.[2]?.count ?? 0) +
-                  (dashboard.opinion?.ticket_status?.[3]?.count ?? 0)
+                  (dashboard.opinion?.ticket_status?.[0]?.count ?? 0) + (dashboard.opinion?.ticket_status?.[1]?.count ?? 0) + (dashboard.opinion?.ticket_status?.[2]?.count ?? 0) + (dashboard.opinion?.ticket_status?.[3]?.count ?? 0)
                 }`}
                 type="donut"
                 chartData={[
@@ -288,12 +246,7 @@ const DashboardApp = ({
                     value: dashboard.opinion?.ticket_status?.[3]?.count ?? 0,
                   },
                 ]}
-                chartColors={[
-                  Colors.OpenColor,
-                  Colors.ResolvedColor,
-                  Colors.CancelColor,
-                  Colors.EscalatedColor,
-                ]}
+                chartColors={[Colors.OpenColor, Colors.ResolvedColor, Colors.CancelColor, Colors.EscalatedColor]}
               />
             </Grid>
             <Grid item xs={12} md={6} lg={8}>
@@ -315,42 +268,24 @@ const DashboardApp = ({
                 //     ?.mandal_name ?? "Mandal 6",
                 // ]}
 
-                chartLabels={(
-                  dashboard.opinion?.ticket_status_by_mandal || []
-                ).map((item) => item.mandal_name ?? "Mandal")}
-                chartColors={[
-                  Colors.OpenColor,
-                  Colors.ResolvedColor,
-                  Colors.CancelColor,
-                  Colors.EscalatedColor,
-                ]}
+                chartLabels={(dashboard.opinion?.ticket_status_by_mandal || []).map((item) => item.mandal_name ?? "Mandal")}
+                chartColors={[Colors.OpenColor, Colors.ResolvedColor, Colors.CancelColor, Colors.EscalatedColor]}
                 chartData={[
                   {
                     name: "Open",
-                    data: dashboard.opinion?.ticket_status_by_mandal?.map(
-                      (item) =>
-                        item.open !== null && item.open !== undefined
-                          ? parseInt(item.open)
-                          : 0
-                    ),
+                    data: dashboard.opinion?.ticket_status_by_mandal?.map((item) => (item.open !== null && item.open !== undefined ? parseInt(item.open) : 0)),
                   },
                   {
                     name: "Resolved",
-                    data: dashboard.opinion?.ticket_status_by_mandal?.map(
-                      (item) => parseInt(item.resolved) ?? 0
-                    ),
+                    data: dashboard.opinion?.ticket_status_by_mandal?.map((item) => parseInt(item.resolved) ?? 0),
                   },
                   {
                     name: "Cancel",
-                    data: dashboard.opinion?.ticket_status_by_mandal?.map(
-                      (item) => parseInt(item.canceled) ?? 0
-                    ),
+                    data: dashboard.opinion?.ticket_status_by_mandal?.map((item) => parseInt(item.canceled) ?? 0),
                   },
                   {
                     name: "Escalated",
-                    data: dashboard.opinion?.ticket_status_by_mandal?.map(
-                      (item) => parseInt(item.escalated) ?? 0
-                    ),
+                    data: dashboard.opinion?.ticket_status_by_mandal?.map((item) => parseInt(item.escalated) ?? 0),
                   },
                 ]}
               />
@@ -396,34 +331,20 @@ const DashboardApp = ({
                     value: dashboard.opinion?.age_wise?.["80+"] ?? 0,
                   },
                 ]}
-                chartColors={[
-                  Colors.Age1Color,
-                  Colors.Age2Color,
-                  Colors.Age3Color,
-                  Colors.Age4Color,
-                  Colors.Age5Color,
-                  Colors.Age6Color,
-                ]}
+                chartColors={[Colors.Age1Color, Colors.Age2Color, Colors.Age3Color, Colors.Age4Color, Colors.Age5Color, Colors.Age6Color]}
               />
             </Grid>{" "}
             <Grid item xs={12} md={6} lg={4}>
               <PieChartWidget
-                title={`Disability (40% or above) -${
-                  dashboard.opinion?.disability_status?.[0]
-                    ?.disability_yes_count ?? 0
-                }`}
+                title={`Disability (40% or above) -${dashboard.opinion?.disability_status?.[0]?.disability_yes_count ?? 0}`}
                 chartData={[
                   {
                     label: "YES",
-                    value:
-                      dashboard.opinion?.disability_status?.[0]
-                        ?.disability_yes_count ?? 0,
+                    value: dashboard.opinion?.disability_status?.[0]?.disability_yes_count ?? 0,
                   },
                   {
                     label: "NO",
-                    value:
-                      dashboard.opinion?.disability_status?.[1]
-                        ?.disability_no_count ?? 0,
+                    value: dashboard.opinion?.disability_status?.[1]?.disability_no_count ?? 0,
                   },
                 ]}
                 chartColors={[Colors.OpenColor, Colors.NETURALColor]}
@@ -431,107 +352,31 @@ const DashboardApp = ({
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
               <PieChartWidget
-                title={`Govt. Employees -${
-                  dashboard.opinion?.govt_employee_status?.length > 1
-                    ? dashboard.opinion?.govt_employee_status?.[1]
-                        ?.govt_employee == 1
-                      ? parseInt(
-                          dashboard.opinion?.govt_employee_status?.[1]?.count ??
-                            0
-                        )
-                      : parseInt(
-                          dashboard.opinion?.govt_employee_status?.[0]?.count ??
-                            0
-                        )
-                    : 0
-                }`}
+                title={`Govt. Employees -${dashboard?.opinion?.govt_employee_status?.[0]?.govt_employee_yes_count ?? 0}`}
                 chartData={[
                   {
                     label: "YES",
-                    value:
-                      dashboard.opinion?.govt_employee_status?.length > 1
-                        ? dashboard.opinion?.govt_employee_status?.[1]
-                            ?.govt_employee == 1
-                          ? parseInt(
-                              dashboard.opinion?.govt_employee_status?.[1]
-                                ?.count ?? 0
-                            )
-                          : parseInt(
-                              dashboard.opinion?.govt_employee_status?.[0]
-                                ?.count ?? 0
-                            )
-                        : 0,
+                    value: dashboard?.opinion?.govt_employee_status?.[0]?.govt_employee_yes_count ?? 0,
                   },
                   {
                     label: "NO",
-                    value:
-                      dashboard.opinion?.govt_employee_status?.length > 1
-                        ? dashboard.opinion?.govt_employee_status?.[0]
-                            ?.govt_employee == 0
-                          ? parseInt(
-                              dashboard.opinion?.govt_employee_status?.[0]
-                                ?.count ?? 0
-                            )
-                          : parseInt(
-                              dashboard.opinion?.govt_employee_status?.[1]
-                                ?.count ?? 0
-                            )
-                        : 0,
+                    value: dashboard?.opinion?.govt_employee_status?.[1]?.govt_employee_no_count ?? 0,
                   },
                 ]}
-                chartColors={[
-                  Colors.OpenColor,
-                  Colors.CancelColor,
-                  Colors.NETURALColor,
-                ]}
+                chartColors={[Colors.OpenColor, Colors.CancelColor, Colors.NETURALColor]}
               />
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
               <PieChartWidget
-                title={`Non Residential -${
-                  dashboard.opinion?.residential_status?.length > 1
-                    ? dashboard.opinion?.residential_status?.[1]?.residential ==
-                      0
-                      ? parseInt(
-                          dashboard.opinion?.residential_status?.[1]?.count ?? 0
-                        )
-                      : parseInt(
-                          dashboard.opinion?.residential_status?.[0]?.count ?? 0
-                        )
-                    : 0
-                }`}
+                title={`Non Residential -${dashboard?.opinion?.residential_status?.[1]?.residential_no_count ?? 0}`}
                 chartData={[
                   {
                     label: "Residential",
-                    value:
-                      dashboard.opinion?.residential_status?.length > 1
-                        ? dashboard.opinion?.residential_status?.[0]
-                            ?.residential == 1
-                          ? parseInt(
-                              dashboard.opinion?.residential_status?.[0]
-                                ?.count ?? 0
-                            )
-                          : parseInt(
-                              dashboard.opinion?.residential_status?.[1]
-                                ?.count ?? 0
-                            )
-                        : 0,
+                    value: dashboard?.opinion?.residential_status?.[0]?.residential_yes_count ?? 0,
                   },
                   {
                     label: "Non Residential",
-                    value:
-                      dashboard.opinion?.residential_status?.length > 1
-                        ? dashboard.opinion?.residential_status?.[1]
-                            ?.residential == 0
-                          ? parseInt(
-                              dashboard.opinion?.residential_status?.[1]
-                                ?.count ?? 0
-                            )
-                          : parseInt(
-                              dashboard.opinion?.residential_status?.[0]
-                                ?.count ?? 0
-                            )
-                        : 0,
+                    value: dashboard?.opinion?.residential_status?.[1]?.residential_no_count ?? 0,
                   },
                 ]}
                 chartColors={[Colors.OpenColor, Colors.CancelColor]}
@@ -539,44 +384,21 @@ const DashboardApp = ({
             </Grid>{" "}
             <Grid item xs={12} md={6} lg={4}>
               <PieChartWidget
-                title={`Religion Wise -${
-                  (dashboard.opinion?.religion_wise ?? []).reduce(
-                    (a, b) => a + b.count,
-                    0
-                  ) ?? 0
-                }`}
-                chartData={(dashboard.opinion?.religion_wise ?? []).map(
-                  (item) => ({
-                    label: item.religion,
-                    value: item.count,
-                  })
-                )}
-                chartColors={[
-                  Colors.Age1Color,
-                  Colors.Age2Color,
-                  Colors.Age3Color,
-                  Colors.Age4Color,
-                  Colors.Age5Color,
-                  Colors.Age6Color,
-
-                  Colors.NETURALColor,
-                ]}
+                title={`Religion Wise -${(dashboard.opinion?.religion_wise ?? []).reduce((a, b) => a + b.count, 0) ?? 0}`}
+                chartData={(dashboard.opinion?.religion_wise ?? []).map((item) => ({
+                  label: item.religion,
+                  value: item.count,
+                }))}
+                chartColors={[Colors.Age1Color, Colors.Age2Color, Colors.Age3Color, Colors.Age4Color, Colors.Age5Color, Colors.Age6Color, Colors.NETURALColor]}
               />
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
               <PieChartWidget
-                title={`Caste Wise -${
-                  (dashboard.opinion?.caste_wise ?? []).reduce(
-                    (a, b) => a + b.count,
-                    0
-                  ) ?? 0
-                }`}
-                chartData={(dashboard.opinion?.caste_wise ?? []).map(
-                  (item) => ({
-                    label: item.caste,
-                    value: item.count,
-                  })
-                )}
+                title={`Caste Wise -${(dashboard.opinion?.caste_wise ?? []).reduce((a, b) => a + b.count, 0) ?? 0}`}
+                chartData={(dashboard.opinion?.caste_wise ?? []).map((item) => ({
+                  label: item.caste,
+                  value: item.count,
+                }))}
                 chartColors={[
                   Colors.Age1Color,
                   Colors.Age2Color,

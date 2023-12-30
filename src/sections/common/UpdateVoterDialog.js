@@ -223,14 +223,14 @@ const UpdateVoterDialog = ({ account, common, voterData, showAlert, updateVoterD
                         custom: <JSPRadio fontSize={22} />,
                       },
                       {
-                        label: "BJP",
+                        label: "Others",
                         value: PARTY_ID.BJP,
-                        custom: <BJPRadio fontSize={22} />,
+                        custom: <CongressRadio fontSize={22} />,
                       },
                       {
-                        label: "INC",
+                        label: "Not Traced",
                         value: PARTY_ID.CONGRESS,
-                        custom: <CongressRadio fontSize={22} />,
+                        custom: <BJPRadio fontSize={22} />,
                       },
                       // {
                       //   label: "Others",

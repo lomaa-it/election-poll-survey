@@ -263,13 +263,13 @@ const OpinionPollSurveyList = forwardRef(({ isUser, voter, account, showAlert, c
           },
           {
             name: "opinionparty",
-            label: "BJP",
+            label: "Others",
             options: {
               customBodyRender: (value, tableMeta, updateValue) => {
                 var data = tableMeta.rowData;
                 var partyId = PARTY_ID.BJP;
                 return (
-                  <BJPRadio
+                  <CongressRadio
                     sx={{
                       p: 0,
                     }}
@@ -283,13 +283,13 @@ const OpinionPollSurveyList = forwardRef(({ isUser, voter, account, showAlert, c
           },
           {
             name: "opinionparty",
-            label: "INC",
+            label: "Not Traced",
             options: {
               customBodyRender: (value, tableMeta, updateValue) => {
                 var data = tableMeta.rowData;
                 var partyId = PARTY_ID.CONGRESS;
                 return (
-                  <CongressRadio
+                  <BJPRadio
                     sx={{
                       p: 0,
                     }}
@@ -307,6 +307,10 @@ const OpinionPollSurveyList = forwardRef(({ isUser, voter, account, showAlert, c
     {
       name: "surveyed_by",
       label: "Surveyed By",
+    },
+    {
+      name: "updatedby",
+      label: "Updated By",
     },
   ];
 

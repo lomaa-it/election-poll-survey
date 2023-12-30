@@ -84,7 +84,7 @@ const ViewVotersList = ({ voter, filterValues, showAlert, getAllVotersSurvey, ac
       label: "Gender",
     },
     {
-      name: "age",
+      name: "voter_age",
       label: "Age",
     },
     {
@@ -121,7 +121,7 @@ const ViewVotersList = ({ voter, filterValues, showAlert, getAllVotersSurvey, ac
         customBodyRender: (value, tableMeta, updateValue) => {
           return (
             <Stack direction="row">
-              <IconButton color="primary">
+              <IconButton color="primary" onClick={() => handleEdit(value)}>
                 <EditNoteIcon />
               </IconButton>
 

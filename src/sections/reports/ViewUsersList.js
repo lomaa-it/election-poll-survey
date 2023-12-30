@@ -58,6 +58,10 @@ const ViewUsersList = ({ user, showAlert, checkOrUncheckUser, deleteUserInRedux,
       name: "user_pk",
       label: "User Id",
     },
+    {
+      name: "username",
+      label: "Username",
+    },
     { name: "user_displayname", label: "Full Name" },
     { name: "lookup_valuename", label: "Designation" },
     {
@@ -111,6 +115,7 @@ const ViewUsersList = ({ user, showAlert, checkOrUncheckUser, deleteUserInRedux,
       label: "Action",
       options: {
         customBodyRender: (value, tableMeta, updateValue) => {
+          console.log("tableMeta", tableMeta.rowData);
           return (
             <Box
               sx={{
@@ -122,7 +127,7 @@ const ViewUsersList = ({ user, showAlert, checkOrUncheckUser, deleteUserInRedux,
                   <EditNoteIcon />
                 </IconButton>
                 <>
-                  {tableMeta.rowData[4] !== "MLA" ? (
+                  {tableMeta.rowData[5] !== "MLA" ? (
                     <IconButton
                       color="error"
                       onClick={() => {

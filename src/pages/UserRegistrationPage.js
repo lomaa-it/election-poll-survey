@@ -151,7 +151,19 @@ const UserRegistrationPage = ({ account, common, showAlert }) => {
               </Grid>
 
               <Grid item xs={12} md={6} lg={3}>
-                <RHFTextField name="username" label="Username/Phone Number *" />
+                <RHFTextField
+                  name="username"
+                  label="Username/Phone Number *"
+                  inputProps={{ maxLength: 10 }}
+                  onKeyDown={(event) => {
+                    if (!/[0-9]/.test(event.key) && !["Backspace", "ArrowRight", "ArrowLeft"].includes(event.key)) {
+                      event.preventDefault();
+                    }
+                    if (event.key === "Enter") {
+                      document.getElementsByName("phone_no")[0].focus();
+                    }
+                  }}
+                />
               </Grid>
 
               {/* <Grid item xs={12} md={6} lg={3}>
@@ -159,7 +171,19 @@ const UserRegistrationPage = ({ account, common, showAlert }) => {
               </Grid> */}
 
               <Grid item xs={12} md={6} lg={3}>
-                <RHFTextField name="phone_no" label="Office Phone Number" />
+                <RHFTextField
+                  name="phone_no"
+                  label="Office Phone Number"
+                  inputProps={{ maxLength: 10 }}
+                  onKeyDown={(event) => {
+                    if (!/[0-9]/.test(event.key) && !["Backspace", "ArrowRight", "ArrowLeft"].includes(event.key)) {
+                      event.preventDefault();
+                    }
+                    if (event.key === "Enter") {
+                      document.getElementsByName("age")[0].focus();
+                    }
+                  }}
+                />
               </Grid>
 
               <Grid item xs={12} md={6} lg={3}>

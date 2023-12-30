@@ -84,7 +84,7 @@ const SearchByFilter = forwardRef(
 
         if (account?.user.sachivalayam_pk != null) {
           var initialSachivalayam = common?.sachivalayams.filter((e) => e.division_id == initialDivision?.division_pk)[0];
-          console.log("initialSachivalayam", initialSachivalayam)
+          console.log("initialSachivalayam", initialSachivalayam);
           if (common?.sachivalayams.length > 0) {
             setFormValues((state) => ({
               ...state,
@@ -94,11 +94,10 @@ const SearchByFilter = forwardRef(
         }
 
         var initialPart = common?.parts.filter((e) => e.sachivalayam_id == initialSachivalayam?.sachivalayam_pk)[0];
-        console.log("initialPart", initialPart)
+        console.log("initialPart", initialPart);
         if (account?.user.part_no == null) {
-          setFormValues((state) => ({ ...state, partno:  account?.user.part_no } ));
-        }else{
-         
+          setFormValues((state) => ({ ...state, partno: account?.user.part_no }));
+        } else {
           if (common?.parts.length > 0) {
             setFormValues((state) => ({ ...state, partno: initialPart ?? null }));
           }
@@ -121,6 +120,7 @@ const SearchByFilter = forwardRef(
             mandal: defaultValues.mandal_pk ? common?.mandals.find((e) => e.mandal_pk === defaultValues.mandal_pk) : state.mandal,
             division: defaultValues.division_pk ? common?.divisions.find((e) => e.division_pk === defaultValues.division_pk) : state.division,
             sachivalayam: defaultValues.sachivalayam_pk ? common?.sachivalayams.find((e) => e.sachivalayam_pk === defaultValues.sachivalayam_pk) : state.sachivalayam,
+            village: defaultValues.village_pk ? common?.villages.find((e) => e.village_pk === defaultValues.village_pk) : state.village,
             partno: defaultValues.part_no ? common?.parts.find((e) => e.part_no === defaultValues.part_no) : state.partno,
           }));
         }

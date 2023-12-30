@@ -23,8 +23,8 @@ export const PARTY_ID = {
   NEUTRAL: 22,
   YSRCP: 23,
   TDP: 24,
-  CONGRESS: 25,
-  BJP: 26,
+  CONGRESS: 26,
+  BJP: 25,
   JANASENA: 27,
   OTHERS: 80,
 };

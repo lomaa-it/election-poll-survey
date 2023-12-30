@@ -36,39 +36,39 @@ const VoterRegistrationPage = ({ account, showAlert }) => {
     voter_name: Yup.string().required("Voter name is required"),
     guardian: Yup.string().required("Voter name is required"),
     guardian_name: Yup.string().required("Guardian name is required"),
-    isnewvoter: Yup.boolean(),
+    is_newregistration: Yup.boolean(),
     voter_id: Yup.string(),
     age: Yup.string().matches(numRegExp, "Must be only digits").max(2, "Age should be less than 100").required("Age is required"),
     phone_no: Yup.string().matches(phoneRegExp, "Phone number is not valid"),
-    resident: Yup.boolean(),
+    is_resident: Yup.boolean(),
     permenent_address: Yup.string(),
     current_address: Yup.string().required("Current address is required"),
     part_slno: Yup.string().required("Part slno is required"),
     gender: Yup.string().required("Gender is required"),
   });
 
-  console.log(props?.voterData);
+  console.log("props for edit", props?.voterData);
   const defaultValues = {
     voter_name: props?.voterData?.voter_name ?? "",
     guardian: props?.voterData?.guardian ?? "16",
     guardian_name: props?.voterData?.guardian_name ?? "",
     voter_id: props?.voterData?.voter_id ?? "",
-    age: props?.voterData?.age ?? "",
-    phone_no: props?.voterData?.phone_no ?? "",
+    age: props?.voterData?.voter_age ?? "",
+    phone_no: props?.voterData?.voter_phone_no ?? "",
     permenent_address: props?.voterData?.permenent_address ?? "",
     current_address: props?.voterData?.current_address ?? "",
     part_slno: props?.voterData?.part_slno ?? "",
     gender: props?.voterData?.gender ?? "",
-    isnewvoter: false,
-    resident: false,
+    is_newregistration: props?.voterData?.is_newregistration ?? false,
+    is_resident: props?.voterData?.is_resident ?? false,
   };
 
   const filterDefaultValues = {
-    mandal_pk: props?.voterData?.mandal_pk ?? "",
-    division_pk: props?.voterData?.division_pk ?? "",
-    sachivalayam_pk: props?.voterData?.sachivalayam_pk ?? "",
+    mandal_pk: props?.voterData?.mandal_id ?? "",
+    division_pk: props?.voterData?.division_id ?? "",
+    sachivalayam_pk: props?.voterData?.sachivalayam_id ?? "",
     part_no: props?.voterData?.part_no ?? null,
-    village_pk: props?.voterData?.village_pk ?? null,
+    village_pk: props?.voterData?.village_id ?? null,
   };
 
   const methods = useForm({
@@ -77,22 +77,22 @@ const VoterRegistrationPage = ({ account, showAlert }) => {
   });
 
   const { handleSubmit, reset, watch, setError, clearErrors } = methods;
-  const resident = watch("resident");
-  const isNewVoter = watch("isnewvoter");
+  const resident = watch("is_resident");
+  const isNewVoter = watch("is_newregistration");
 
   console.log("resident", resident);
   console.log("isNewVoter", isNewVoter);
 
   const onSubmit = async (data) => {
     clearErrors("voter_id");
-    if (data.isnewvoter == false && data.voter_id == "") {
+    if (data.is_newregistration == false && data.voter_id == "") {
       setError("voter_id", {
         message: "Voter ID is required",
       });
       return;
     }
 
-    if (data.resident == true && data.permenent_address == "") {
+    if (data.is_resident == true && data.permenent_address == "") {
       setError("permenent_address", {
         message: "Permenent address is required",
       });
@@ -136,31 +136,61 @@ const VoterRegistrationPage = ({ account, showAlert }) => {
     if (hasErrors) return;
 
     setLoading(true);
-    try {
-      var jsonData = {
-        ...data,
-        state_id: 5,
-        district_id: 6,
-        consistency_id: 3,
-        mandal_id: filterValues.mandal?.mandal_pk ?? null,
-        division_id: filterValues.division?.division_pk ?? null,
-        sachivalayam_id: filterValues.sachivalayam?.sachivalayam_pk ?? null,
-        part_no: filterValues.partno?.part_no ?? null,
-        village_id: filterValues.village?.village_pk ?? null,
-        createdby: account.user.user_pk,
-      };
+    if (props?.voterData == null) {
+      try {
+        var jsonData = {
+          ...data,
+          state_id: 5,
+          district_id: 6,
+          consistency_id: 3,
+          mandal_id: filterValues.mandal?.mandal_pk ?? null,
+          division_id: filterValues.division?.division_pk ?? null,
+          sachivalayam_id: filterValues.sachivalayam?.sachivalayam_pk ?? null,
+          part_no: filterValues.partno?.part_no ?? null,
+          village_id: filterValues.village?.village_pk ?? null,
+          createdby: account.user.user_pk,
+        };
 
-      await instance.post(addVoters, jsonData);
-      showAlert({ text: "Voter added successfully", color: "success" });
-      reset();
-      filterRef.current.reset();
+        await instance.post(addVoters, jsonData);
+        showAlert({ text: "Voter added successfully", color: "success" });
+        reset();
+        filterRef.current.reset();
 
-      setLoading(false);
-    } catch (error) {
-      showAlert({
-        text: error.response?.data?.error ?? "Something went wrong",
-      });
-      setLoading(false);
+        setLoading(false);
+      } catch (error) {
+        showAlert({
+          text: error.response?.data?.error ?? "Something went wrong",
+        });
+        setLoading(false);
+      }
+    } else {
+      try {
+        var jsonData = {
+          ...data,
+          state_id: 5,
+          district_id: 6,
+          consistency_id: 3,
+          mandal_id: filterValues.mandal?.mandal_pk ?? null,
+          division_id: filterValues.division?.division_pk ?? null,
+          sachivalayam_id: filterValues.sachivalayam?.sachivalayam_pk ?? null,
+          part_no: filterValues.partno?.part_no ?? null,
+          village_id: filterValues.village?.village_pk ?? null,
+          updatedby: account.user.user_pk,
+        };
+
+        await instance.put(`${addVoters}/${props.voterData.voter_pkk}`, jsonData);
+        showAlert({ text: "Voter Update successfully", color: "success" });
+        reset();
+        filterRef.current.reset();
+
+        setLoading(false);
+        navigate(-1);
+      } catch (error) {
+        showAlert({
+          text: error.response?.data?.error ?? "Something went wrong",
+        });
+        setLoading(false);
+      }
     }
   };
 
@@ -188,7 +218,7 @@ const VoterRegistrationPage = ({ account, showAlert }) => {
 
             <Grid container spacing={2} alignItems="start">
               <Grid item xs={12} md={6} lg={3}>
-                <RHFCheckbox name="isnewvoter" label="is New Voter?" />
+                <RHFCheckbox name="is_newregistration" label="is New Voter?" />
               </Grid>
 
               <Grid item xs={12} md={6} lg={3}>
@@ -255,7 +285,7 @@ const VoterRegistrationPage = ({ account, showAlert }) => {
               </Grid>
 
               <Grid item xs={12} md={12} lg={12}>
-                <RHFCheckbox name="resident" label="Resident" />
+                <RHFCheckbox name="is_resident" label="Resident" />
               </Grid>
 
               {resident == true && (
