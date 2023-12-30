@@ -1,16 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  Typography,
-  Card,
-  Stack,
-  Grid,
-  Switch,
-  Divider,
-  Box,
-  Chip,
-  TextField,
-  FormControlLabel,
-} from "@mui/material";
+import { Typography, Card, Stack, Grid, Switch, Divider, Box, Chip, TextField, FormControlLabel } from "@mui/material";
 import { CheckBox } from "@mui/icons-material";
 import MUIDataTable from "mui-datatables";
 import { connect } from "react-redux";
@@ -20,6 +9,7 @@ import ViewUserPage from "../../pages/ViewUserPage";
 import Sachivalayam from "../../pages/Sachivalayam";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import CustomMuiDataTable from "../../components/CustomMuiDataTable";
 
 const DistrictsList = ({ showAlert, districtList }) => {
   const columns = [
@@ -69,12 +59,7 @@ const DistrictsList = ({ showAlert, districtList }) => {
       <Stack>
         <Divider />
 
-        <MUIDataTable
-          title=""
-          columns={columns}
-          data={districtListForTable}
-          options={options}
-        />
+        <CustomMuiDataTable title="" columns={columns} data={districtListForTable} options={options} />
       </Stack>
     </Card>
   );

@@ -2,15 +2,14 @@ import { useEffect, useState } from "react";
 import { Typography, Card, Stack, Grid, Switch, Divider, Box, Chip, TextField, MenuItem, CircularProgress } from "@mui/material";
 import Checkbox from "@mui/material/Checkbox";
 import Button from "@mui/material/Button";
-import MUIDataTable from "mui-datatables";
 import { connect } from "react-redux";
 import { showAlert } from "../../actions/alert";
 import { LoadingButton } from "@mui/lab";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { getMuiTableTheme, getTicketStatusById, searchFiltercolor } from "../../constants";
+import { getTicketStatusById } from "../../constants";
 import { fToNow } from "../../utils/formatTime";
+import CustomMuiDataTable from "../../components/CustomMuiDataTable";
 
 const TicketHistoryList = ({ ticket, showAlert }) => {
   const columns = [
@@ -59,11 +58,7 @@ const TicketHistoryList = ({ ticket, showAlert }) => {
         </Box>
       )}
 
-      {!ticket.isLoading && (
-        <ThemeProvider theme={getMuiTableTheme()}>
-          <MUIDataTable title="Ticket History List" columns={columns} data={ticket.history ?? []} options={options} />
-        </ThemeProvider>
-      )}
+      {!ticket.isLoading && <CustomMuiDataTable title="Ticket History List" columns={columns} data={ticket.history ?? []} options={options} />}
     </Card>
   );
 };

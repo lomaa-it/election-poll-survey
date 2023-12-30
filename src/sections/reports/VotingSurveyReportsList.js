@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react";
 import { Typography, Card, Stack, Grid, Switch, Divider, Box, Chip, TextField } from "@mui/material";
-import MUIDataTable from "mui-datatables";
 import { connect } from "react-redux";
 import { showAlert } from "../../actions/alert";
 import { LoadingButton } from "@mui/lab";
 import PollResultsBarChartWidget from "../opinionPollSurveyResults/PollResultsBarChartWidget";
 import SearchByFilter from "../common/SearchByFilter";
 
-import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { searchFiltercolor } from "../../constants";
+import CustomMuiDataTable from "../../components/CustomMuiDataTable";
 
 const VotingSurveyReportsList = ({ showAlert }) => {
   useEffect(() => {}, []);
@@ -71,19 +70,6 @@ const VotingSurveyReportsList = ({ showAlert }) => {
     responsive: "standard",
   };
 
-  const getMuiTheme = () =>
-    createTheme({
-      components: {
-        MUIDataTableHeadCell: {
-          styleOverrides: {
-            root: {
-              backgroundColor: searchFiltercolor,
-            },
-          },
-        },
-      },
-    });
-
   return (
     <Card elevation={1}>
       <Stack>
@@ -121,19 +107,18 @@ const VotingSurveyReportsList = ({ showAlert }) => {
         </Grid>
 
         <Divider />
-        <ThemeProvider theme={getMuiTheme()}>
-          <MUIDataTable
-            title="Survey Analysis"
-            columns={columns}
-            data={[
-              ["Mandal 1", "Divsion 1", "Sachivalayam 1", "6", "Village 1", "25000", "2522", "69%", "888", "24%", "699", "5%", "455", "4%", "230", "2%"],
-              ["Mandal 2", "Divsion 1", "Sachivalayam 1", "1", "Village 1", "25000", "2522", "69%", "888", "24%", "699", "5%", "455", "4%", "230", "2%"],
-              ["Mandal 3", "Divsion 1", "Sachivalayam 1", "2", "Village 1", "25000", "2522", "69%", "888", "24%", "699", "5%", "455", "4%", "230", "2%"],
-              ["Mandal 4", "Divsion 1", "Sachivalayam 1", "3", "Village 1", "25000", "2522", "69%", "888", "24%", "699", "5%", "455", "4%", "230", "2%"],
-            ]}
-            options={options}
-          />
-        </ThemeProvider>
+
+        <CustomMuiDataTable
+          title="Survey Analysis"
+          columns={columns}
+          data={[
+            ["Mandal 1", "Divsion 1", "Sachivalayam 1", "6", "Village 1", "25000", "2522", "69%", "888", "24%", "699", "5%", "455", "4%", "230", "2%"],
+            ["Mandal 2", "Divsion 1", "Sachivalayam 1", "1", "Village 1", "25000", "2522", "69%", "888", "24%", "699", "5%", "455", "4%", "230", "2%"],
+            ["Mandal 3", "Divsion 1", "Sachivalayam 1", "2", "Village 1", "25000", "2522", "69%", "888", "24%", "699", "5%", "455", "4%", "230", "2%"],
+            ["Mandal 4", "Divsion 1", "Sachivalayam 1", "3", "Village 1", "25000", "2522", "69%", "888", "24%", "699", "5%", "455", "4%", "230", "2%"],
+          ]}
+          options={options}
+        />
       </Stack>
     </Card>
   );

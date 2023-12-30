@@ -1,43 +1,16 @@
 import { useEffect, useState, useRef, useCallback } from "react";
-import {
-  Typography,
-  Card,
-  Stack,
-  Grid,
-  Switch,
-  Divider,
-  Box,
-  CircularProgress,
-  TextField,
-} from "@mui/material";
-import MUIDataTable from "mui-datatables";
+import { Typography, Card, Stack, Grid, Switch, Divider, Box, CircularProgress, TextField } from "@mui/material";
 import { connect } from "react-redux";
 import { showAlert } from "../../actions/alert";
 import { LoadingButton } from "@mui/lab";
 import SearchByFilter from "../common/SearchByFilter";
-import {
-  getOpinionResults,
-  clearDashboardReducer,
-} from "../../actions/dashboard";
+import { getOpinionResults, clearDashboardReducer } from "../../actions/dashboard";
 import { BarChartWidget } from "../common";
-import {
-  BJPColor,
-  CONGRESSColor,
-  JSPColor,
-  NETURALColor,
-  OTHERColor,
-  TDPColor,
-  YSRCPColor,
-} from "../../utils/constants";
+import { BJPColor, CONGRESSColor, JSPColor, NETURALColor, OTHERColor, TDPColor, YSRCPColor } from "../../utils/constants";
 import { searchFiltercolor } from "../../constants";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useLocation } from "react-router-dom";
-const SurveyReportsList = ({
-  dashboard,
-  getOpinionResults,
-  clearDashboardReducer,
-  account,
-}) => {
+import CustomMuiDataTable from "../../components/CustomMuiDataTable";
+const SurveyReportsList = ({ dashboard, getOpinionResults, clearDashboardReducer, account }) => {
   const [filterValues, setFilterValues] = useState(null);
   const [isLoading, setLoading] = useState(false);
   const [reset, setReset] = useState(false);
@@ -182,19 +155,6 @@ const SurveyReportsList = ({
     }),
   };
 
-  const getMuiTheme = () =>
-    createTheme({
-      components: {
-        MUIDataTableHeadCell: {
-          styleOverrides: {
-            root: {
-              backgroundColor: searchFiltercolor,
-            },
-          },
-        },
-      },
-    });
-
   return (
     <>
       <Card sx={{ p: 3, backgroundColor: searchFiltercolor }}>
@@ -233,12 +193,7 @@ const SurveyReportsList = ({
 
       <Card elevation={1}>
         {dashboard.isLoading && (
-          <Box
-            minHeight={200}
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-          >
+          <Box minHeight={200} display="flex" justifyContent="center" alignItems="center">
             <CircularProgress />
           </Box>
         )}
@@ -249,71 +204,27 @@ const SurveyReportsList = ({
               <BarChartWidget
                 distributed={true}
                 withCard={false}
-                chartLabels={[
-                  "Neutral",
-                  "YCP",
-                  "TDP",
-                  "JSP",
-                  "Congress",
-                  "BJP",
-                  "Others",
-                ]}
+                chartLabels={["Neutral", "YCP", "TDP", "JSP", "Congress", "BJP", "Others"]}
                 chartData={[
                   {
                     name: "Total",
                     data: [
-                      dashboard.opinionResults.reduce(
-                        (sum, e) => sum + e.neutral,
-                        0
-                      ),
-                      dashboard.opinionResults.reduce(
-                        (sum, e) => sum + e.ysrcp,
-                        0
-                      ),
-                      dashboard.opinionResults.reduce(
-                        (sum, e) => sum + e.tdp,
-                        0
-                      ),
-                      dashboard.opinionResults.reduce(
-                        (sum, e) => sum + e.janasena,
-                        0
-                      ),
-                      dashboard.opinionResults.reduce(
-                        (sum, e) => sum + e.congress,
-                        0
-                      ),
-                      dashboard.opinionResults.reduce(
-                        (sum, e) => sum + e.bjp,
-                        0
-                      ),
-                      dashboard.opinionResults.reduce(
-                        (sum, e) => sum + e.otherss,
-                        0
-                      ),
+                      dashboard.opinionResults.reduce((sum, e) => sum + e.neutral, 0),
+                      dashboard.opinionResults.reduce((sum, e) => sum + e.ysrcp, 0),
+                      dashboard.opinionResults.reduce((sum, e) => sum + e.tdp, 0),
+                      dashboard.opinionResults.reduce((sum, e) => sum + e.janasena, 0),
+                      dashboard.opinionResults.reduce((sum, e) => sum + e.congress, 0),
+                      dashboard.opinionResults.reduce((sum, e) => sum + e.bjp, 0),
+                      dashboard.opinionResults.reduce((sum, e) => sum + e.otherss, 0),
                     ],
                   },
                 ]}
-                chartColors={[
-                  NETURALColor,
-                  YSRCPColor,
-                  TDPColor,
-                  JSPColor,
-                  CONGRESSColor,
-                  BJPColor,
-                  OTHERColor,
-                ]}
+                chartColors={[NETURALColor, YSRCPColor, TDPColor, JSPColor, CONGRESSColor, BJPColor, OTHERColor]}
               />
             </Box>
 
             <Divider />
-            <ThemeProvider theme={getMuiTheme()}>
-              <MUIDataTable
-                title="Opinion Reports"
-                columns={columns}
-                data={dashboard.opinionResults}
-                options={options}
-              />
-            </ThemeProvider>
+            <CustomMuiDataTable title="Opinion Reports" columns={columns} data={dashboard.opinionResults} options={options} />
           </>
         )}
       </Card>

@@ -1,19 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  Typography,
-  Card,
-  Stack,
-  Grid,
-  Switch,
-  Divider,
-  Box,
-  Chip,
-  TextField,
-  FormControlLabel,
-  Popover,
-  Button,
-  MenuItem,
-} from "@mui/material";
+import { Typography, Card, Stack, Grid, Switch, Divider, Box, Chip, TextField, FormControlLabel, Popover, Button, MenuItem } from "@mui/material";
 import { CheckBox } from "@mui/icons-material";
 import MUIDataTable from "mui-datatables";
 import { connect } from "react-redux";
@@ -26,15 +12,9 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { set } from "date-fns";
 import { updateMandalByIdRoute } from "../../utils/apis";
 import instance from "../../utils/axios";
+import CustomMuiDataTable from "../../components/CustomMuiDataTable";
 
-const MandalsList = ({
-  showAlert,
-  mandalsList,
-  fetchedData,
-  setFetchedData,
-  refresh,
-  setRefresh,
-}) => {
+const MandalsList = ({ showAlert, mandalsList, fetchedData, setFetchedData, refresh, setRefresh }) => {
   useEffect(() => {}, []);
   const [anchorEl, setAnchorEl] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -73,16 +53,12 @@ const MandalsList = ({
     setAnchorEl(event.currentTarget);
     // console.log("data", data);
 
-   //find district_id using consistency_id
-    const consistency = fetchedData.consistency.find(
-      (consistency) => consistency.consistency_pk === data.consistency_id
-    );
+    //find district_id using consistency_id
+    const consistency = fetchedData.consistency.find((consistency) => consistency.consistency_pk === data.consistency_id);
     const district_id = consistency ? consistency.district_pk : null;
 
-     //find state_id using district_id
-     const district = fetchedData.district.find(
-      (district) => district.district_pk === district_id
-    );
+    //find state_id using district_id
+    const district = fetchedData.district.find((district) => district.district_pk === district_id);
     const state_id = district ? district.state_id : null;
 
     setSelectedValues((prevState) => ({
@@ -123,14 +99,11 @@ const MandalsList = ({
 
     try {
       setIsLoading(true);
-      const response = await instance.put(
-        updateMandalByIdRoute + selectedValues.mandal_id,
-        {
-          consistency_id: selectedValues.consistency_id,
-          mandal_name: selectedValues.mandal_name,
-        }
-      );
-  
+      const response = await instance.put(updateMandalByIdRoute + selectedValues.mandal_id, {
+        consistency_id: selectedValues.consistency_id,
+        mandal_name: selectedValues.mandal_name,
+      });
+
       setIsLoading(false);
       showAlert({ text: "Mandal Updated Successfully", color: "success" });
       setRefresh((prevState) => !prevState);
@@ -210,11 +183,7 @@ const MandalsList = ({
                   }}
                 >
                   {fetchedData.states.map((state) => {
-                    return (
-                      <MenuItem value={state.state_pk}>
-                        {state.state_name}
-                      </MenuItem>
-                    );
+                    return <MenuItem value={state.state_pk}>{state.state_name}</MenuItem>;
                   })}
                 </TextField>
                 <TextField
@@ -233,16 +202,9 @@ const MandalsList = ({
                 >
                   {/* filter districk based on state_id */}
                   {fetchedData.district
-                    .filter(
-                      (district) =>
-                        district.state_id === selectedValues.state_id
-                    )
+                    .filter((district) => district.state_id === selectedValues.state_id)
                     .map((district) => {
-                      return (
-                        <MenuItem value={district.district_pk}>
-                          {district.district_name}
-                        </MenuItem>
-                      );
+                      return <MenuItem value={district.district_pk}>{district.district_name}</MenuItem>;
                     })}
                 </TextField>
                 <TextField
@@ -260,16 +222,9 @@ const MandalsList = ({
                 >
                   {/* filter constituency based on district_id */}
                   {fetchedData.consistency
-                    .filter(
-                      (consistency) =>
-                        consistency.district_pk === selectedValues.district_id
-                    )
+                    .filter((consistency) => consistency.district_pk === selectedValues.district_id)
                     .map((consistency) => {
-                      return (
-                        <MenuItem value={consistency.consistency_pk}>
-                          {consistency.consistency_name}
-                        </MenuItem>
-                      );
+                      return <MenuItem value={consistency.consistency_pk}>{consistency.consistency_name}</MenuItem>;
                     })}
                 </TextField>
                 <TextField
@@ -320,12 +275,7 @@ const MandalsList = ({
   };
 
   const formartedData = fetchedData.mandal.map((mandal) => {
-    return [
-      mandal.district_name || "District",
-      mandal.consistency_id,
-      mandal.mandal_name,
-      renderEditAndDelete(mandal),
-    ];
+    return [mandal.district_name || "District", mandal.consistency_id, mandal.mandal_name, renderEditAndDelete(mandal)];
   });
 
   return (
@@ -333,12 +283,7 @@ const MandalsList = ({
       <Stack>
         <Divider />
 
-        <MUIDataTable
-          title=""
-          columns={columns}
-          data={formartedData}
-          options={options}
-        />
+        <CustomMuiDataTable title="" columns={columns} data={formartedData} options={options} />
       </Stack>
     </Card>
   );

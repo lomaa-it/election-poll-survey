@@ -1,20 +1,10 @@
 import { useEffect, useState } from "react";
-import {
-  Typography,
-  Card,
-  Stack,
-  Grid,
-  Switch,
-  Divider,
-  Box,
-  Chip,
-  TextField,
-} from "@mui/material";
+import { Typography, Card, Stack, Grid, Switch, Divider, Box, Chip, TextField } from "@mui/material";
 
-import MUIDataTable from "mui-datatables";
 import { connect } from "react-redux";
 import { showAlert } from "../../actions/alert";
 import { LoadingButton } from "@mui/lab";
+import CustomMuiDataTable from "../../components/CustomMuiDataTable";
 
 const VotingPollingReportsList = ({ showAlert }) => {
   useEffect(() => {}, []);
@@ -51,48 +41,14 @@ const VotingPollingReportsList = ({ showAlert }) => {
   return (
     <Card elevation={1}>
       <Stack>
-        <Divider />
-
-        <MUIDataTable
+        <CustomMuiDataTable
           title="Voting Polling Reports"
           columns={columns}
           data={[
-            [
-              "Constituency 1",
-
-              "Constituency Votes",
-              "Polled Votes",
-              "%",
-              "Others",
-              "%",
-            ],
-            [
-              "Constituency 1",
-
-              "Constituency Votes",
-              "Polled Votes",
-              "%",
-              "Others",
-              "%",
-            ],
-            [
-              "Constituency 1",
-
-              "Constituency Votes",
-              "Polled Votes",
-              "%",
-              "Others",
-              "%",
-            ],
-            [
-              "Constituency 1",
-
-              "Constituency Votes",
-              "Polled Votes",
-              "%",
-              "Others",
-              "%",
-            ],
+            ["Constituency 1", "Constituency Votes", "Polled Votes", "%", "Others", "%"],
+            ["Constituency 1", "Constituency Votes", "Polled Votes", "%", "Others", "%"],
+            ["Constituency 1", "Constituency Votes", "Polled Votes", "%", "Others", "%"],
+            ["Constituency 1", "Constituency Votes", "Polled Votes", "%", "Others", "%"],
           ]}
           options={options}
         />

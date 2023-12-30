@@ -1,19 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  Typography,
-  Card,
-  Stack,
-  Grid,
-  Switch,
-  Divider,
-  Box,
-  Chip,
-  Button,
-  Popover,
-  TextField,
-  FormControlLabel,
-  MenuItem,
-} from "@mui/material";
+import { Typography, Card, Stack, Grid, Switch, Divider, Box, Chip, Button, Popover, TextField, FormControlLabel, MenuItem } from "@mui/material";
 import { CheckBox } from "@mui/icons-material";
 import MUIDataTable from "mui-datatables";
 import { connect } from "react-redux";
@@ -23,15 +9,9 @@ import ViewUserPage from "../../pages/ViewUserPage";
 import Sachivalayam from "../../pages/Sachivalayam";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import CustomMuiDataTable from "../../components/CustomMuiDataTable";
 
-const SachivalayamList = ({
-  showAlert,
-  sachivalayamList,
-  fetchedData,
-  setFetchedData,
-  refresh,
-  setRefresh,
-}) => {
+const SachivalayamList = ({ showAlert, sachivalayamList, fetchedData, setFetchedData, refresh, setRefresh }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -166,11 +146,7 @@ const SachivalayamList = ({
                   }}
                 >
                   {fetchedData.states.map((state) => {
-                    return (
-                      <MenuItem value={state.state_pk}>
-                        {state.state_name}
-                      </MenuItem>
-                    );
+                    return <MenuItem value={state.state_pk}>{state.state_name}</MenuItem>;
                   })}
                 </TextField>
                 <TextField
@@ -191,16 +167,9 @@ const SachivalayamList = ({
                 >
                   {/* filter districk based on state_id */}
                   {fetchedData.district
-                    .filter(
-                      (district) =>
-                        district.state_id === selectedValues.state_id
-                    )
+                    .filter((district) => district.state_id === selectedValues.state_id)
                     .map((district) => {
-                      return (
-                        <MenuItem value={district.district_pk}>
-                          {district.district_name}
-                        </MenuItem>
-                      );
+                      return <MenuItem value={district.district_pk}>{district.district_name}</MenuItem>;
                     })}
                 </TextField>
                 <TextField
@@ -220,16 +189,9 @@ const SachivalayamList = ({
                 >
                   {/* filter constituency based on district_id */}
                   {fetchedData.consistency
-                    .filter(
-                      (consistency) =>
-                        consistency.district_pk === selectedValues.district_id
-                    )
+                    .filter((consistency) => consistency.district_pk === selectedValues.district_id)
                     .map((consistency) => {
-                      return (
-                        <MenuItem value={consistency.consistency_pk}>
-                          {consistency.consistency_name}
-                        </MenuItem>
-                      );
+                      return <MenuItem value={consistency.consistency_pk}>{consistency.consistency_name}</MenuItem>;
                     })}
                 </TextField>
                 <TextField
@@ -248,16 +210,9 @@ const SachivalayamList = ({
                 >
                   {/* filter mandal based on consistency_id */}
                   {fetchedData.mandal
-                    .filter(
-                      (mandal) =>
-                        mandal.consistency_id === selectedValues.consistency_id
-                    )
+                    .filter((mandal) => mandal.consistency_id === selectedValues.consistency_id)
                     .map((mandal) => {
-                      return (
-                        <MenuItem value={mandal.mandal_pk}>
-                          {mandal.mandal_name}
-                        </MenuItem>
-                      );
+                      return <MenuItem value={mandal.mandal_pk}>{mandal.mandal_name}</MenuItem>;
                     })}
                 </TextField>
                 <TextField
@@ -275,16 +230,9 @@ const SachivalayamList = ({
                 >
                   {/* filter division based on mandal_id */}
                   {fetchedData.division
-                    .filter(
-                      (division) =>
-                        division.mandal_id === selectedValues.mandal_id
-                    )
+                    .filter((division) => division.mandal_id === selectedValues.mandal_id)
                     .map((division) => {
-                      return (
-                        <MenuItem value={division.division_pk}>
-                          {division.division_name}
-                        </MenuItem>
-                      );
+                      return <MenuItem value={division.division_pk}>{division.division_name}</MenuItem>;
                     })}
                 </TextField>
                 <TextField
@@ -350,12 +298,7 @@ const SachivalayamList = ({
       <Stack>
         <Divider />
 
-        <MUIDataTable
-          title=""
-          columns={columns}
-          data={formartedData}
-          options={options}
-        />
+        <CustomMuiDataTable title="" columns={columns} data={formartedData} options={options} />
       </Stack>
     </Card>
   );

@@ -1,16 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  Typography,
-  Card,
-  Stack,
-  Grid,
-  Switch,
-  Divider,
-  Box,
-  Chip,
-  TextField,
-  FormControlLabel,
-} from "@mui/material";
+import { Typography, Card, Stack, Grid, Switch, Divider, Box, Chip, TextField, FormControlLabel } from "@mui/material";
 import { CheckBox } from "@mui/icons-material";
 import MUIDataTable from "mui-datatables";
 import { connect } from "react-redux";
@@ -20,6 +9,7 @@ import ViewUserPage from "../../pages/ViewUserPage";
 import Sachivalayam from "../../pages/Sachivalayam";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import CustomMuiDataTable from "../../components/CustomMuiDataTable";
 
 const PartiesList = ({ showAlert }) => {
   useEffect(() => {}, []);
@@ -27,9 +17,10 @@ const PartiesList = ({ showAlert }) => {
   const columns = [
     {
       label: "Sequence Number",
-    },{
-        label: "Party Name",
-      },
+    },
+    {
+      label: "Party Name",
+    },
 
     {
       label: "Edit/Delete",
@@ -64,13 +55,13 @@ const PartiesList = ({ showAlert }) => {
       <Stack>
         <Divider />
 
-        <MUIDataTable
+        <CustomMuiDataTable
           title=""
           columns={columns}
           data={[
-            ["1","YSR", renderEditAndDelete()],
-            ["2", "TDP",renderEditAndDelete()],
-            ["3", "NEUTRAL",renderEditAndDelete()],
+            ["1", "YSR", renderEditAndDelete()],
+            ["2", "TDP", renderEditAndDelete()],
+            ["3", "NEUTRAL", renderEditAndDelete()],
           ]}
           options={options}
         />

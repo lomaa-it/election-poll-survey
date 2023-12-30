@@ -27,7 +27,7 @@ export const getAllVotersSurvey =
       const cardResponseData = cardResponse.data;
       const cardData = cardResponseData?.message?.data[0] ?? [];
 
-      console.log(cardData);
+      // console.log(cardData);
 
       dispatch({
         type: "VOTER_LOAD_SUCCESS",

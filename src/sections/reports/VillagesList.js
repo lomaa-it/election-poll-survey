@@ -1,25 +1,12 @@
 import { useEffect, useState } from "react";
-import {
-  Typography,
-  Card,
-  Stack,
-  Grid,
-  Switch,
-  Divider,
-  Box,
-  Chip,
-  TextField,
-  FormControlLabel,
-} from "@mui/material";
+import { Typography, Card, Stack, Grid, Switch, Divider, Box, Chip, TextField, FormControlLabel } from "@mui/material";
 import { CheckBox } from "@mui/icons-material";
-import MUIDataTable from "mui-datatables";
 import { connect } from "react-redux";
 import { showAlert } from "../../actions/alert";
-import { LoadingButton } from "@mui/lab";
-import ViewUserPage from "../../pages/ViewUserPage";
-import Sachivalayam from "../../pages/Sachivalayam";
+
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import CustomMuiDataTable from "../../components/CustomMuiDataTable";
 
 const VillagesList = ({ showAlert, villageList }) => {
   useEffect(() => {}, []);
@@ -90,12 +77,7 @@ const VillagesList = ({ showAlert, villageList }) => {
       <Stack>
         <Divider />
 
-        <MUIDataTable
-          title=""
-          columns={columns}
-          data={formartedData}
-          options={options}
-        />
+        <CustomMuiDataTable title="" columns={columns} data={formartedData} options={options} />
       </Stack>
     </Card>
   );

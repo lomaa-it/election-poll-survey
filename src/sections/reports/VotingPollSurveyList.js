@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "@fontsource/inter";
 import { Typography, Card, Stack, Grid, Switch, Divider, Box, Chip, Radio, TextField } from "@mui/material";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { styled } from "@mui/system";
 import { CheckBox } from "@mui/icons-material";
 import Button from "@mui/material/Button";
@@ -12,7 +11,7 @@ import { showAlert } from "../../actions/alert";
 import { LoadingButton } from "@mui/lab";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import { searchFiltercolor } from "../../constants";
+import CustomMuiDataTable from "../../components/CustomMuiDataTable";
 
 const VotingPollSurveyList = ({ showAlert }) => {
   useEffect(() => {}, []);
@@ -178,36 +177,20 @@ const VotingPollSurveyList = ({ showAlert }) => {
     return <OthersRadio />;
   };
 
-  const getMuiTheme = () =>
-    createTheme({
-      components: {
-        MUIDataTableHeadCell: {
-          styleOverrides: {
-            root: {
-              backgroundColor: searchFiltercolor,
-            },
-          },
-        },
-      },
-    });
-
   return (
     <Card elevation={1}>
       <Stack>
-        <Divider />
-        <ThemeProvider theme={getMuiTheme()}>
-          <MUIDataTable
-            title=""
-            columns={columns}
-            data={[
-              ["5454", "1", "Rama Rao", "23", "912345678", "RailWay New Colony", "YES", renderNeutralRadio(), renderYCPRadio(), renderTDPRadio(), renderJSPRadio(), renderBJPRadio(), renderCongressRadio(), renderOthersRadio(), renderEditButton()],
-              ["5454", "2", "Srinivas", "23", "912345678", "RailWay New Colony", "NO", renderNeutralRadio(), renderYCPRadio(), renderTDPRadio(), renderJSPRadio(), renderBJPRadio(), renderCongressRadio(), renderOthersRadio(), renderEditButton()],
-              ["5454", "3", "Varun", "23", "912345678", "RailWay New Colony", "YES", renderNeutralRadio(), renderYCPRadio(), renderTDPRadio(), renderJSPRadio(), renderBJPRadio(), renderCongressRadio(), renderOthersRadio(), renderEditButton()],
-              ["5454", "4", "Chandu", "23", "912345678", "RailWay New Colony", "NO", renderNeutralRadio(), renderYCPRadio(), renderTDPRadio(), renderJSPRadio(), renderBJPRadio(), renderCongressRadio(), renderOthersRadio(), renderEditButton()],
-            ]}
-            options={options}
-          />
-        </ThemeProvider>
+        <CustomMuiDataTable
+          title=""
+          columns={columns}
+          data={[
+            ["5454", "1", "Rama Rao", "23", "912345678", "RailWay New Colony", "YES", renderNeutralRadio(), renderYCPRadio(), renderTDPRadio(), renderJSPRadio(), renderBJPRadio(), renderCongressRadio(), renderOthersRadio(), renderEditButton()],
+            ["5454", "2", "Srinivas", "23", "912345678", "RailWay New Colony", "NO", renderNeutralRadio(), renderYCPRadio(), renderTDPRadio(), renderJSPRadio(), renderBJPRadio(), renderCongressRadio(), renderOthersRadio(), renderEditButton()],
+            ["5454", "3", "Varun", "23", "912345678", "RailWay New Colony", "YES", renderNeutralRadio(), renderYCPRadio(), renderTDPRadio(), renderJSPRadio(), renderBJPRadio(), renderCongressRadio(), renderOthersRadio(), renderEditButton()],
+            ["5454", "4", "Chandu", "23", "912345678", "RailWay New Colony", "NO", renderNeutralRadio(), renderYCPRadio(), renderTDPRadio(), renderJSPRadio(), renderBJPRadio(), renderCongressRadio(), renderOthersRadio(), renderEditButton()],
+          ]}
+          options={options}
+        />
       </Stack>
     </Card>
   );

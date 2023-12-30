@@ -1,22 +1,11 @@
 import { useEffect, useState } from "react";
-import {
-  Typography,
-  Card,
-  Stack,
-  Grid,
-  Switch,
-  Divider,
-  Box,
-  Chip,
-  TextField,
-} from "@mui/material";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { Typography, Card, Stack, Grid, Switch, Divider, Box, Chip, TextField } from "@mui/material";
 
-import MUIDataTable from "mui-datatables";
 import { connect } from "react-redux";
 import { showAlert } from "../../actions/alert";
 import { LoadingButton } from "@mui/lab";
 import { searchFiltercolor } from "../../constants";
+import CustomMuiDataTable from "../../components/CustomMuiDataTable";
 
 const ReportbySurveyandVotingReasonList = ({ showAlert }) => {
   useEffect(() => {}, []);
@@ -53,82 +42,22 @@ const ReportbySurveyandVotingReasonList = ({ showAlert }) => {
     responsive: "standard",
   };
 
-  const getMuiTheme = () =>
-    createTheme({
-      components: {
-        MUIDataTableHeadCell: {
-          styleOverrides: {
-            root: {
-              backgroundColor: searchFiltercolor,
-            },
-          },
-        },
-      },
-    });
-
   return (
     <Card elevation={1}>
       <Stack>
         <Divider />
-        <ThemeProvider theme={getMuiTheme()}>
-          <MUIDataTable
-            title=""
-            columns={columns}
-            data={[
-              [
-                "Constituency 1",
-                "Mandal 1",
-                "Panchayat 1",
-                "Village 1",
-                "Voter 1",
-                "Phone 1",
-                "Poll Reason 1",
-                "Voting Reason 1",
-              ],
-              [
-                "Constituency 1",
-                "Mandal 1",
-                "Panchayat 1",
-                "Village 1",
-                "Voter 1",
-                "Phone 1",
-                "Poll Reason 1",
-                "Voting Reason 1",
-              ],
-              [
-                "Constituency 1",
-                "Mandal 1",
-                "Panchayat 1",
-                "Village 1",
-                "Voter 1",
-                "Phone 1",
-                "Poll Reason 1",
-                "Voting Reason 1",
-              ],
-              [
-                "Constituency 1",
-                "Mandal 1",
-                "Panchayat 1",
-                "Village 1",
-                "Voter 1",
-                "Phone 1",
-                "Poll Reason 1",
-                "Voting Reason 1",
-              ],
-              [
-                "Constituency 1",
-                "Mandal 1",
-                "Panchayat 1",
-                "Village 1",
-                "Voter 1",
-                "Phone 1",
-                "Poll Reason 1",
-                "Voting Reason 1",
-              ],
-            ]}
-            options={options}
-          />
-        </ThemeProvider>
+        <CustomMuiDataTable
+          title=""
+          columns={columns}
+          data={[
+            ["Constituency 1", "Mandal 1", "Panchayat 1", "Village 1", "Voter 1", "Phone 1", "Poll Reason 1", "Voting Reason 1"],
+            ["Constituency 1", "Mandal 1", "Panchayat 1", "Village 1", "Voter 1", "Phone 1", "Poll Reason 1", "Voting Reason 1"],
+            ["Constituency 1", "Mandal 1", "Panchayat 1", "Village 1", "Voter 1", "Phone 1", "Poll Reason 1", "Voting Reason 1"],
+            ["Constituency 1", "Mandal 1", "Panchayat 1", "Village 1", "Voter 1", "Phone 1", "Poll Reason 1", "Voting Reason 1"],
+            ["Constituency 1", "Mandal 1", "Panchayat 1", "Village 1", "Voter 1", "Phone 1", "Poll Reason 1", "Voting Reason 1"],
+          ]}
+          options={options}
+        />
       </Stack>
     </Card>
   );

@@ -1,18 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import {
-  Typography,
-  Card,
-  Stack,
-  Grid,
-  Switch,
-  Divider,
-  Box,
-  Chip,
-  TextField,
-  FormControlLabel,
-  CircularProgress,
-  Checkbox,
-} from "@mui/material";
+import { Typography, Card, Stack, Grid, Switch, Divider, Box, Chip, TextField, FormControlLabel, CircularProgress, Checkbox } from "@mui/material";
 import * as Yup from "yup";
 import { CheckBox } from "@mui/icons-material";
 import MUIDataTable from "mui-datatables";
@@ -32,16 +19,9 @@ import SearchByFilter from "../common/SearchByFilter";
 import { checkOrUncheckUser } from "../../actions/user";
 import { set } from "date-fns";
 import { sachivalayammappingtopartsRoute } from "../../utils/apis";
+import CustomMuiDataTable from "../../components/CustomMuiDataTable";
 
-const PartsList = ({
-  showAlert,
-  partsList,
-  common,
-  account,
-  checkOrUncheckUser,
-  reFecthData,
-  isFetching,
-}) => {
+const PartsList = ({ showAlert, partsList, common, account, checkOrUncheckUser, reFecthData, isFetching }) => {
   const filterRef = useRef(null);
   const [isLoading, setLoading] = useState(false);
   const [filterValues, setFilterValues] = useState({
@@ -70,9 +50,7 @@ const PartsList = ({
                 if (e.target.checked) {
                   setCheckedValues([...checkedValues, tableMeta.rowData[0]]);
                 } else {
-                  setCheckedValues(
-                    checkedValues.filter((item) => item != tableMeta.rowData[0])
-                  );
+                  setCheckedValues(checkedValues.filter((item) => item != tableMeta.rowData[0]));
                 }
               }}
             />
@@ -99,8 +77,7 @@ const PartsList = ({
       options: {
         customBodyRender: (value, tableMeta, updateValue) => {
           // console.log("tableMeta", tableMeta.rowData);
-          const totalVotel =
-            tableMeta.rowData[4] + tableMeta.rowData[5] + tableMeta.rowData[6];
+          const totalVotel = tableMeta.rowData[4] + tableMeta.rowData[5] + tableMeta.rowData[6];
           return totalVotel;
         },
       },
@@ -212,22 +189,10 @@ const PartsList = ({
             </Typography>
 
             <Grid container spacing={2} alignItems="center">
-              <SearchByFilter
-                ref={filterRef}
-                showPartNo={false}
-                showVillage={false}
-                showOtherFilters={false}
-                onChanged={(value) => setFilterValues(value)}
-                showSearchButton={false}
-              />
+              <SearchByFilter ref={filterRef} showPartNo={false} showVillage={false} showOtherFilters={false} onChanged={(value) => setFilterValues(value)} showSearchButton={false} />
 
               <Grid item xs={12} md={6} lg={2}>
-                <LoadingButton
-                  type="submit"
-                  loading={isLoading}
-                  onClick={handleSubmit}
-                  variant="contained"
-                >
+                <LoadingButton type="submit" loading={isLoading} onClick={handleSubmit} variant="contained">
                   Assign Part
                 </LoadingButton>
               </Grid>
@@ -237,24 +202,12 @@ const PartsList = ({
           <Divider />
 
           {isFetching && (
-            <Box
-              minHeight={200}
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-            >
+            <Box minHeight={200} display="flex" justifyContent="center" alignItems="center">
               <CircularProgress />
             </Box>
           )}
 
-          {!isFetching && (
-            <MUIDataTable
-              title=""
-              columns={columns}
-              data={partsList}
-              options={options}
-            />
-          )}
+          {!isFetching && <CustomMuiDataTable title="" columns={columns} data={partsList} options={options} />}
         </Stack>
       </>
     </Card>

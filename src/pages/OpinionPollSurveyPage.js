@@ -43,7 +43,6 @@ const OpinionPollSurveyPage = ({ isUser, getAllVotersSurvey, clearVoterReducer, 
 
     await getAllVotersSurvey(values);
     setFilterValues(values);
-    console.log(values);
   };
 
   const handleSearchSubmit = () => {

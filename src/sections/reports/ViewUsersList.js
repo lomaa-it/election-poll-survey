@@ -1,31 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  Typography,
-  Card,
-  Stack,
-  Grid,
-  Switch,
-  Divider,
-  Box,
-  Chip,
-  TextField,
-  Button,
-  CircularProgress,
-  Checkbox,
-  IconButton,
-} from "@mui/material";
+import { Typography, Card, Stack, Grid, Switch, Divider, Box, Chip, TextField, Button, CircularProgress, Checkbox, IconButton } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
 import MUIDataTable from "mui-datatables";
 import { connect } from "react-redux";
 import { showAlert } from "../../actions/alert";
-import { getMuiTableTheme } from "../../constants";
-import {
-  checkOrUncheckUser,
-  clearUserReducer,
-  deleteUserInRedux,
-} from "../../actions/user";
+import { checkOrUncheckUser, clearUserReducer, deleteUserInRedux } from "../../actions/user";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import { LoadingButton } from "@mui/lab";
 import instance from "../../utils/axios";
@@ -38,17 +18,11 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import CustomMuiDataTable from "../../components/CustomMuiDataTable";
 
 //
 
-const ViewUsersList = ({
-  user,
-  showAlert,
-  checkOrUncheckUser,
-  deleteUserInRedux,
-  clearUserReducer,
-  account,
-}) => {
+const ViewUsersList = ({ user, showAlert, checkOrUncheckUser, deleteUserInRedux, clearUserReducer, account }) => {
   const navigate = useNavigate();
 
   const [isLoading, setLoading] = useState(false);
@@ -77,12 +51,7 @@ const ViewUsersList = ({
       options: {
         customBodyRender: (value, tableMeta, updateValue) => {
           var data = tableMeta.rowData;
-          return data[0] ? (
-            <Checkbox
-              checked={value ?? false}
-              onChange={(e) => checkOrUncheckUser(data[2], e.target.checked)}
-            />
-          ) : null;
+          return data[0] ? <Checkbox checked={value ?? false} onChange={(e) => checkOrUncheckUser(data[2], e.target.checked)} /> : null;
         },
       },
     },
@@ -186,9 +155,7 @@ const ViewUsersList = ({
                     aria-labelledby="alert-dialog-title"
                     aria-describedby="alert-dialog-description"
                   >
-                    <DialogTitle id="alert-dialog-title">
-                      {"Are You Sure you want to Delete This User?"}
-                    </DialogTitle>
+                    <DialogTitle id="alert-dialog-title">{"Are You Sure you want to Delete This User?"}</DialogTitle>
                     <DialogContent>
                       <DialogContentText id="alert-dialog-description">
                         {user.data.map((item) => {
@@ -262,11 +229,7 @@ const ViewUsersList = ({
 
                         Agree
                       </Button> */}
-                      <LoadingButton
-                        loading={isLoading}
-                        variant="outlined"
-                        onClick={handleDelete}
-                      >
+                      <LoadingButton loading={isLoading} variant="outlined" onClick={handleDelete}>
                         Delete
                       </LoadingButton>
                     </DialogActions>
@@ -308,9 +271,7 @@ const ViewUsersList = ({
       console.log(deleteUserPk);
       // var index = user.data.findIndex((e) => e.user_pk == deleteUserPk);
 
-      const response = await instance.delete(
-        `${deleteUserById + deleteUserPk}`
-      );
+      const response = await instance.delete(`${deleteUserById + deleteUserPk}`);
       console.log(response);
       showAlert({ text: "User Deleted Successfully", color: "success" });
       deleteUserInRedux(deleteUserPk, user);
@@ -361,12 +322,7 @@ const ViewUsersList = ({
   return (
     <Card elevation={1}>
       {user.isLoading && (
-        <Box
-          minHeight={200}
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-        >
+        <Box minHeight={200} display="flex" justifyContent="center" alignItems="center">
           <CircularProgress />
         </Box>
       )}
@@ -380,11 +336,7 @@ const ViewUsersList = ({
 
             <Grid container spacing={2} alignItems="center">
               <Grid item xs={12} md={6} lg={6}>
-                <LoadingButton
-                  loading={isLoading}
-                  variant="outlined"
-                  onClick={handleSubmit}
-                >
+                <LoadingButton loading={isLoading} variant="outlined" onClick={handleSubmit}>
                   Send Login Credentials
                 </LoadingButton>
               </Grid>
@@ -393,14 +345,7 @@ const ViewUsersList = ({
 
           <Divider />
 
-          <ThemeProvider theme={getMuiTableTheme()}>
-            <MUIDataTable
-              title="Users List"
-              columns={columns}
-              data={user.data}
-              options={options}
-            />
-          </ThemeProvider>
+          <CustomMuiDataTable title="Users List" columns={columns} data={user.data} options={options} />
         </>
       )}
     </Card>

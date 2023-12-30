@@ -1,19 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import {
-  Typography,
-  Card,
-  Stack,
-  Grid,
-  Switch,
-  Divider,
-  Box,
-  Chip,
-  TextField,
-  CircularProgress,
-  MenuItem,
-  Button,
-  Checkbox,
-} from "@mui/material";
+import { Typography, Card, Stack, Grid, Switch, Divider, Box, Chip, TextField, CircularProgress, MenuItem, Button, Checkbox } from "@mui/material";
 import { CheckBox } from "@mui/icons-material";
 import MUIDataTable from "mui-datatables";
 import { connect } from "react-redux";
@@ -21,26 +7,16 @@ import { showAlert } from "../../actions/alert";
 import { LoadingButton } from "@mui/lab";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import {
-  ROWS_PER_PAGE_OPTION,
-  getMuiTableTheme,
-  searchFiltercolor,
-} from "../../constants";
+import { ROWS_PER_PAGE_OPTION } from "../../constants";
 import { getAllVotersSurvey } from "../../actions/voter";
 import { UncontrolledTextField } from "../../components/hook-form/RHFTextField";
 import SearchIcon from "@mui/icons-material/Search";
 import SearchByFilter from "../common/SearchByFilter";
 import { sachivalayamMappingtoVotersRoute } from "../../utils/apis";
 import instance from "../../utils/axios";
+import CustomMuiDataTable from "../../components/CustomMuiDataTable";
 
-const ViewVotersList = ({
-  voter,
-  filterValues,
-  showAlert,
-  getAllVotersSurvey,
-  account,
-}) => {
+const ViewVotersList = ({ voter, filterValues, showAlert, getAllVotersSurvey, account }) => {
   const fieldname = useRef();
   const fieldvalue = useRef();
   const filterRef = useRef(null);
@@ -70,9 +46,7 @@ const ViewVotersList = ({
                 if (e.target.checked) {
                   setCheckedValues([...checkedValues, tableMeta.rowData[0]]);
                 } else {
-                  setCheckedValues(
-                    checkedValues.filter((item) => item != tableMeta.rowData[0])
-                  );
+                  setCheckedValues(checkedValues.filter((item) => item != tableMeta.rowData[0]));
                 }
               }}
             />
@@ -218,11 +192,7 @@ const ViewVotersList = ({
       fieldname: fieldname.current.value,
       fieldvalue: fieldvalue.current.value,
     };
-    getAllVotersSurvey(
-      { ...filterValues, ...searchForm },
-      tableState.page,
-      tableState.rowsPerPage
-    );
+    getAllVotersSurvey({ ...filterValues, ...searchForm }, tableState.page, tableState.rowsPerPage);
   };
 
   const renderEditAndDelete = () => {
@@ -278,7 +248,7 @@ const ViewVotersList = ({
       };
       console.log("jsonData", jsonData);
       await instance.post(sachivalayamMappingtoVotersRoute, jsonData);
-      console.log("Hi ")
+      console.log("Hi ");
       showAlert({
         text: "Voter assigned successfully",
         color: "success",
@@ -302,11 +272,7 @@ const ViewVotersList = ({
       <Box p={3}>
         <Grid container spacing={2} alignItems="center">
           <Grid item xs={2}>
-            <UncontrolledTextField
-              inputRef={fieldname}
-              label="Search by"
-              select
-            >
+            <UncontrolledTextField inputRef={fieldname} label="Search by" select>
               {searchFields.map((item, index) => (
                 <MenuItem key={index} value={item.name}>
                   {item.label}
@@ -320,11 +286,7 @@ const ViewVotersList = ({
           </Grid>
 
           <Grid item xs={3}>
-            <Button
-              disabled={voter.isLoading}
-              variant="contained"
-              onClick={handleRetrieveData}
-            >
+            <Button disabled={voter.isLoading} variant="contained" onClick={handleRetrieveData}>
               <SearchIcon />
             </Button>
           </Grid>
@@ -334,12 +296,7 @@ const ViewVotersList = ({
       <Divider />
 
       {voter.isLoading && (
-        <Box
-          minHeight={200}
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-        >
+        <Box minHeight={200} display="flex" justifyContent="center" alignItems="center">
           <CircularProgress />
         </Box>
       )}
@@ -352,34 +309,17 @@ const ViewVotersList = ({
             </Typography>
 
             <Grid container spacing={2} alignItems="center">
-              <SearchByFilter
-                ref={filterRef}
-                showPartNo={false}
-                showVillage={false}
-                showOtherFilters={false}
-                onChanged={(value) => setAssignValues(value)}
-                showSearchButton={false}
-              />
+              <SearchByFilter ref={filterRef} showPartNo={false} showVillage={false} showOtherFilters={false} onChanged={(value) => setAssignValues(value)} showSearchButton={false} />
 
               <Grid item xs={12} md={6} lg={3}>
-                <LoadingButton
-                  type="submit"
-                  loading={isLoading}
-                  onClick={handleSubmit}
-                  variant="contained"
-                >
+                <LoadingButton type="submit" loading={isLoading} onClick={handleSubmit} variant="contained">
                   Assign Sachivalayam
                 </LoadingButton>
               </Grid>
             </Grid>
           </Box>
-          <ThemeProvider theme={getMuiTableTheme()}>
-            <MUIDataTable
-              columns={columns}
-              data={voter.data}
-              options={options}
-            />
-          </ThemeProvider>
+
+          <CustomMuiDataTable columns={columns} data={voter.data} options={options} />
         </>
       )}
     </Card>

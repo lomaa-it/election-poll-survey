@@ -1,43 +1,19 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  Typography,
-  Card,
-  Stack,
-  Grid,
-  Switch,
-  Divider,
-  Box,
-  Chip,
-  TextField,
-  MenuItem,
-  IconButton,
-  CircularProgress,
-} from "@mui/material";
+import { Typography, Card, Stack, Grid, Switch, Divider, Box, Chip, TextField, MenuItem, IconButton, CircularProgress } from "@mui/material";
 import Checkbox from "@mui/material/Checkbox";
-import MUIDataTable from "mui-datatables";
 import { connect } from "react-redux";
 import { showAlert } from "../../actions/alert";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import { ThemeProvider } from "@mui/material/styles";
-import {
-  getMuiTableTheme,
-  getTicketStatusById,
-  searchFiltercolor,
-} from "../../constants";
+import { getTicketStatusById } from "../../constants";
 
 import { checkOrUncheckTicket } from "../../actions/ticket";
 import AnalyticsCard from "../common/AnalyticsCard";
 import { fToNow } from "../../utils/formatTime";
+import CustomMuiDataTable from "../../components/CustomMuiDataTable";
 
-const ViewTicketsList = ({
-  isUser,
-  common,
-  ticket,
-  showAlert,
-  checkOrUncheckTicket,
-  account,
-}) => {
+const ViewTicketsList = ({ isUser, common, ticket, showAlert, checkOrUncheckTicket, account }) => {
   const navigate = useNavigate();
   const [isLoading, setLoading] = useState(false);
   const [formValues, setFormValues] = useState({
@@ -52,12 +28,7 @@ const ViewTicketsList = ({
       options: {
         customBodyRender: (value, tableMeta, updateValue) => {
           var data = tableMeta.rowData;
-          return (
-            <Checkbox
-              checked={value ?? false}
-              onChange={(e) => checkOrUncheckTicket(data[1], e.target.checked)}
-            />
-          );
+          return <Checkbox checked={value ?? false} onChange={(e) => checkOrUncheckTicket(data[1], e.target.checked)} />;
         },
       },
     },
@@ -174,27 +145,13 @@ const ViewTicketsList = ({
 
   return (
     <>
-      <AnalyticsCard
-        names={["Total", "Open", "Resolved", "Cancelled", "Escalated"]}
-        values={[
-          ticket.analytics?.count,
-          ticket.analytics?.open,
-          ticket.analytics?.resolved,
-          ticket.analytics?.cancelled,
-          ticket.analytics?.escalated,
-        ]}
-      />
+      <AnalyticsCard names={["Total", "Open", "Resolved", "Cancelled", "Escalated"]} values={[ticket.analytics?.count, ticket.analytics?.open, ticket.analytics?.resolved, ticket.analytics?.cancelled, ticket.analytics?.escalated]} />
 
       <Box p={1} />
 
       <Card elevation={1}>
         {ticket.isLoading && (
-          <Box
-            minHeight={200}
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-          >
+          <Box minHeight={200} display="flex" justifyContent="center" alignItems="center">
             <CircularProgress />
           </Box>
         )}
@@ -253,14 +210,7 @@ const ViewTicketsList = ({
 
             <Divider /> */}
 
-            <ThemeProvider theme={getMuiTableTheme()}>
-              <MUIDataTable
-                title="Tickets List"
-                columns={columns}
-                data={ticket.data ?? []}
-                options={options}
-              />
-            </ThemeProvider>
+            <CustomMuiDataTable title="Tickets List" columns={columns} data={ticket.data ?? []} options={options} />
           </>
         )}
       </Card>

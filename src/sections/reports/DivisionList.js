@@ -1,15 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  Card,
-  Stack,
-  Grid,
-  Divider,
-  Box,
-  TextField,
-  MenuItem,
-  Button,
-  Popover,
-} from "@mui/material";
+import { Card, Stack, Grid, Divider, Box, TextField, MenuItem, Button, Popover } from "@mui/material";
 
 import MUIDataTable from "mui-datatables";
 import { connect } from "react-redux";
@@ -20,16 +10,9 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { updateDivisionByIdRoute } from "../../utils/apis";
 import { set } from "date-fns";
 import instance from "../../utils/axios";
+import CustomMuiDataTable from "../../components/CustomMuiDataTable";
 
-const DivisionList = ({
-  showAlert,
-  divisionList,
-  fetchedData,
-  setFetchedData,
-  refresh,
-  setRefresh,
-}) => {
-
+const DivisionList = ({ showAlert, divisionList, fetchedData, setFetchedData, refresh, setRefresh }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -72,21 +55,15 @@ const DivisionList = ({
     console.log("Divison data", data);
 
     // find consistency_id using mandal_id
-    const mandal = fetchedData.mandal.find(
-      (mandal) => mandal.mandal_pk === data.mandal_id
-    );
+    const mandal = fetchedData.mandal.find((mandal) => mandal.mandal_pk === data.mandal_id);
     const consistency_id = mandal ? mandal.consistency_id : null;
 
     //find district_id using consistency_id
-    const consistency = fetchedData.consistency.find(
-      (consistency) => consistency.consistency_pk === consistency_id
-    );
+    const consistency = fetchedData.consistency.find((consistency) => consistency.consistency_pk === consistency_id);
     const district_id = consistency ? consistency.district_pk : null;
 
     //find state_id using district_id
-    const district = fetchedData.district.find(
-      (district) => district.district_pk === district_id
-    );
+    const district = fetchedData.district.find((district) => district.district_pk === district_id);
     const state_id = district ? district.state_id : null;
 
     setSelectedValues((prevState) => ({
@@ -129,13 +106,10 @@ const DivisionList = ({
     console.log("selectedValues", selectedValues);
     try {
       setIsLoading(true);
-      const response = await instance.put(
-        updateDivisionByIdRoute + selectedValues.division_id,
-        {
-          mandal_id: selectedValues.mandal_id,
-          division_name: selectedValues.division_name,
-        }
-      );
+      const response = await instance.put(updateDivisionByIdRoute + selectedValues.division_id, {
+        mandal_id: selectedValues.mandal_id,
+        division_name: selectedValues.division_name,
+      });
 
       console.log("Division Updated", response.data.message);
       setIsLoading(false);
@@ -219,11 +193,7 @@ const DivisionList = ({
                   }}
                 >
                   {fetchedData.states.map((state) => {
-                    return (
-                      <MenuItem value={state.state_pk}>
-                        {state.state_name}
-                      </MenuItem>
-                    );
+                    return <MenuItem value={state.state_pk}>{state.state_name}</MenuItem>;
                   })}
                 </TextField>
                 <TextField
@@ -243,16 +213,9 @@ const DivisionList = ({
                 >
                   {/* filter districk based on state_id */}
                   {fetchedData.district
-                    .filter(
-                      (district) =>
-                        district.state_id === selectedValues.state_id
-                    )
+                    .filter((district) => district.state_id === selectedValues.state_id)
                     .map((district) => {
-                      return (
-                        <MenuItem value={district.district_pk}>
-                          {district.district_name}
-                        </MenuItem>
-                      );
+                      return <MenuItem value={district.district_pk}>{district.district_name}</MenuItem>;
                     })}
                 </TextField>
                 <TextField
@@ -271,16 +234,9 @@ const DivisionList = ({
                 >
                   {/* filter constituency based on district_id */}
                   {fetchedData.consistency
-                    .filter(
-                      (consistency) =>
-                        consistency.district_pk === selectedValues.district_id
-                    )
+                    .filter((consistency) => consistency.district_pk === selectedValues.district_id)
                     .map((consistency) => {
-                      return (
-                        <MenuItem value={consistency.consistency_pk}>
-                          {consistency.consistency_name}
-                        </MenuItem>
-                      );
+                      return <MenuItem value={consistency.consistency_pk}>{consistency.consistency_name}</MenuItem>;
                     })}
                 </TextField>
                 <TextField
@@ -298,16 +254,9 @@ const DivisionList = ({
                 >
                   {/* filter mandal based on consistency_id */}
                   {fetchedData.mandal
-                    .filter(
-                      (mandal) =>
-                        mandal.consistency_id === selectedValues.consistency_id
-                    )
+                    .filter((mandal) => mandal.consistency_id === selectedValues.consistency_id)
                     .map((mandal) => {
-                      return (
-                        <MenuItem value={mandal.mandal_pk}>
-                          {mandal.mandal_name}
-                        </MenuItem>
-                      );
+                      return <MenuItem value={mandal.mandal_pk}>{mandal.mandal_name}</MenuItem>;
                     })}
                 </TextField>
 
@@ -359,13 +308,7 @@ const DivisionList = ({
   };
 
   const formartedData = fetchedData.division.map((division) => {
-    return [
-      division.district_name || "District",
-      division.consitency_name || "Constituency",
-      division.mandal_name || "Mandal",
-      division.division_name || "Division",
-      renderEditAndDelete(division),
-    ];
+    return [division.district_name || "District", division.consitency_name || "Constituency", division.mandal_name || "Mandal", division.division_name || "Division", renderEditAndDelete(division)];
   });
 
   return (
@@ -373,12 +316,7 @@ const DivisionList = ({
       <Stack>
         <Divider />
 
-        <MUIDataTable
-          title=""
-          columns={columns}
-          data={formartedData}
-          options={options}
-        />
+        <CustomMuiDataTable title="" columns={columns} data={formartedData} options={options} />
       </Stack>
     </Card>
   );
