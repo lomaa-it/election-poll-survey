@@ -28,6 +28,7 @@ const UserRegistrationPage = ({ account, common, showAlert }) => {
 
   const [filterValues, setFilterValues] = useState(null);
   const [isLoading, setLoading] = useState(false);
+
   const pageName = props?.userData == null ? "Add User" : "Edit User";
 
   const schema = Yup.object().shape({
