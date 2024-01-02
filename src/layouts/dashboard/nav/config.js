@@ -165,7 +165,11 @@ const mlaNavConfig = [
       },
     ],
   },
-
+  {
+    title: "Access Management",
+    path: "/access-management",
+    icon: <Iconify icon="ic:baseline-people" width="24px" height="24px" />,
+  },
   // Voter Management with Sub Menu
   // {
   //   title: "Voter Management",

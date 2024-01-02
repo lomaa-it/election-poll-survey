@@ -46,6 +46,7 @@ import { LOGIN_TYPES } from "./constants";
 import LandingPage from "./pages/LandingPage";
 import ViewTicketsHistoryPage from "./pages/ViewTicketsHistoryPage";
 import ForgetResetPage from "./pages/ForgetResetPage";
+import AccessManagementPage from "./pages/AccessManagementPage";
 
 const Router = () => {
   return (
@@ -82,6 +83,7 @@ const Router = () => {
           <Route path="absent-ticket" element={<AbsentTicketPage />} />
           <Route path="voter-and-volunteer-mapping" element={<VoterAndVolunteerMappingPage />} />
           <Route path="user-mapping" element={<UserMappingPage />} />
+          <Route path="access-management" element={<AccessManagementPage />} />
 
           <Route path="divisions" element={<DivisionPage />} />
           <Route path="mandals" element={<MandalPage />} />
