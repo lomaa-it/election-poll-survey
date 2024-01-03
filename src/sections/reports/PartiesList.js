@@ -11,7 +11,7 @@ import EditNoteIcon from "@mui/icons-material/EditNote";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import CustomMuiDataTable from "../../components/CustomMuiDataTable";
 
-const PartiesList = ({ showAlert }) => {
+const PartiesList = ({ showAlert, partiesList }) => {
   useEffect(() => {}, []);
 
   const columns = [
@@ -50,21 +50,16 @@ const PartiesList = ({ showAlert }) => {
     );
   };
 
+  const formartedData = partiesList.map((data) => {
+    return [data.lookup_sequence, data.party_name, renderEditAndDelete(data)];
+  });
+
   return (
     <Card elevation={1}>
       <Stack>
         <Divider />
 
-        <CustomMuiDataTable
-          title=""
-          columns={columns}
-          data={[
-            ["1", "YSR", renderEditAndDelete()],
-            ["2", "TDP", renderEditAndDelete()],
-            ["3", "NEUTRAL", renderEditAndDelete()],
-          ]}
-          options={options}
-        />
+        <CustomMuiDataTable title="" columns={columns} data={formartedData} options={options} />
       </Stack>
     </Card>
   );

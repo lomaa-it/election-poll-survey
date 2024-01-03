@@ -234,48 +234,48 @@ const mlaNavConfig = [
     path: "/admin",
     icon: <Iconify icon="eos-icons:admin" width="24px" height="24px" />,
     children: [
-      // {
-      //   title: "Designations",
-      //   path: "/designations",
-      // },
-      // {
-      //   title: "Political Parties",
-      //   path: "/parties",
-      // },
+      {
+        title: "Designations",
+        path: "/designations",
+      },
+      {
+        title: "Political Parties",
+        path: "/parties",
+      },
       // {
       //   title: "States",
       //   path: "/states",
       //   icon: <Iconify icon="bi:building" width="24px" height="24px" />,
       // },
-      // {
-      //   title: "Districts",
-      //   path: "/districts",
-      // },
-      // {
-      //   title: "Constituencies",
-      //   path: "/constituencies",
-      // },
+      {
+        title: "Districts",
+        path: "/districts",
+      },
+      {
+        title: "Constituencies",
+        path: "/constituencies",
+      },
 
-      // {
-      //   title: "Mandals",
-      //   path: "/mandals",
-      // },
-      // {
-      //   title: "Divisions",
-      //   path: "/divisions",
-      // },
-      // {
-      //   title: "Sachivalayam",
-      //   path: "/sachivalayam",
-      // },
+      {
+        title: "Mandals",
+        path: "/mandals",
+      },
+      {
+        title: "Divisions",
+        path: "/divisions",
+      },
+      {
+        title: "Sachivalayam",
+        path: "/sachivalayam",
+      },
       {
         title: "Parts",
         path: "/parts",
       },
-      // {
-      //   title: "Villages",
-      //   path: "/villages",
-      // },
+      {
+        title: "Villages",
+        path: "/villages",
+      },
     ],
   },
   // {

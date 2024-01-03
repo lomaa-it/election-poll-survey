@@ -219,7 +219,7 @@ const DashboardApp = ({ dashboard, getOpinionDashboard, clearDashboardReducer, c
                   label: item.party_name,
                   value: item.count,
                 }))}
-                chartColors={[Colors.NETURALColor, Colors.YSRCPColor, Colors.TDPColor, Colors.OTHERColor, Colors.CONGRESSColor, Colors.JSPColor]}
+                chartColors={[Colors.NETURALColor, Colors.YSRCPColor, Colors.TDPColor, Colors.JSPColor, Colors.OTHERColor, Colors.CONGRESSColor]}
               />
             </Grid>
             <Grid item xs={12} md={6} lg={4}>

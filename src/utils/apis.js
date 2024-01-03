@@ -6,11 +6,11 @@ import instance from "./axios";
 import LsService from "../services/localstorage";
 
 // new api for baseServerUrl
-export const baseServerUrl = "https://c1f8-123-201-171-181.ngrok-free.app/";
+// export const baseServerUrl = "https://c1f8-123-201-171-181.ngrok-free.app/";
 
 // export const baseServerUrl = "https://d1ef-123-201-174-192.ngrok-free.app";
 // export const baseServerUrl = "https://mumbaiapi.cgrysrcongress.in";
-// export const baseServerUrl = "http://192.168.0.102:8080";
+export const baseServerUrl = "http://192.168.0.102:8080";
 /// new
 // export const baseServerUrl = "https://poll2.onrender.com";
 
@@ -53,6 +53,7 @@ export const getallpartsbysachivalayamidRoute = "/getallpartsbysachivalayamid";
 export const sachivalayammappingtopartsRoute = "/sachivalayammappingtoparts";
 
 // GET ALL DATA
+export const getVillagesBySachivalayamIdRoute = "/getvillagesbysachivalayamid"
 export const getVoterTicketHistoryRoute = "/getvotertickethistory";
 export const getTicketStatusRoute = "/getticketstatus";
 export const getAllTicketsRoute = "/getallticketswithjoinandwhere";
@@ -105,6 +106,7 @@ export const createPartsRoute = "/parts/";
 export const createVillagesRoute = "/villages/";
 export const createTicketRoute = "/createticketinticketmasterandtickethistory";
 export const createTicketHistoryRoute = "/ticket_history";
+export const createPartyRoute = "/lookup/";
 
 // Delete By Id
 export const deleteStatesByIdRoute = "/states/";

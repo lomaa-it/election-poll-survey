@@ -258,6 +258,10 @@ const AccessMangementList = () => {
     elevation: 0,
     selectableRows: "none",
     responsive: "standard",
+    download: false,
+    print: false,
+    viewColumns: false,
+    filter: false,
   };
 
   return (

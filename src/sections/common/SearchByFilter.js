@@ -7,12 +7,16 @@ import { LoadingButton } from "@mui/lab";
 import { getAllCommonData } from "../../actions/common";
 
 import { ageDropdown } from "../../utils/dropdownconstants";
+import { getVillagesBySachivalayamIdRoute } from "../../utils/apis";
+import instance from "../../utils/axios";
+import { add } from "date-fns";
 
 const SearchByFilter = forwardRef(
   (
     {
       account,
       common,
+      addVoterVillage = false,
       defaultValues,
       getAllCommonData,
       onChanged,
@@ -43,6 +47,8 @@ const SearchByFilter = forwardRef(
       govt_employee: null,
       age: null,
     });
+
+    const [addVoterVillageData, setAddVoterVillageData] = useState(null);
     const [errors, setErrors] = useState({
       mandal: null,
       division: null,
@@ -62,6 +68,25 @@ const SearchByFilter = forwardRef(
     useEffect(() => {
       setIntialDefaultValues(true);
     }, [common]);
+
+    /// addvoter
+    let addVoterCall = 0;
+    useEffect(() => {
+      console.log(addVoterCall++);
+      console.log("formValues.sachivalayam", formValues.sachivalayam);
+      if (formValues.sachivalayam == null) return;
+
+      const getVillagesBySachivalayamId = async () => {
+        const response = await instance.post(getVillagesBySachivalayamIdRoute, {
+          sachivalayam_id: formValues.sachivalayam?.sachivalayam_pk,
+        });
+        const data = response.data?.message ?? [];
+        console.log("data", data);
+        setAddVoterVillageData(data);
+      };
+
+      getVillagesBySachivalayamId();
+    }, [formValues.sachivalayam]);
 
     const setIntialDefaultValues = (allowSubmit) => {
       if (common?.mandals.length > 0) {
@@ -335,6 +360,22 @@ const SearchByFilter = forwardRef(
               getOptionLabel={(option) => option.village_name}
               onChange={handleChange}
               error={!!errors.village}
+              helperText={errors.village}
+              // disabled={account.user.village_pk != null}
+            />
+          </Grid>
+        )}
+        {addVoterVillage && (
+          <Grid item xs={12} md={6} lg={lg}>
+            <RHFAutoComplete
+              name="village"
+              label="Select Village"
+              value={formValues.village}
+              options={addVoterVillageData ?? []}
+              getOptionLabel={(option) => option.village_name}
+              onChange={handleChange}
+              error={!!errors.village}
+              loading={addVoterVillageData ? addVoterVillageData.length == 0 : false}
               helperText={errors.village}
               // disabled={account.user.village_pk != null}
             />

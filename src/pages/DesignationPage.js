@@ -20,8 +20,9 @@ import {
 } from "../utils/apis";
 import instance from "../utils/axios";
 import { set } from "date-fns";
+import { showAlert } from "../actions/alert";
 
-const DesignationPage = ({ dashboard }) => {
+const DesignationPage = ({ dashboard,showAlert }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [refresh, setRefresh] = useState(false);
 
@@ -57,6 +58,7 @@ const DesignationPage = ({ dashboard }) => {
         lookup_valuename: selectedValues.lookup_valuename,
       });
       console.log(response.data.message);
+      showAlert({ text: "Designation Added", color: "success" });
       setSelectedValues({
         ...selectedValues,
         lookup_valuename: "",
@@ -66,6 +68,7 @@ const DesignationPage = ({ dashboard }) => {
       setRefresh((prev) => !prev);
     } catch (error) {
       console.log(error);
+      showAlert({ text: "Designation Not Added", color: "error" });
       setIsLoading(false);
       setRefresh((prev) => !prev);
     }
@@ -135,4 +138,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, null)(DesignationPage);
+export default connect(mapStateToProps, { showAlert })(DesignationPage);

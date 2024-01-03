@@ -7,7 +7,7 @@ import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import SearchByFilter from "../sections/common/SearchByFilter";
 import { numRegExp, phoneRegExp } from "../constants";
 import { FormProvider, RHFCheckbox, RHFRadio, RHFTextField } from "../components/hook-form";
@@ -15,6 +15,7 @@ import instance from "../utils/axios";
 import { showAlert } from "../actions/alert";
 import { addVoters } from "../utils/apis";
 import { useLocation, useNavigate } from "react-router-dom";
+import { is } from "date-fns/locale";
 
 const VoterRegistrationPage = ({ account, showAlert }) => {
   const props = useLocation().state;
@@ -82,6 +83,9 @@ const VoterRegistrationPage = ({ account, showAlert }) => {
 
   console.log("resident", resident);
   console.log("isNewVoter", isNewVoter);
+  useEffect(() => {
+    filterRef.current.reset();
+  }, [isNewVoter]);
 
   const onSubmit = async (data) => {
     clearErrors("voter_id");
@@ -221,7 +225,17 @@ const VoterRegistrationPage = ({ account, showAlert }) => {
             {/* <Typography sx={{ pb: 2 }}>Assign Authority</Typography> */}
 
             <Grid container spacing={2} alignItems="start">
-              <SearchByFilter ref={filterRef} defaultValues={filterDefaultValues} showOtherFilters={false} showSearchButton={false} showPartNo={isNewVoter ? false : true} onChanged={(value) => setFilterValues(value)} lg={3} />
+              <SearchByFilter
+                ref={filterRef}
+                defaultValues={filterDefaultValues}
+                showOtherFilters={false}
+                addVoterVillage={isNewVoter ? true : false}
+                showVillage={isNewVoter ? false : true}
+                showSearchButton={false}
+                showPartNo={isNewVoter ? false : true}
+                onChanged={(value) => setFilterValues(value)}
+                lg={3}
+              />
               {isNewVoter == false && (
                 <Grid item xs={12} md={6} lg={3}>
                   <RHFTextField name="part_slno" label="Part SL No" />
