@@ -108,9 +108,10 @@ const LoginForm = ({ showAlert, authSuccess }) => {
       const responseData = response.data?.message ?? [];
       console.log("responseData", responseData);
       setLoading(false);
+      console.log("responseData", responseData.length);
 
-      if (responseData.length == 1) {
-        var userData = responseData[0];
+      if (responseData) {
+        var userData = responseData;
         if (userData.is_first_login == 1) {
           navigate("/reset-password", { replace: true, state: userData });
         } else {
