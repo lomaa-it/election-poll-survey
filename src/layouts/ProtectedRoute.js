@@ -8,24 +8,20 @@ const ProtectedRoute = ({ type, auth, showAlert, authLogout }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Set session variable
-    sessionStorage.setItem("user", JSON.stringify(auth.user));
+    var now = new Date();
+    const timeDifference = Math.max(0, (auth.user?.expiry || 0) - now.getTime());
 
-    // Set session timeout
-    const timeoutID = setTimeout(() => {
-      sessionStorage.removeItem("user");
+    const timeoutId = setTimeout(() => {
       authLogout();
-      showAlert({ text: "Session Time-Out", color: "error" });
-      navigate("/login"); // Redirect to login page
-    }, 30 * 60 * 1000); // 30 minutes timeout
+      navigate("/logout", { replace: true });
+    }, timeDifference);
 
     return () => {
-      clearTimeout(timeoutID);
+      clearTimeout(timeoutId);
     };
-  }, [auth.user, navigate]);
+  }, []);
 
-  // return <Outlet />;
-  return auth.isAuthenticated && type?.includes(auth.user?.desgination_name) ? <Outlet /> : <Navigate to="/404" replace />;
+  return auth.isAuthenticated && type?.includes(auth.user?.desgination_name) ? <Outlet /> : <Navigate to="/logout" replace />;
 };
 
 const mapStateToProps = (state) => {

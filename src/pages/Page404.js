@@ -14,11 +14,11 @@ const StyledContent = styled("div")(({ theme }) => ({
   padding: theme.spacing(12, 0),
 }));
 
-export default function Page404() {
+function Page404() {
   return (
     <>
       <Helmet>
-        <title> 404 Page Not Found | RK Bar </title>
+        <title> 404 Page Not Found </title>
       </Helmet>
 
       <Container>
@@ -27,25 +27,19 @@ export default function Page404() {
             Sorry, page not found!
           </Typography>
 
-          <Typography sx={{ color: "text.secondary" }}>
-            Sorry, we couldn’t find the page you’re looking for. Perhaps you’ve
-            mistyped the URL? Be sure to check your spelling.
-          </Typography>
+          <Typography sx={{ color: "text.secondary" }}>Sorry, we couldn’t find the page you’re looking for. Perhaps you’ve mistyped the URL? Be sure to check your spelling.</Typography>
 
-          <Box
+          {/* <Box
             component="img"
             src={
               PUBLIC_URL + "static/assets/illustrations/illustration_404.svg"
             }
             sx={{ height: 260, mx: "auto", my: { xs: 5, sm: 10 } }}
-          />
+          /> */}
 
-          <Button
-            to="/"
-            size="large"
-            variant="contained"
-            component={RouterLink}
-          >
+          <Box p={2} />
+
+          <Button to="/" size="large" variant="contained" component={RouterLink}>
             Go to Home
           </Button>
         </StyledContent>
@@ -53,3 +47,39 @@ export default function Page404() {
     </>
   );
 }
+
+function PageSessionTimeout() {
+  return (
+    <>
+      <Helmet>
+        <title> 404 Page Not Found </title>
+      </Helmet>
+
+      <Container>
+        <StyledContent sx={{ textAlign: "center", alignItems: "center" }}>
+          <Typography variant="h3" paragraph>
+            Session Timeout
+          </Typography>
+
+          <Typography sx={{ color: "text.secondary" }}>Your session was expired, Please login again.</Typography>
+
+          {/* <Box
+            component="img"
+            src={
+              PUBLIC_URL + "static/assets/illustrations/illustration_404.svg"
+            }
+            sx={{ height: 260, mx: "auto", my: { xs: 5, sm: 10 } }}
+          /> */}
+
+          <Box p={2} />
+
+          <Button to="/" size="large" variant="contained" component={RouterLink}>
+            Go to Home
+          </Button>
+        </StyledContent>
+      </Container>
+    </>
+  );
+}
+
+export { Page404, PageSessionTimeout };

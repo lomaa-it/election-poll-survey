@@ -4,7 +4,6 @@ import { Navigate, useRoutes, Routes, Route } from "react-router-dom";
 import DashboardLayout from "./layouts/dashboard/DashboardLayout";
 import ProtectedRoute from "./layouts/ProtectedRoute";
 
-import NotFound from "./pages/Page404";
 import LoginPage from "./pages/LoginPage";
 import ForgetPage from "./pages/ForgetPage";
 import ResetPage from "./pages/ResetPage";
@@ -47,12 +46,14 @@ import LandingPage from "./pages/LandingPage";
 import ViewTicketsHistoryPage from "./pages/ViewTicketsHistoryPage";
 import ForgetResetPage from "./pages/ForgetResetPage";
 import AccessManagementPage from "./pages/AccessManagementPage";
+import { Page404, PageSessionTimeout } from "./pages/Page404";
 
 const Router = () => {
   return (
     <Routes>
       <Route path="/" element={<Navigate to="/login" />} />
-      <Route path="/404" element={<NotFound />} />
+      <Route path="/404" element={<Page404 />} />
+      <Route path="/logout" element={<PageSessionTimeout />} />
 
       <Route path="/landing-page" element={<LandingPage />} />
       <Route path="/login" element={<LoginPage />} />

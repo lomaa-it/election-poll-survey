@@ -1,7 +1,7 @@
-const days = 1;
+const minutes = 30;
 
 class LsService {
-  ls = window.localStorage;
+  ls = window.sessionStorage;
 
   setItem(key, value) {
     value = JSON.stringify(value);
@@ -25,9 +25,10 @@ class LsService {
 
   setCurrentUser(values) {
     const now = new Date();
-    now.setDate(now.getDate() + days);
+    now.setMinutes(now.getMinutes() + minutes);
     let data = { ...values, expiry: now.getTime() };
     this.setItem("polling_survey", data);
+    return data;
   }
 
   getCurrentUser() {
@@ -36,10 +37,12 @@ class LsService {
     if (!data) {
       return null;
     }
+
     if (now.getTime() > data.expiry) {
       this.removeCurrentUser();
       return null;
     }
+
     return data;
   }
 

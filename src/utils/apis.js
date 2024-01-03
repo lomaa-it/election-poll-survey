@@ -2,11 +2,14 @@
 // export const baseServerUrl = "https://poll-7ks0.onrender.com";
 // export const baseServerUrl = "https://cd30-123-201-175-198.ngrok-free.app";
 
+import instance from "./axios";
+import LsService from "../services/localstorage";
+
 // new api for baseServerUrl
-// export const baseServerUrl = "https://b080-123-201-175-33.ngrok-free.app";
+export const baseServerUrl = "https://c1f8-123-201-171-181.ngrok-free.app/";
 
 // export const baseServerUrl = "https://d1ef-123-201-174-192.ngrok-free.app";
-export const baseServerUrl = "https://mumbaiapi.cgrysrcongress.in";
+// export const baseServerUrl = "https://mumbaiapi.cgrysrcongress.in";
 // export const baseServerUrl = "http://192.168.0.102:8080";
 /// new
 // export const baseServerUrl = "https://poll2.onrender.com";
@@ -114,3 +117,15 @@ export const updateMandalByIdRoute = "/mandals/";
 export const updateDivisionByIdRoute = "/divisions/";
 export const designationMappingRoute = "/designationmappingtousers";
 export const sendCredsToUsersRoute = "/sendcredstousers";
+
+export const postRequest = (route, data) => {
+  let user = LsService.getCurrentUser();
+  var accesstoken = user.user_pk;
+
+  return instance.post(route, data, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accesstoken}`,
+    },
+  });
+};

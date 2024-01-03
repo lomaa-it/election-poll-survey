@@ -8,7 +8,7 @@ import { checkOrUncheckUser, clearUserReducer, deleteUserInRedux } from "../../a
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import { LoadingButton } from "@mui/lab";
 import instance from "../../utils/axios";
-import { deleteUserById, sendCredsToUsersRoute } from "../../utils/apis";
+import { deleteUserById, postRequest, sendCredsToUsersRoute } from "../../utils/apis";
 
 // pop up
 
@@ -18,6 +18,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import CustomMuiDataTable from "../../components/CustomMuiDataTable";
+import { ROWS_PER_PAGE_OPTION } from "../../constants";
 
 //
 
@@ -115,7 +116,7 @@ const ViewUsersList = ({ user, showAlert, checkOrUncheckUser, deleteUserInRedux,
       label: "Action",
       options: {
         customBodyRender: (value, tableMeta, updateValue) => {
-          console.log("tableMeta", tableMeta.rowData);
+          // console.log("tableMeta", tableMeta.rowData);
           return (
             <Box
               sx={{
@@ -240,6 +241,8 @@ const ViewUsersList = ({ user, showAlert, checkOrUncheckUser, deleteUserInRedux,
     elevation: 0,
     selectableRows: "none",
     responsive: "standard",
+    rowsPerPage: 200,
+    rowsPerPageOptions: ROWS_PER_PAGE_OPTION,
     ...(account.user?.desgination_name != "MLA" && {
       filter: false,
       search: false,
@@ -298,13 +301,14 @@ const ViewUsersList = ({ user, showAlert, checkOrUncheckUser, deleteUserInRedux,
         usersList: userList,
       };
 
-      await instance.post(sendCredsToUsersRoute, jsonData);
+      await postRequest(sendCredsToUsersRoute, jsonData);
 
       clearUserReducer();
       showAlert({
         text: "Login credientials send successfully",
         color: "success",
       });
+
       setLoading(false);
     } catch (error) {
       console.error(error);

@@ -3,8 +3,8 @@ import LsService from "../services/localstorage";
 let user = LsService.getCurrentUser();
 
 const initialState = {
-  user: user && user.user_displayname ? user : null,
-  isAuthenticated: user && user.user_displayname ? true : false,
+  user: user && user.user_pk ? user : null,
+  isAuthenticated: user && user.user_pk ? true : false,
   isLoading: false,
   errorMessage: null,
   data: {},
@@ -15,11 +15,11 @@ export default function authReducer(state = initialState, action) {
 
   switch (type) {
     case "LOGIN_SUCCESS":
-      LsService.setCurrentUser(payload);
+      var data = LsService.setCurrentUser(payload);
       return {
         ...state,
         isAuthenticated: true,
-        user: payload,
+        user: data,
       };
 
     case "LOGIN_UPDATED":
