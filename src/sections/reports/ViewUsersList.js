@@ -19,6 +19,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import CustomMuiDataTable from "../../components/CustomMuiDataTable";
 import { ROWS_PER_PAGE_OPTION } from "../../constants";
+import ApiServices from "../../services/apiservices";
 
 //
 
@@ -301,7 +302,7 @@ const ViewUsersList = ({ user, showAlert, checkOrUncheckUser, deleteUserInRedux,
         usersList: userList,
       };
 
-      await postRequest(sendCredsToUsersRoute, jsonData);
+      await ApiServices.postRequest(sendCredsToUsersRoute, jsonData);
 
       clearUserReducer();
       showAlert({
