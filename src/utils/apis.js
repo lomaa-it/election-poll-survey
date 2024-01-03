@@ -9,8 +9,8 @@ import LsService from "../services/localstorage";
 // export const baseServerUrl = "https://c1f8-123-201-171-181.ngrok-free.app/";
 
 // export const baseServerUrl = "https://d1ef-123-201-174-192.ngrok-free.app";
-// export const baseServerUrl = "https://mumbaiapi.cgrysrcongress.in";
-export const baseServerUrl = "http://192.168.0.102:8080";
+export const baseServerUrl = "https://mumbaiapi.cgrysrcongress.in";
+// export const baseServerUrl = "http://192.168.0.102:8080";
 /// new
 // export const baseServerUrl = "https://poll2.onrender.com";
 
