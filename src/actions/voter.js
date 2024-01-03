@@ -40,6 +40,7 @@ export const getAllVotersSurvey =
           limit: limit,
         },
       });
+      // console.log("VOTER_LOAD_SUCCESS", itemsList);
     } catch (err) {
       console.log(err);
       dispatch({

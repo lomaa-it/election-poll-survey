@@ -5,10 +5,10 @@ import AccessMangementList from "../sections/reports/AccessMangementList";
 
 const AccessManagementPage = () => {
   return (
-    <Page title="Voter Registration">
+    <Page title="Assign Authority">
       <Container maxWidth="xl">
         <Typography variant="h4" sx={{ mb: 1 }}>
-          Add Poll Survey
+        Assign Authority
         </Typography>
 
         <Box p={1} />

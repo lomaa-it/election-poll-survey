@@ -90,11 +90,11 @@ const mlaNavConfig = [
         path: "/opinionsurvey/survey",
         icon: <Iconify icon="ic:round-person" width="24px" height="24px" />,
       },
-      {
-        title: "Opinion Results",
-        path: "/opinionsurvey/results",
-        icon: <Iconify icon="ic:round-person" width="24px" height="24px" />,
-      },
+      // {
+      //   title: "Opinion Results",
+      //   path: "/opinionsurvey/results",
+      //   icon: <Iconify icon="ic:round-person" width="24px" height="24px" />,
+      // },
       {
         title: "Opinion Reports",
         path: "/opinionsurvey/reports",

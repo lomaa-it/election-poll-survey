@@ -202,64 +202,43 @@ const VoterRegistrationPage = ({ account, showAlert }) => {
           Add Voter
         </Typography> */}
           <Card sx={{ p: 3, mt: 1, mb: 2 }}>
-            <Typography sx={{ pb: 2 }}>Assign Authority</Typography>
-
-            <Grid container spacing={2} alignItems="start">
-              <SearchByFilter ref={filterRef} defaultValues={filterDefaultValues} showOtherFilters={false} showSearchButton={false} onChanged={(value) => setFilterValues(value)} lg={3} />
-
+            <Grid
+              container
+              spacing={2}
+              alignItems="start"
+              sx={{
+                marginBottom: "20px",
+              }}
+            >
               <Grid item xs={12} md={6} lg={3}>
-                <RHFTextField name="part_slno" label="Part SL No" />
+                {/* <RHFCheckbox name="is_newregistration" label="is New Voter?" /> */}
+                <RHFTextField name="is_newregistration" label="Voter Type?" select>
+                  <MenuItem value={false}>New voter</MenuItem>
+                  <MenuItem value={true}>New Registration</MenuItem>
+                </RHFTextField>
               </Grid>
             </Grid>
-          </Card>
-
-          <Card sx={{ p: 3 }}>
-            <Typography sx={{ pb: 2 }}>Basic Info</Typography>
+            {/* <Typography sx={{ pb: 2 }}>Assign Authority</Typography> */}
 
             <Grid container spacing={2} alignItems="start">
-              <Grid item xs={12} md={6} lg={3}>
-                <RHFCheckbox name="is_newregistration" label="is New Voter?" />
-              </Grid>
+              <SearchByFilter ref={filterRef} defaultValues={filterDefaultValues} showOtherFilters={false} showSearchButton={false} showPartNo={isNewVoter ? false : true} onChanged={(value) => setFilterValues(value)} lg={3} />
+              {isNewVoter == false && (
+                <Grid item xs={12} md={6} lg={3}>
+                  <RHFTextField name="part_slno" label="Part SL No" />
+                </Grid>
+              )}
 
-              <Grid item xs={12} md={6} lg={3}>
-                <TextField
-                  name="file"
-                  type="file"
-                  size="small"
-                  label="Upload Proof"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                />
-              </Grid>
-
-              <Grid item xs={12} md={6} lg={3}>
-                <RHFTextField name="voter_name" label="Voter Name" />
-              </Grid>
+              {/* <Typography sx={{ pb: 2 }}>Basic Info</Typography> */}
 
               {isNewVoter == false && (
                 <Grid item xs={12} md={6} lg={3}>
                   <RHFTextField name="voter_id" label="Voter ID" />
                 </Grid>
               )}
-
               <Grid item xs={12} md={6} lg={3}>
-                <RHFTextField name="age" label="Age" />
+                <RHFTextField name="voter_name" label="Voter Name" />
               </Grid>
-
-              <Grid item xs={12} md={6} lg={3}>
-                <RHFTextField name="gender" label="Gender" select>
-                  <MenuItem value={13}>Male</MenuItem>
-                  <MenuItem value={14}>Female</MenuItem>
-                  <MenuItem value={15}>Transgender</MenuItem>
-                </RHFTextField>
-              </Grid>
-
-              <Grid item xs={12} md={6} lg={3}>
-                <RHFTextField name="phone_no" label="Phone Number" inputProps={{ maxLength: 10 }} />
-              </Grid>
-
-              <Grid item xs={12} md={12} lg={3}>
+              <Grid item xs={12} md={12} lg={4}>
                 <RHFRadio
                   name="guardian"
                   filedLabel="Guardian"
@@ -280,12 +259,26 @@ const VoterRegistrationPage = ({ account, showAlert }) => {
                 />
               </Grid>
 
-              <Grid item xs={12} md={6} lg={3}>
+              <Grid item xs={12} md={6} lg={3} alignSelf={"flex-end"}>
                 <RHFTextField name="guardian_name" label="Guardian Name" />
               </Grid>
 
+              <Grid item xs={12} md={6} lg={3} alignSelf={"flex-end"}>
+                <RHFTextField name="gender" label="Gender" select>
+                  <MenuItem value={13}>Male</MenuItem>
+                  <MenuItem value={14}>Female</MenuItem>
+                  <MenuItem value={15}>Transgender</MenuItem>
+                </RHFTextField>
+              </Grid>
+              <Grid item xs={12} md={6} lg={2} alignSelf={"flex-end"}>
+                <RHFTextField name="age" label="Age" />
+              </Grid>
+              <Grid item xs={12} md={6} lg={3}>
+                <RHFTextField name="phone_no" label="Phone Number" inputProps={{ maxLength: 10 }} />
+              </Grid>
+
               <Grid item xs={12} md={12} lg={12}>
-                <RHFCheckbox name="is_resident" label="Resident" />
+                <RHFCheckbox name="is_resident" label="Is Resident" />
               </Grid>
 
               {resident == true && (
@@ -296,6 +289,18 @@ const VoterRegistrationPage = ({ account, showAlert }) => {
 
               <Grid item xs={12} md={6} lg={6}>
                 <RHFTextField name="current_address" label="Current Address" multiline rows={4} fullWidth />
+              </Grid>
+
+              <Grid item xs={12} md={6} lg={3}>
+                <TextField
+                  name="file"
+                  type="file"
+                  size="large"
+                  label="Upload Proof"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
               </Grid>
 
               <Grid

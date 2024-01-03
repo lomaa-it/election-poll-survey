@@ -6,7 +6,7 @@ import { Box, IconButton, Dialog, MenuItem, Grid, Radio, DialogContent, DialogTi
 import FormControl from "@mui/material/FormControl";
 import RadioGroup from "@mui/material/RadioGroup";
 
-import { PARTY_ID, casteList, phoneRegExp, religionList } from "../../constants";
+import { PARTY_ID, casteList, getTicketColorByValue, phoneRegExp, religionList } from "../../constants";
 import { LoadingButton } from "@mui/lab";
 import EditIcon from "@mui/icons-material/Edit";
 import { BJPRadio, CongressRadio, JSPRadio, NeutralRadio, OthersRadio, TDPRadio, YCPRadio } from "./PartyRadioButtons";
@@ -106,15 +106,18 @@ const UpdateVoterDialog = ({ account, common, voterData, showAlert, updateVoterD
     setOpen(false);
   };
 
-  // console.log("voterData", voterData);
+  console.log("voterData", voterData);
+
+  const iconColor = getTicketColorByValue(voterData.status_id);
+  console.log("iconColor", iconColor);
 
   return (
     <>
       <IconButton
-        color={isActive ? "success" : "default"}
         onClick={() => setOpen(true)}
         sx={{
           p: 0,
+          color: iconColor,
         }}
       >
         <EditIcon />

@@ -1,12 +1,4 @@
-import {
-  Grid,
-  Container,
-  Typography,
-  Box,
-  TextField,
-  Card,
-  MenuItem,
-} from "@mui/material";
+import { Grid, Container, Typography, Box, TextField, Card, MenuItem } from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -18,7 +10,7 @@ import { searchFiltercolor } from "../constants";
 import { clearUserReducer, getAllUsers } from "../actions/user";
 import { UncontrolledTextField } from "../components/hook-form/RHFTextField";
 
-const ViewUserPage = ({ common, clearUserReducer, getAllUsers }) => {
+const ViewUserPage = ({ account, common, clearUserReducer, getAllUsers }) => {
   const [designation, setDesignation] = useState(null);
 
   useEffect(() => {
@@ -28,10 +20,13 @@ const ViewUserPage = ({ common, clearUserReducer, getAllUsers }) => {
   const handleSubmit = async (filterValues) => {
     var values = {
       designation_id: designation ?? null,
+      username:account.user.username,
       ...filterValues,
     };
     await getAllUsers(values);
   };
+
+  console.log("account", account);
 
   return (
     <Page title="User List">
@@ -44,13 +39,7 @@ const ViewUserPage = ({ common, clearUserReducer, getAllUsers }) => {
               onReset={() => setDesignation(null)}
               children={
                 <Grid item xs={12} md={6} lg={2}>
-                  <UncontrolledTextField
-                    name="designation_id"
-                    label="Select Designation*"
-                    select
-                    value={designation}
-                    onChange={(e) => setDesignation(e.target.value)}
-                  >
+                  <UncontrolledTextField name="designation_id" label="Select Designation*" select value={designation} onChange={(e) => setDesignation(e.target.value)}>
                     {common.designation?.map((item, index) => (
                       <MenuItem key={index} value={item.value}>
                         {item.label}
@@ -90,11 +79,7 @@ const ViewUserPage = ({ common, clearUserReducer, getAllUsers }) => {
 };
 
 const mapStateToProps = (state) => {
-  return {
-    common: state.common,
-  };
+  return { account: state.auth, common: state.common };
 };
 
-export default connect(mapStateToProps, { clearUserReducer, getAllUsers })(
-  ViewUserPage
-);
+export default connect(mapStateToProps, { clearUserReducer, getAllUsers })(ViewUserPage);

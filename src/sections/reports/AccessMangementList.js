@@ -1,9 +1,26 @@
 import React from "react";
 import CustomMuiDataTable from "../../components/CustomMuiDataTable";
-import { Box, Checkbox, Stack } from "@mui/material";
+import { Box, Checkbox, Stack, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 
-const CustomCheckbox = styled(Checkbox)(({ theme }) => ({ padding: 0, "& .MuiSvgIcon-root": { fontSize: 20 } }));
+const CustomCheckbox = styled(Checkbox)(({ theme }) => ({ padding: 0, "& .MuiSvgIcon-root": { fontSize: 17 } }));
+const CustomCheckboxWithLabel = ({ label, labelPlacement, ...props }) => (
+  <FormControlLabel
+    control={<CustomCheckbox {...props} />}
+    label={
+      <Typography
+        variant="p"
+        sx={{
+          fontSize: "12px",
+        }}
+      >
+        {label}
+      </Typography>
+    }
+    labelPlacement={labelPlacement}
+  />
+);
 
 const AccessMangementList = () => {
   const columns = [
@@ -21,9 +38,18 @@ const AccessMangementList = () => {
       options: {
         customBodyRender: (value, tableMeta, updateValue) => {
           return (
-            <Stack direction="row" spacing={1}>
-              <CustomCheckbox size="small" />
-            </Stack>
+            <Box alignItems="center">
+              <CustomCheckboxWithLabel label="Access Menu" labelPlacement="top" />
+
+              <Stack direction="row" spacing={1}>
+                <CustomCheckboxWithLabel label="C" labelPlacement="top" />
+                <CustomCheckboxWithLabel label="R" labelPlacement="top" />
+                <CustomCheckboxWithLabel label="U" labelPlacement="top" />
+                <CustomCheckboxWithLabel label="D" labelPlacement="top" />
+                <CustomCheckboxWithLabel label="Approved" labelPlacement="top" />
+                <hr />
+              </Stack>
+            </Box>
           );
         },
       },
@@ -34,9 +60,18 @@ const AccessMangementList = () => {
       options: {
         customBodyRender: (value, tableMeta, updateValue) => {
           return (
-            <Stack direction="row" spacing={1}>
-              <CustomCheckbox />
-            </Stack>
+            <Box alignItems="center">
+              <CustomCheckboxWithLabel label="Access Menu" labelPlacement="top" />
+
+              <Stack direction="row" spacing={1}>
+                <CustomCheckboxWithLabel label="C" labelPlacement="top" />
+                <CustomCheckboxWithLabel label="R" labelPlacement="top" />
+                <CustomCheckboxWithLabel label="U" labelPlacement="top" />
+                <CustomCheckboxWithLabel label="D" labelPlacement="top" />
+                <CustomCheckboxWithLabel label="Approved" labelPlacement="top" />
+                <hr />
+              </Stack>
+            </Box>
           );
         },
       },
@@ -47,9 +82,18 @@ const AccessMangementList = () => {
       options: {
         customBodyRender: (value, tableMeta, updateValue) => {
           return (
-            <Stack direction="row" spacing={1}>
-              <CustomCheckbox />
-            </Stack>
+            <Box alignItems="center">
+              <CustomCheckboxWithLabel label="Access Menu" labelPlacement="top" />
+
+              <Stack direction="row" spacing={1}>
+                <CustomCheckboxWithLabel label="C" labelPlacement="top" />
+                <CustomCheckboxWithLabel label="R" labelPlacement="top" />
+                <CustomCheckboxWithLabel label="U" labelPlacement="top" />
+                <CustomCheckboxWithLabel label="D" labelPlacement="top" />
+                <CustomCheckboxWithLabel label="Approved" labelPlacement="top" />
+                <hr />
+              </Stack>
+            </Box>
           );
         },
       },
@@ -60,9 +104,18 @@ const AccessMangementList = () => {
       options: {
         customBodyRender: (value, tableMeta, updateValue) => {
           return (
-            <Stack direction="row" spacing={1}>
-              <CustomCheckbox />
-            </Stack>
+            <Box alignItems="center">
+              <CustomCheckboxWithLabel label="Access Menu" labelPlacement="top" />
+
+              <Stack direction="row" spacing={1}>
+                <CustomCheckboxWithLabel label="C" labelPlacement="top" />
+                <CustomCheckboxWithLabel label="R" labelPlacement="top" />
+                <CustomCheckboxWithLabel label="U" labelPlacement="top" />
+                <CustomCheckboxWithLabel label="D" labelPlacement="top" />
+                <CustomCheckboxWithLabel label="Approved" labelPlacement="top" />
+                <hr />
+              </Stack>
+            </Box>
           );
         },
       },
@@ -73,9 +126,18 @@ const AccessMangementList = () => {
       options: {
         customBodyRender: (value, tableMeta, updateValue) => {
           return (
-            <Stack direction="row" spacing={1}>
-              <CustomCheckbox />
-            </Stack>
+            <Box alignItems="center">
+              <CustomCheckboxWithLabel label="Access Menu" labelPlacement="top" />
+
+              <Stack direction="row" spacing={1}>
+                <CustomCheckboxWithLabel label="C" labelPlacement="top" />
+                <CustomCheckboxWithLabel label="R" labelPlacement="top" />
+                <CustomCheckboxWithLabel label="U" labelPlacement="top" />
+                <CustomCheckboxWithLabel label="D" labelPlacement="top" />
+                <CustomCheckboxWithLabel label="Approved" labelPlacement="top" />
+                <hr />
+              </Stack>
+            </Box>
           );
         },
       },
@@ -86,9 +148,18 @@ const AccessMangementList = () => {
       options: {
         customBodyRender: (value, tableMeta, updateValue) => {
           return (
-            <Stack direction="row" spacing={1}>
-              <CustomCheckbox />
-            </Stack>
+            <Box alignItems="center">
+              <CustomCheckboxWithLabel label="Access Menu" labelPlacement="top" />
+
+              <Stack direction="row" spacing={1}>
+                <CustomCheckboxWithLabel label="C" labelPlacement="top" />
+                <CustomCheckboxWithLabel label="R" labelPlacement="top" />
+                <CustomCheckboxWithLabel label="U" labelPlacement="top" />
+                <CustomCheckboxWithLabel label="D" labelPlacement="top" />
+                <CustomCheckboxWithLabel label="Approved" labelPlacement="top" />
+                <hr />
+              </Stack>
+            </Box>
           );
         },
       },
@@ -99,9 +170,18 @@ const AccessMangementList = () => {
       options: {
         customBodyRender: (value, tableMeta, updateValue) => {
           return (
-            <Stack direction="row" spacing={1}>
-              <CustomCheckbox />
-            </Stack>
+            <Box alignItems="center">
+              <CustomCheckboxWithLabel label="Access Menu" labelPlacement="top" />
+
+              <Stack direction="row" spacing={1}>
+                <CustomCheckboxWithLabel label="C" labelPlacement="top" />
+                <CustomCheckboxWithLabel label="R" labelPlacement="top" />
+                <CustomCheckboxWithLabel label="U" labelPlacement="top" />
+                <CustomCheckboxWithLabel label="D" labelPlacement="top" />
+                <CustomCheckboxWithLabel label="Approved" labelPlacement="top" />
+                <hr />
+              </Stack>
+            </Box>
           );
         },
       },
@@ -113,13 +193,15 @@ const AccessMangementList = () => {
         customBodyRender: (value, tableMeta, updateValue) => {
           return (
             <Box alignItems="center">
-              <CustomCheckbox />
+              <CustomCheckboxWithLabel label="Access Menu" labelPlacement="top" />
 
               <Stack direction="row" spacing={1}>
-                <CustomCheckbox />
-                <CustomCheckbox />
-                <CustomCheckbox />
-                <CustomCheckbox />
+                <CustomCheckboxWithLabel label="C" labelPlacement="top" />
+                <CustomCheckboxWithLabel label="R" labelPlacement="top" />
+                <CustomCheckboxWithLabel label="U" labelPlacement="top" />
+                <CustomCheckboxWithLabel label="D" labelPlacement="top" />
+                <CustomCheckboxWithLabel label="Approved" labelPlacement="top" />
+                <hr />
               </Stack>
             </Box>
           );
@@ -132,9 +214,18 @@ const AccessMangementList = () => {
       options: {
         customBodyRender: (value, tableMeta, updateValue) => {
           return (
-            <Stack direction="row" spacing={1}>
-              <CustomCheckbox />
-            </Stack>
+            <Box alignItems="center">
+              <CustomCheckboxWithLabel label="Access Menu" labelPlacement="top" />
+
+              <Stack direction="row" spacing={1}>
+                <CustomCheckboxWithLabel label="C" labelPlacement="top" />
+                <CustomCheckboxWithLabel label="R" labelPlacement="top" />
+                <CustomCheckboxWithLabel label="U" labelPlacement="top" />
+                <CustomCheckboxWithLabel label="D" labelPlacement="top" />
+                <CustomCheckboxWithLabel label="Approved" labelPlacement="top" />
+                <hr />
+              </Stack>
+            </Box>
           );
         },
       },
@@ -145,9 +236,18 @@ const AccessMangementList = () => {
       options: {
         customBodyRender: (value, tableMeta, updateValue) => {
           return (
-            <Stack direction="row" spacing={1}>
-              <CustomCheckbox />
-            </Stack>
+            <Box alignItems="center">
+              <CustomCheckboxWithLabel label="Access Menu" labelPlacement="top" />
+
+              <Stack direction="row" spacing={1}>
+                <CustomCheckboxWithLabel label="C" labelPlacement="top" />
+                <CustomCheckboxWithLabel label="R" labelPlacement="top" />
+                <CustomCheckboxWithLabel label="U" labelPlacement="top" />
+                <CustomCheckboxWithLabel label="D" labelPlacement="top" />
+                <CustomCheckboxWithLabel label="Approved" labelPlacement="top" />
+                <hr />
+              </Stack>
+            </Box>
           );
         },
       },
@@ -162,7 +262,7 @@ const AccessMangementList = () => {
 
   return (
     <CustomMuiDataTable
-      title="Opinion Poll"
+      title=""
       columns={columns}
       data={[
         ["ID0", "Survey Dashboard"],
