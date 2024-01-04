@@ -17,6 +17,7 @@ import { showAlert } from "../../../actions/alert";
 import instance from "../../../utils/axios";
 import { resetPswdRoute } from "../../../utils/apis";
 import Iconify from "../../../components/Iconify";
+import ApiServices from "../../../services/apiservices";
 
 const ResetForm = ({ showAlert }) => {
   const navigate = useNavigate();
@@ -61,7 +62,7 @@ const ResetForm = ({ showAlert }) => {
         password: data.newpswd,
       };
 
-      await instance.post(resetPswdRoute, jsonData);
+      await ApiServices.postRequest(resetPswdRoute, jsonData);
 
       setLoading(false);
       showAlert({ text: "Password reset completed", color: "success" });

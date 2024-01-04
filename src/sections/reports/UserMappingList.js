@@ -9,6 +9,7 @@ import instance from "../../utils/axios";
 import { designationMappingRoute } from "../../utils/apis";
 import { LoadingButton } from "@mui/lab";
 import CustomMuiDataTable from "../../components/CustomMuiDataTable";
+import ApiServices from "../../services/apiservices";
 
 const UserMappingList = ({ common, user, filterValues, showAlert, checkOrUncheckUser, clearUserReducer, account }) => {
   const [isLoading, setLoading] = useState(false);
@@ -130,7 +131,7 @@ const UserMappingList = ({ common, user, filterValues, showAlert, checkOrUncheck
         usersPkList: userList,
       };
 
-      await instance.post(designationMappingRoute, jsonData);
+      await ApiServices.postRequest(designationMappingRoute, jsonData);
 
       resetFormValues();
       clearUserReducer();

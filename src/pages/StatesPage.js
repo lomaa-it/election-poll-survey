@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import instance from "../utils/axios";
 import { createStatesRoute, getAllStatesRoute } from "../utils/apis";
 import { set } from "date-fns";
+import ApiServices from "../services/apiservices";
 
 const StatesPage = ({ dashboard }) => {
   const [stateList, setStateList] = useState([]);
@@ -18,7 +19,7 @@ const StatesPage = ({ dashboard }) => {
 
   useEffect(() => {
     const fetchStates = async () => {
-      const response = await instance.post(getAllStatesRoute);
+      const response = await ApiServices.postRequest(getAllStatesRoute);
       const responseData = response.data.message;
       setStateList(responseData);
     };

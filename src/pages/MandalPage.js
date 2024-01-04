@@ -25,6 +25,7 @@ import {
 } from "../utils/apis";
 import { set } from "date-fns";
 import { showAlert } from "../actions/alert";
+import ApiServices from "../services/apiservices";
 
 const MandalPage = ({ dashboard }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -47,14 +48,14 @@ const MandalPage = ({ dashboard }) => {
     const fecthOptionsData = async () => {
       try {
         /// get all states
-        const statesResponse = await instance.post(getAllStatesRoute);
+        const statesResponse = await ApiServices.postRequest(getAllStatesRoute);
         console.log("states", statesResponse.data.message);
         /// get all districts
-        const districtsResponse = await instance.post(getAllDistrictsRoute);
+        const districtsResponse = await ApiServices.postRequest(getAllDistrictsRoute);
         console.log("districts", districtsResponse.data.message);
 
         /// get all constituencies
-        const constituenciesResponse = await instance.post(
+        const constituenciesResponse = await ApiServices.postRequest(
           getAllConstituenciesRoute
         );
         console.log("constituencies", constituenciesResponse.data.message);
@@ -77,7 +78,7 @@ const MandalPage = ({ dashboard }) => {
     const fecthOptionsData = async () => {
       try {
         /// get all mandals
-        const mandalsResponse = await instance.post(getAllMandalRoute);
+        const mandalsResponse = await ApiServices.postRequest(getAllMandalRoute);
         console.log("mandals", mandalsResponse.data.message);
 
         /// state update
@@ -96,7 +97,7 @@ const MandalPage = ({ dashboard }) => {
     console.log(selectedValues);
     try {
       setIsLoading(true);
-      const response = await instance.post(createMandalsRoute, {
+      const response = await ApiServices.postRequest(createMandalsRoute, {
         mandal_name: selectedValues.mandal_name,
         consistency_id: selectedValues.consistency_id,
       });

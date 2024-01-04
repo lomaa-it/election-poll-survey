@@ -12,6 +12,7 @@ import { checkOrUncheckTicket } from "../../actions/ticket";
 import AnalyticsCard from "../common/AnalyticsCard";
 import { fToNow } from "../../utils/formatTime";
 import CustomMuiDataTable from "../../components/CustomMuiDataTable";
+import ApiServices from "../../services/apiservices";
 
 const ViewTicketsList = ({ isUser, common, ticket, showAlert, checkOrUncheckTicket, account }) => {
   const navigate = useNavigate();
@@ -123,7 +124,7 @@ const ViewTicketsList = ({ isUser, common, ticket, showAlert, checkOrUncheckTick
   //   console.log("requestBody", requestBody);
   //   try {
   //     setLoading(true);
-  //     await instance.put(updateTicketStatusRoute, requestBody);
+      // await ApiServices.putRequest(updateTicketStatusRoute, requestBody);
   //     showAlert({
   //       text: "Ticket status updated successfully",
   //       color: "success",

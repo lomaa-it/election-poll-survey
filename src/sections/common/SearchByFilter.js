@@ -10,6 +10,7 @@ import { ageDropdown } from "../../utils/dropdownconstants";
 import { getVillagesBySachivalayamIdRoute } from "../../utils/apis";
 import instance from "../../utils/axios";
 import { add } from "date-fns";
+import ApiServices from "../../services/apiservices";
 
 const SearchByFilter = forwardRef(
   (
@@ -58,6 +59,7 @@ const SearchByFilter = forwardRef(
     });
     const [isLoading, setLoading] = useState(false);
     const [submitFlag, setSubmitFlag] = useState(false);
+    const [isLoadingVillage, setLoadingVillage] = useState(false);
 
     useEffect(() => {
       if (common?.mandals.length == 0) {
@@ -77,12 +79,14 @@ const SearchByFilter = forwardRef(
       if (formValues.sachivalayam == null) return;
 
       const getVillagesBySachivalayamId = async () => {
-        const response = await instance.post(getVillagesBySachivalayamIdRoute, {
+        setLoadingVillage(true);
+        const response = await ApiServices.postRequest(getVillagesBySachivalayamIdRoute, {
           sachivalayam_id: formValues.sachivalayam?.sachivalayam_pk,
         });
         const data = response.data?.message ?? [];
         console.log("data", data);
         setAddVoterVillageData(data);
+        setLoadingVillage(false);
       };
 
       getVillagesBySachivalayamId();
@@ -160,9 +164,9 @@ const SearchByFilter = forwardRef(
       if (onSubmit == null) return;
 
       const jsonData = {
-        state_id: 5,
-        district_id: 6,
-        consistency_id: 3,
+        state_id: account?.user?.state_pk ?? null,
+        district_id: account?.user?.district_pk ?? null,
+        consistency_id: account?.user?.consistency_pk ?? null,
         mandal_id: formValues.mandal?.mandal_pk ?? null,
         division_id: formValues.division?.division_pk ?? null,
         sachivalayam_id: formValues.sachivalayam?.sachivalayam_pk ?? null,
@@ -175,6 +179,8 @@ const SearchByFilter = forwardRef(
         govt_employee: formValues.govt_employee?.value ?? null,
         age: formValues.age?.value ?? "",
       };
+
+      console.log(jsonData);
 
       setLoading(true);
       await onSubmit(jsonData);
@@ -375,7 +381,7 @@ const SearchByFilter = forwardRef(
               getOptionLabel={(option) => option.village_name}
               onChange={handleChange}
               error={!!errors.village}
-              loading={addVoterVillageData ? addVoterVillageData.length == 0 : false}
+              loading={isLoadingVillage}
               helperText={errors.village}
               // disabled={account.user.village_pk != null}
             />

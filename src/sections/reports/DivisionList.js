@@ -11,6 +11,7 @@ import { updateDivisionByIdRoute } from "../../utils/apis";
 import { set } from "date-fns";
 import instance from "../../utils/axios";
 import CustomMuiDataTable from "../../components/CustomMuiDataTable";
+import ApiServices from "../../services/apiservices";
 
 const DivisionList = ({ showAlert, divisionList, fetchedData, setFetchedData, refresh, setRefresh }) => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -106,7 +107,7 @@ const DivisionList = ({ showAlert, divisionList, fetchedData, setFetchedData, re
     console.log("selectedValues", selectedValues);
     try {
       setIsLoading(true);
-      const response = await instance.put(updateDivisionByIdRoute + selectedValues.division_id, {
+      const response = await ApiServices.putRequest(updateDivisionByIdRoute + selectedValues.division_id, {
         mandal_id: selectedValues.mandal_id,
         division_name: selectedValues.division_name,
       });

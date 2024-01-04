@@ -15,6 +15,7 @@ import { showAlert } from "../actions/alert";
 import { FormProvider, RHFTextField } from "../components/hook-form";
 import SearchByFilter from "../sections/common/SearchByFilter";
 import { phoneRegExp } from "../constants";
+import ApiServices from "../services/apiservices";
 
 const PRIORITY1 = [33, 34, 35, 36, 37, 38];
 const PRIORITY2 = [34, 35, 36, 37, 38];
@@ -105,9 +106,10 @@ const UserRegistrationPage = ({ account, common, showAlert }) => {
     try {
       var jsonData = {
         ...data,
-        state_id: 5,
-        district_id: 6,
-        consistency_id: 3,
+        age: data.age == "" ? null : data.age,
+        state_id: account.user?.state_pk ?? null,
+        district_id: account.user?.district_pk ?? null,
+        consistency_id: account.user?.consistency_pk ?? null,
         mandal_id: filterValues.mandal?.mandal_pk ?? null,
         division_id: filterValues.division?.division_pk ?? null,
         sachivalayam_id: filterValues.sachivalayam?.sachivalayam_pk ?? null,
@@ -116,11 +118,11 @@ const UserRegistrationPage = ({ account, common, showAlert }) => {
       };
 
       if (props?.userData != null) {
-        await instance.put(`${createUsersRoute}/${props.userData.user_pk}`, { ...jsonData, updatedby: account.user?.user_pk });
+        await ApiServices.putRequest(`${createUsersRoute}/${props.userData.user_pk}`, { ...jsonData, updatedby: account.user?.user_pk });
         showAlert({ text: "User updated successfully", color: "success" });
         navigate(-1);
       } else {
-        await instance.post(createUsersRoute, { ...jsonData, createdby: account.user?.user_pk });
+        await ApiServices.postRequest(createUsersRoute, { ...jsonData, createdby: account.user?.user_pk });
         showAlert({ text: "User added successfully", color: "success" });
         reset();
         filterRef.current.reset();

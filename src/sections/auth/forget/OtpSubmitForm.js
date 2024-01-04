@@ -10,6 +10,7 @@ import { LoadingButton } from "@mui/lab";
 import { saveNewPassword } from "../../../utils/apis";
 import { Try } from "@mui/icons-material";
 import instance from "../../../utils/axios";
+import ApiServices from "../../../services/apiservices";
 
 const OtpSubmitForm = ({ formValues, showAlert }) => {
   const navigate = useNavigate();
@@ -40,7 +41,7 @@ const OtpSubmitForm = ({ formValues, showAlert }) => {
     console.log(data);
     setLoading(true);
     try {
-      const response = await instance.post(saveNewPassword, {
+      const response = await ApiServices.postRequest(saveNewPassword, {
         otp: data.otp,
         username: formValues.username,
         password: data.confirm_password,

@@ -8,9 +8,10 @@ import Button from "@mui/material/Button";
 import ConstituenciesList from "../sections/reports/ConstituenciesList";
 import { useEffect, useState } from "react";
 import { getAllStatesRoute, getAllConstituenciesWithJoinRoute, createConstituenciesRoute, getAllDistrictsRoute } from "../utils/apis";
-import instance from "../utils/axios";
+
 import { showAlert } from "../actions/alert";
 import { set } from "date-fns";
+import ApiServices from "../services/apiservices";
 
 const ConstituenciesPage = ({ dashboard }) => {
   const [constituenciesList, setConstituenciesList] = useState([]);
@@ -21,19 +22,19 @@ const ConstituenciesPage = ({ dashboard }) => {
   const [consituencyName, setConsituencyName] = useState("");
 
   // const fetchConstituencies = async () => {
-  //   const response = await instance.post(getAllConstituenciesWithJoinRoute);
+  //   const response = await ApiServices.postRequest(getAllConstituenciesWithJoinRoute);
   //   console.log("constituencies", response.data.message);
   //   setConstituenciesList(response.data.message);
   // };
 
   const fetchStates = async () => {
-    const response = await instance.post(getAllStatesRoute);
+    const response = await ApiServices.postRequestt(getAllStatesRoute);
     console.log("states", response.data.message);
     setStateList(response.data.message);
   };
 
   const fecthDistricts = async () => {
-    const response = await instance.post(getAllDistrictsRoute);
+    const response = await ApiServices.postRequest(getAllDistrictsRoute);
     console.log("districts", response.data.message);
     setDistrictList(response.data.message);
   };
@@ -70,7 +71,7 @@ const ConstituenciesPage = ({ dashboard }) => {
       showAlert("error", "Please select district");
       return;
     }
-    const response = await instance.post(createConstituenciesRoute, {
+    const response = await ApiServices.postRequest(createConstituenciesRoute, {
       consistency_id: 2,
       consistency_name: consituencyName,
       district_pk: districtId,

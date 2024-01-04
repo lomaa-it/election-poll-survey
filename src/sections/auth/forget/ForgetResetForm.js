@@ -16,6 +16,7 @@ import { connect } from "react-redux";
 import { showAlert } from "../../../actions/alert";
 import instance from "../../../utils/axios";
 import { resetPswdRoute } from "../../../utils/apis";
+import ApiServices from "../../../services/apiservices";
 
 const ForgetResetForm = ({ showAlert }) => {
   const navigate = useNavigate();
@@ -58,7 +59,7 @@ const ForgetResetForm = ({ showAlert }) => {
         password: data.newpswd,
       };
 
-      await instance.post(resetPswdRoute, jsonData);
+      await ApiServices.postRequest(resetPswdRoute, jsonData);
 
       setLoading(false);
       showAlert({ text: "Password reset completed", color: "success" });

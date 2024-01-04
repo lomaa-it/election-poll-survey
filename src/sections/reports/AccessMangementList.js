@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import CustomMuiDataTable from "../../components/CustomMuiDataTable";
 import { Box, Checkbox, Stack, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
+import { getallAccessPermissions } from "../../utils/apis";
+import ApiServices from "../../services/apiservices";
+import { set } from "date-fns";
+import { LoadingButton } from "@mui/lab";
 
 const CustomCheckbox = styled(Checkbox)(({ theme }) => ({ padding: 0, "& .MuiSvgIcon-root": { fontSize: 17 } }));
 const CustomCheckboxWithLabel = ({ label, labelPlacement, ...props }) => (
@@ -23,6 +27,21 @@ const CustomCheckboxWithLabel = ({ label, labelPlacement, ...props }) => (
 );
 
 const AccessMangementList = () => {
+  const [fetchData, setFetchData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await ApiServices.postRequest(getallAccessPermissions, {});
+        const responseData = response.data?.message ?? [];
+        setFetchData(responseData);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
+
   const columns = [
     {
       name: "page_id",
@@ -33,14 +52,17 @@ const AccessMangementList = () => {
       label: "Page Name",
     },
     {
-      name: "name",
+      name: "design_id",
       label: "CM",
       options: {
         customBodyRender: (value, tableMeta, updateValue) => {
+          console.log("sssssss", tableMeta);
+          // const filterData = fetchData.filter((item) => item.design_id === value);
+          // console.log("filterData", filterData);
           return (
             <Box alignItems="center">
               <CustomCheckboxWithLabel label="Access Menu" labelPlacement="top" />
-
+              {value}
               <Stack direction="row" spacing={1}>
                 <CustomCheckboxWithLabel label="C" labelPlacement="top" />
                 <CustomCheckboxWithLabel label="R" labelPlacement="top" />
@@ -265,16 +287,10 @@ const AccessMangementList = () => {
   };
 
   return (
-    <CustomMuiDataTable
-      title=""
-      columns={columns}
-      data={[
-        ["ID0", "Survey Dashboard"],
-        ["ID1", "Survey Page"],
-        ["ID2", "Add Voter"],
-      ]}
-      options={options}
-    />
+    <Box>
+      
+      <CustomMuiDataTable title="" columns={columns} data={fetchData} options={options} />;
+    </Box>
   );
 };
 

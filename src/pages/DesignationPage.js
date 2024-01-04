@@ -1,11 +1,4 @@
-import {
-  Grid,
-  Container,
-  Typography,
-  Box,
-  TextField,
-  Card,
-} from "@mui/material";
+import { Grid, Container, Typography, Box, TextField, Card } from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -14,15 +7,13 @@ import ViewUsersList from "../sections/reports/ViewUsersList";
 import Button from "@mui/material/Button";
 import DesignationList from "../sections/reports/DesignationList";
 import { useEffect, useState } from "react";
-import {
-  getAllDesignationsRoute,
-  createDesignationsRoute,
-} from "../utils/apis";
-import instance from "../utils/axios";
+import { getAllDesignationsRoute, createDesignationsRoute } from "../utils/apis";
+
 import { set } from "date-fns";
 import { showAlert } from "../actions/alert";
+import ApiServices from "../services/apiservices";
 
-const DesignationPage = ({ dashboard,showAlert }) => {
+const DesignationPage = ({ dashboard, showAlert }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [refresh, setRefresh] = useState(false);
 
@@ -38,7 +29,7 @@ const DesignationPage = ({ dashboard,showAlert }) => {
   useEffect(() => {
     const fetchDesignations = async () => {
       try {
-        const response = await instance.post(getAllDesignationsRoute);
+        const response = await ApiServices.postRequest(getAllDesignationsRoute);
         console.log(response.data.message);
         setFetchedData({
           designation: response.data.message,
@@ -53,7 +44,7 @@ const DesignationPage = ({ dashboard,showAlert }) => {
   const handleSubmit = async () => {
     setIsLoading(true);
     try {
-      const response = await instance.post(createDesignationsRoute, {
+      const response = await ApiServices.postRequest(createDesignationsRoute, {
         lookup_name: selectedValues.lookup_name,
         lookup_valuename: selectedValues.lookup_valuename,
       });
@@ -84,10 +75,7 @@ const DesignationPage = ({ dashboard,showAlert }) => {
         <Card sx={{ p: 3 }}>
           <Grid container spacing={2} alignItems="center">
             <Grid item xs={12} md={6} lg={9}>
-              <DesignationList
-                designationlist={fetchedData.designation}
-                setRefresh={setRefresh}
-              />
+              <DesignationList designationlist={fetchedData.designation} setRefresh={setRefresh} />
             </Grid>
             <Grid
               item

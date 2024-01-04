@@ -15,8 +15,8 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { addVoterTicket } from "../actions/voter";
 import { showAlert } from "../actions/alert";
 import { createTicketRoute } from "../utils/apis";
-import instance from "../utils/axios";
 import TicketHistoryList from "../sections/reports/TicketHistoryList";
+import ApiServices from "../services/apiservices";
 
 const AddTicketPage = ({ common, voter, showAlert }) => {
   const navigate = useNavigate();
@@ -44,7 +44,7 @@ const AddTicketPage = ({ common, voter, showAlert }) => {
   const onSubmit = async (data) => {
     setLoading(true);
     // var result = await addVoterTicket(props[0], data);
-    const result = await instance.post(createTicketRoute, {
+    const result = await ApiServices.postRequest(createTicketRoute, {
       ...data,
       voter_pk: props[0],
       volunteer_id: 12,

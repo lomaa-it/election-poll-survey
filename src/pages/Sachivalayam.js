@@ -25,6 +25,7 @@ import {
 } from "../utils/apis";
 import { showAlert } from "../actions/alert";
 import { set } from "date-fns";
+import ApiServices from "../services/apiservices";
 
 const Sachivalayam = ({ dashboard }) => {
   const [refresh, setRefresh] = useState(false);
@@ -52,24 +53,24 @@ const Sachivalayam = ({ dashboard }) => {
     const fecthOptionsData = async () => {
       try {
         /// get all states
-        const statesResponse = await instance.post(getAllStatesRoute);
+        const statesResponse = await ApiServices.postRequest(getAllStatesRoute);
         // console.log("states", statesResponse.data.message);
         /// get all districts
-        const districtsResponse = await instance.post(getAllDistrictsRoute);
+        const districtsResponse = await ApiServices.postRequest(getAllDistrictsRoute);
         // console.log("districts", districtsResponse.data.message);
 
         /// get all constituencies
-        const constituenciesResponse = await instance.post(
+        const constituenciesResponse = await ApiServices.postRequest(
           getAllConstituenciesRoute
         );
         // console.log("constituencies", constituenciesResponse.data.message);
 
         /// get all mandals
-        const mandalsResponse = await instance.post(getAllMandalRoute);
+        const mandalsResponse = await ApiServices.postRequest(getAllMandalRoute);
         // console.log("mandals", mandalsResponse.data.message);
 
         /// get all divisions
-        const divisionsResponse = await instance.post(getAllDivisionRoute);
+        const divisionsResponse = await ApiServices.postRequest(getAllDivisionRoute);
         // console.log("divisions", divisionsResponse.data.message);
 
         /// state update
@@ -91,7 +92,7 @@ const Sachivalayam = ({ dashboard }) => {
     const fecthOptionsData = async () => {
       try {
         /// get all sachivalayam
-        const sachivalayamResponse = await instance.post(
+        const sachivalayamResponse = await ApiServices.postRequest(
           getAllSachivalayamRoute
         );
         console.log("sachivalayam", sachivalayamResponse.data.message);
@@ -113,7 +114,7 @@ const Sachivalayam = ({ dashboard }) => {
     console.log("selectedValues", selectedValues);
     try {
       setIsLoading(true);
-      const response = await instance.post(createSachivalayamRoute, {
+      const response = await ApiServices.postRequest(createSachivalayamRoute, {
         sachivalayam_name: selectedValues.sachivalayam_name,
         division_id: selectedValues.division_id,
       });

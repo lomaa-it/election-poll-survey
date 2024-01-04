@@ -1,13 +1,4 @@
-import {
-  Grid,
-  Container,
-  Typography,
-  Box,
-  TextField,
-  Card,
-  Stack,
-  MenuItem,
-} from "@mui/material";
+import { Grid, Container, Typography, Box, TextField, Card, Stack, MenuItem } from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -17,20 +8,10 @@ import Button from "@mui/material/Button";
 import VoterAndVolunteerMappingList from "../sections/reports/VoterAndVolunteerMappingList";
 import VillagesList from "../sections/reports/VillagesList";
 import { useEffect, useState } from "react";
-import instance from "../utils/axios";
-import {
-  getAllConstituenciesRoute,
-  getAllDistrictsRoute,
-  getAllDivisionRoute,
-  getAllMandalRoute,
-  getAllPartsRoute,
-  getAllSachivalayamRoute,
-  getAllStatesRoute,
-  getAllVillageRoute,
-  createVillagesRoute,
-} from "../utils/apis";
+import { getAllConstituenciesRoute, getAllDistrictsRoute, getAllDivisionRoute, getAllMandalRoute, getAllPartsRoute, getAllSachivalayamRoute, getAllStatesRoute, getAllVillageRoute, createVillagesRoute } from "../utils/apis";
 import { showAlert } from "../actions/alert";
 import { set } from "date-fns/esm";
+import ApiServices from "../services/apiservices";
 
 const VillagesPage = ({ dashboard }) => {
   const [refresh, setRefresh] = useState(false);
@@ -62,34 +43,30 @@ const VillagesPage = ({ dashboard }) => {
     const fecthOptionsData = async () => {
       try {
         /// get all states
-        const statesResponse = await instance.get(getAllStatesRoute);
+        const statesResponse = await ApiServices.getRequest(getAllStatesRoute);
         // console.log("states", statesResponse.data.message);
         /// get all districts
-        const districtsResponse = await instance.get(getAllDistrictsRoute);
+        const districtsResponse = await ApiServices.getRequest(getAllDistrictsRoute);
         // console.log("districts", districtsResponse.data.message);
 
         /// get all constituencies
-        const constituenciesResponse = await instance.get(
-          getAllConstituenciesRoute
-        );
+        const constituenciesResponse = await ApiServices.getRequest(getAllConstituenciesRoute);
         // console.log("constituencies", constituenciesResponse.data.message);
 
         /// get all mandals
-        const mandalsResponse = await instance.get(getAllMandalRoute);
+        const mandalsResponse = await ApiServices.getRequest(getAllMandalRoute);
         // console.log("mandals", mandalsResponse.data.message);
 
         /// get all divisions
-        const divisionsResponse = await instance.get(getAllDivisionRoute);
+        const divisionsResponse = await ApiServices.getRequest(getAllDivisionRoute);
         // console.log("divisions", divisionsResponse.data.message);
 
         /// get all sachivalayam
-        const sachivalayamResponse = await instance.get(
-          getAllSachivalayamRoute
-        );
+        const sachivalayamResponse = await ApiServices.getRequest(getAllSachivalayamRoute);
         // console.log("sachivalayam", sachivalayamResponse.data.message);
 
         /// get all parts
-        const partsResponse = await instance.get(getAllPartsRoute);
+        const partsResponse = await ApiServices.getRequest(getAllPartsRoute);
         console.log("parts", partsResponse.data.message);
 
         /// state update
@@ -114,7 +91,7 @@ const VillagesPage = ({ dashboard }) => {
     const fecthOptionsData = async () => {
       try {
         /// get all villages
-        const villagesResponse = await instance.get(getAllVillageRoute);
+        const villagesResponse = await ApiServices.getRequest(getAllVillageRoute);
         console.log("villages", villagesResponse.data.message);
 
         /// state update
@@ -134,7 +111,7 @@ const VillagesPage = ({ dashboard }) => {
 
     try {
       setIsLoading(true);
-      const response = await instance.post(createVillagesRoute, {
+      const response = await ApiServices.postRequest(createVillagesRoute, {
         part_no: selectedValues.part_no,
         village_name: selectedValues.village_name,
       });
@@ -197,11 +174,7 @@ const VillagesPage = ({ dashboard }) => {
                 }}
               >
                 {fetchedData.states.map((state) => {
-                  return (
-                    <MenuItem value={state.state_pk}>
-                      {state.state_name}
-                    </MenuItem>
-                  );
+                  return <MenuItem value={state.state_pk}>{state.state_name}</MenuItem>;
                 })}
               </TextField>
             </Grid>
@@ -226,15 +199,9 @@ const VillagesPage = ({ dashboard }) => {
               >
                 {/* filter districk based on state_id */}
                 {fetchedData.district
-                  .filter(
-                    (district) => district.state_id === selectedValues.state_id
-                  )
+                  .filter((district) => district.state_id === selectedValues.state_id)
                   .map((district) => {
-                    return (
-                      <MenuItem value={district.district_pk}>
-                        {district.district_name}
-                      </MenuItem>
-                    );
+                    return <MenuItem value={district.district_pk}>{district.district_name}</MenuItem>;
                   })}
               </TextField>
             </Grid>
@@ -258,16 +225,9 @@ const VillagesPage = ({ dashboard }) => {
               >
                 {/* filter constituency based on district_id */}
                 {fetchedData.consistency
-                  .filter(
-                    (consistency) =>
-                      consistency.district_pk === selectedValues.district_id
-                  )
+                  .filter((consistency) => consistency.district_pk === selectedValues.district_id)
                   .map((consistency) => {
-                    return (
-                      <MenuItem value={consistency.consistency_pk}>
-                        {consistency.consistency_name}
-                      </MenuItem>
-                    );
+                    return <MenuItem value={consistency.consistency_pk}>{consistency.consistency_name}</MenuItem>;
                   })}
               </TextField>
             </Grid>
@@ -290,16 +250,9 @@ const VillagesPage = ({ dashboard }) => {
               >
                 {/* filter mandal based on consistency_id */}
                 {fetchedData.mandal
-                  .filter(
-                    (mandal) =>
-                      mandal.consistency_id === selectedValues.consistency_id
-                  )
+                  .filter((mandal) => mandal.consistency_id === selectedValues.consistency_id)
                   .map((mandal) => {
-                    return (
-                      <MenuItem value={mandal.mandal_pk}>
-                        {mandal.mandal_name}
-                      </MenuItem>
-                    );
+                    return <MenuItem value={mandal.mandal_pk}>{mandal.mandal_name}</MenuItem>;
                   })}
               </TextField>
             </Grid>
@@ -321,16 +274,9 @@ const VillagesPage = ({ dashboard }) => {
               >
                 {/* filter division based on mandal_id */}
                 {fetchedData.division
-                  .filter(
-                    (division) =>
-                      division.mandal_id === selectedValues.mandal_id
-                  )
+                  .filter((division) => division.mandal_id === selectedValues.mandal_id)
                   .map((division) => {
-                    return (
-                      <MenuItem value={division.division_pk}>
-                        {division.division_name}
-                      </MenuItem>
-                    );
+                    return <MenuItem value={division.division_pk}>{division.division_name}</MenuItem>;
                   })}
               </TextField>
             </Grid>
@@ -351,16 +297,9 @@ const VillagesPage = ({ dashboard }) => {
               >
                 {/* filter sachivalayam based on division_id */}
                 {fetchedData.sachivalayam
-                  .filter(
-                    (sachivalayam) =>
-                      sachivalayam.division_id === selectedValues.division_id
-                  )
+                  .filter((sachivalayam) => sachivalayam.division_id === selectedValues.division_id)
                   .map((sachivalayam) => {
-                    return (
-                      <MenuItem value={sachivalayam.sachivalayam_pk}>
-                        {sachivalayam.sachivalayam_name}
-                      </MenuItem>
-                    );
+                    return <MenuItem value={sachivalayam.sachivalayam_pk}>{sachivalayam.sachivalayam_name}</MenuItem>;
                   })}
               </TextField>
             </Grid>
@@ -380,14 +319,9 @@ const VillagesPage = ({ dashboard }) => {
               >
                 {/* filter part based on sachivalayam_id */}
                 {fetchedData.part
-                  .filter(
-                    (part) =>
-                      part.sachivalayam_id === selectedValues.sachivalayam_id
-                  )
+                  .filter((part) => part.sachivalayam_id === selectedValues.sachivalayam_id)
                   .map((part) => {
-                    return (
-                      <MenuItem value={part.part_no}>{part.part_no}</MenuItem>
-                    );
+                    return <MenuItem value={part.part_no}>{part.part_no}</MenuItem>;
                   })}
               </TextField>
             </Grid>
@@ -406,11 +340,7 @@ const VillagesPage = ({ dashboard }) => {
               />
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
-              <LoadingButton
-                loading={isLoading}
-                onClick={handleSubmit}
-                variant="contained"
-              >
+              <LoadingButton loading={isLoading} onClick={handleSubmit} variant="contained">
                 Add
               </LoadingButton>
             </Grid>

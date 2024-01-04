@@ -14,6 +14,7 @@ import SearchByFilter from "../common/SearchByFilter";
 import { sachivalayamMappingtoVotersRoute } from "../../utils/apis";
 import instance from "../../utils/axios";
 import CustomMuiDataTable from "../../components/CustomMuiDataTable";
+import ApiServices from "../../services/apiservices";
 
 const ViewVotersList = ({ voter, filterValues, showAlert, getAllVotersSurvey, account }) => {
   const fieldname = useRef();
@@ -245,7 +246,7 @@ const ViewVotersList = ({ voter, filterValues, showAlert, getAllVotersSurvey, ac
         new_division_id: assignValues.division.division_pk,
       };
       console.log("jsonData", jsonData);
-      await instance.post(sachivalayamMappingtoVotersRoute, jsonData);
+      await ApiServices.postRequest(sachivalayamMappingtoVotersRoute, jsonData);
       console.log("Hi ");
       showAlert({
         text: "Voter assigned successfully",

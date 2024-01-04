@@ -1,4 +1,3 @@
-import instance from "../utils/axios";
 import {
   getDashBoardbyCasteCount,
   getDashBoardbyDisabilityCount,
@@ -15,6 +14,7 @@ import {
   getOpinionDashboardRoute,
   getOpinionResultRoute,
 } from "../utils/apis";
+import ApiServices from "../services/apiservices";
 
 export const clearDashboardReducer = () => async (dispatch) => {
   dispatch({
@@ -28,19 +28,19 @@ export const getOpinionDashboard = (data) => async (dispatch, getState) => {
   });
 
   const apiCalls = [
-    instance.post(getDashBoardbyTotalVoters, data),
-    instance.post(getDashBoardbyGenderCount, data),
-    instance.post(getDashBoardbyStatusCount, data),
-    instance.post(getDashBoardbyVoterPulse, data),
-    instance.post(getDashBoardbyTicketStatus, data),
-    instance.post(getDashBoardbyCasteCount, data),
-    instance.post(getDashBoardbyReligionCount, data),
-    instance.post(getDashBoardbyDisabilityCount, data),
-    instance.post(getDashBoardbyGovtEmployeeCount, data),
-    instance.post(getDashBoardbyResidentialStatus, data),
-    instance.post(getDashBoardbyageGroup, data),
-    instance.post(getDashBoardbyTicketbarChart, data),
-    // instance.post(apiUrl2, data),
+    ApiServices.postRequest(getDashBoardbyTotalVoters, data),
+    ApiServices.postRequest(getDashBoardbyGenderCount, data),
+    ApiServices.postRequest(getDashBoardbyStatusCount, data),
+    ApiServices.postRequest(getDashBoardbyVoterPulse, data),
+    ApiServices.postRequest(getDashBoardbyTicketStatus, data),
+    ApiServices.postRequest(getDashBoardbyCasteCount, data),
+    ApiServices.postRequest(getDashBoardbyReligionCount, data),
+    ApiServices.postRequest(getDashBoardbyDisabilityCount, data),
+    ApiServices.postRequest(getDashBoardbyGovtEmployeeCount, data),
+    ApiServices.postRequest(getDashBoardbyResidentialStatus, data),
+    ApiServices.postRequest(getDashBoardbyageGroup, data),
+    ApiServices.postRequest(getDashBoardbyTicketbarChart, data),
+    // ApiServices.postRequest(apiUrl2, data),
     // ... add more API calls as needed
   ];
 
@@ -228,7 +228,7 @@ export const getOpinionDashboard = (data) => async (dispatch, getState) => {
   });
 
   // try {
-  //   const response = await instance.post(getOpinionDashboardRoute, data);
+  //   const response = await ApiServices.postRequest(getOpinionDashboardRoute, data);
   //   const responseData = response.data?.message ?? [];
 
   //   console.log(responseData);
@@ -252,7 +252,7 @@ export const getOpinionResults = (data) => async (dispatch) => {
   });
 
   try {
-    const response = await instance.post(getOpinionResultRoute, data);
+    const response = await ApiServices.postRequest(getOpinionResultRoute, data);
     const responseData = response.data?.message ?? [];
 
     console.log(responseData);

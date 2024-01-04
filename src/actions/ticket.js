@@ -1,5 +1,6 @@
+import ApiServices from "../services/apiservices";
 import { createTicketHistoryRoute, createTicketRoute, getAllTicketsRoute, getVoterTicketHistoryRoute } from "../utils/apis";
-import instance from "../utils/axios";
+
 
 export const clearTicketReducer = () => async (dispatch) => {
   dispatch({
@@ -13,7 +14,7 @@ export const getAllTickets = (data) => async (dispatch) => {
   });
 
   try {
-    const response = await instance.post(getAllTicketsRoute, data);
+    const response = await ApiServices.postRequest(getAllTicketsRoute, data);
 
     const responseData = response.data;
     const itemsList = responseData?.message ?? [];
@@ -47,7 +48,7 @@ export const getVoterTicketHistory = (id) => async (dispatch) => {
   });
 
   try {
-    const response = await instance.post(getVoterTicketHistoryRoute, { voter_pk: id });
+    const response = await ApiServices.postRequest(getVoterTicketHistoryRoute, { voter_pk: id });
     const responseData = response.data?.message ?? [];
 
     dispatch({
@@ -74,7 +75,7 @@ export const addVoterTicket = async (id, data, account) => {
       createdby: account.user.user_pk,
     };
 
-    var response = await instance.post(createTicketRoute, jsonData);
+    var response = await ApiServices.postRequest(createTicketRoute, jsonData);
     const responseData = response.data ?? {};
     // console.log(result);
 
@@ -101,7 +102,7 @@ export const updateReplyVoterTicket = async (id, data, account) => {
       createdby: account.user.user_pk,
     };
 
-    var response = await instance.post(createTicketHistoryRoute, jsonData);
+    var response = await ApiServices.postRequest(createTicketHistoryRoute, jsonData);
     const responseData = response.data ?? {};
     // console.log(result);
 

@@ -8,8 +8,9 @@ import Button from "@mui/material/Button";
 import PartiesList from "../sections/reports/PartiesList";
 import { createPartyRoute, getAllPartiesRoute } from "../utils/apis";
 import { useEffect, useState } from "react";
-import instance from "../utils/axios";
+
 import { showAlert } from "../actions/alert";
+import ApiServices from "../services/apiservices";
 
 const PartiesPage = ({ dashboard, showAlert }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -26,7 +27,7 @@ const PartiesPage = ({ dashboard, showAlert }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await instance.post(getAllPartiesRoute);
+        const response = await ApiServices.postRequest(getAllPartiesRoute);
         console.log(response.data.message);
         setFetchedData({
           parties: response.data.message,
@@ -41,7 +42,7 @@ const PartiesPage = ({ dashboard, showAlert }) => {
   const handleSubmit = async () => {
     setIsLoading(true);
     try {
-      const response = await instance.post(createPartyRoute, {
+      const response = await ApiServices.postRequest(createPartyRoute, {
         lookup_sequence: selectedValues.lookup_sequence,
         lookup_name: selectedValues.lookup_name,
         lookup_valuename: selectedValues.lookup_valuename,

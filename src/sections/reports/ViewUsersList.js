@@ -269,7 +269,7 @@ const ViewUsersList = ({ user, showAlert, checkOrUncheckUser, deleteUserInRedux,
       console.log(deleteUserPk);
       // var index = user.data.findIndex((e) => e.user_pk == deleteUserPk);
 
-      const response = await instance.delete(`${deleteUserById + deleteUserPk}`);
+      const response = await ApiServices.deleteRequest(`${deleteUserById + deleteUserPk}`);
       console.log(response);
       showAlert({ text: "User Deleted Successfully", color: "success" });
       deleteUserInRedux(deleteUserPk, user);

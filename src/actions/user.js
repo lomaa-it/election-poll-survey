@@ -1,5 +1,5 @@
+import ApiServices from "../services/apiservices";
 import { getAllUsersRoute } from "../utils/apis";
-import instance from "../utils/axios";
 
 export const clearUserReducer = () => async (dispatch) => {
   dispatch({
@@ -13,7 +13,7 @@ export const getAllUsers = (data) => async (dispatch) => {
   });
 
   try {
-    const response = await instance.post(getAllUsersRoute, data);
+    const response = await ApiServices.postRequest(getAllUsersRoute, data);
     const responseData = response.data?.message ?? [];
 
     dispatch({

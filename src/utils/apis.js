@@ -2,7 +2,7 @@
 // export const baseServerUrl = "https://poll-7ks0.onrender.com";
 // export const baseServerUrl = "https://cd30-123-201-175-198.ngrok-free.app";
 
-import instance from "./axios";
+
 import LsService from "../services/localstorage";
 
 // new api for baseServerUrl
@@ -13,6 +13,9 @@ export const baseServerUrl = "https://mumbaiapi.cgrysrcongress.in";
 // export const baseServerUrl = "http://192.168.0.102:8080";
 /// new
 // export const baseServerUrl = "https://poll2.onrender.com";
+
+// Access Management Api's
+export const getallAccessPermissions = "/getall_access_permissions";
 
 // Survey Dashboard Apis
 export const getDashBoardbyTotalVoters = "/getdashboardbytotalvoters";
@@ -53,7 +56,7 @@ export const getallpartsbysachivalayamidRoute = "/getallpartsbysachivalayamid";
 export const sachivalayammappingtopartsRoute = "/sachivalayammappingtoparts";
 
 // GET ALL DATA
-export const getVillagesBySachivalayamIdRoute = "/getvillagesbysachivalayamid"
+export const getVillagesBySachivalayamIdRoute = "/getvillagesbysachivalayamid";
 export const getVoterTicketHistoryRoute = "/getvotertickethistory";
 export const getTicketStatusRoute = "/getticketstatus";
 export const getAllTicketsRoute = "/getallticketswithjoinandwhere";
@@ -120,14 +123,14 @@ export const updateDivisionByIdRoute = "/divisions/";
 export const designationMappingRoute = "/designationmappingtousers";
 export const sendCredsToUsersRoute = "/sendcredstousers";
 
-export const postRequest = (route, data) => {
-  let user = LsService.getCurrentUser();
-  var accesstoken = user.user_pk;
+// export const postRequest = (route, data) => {
+//   let user = LsService.getCurrentUser();
+//   var accesstoken = user.user_pk;
 
-  return instance.post(route, data, {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${accesstoken}`,
-    },
-  });
-};
+//   return instance.post(route, data, {
+//     headers: {
+//       "Content-Type": "application/json",
+//       Authorization: `Bearer ${accesstoken}`,
+//     },
+//   });
+// };

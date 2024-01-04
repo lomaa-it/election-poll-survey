@@ -26,6 +26,7 @@ import {
   createDivisionsRoute,
 } from "../utils/apis";
 import { showAlert } from "../actions/alert";
+import ApiServices from "../services/apiservices";
 
 const DivisionPage = ({ dashboard }) => {
   const [refresh, setRefresh] = useState(false);
@@ -51,24 +52,24 @@ const DivisionPage = ({ dashboard }) => {
     const fecthOptionsData = async () => {
       try {
         /// get all states
-        const statesResponse = await instance.post(getAllStatesRoute);
+        const statesResponse = await ApiServices.postRequest(getAllStatesRoute);
         console.log("states", statesResponse.data.message);
         /// get all districts
-        const districtsResponse = await instance.post(getAllDistrictsRoute);
+        const districtsResponse = await ApiServices.postRequest(getAllDistrictsRoute);
         console.log("districts", districtsResponse.data.message);
 
         /// get all constituencies
-        const constituenciesResponse = await instance.post(
+        const constituenciesResponse = await ApiServices.postRequest(
           getAllConstituenciesRoute
         );
         console.log("constituencies", constituenciesResponse.data.message);
 
         /// get all mandals
-        const mandalsResponse = await instance.post(getAllMandalRoute);
+        const mandalsResponse = await ApiServices.postRequest(getAllMandalRoute);
         console.log("mandals", mandalsResponse.data.message);
 
         /// get all divisions
-        const divisionsResponse = await instance.post(getAllDivisionRoute);
+        const divisionsResponse = await ApiServices.postRequest(getAllDivisionRoute);
         console.log("divisions", divisionsResponse.data.message);
 
         /// state update
@@ -91,7 +92,7 @@ const DivisionPage = ({ dashboard }) => {
     const fecthOptionsData = async () => {
       try {
         /// get all divisions
-        const divisionsResponse = await instance.post(getAllDivisionRoute);
+        const divisionsResponse = await ApiServices.postRequest(getAllDivisionRoute);
         console.log("divisions", divisionsResponse.data.message);
 
         /// state update
@@ -111,7 +112,7 @@ const DivisionPage = ({ dashboard }) => {
     console.log(selectedValues);
     try {
       setIsLoading(true);
-      const response = await instance.post(createDivisionsRoute, {
+      const response = await ApiServices.postRequest(createDivisionsRoute, {
         division_name: selectedValues.division_name,
         mandal_id: selectedValues.mandal_id,
       });

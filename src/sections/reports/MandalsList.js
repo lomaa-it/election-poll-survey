@@ -13,6 +13,7 @@ import { set } from "date-fns";
 import { updateMandalByIdRoute } from "../../utils/apis";
 import instance from "../../utils/axios";
 import CustomMuiDataTable from "../../components/CustomMuiDataTable";
+import ApiServices from "../../services/apiservices";
 
 const MandalsList = ({ showAlert, mandalsList, fetchedData, setFetchedData, refresh, setRefresh }) => {
   useEffect(() => {}, []);
@@ -99,7 +100,7 @@ const MandalsList = ({ showAlert, mandalsList, fetchedData, setFetchedData, refr
 
     try {
       setIsLoading(true);
-      const response = await instance.put(updateMandalByIdRoute + selectedValues.mandal_id, {
+      const response = await ApiServices.putRequest(updateMandalByIdRoute + selectedValues.mandal_id, {
         consistency_id: selectedValues.consistency_id,
         mandal_name: selectedValues.mandal_name,
       });

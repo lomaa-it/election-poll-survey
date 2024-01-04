@@ -14,6 +14,7 @@ import instance from "../../utils/axios";
 import { deleteStatesByIdRoute, updateStatesByIdRoute } from "../../utils/apis";
 import Popper from "@mui/material/Popper";
 import CustomMuiDataTable from "../../components/CustomMuiDataTable";
+import ApiServices from "../../services/apiservices";
 
 const StatesList = ({ showAlert, stateList, setStateList }) => {
   const columns = [
@@ -63,7 +64,7 @@ const StatesList = ({ showAlert, stateList, setStateList }) => {
     const data = {
       state_name: editedStateName,
     };
-    const response = await instance.put(updateStatesByIdRoute + state_pk, data);
+    const response = await ApiServices.putRequest(updateStatesByIdRoute + state_pk, data);
     const responseData = response.data.message;
     console.log("updatedData", responseData);
     setStateList(stateList.map((state) => (state.state_pk === state_pk ? { ...state, state_name: responseData.state_name } : state)));

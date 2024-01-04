@@ -20,6 +20,7 @@ import { checkOrUncheckUser } from "../../actions/user";
 import { set } from "date-fns";
 import { sachivalayammappingtopartsRoute } from "../../utils/apis";
 import CustomMuiDataTable from "../../components/CustomMuiDataTable";
+import ApiServices from "../../services/apiservices";
 
 const PartsList = ({ showAlert, partsList, common, account, checkOrUncheckUser, reFecthData, isFetching }) => {
   const filterRef = useRef(null);
@@ -160,7 +161,7 @@ const PartsList = ({ showAlert, partsList, common, account, checkOrUncheckUser, 
         new_sachivalayam_id: filterValues.sachivalayam.sachivalayam_pk,
       };
       console.log("jsonData", jsonData);
-      await instance.post(sachivalayammappingtopartsRoute, jsonData);
+      await ApiServices.postRequest(sachivalayammappingtopartsRoute, jsonData);
       showAlert({
         text: "Part assigned successfully",
         color: "success",

@@ -1,3 +1,4 @@
+import ApiServices from "../services/apiservices";
 import {
   getAllDivisionRoute,
   getAllMandalRoute,
@@ -11,7 +12,6 @@ import {
   getTicketStatusRoute,
   getAllPartiesRoute,
 } from "../utils/apis";
-import instance from "../utils/axios";
 
 export const getAllCommonData = (user) => async (dispatch) => {
   dispatch({
@@ -19,37 +19,37 @@ export const getAllCommonData = (user) => async (dispatch) => {
   });
 
   try {
-    const mandalResponse = await instance.post(getAllMandalRoute);
+    const mandalResponse = await ApiServices.postRequest(getAllMandalRoute);
     const mandalsResponseData = mandalResponse.data?.message ?? [];
 
-    const divisionsResponse = await instance.post(getAllDivisionRoute);
+    const divisionsResponse = await ApiServices.postRequest(getAllDivisionRoute);
     const divisionsResponseData = divisionsResponse.data?.message ?? [];
 
-    const sachivalayamResponse = await instance.post(getAllSachivalayamRoute);
+    const sachivalayamResponse = await ApiServices.postRequest(getAllSachivalayamRoute);
     const sachivalayamResponseData = sachivalayamResponse.data?.message ?? [];
 
-    const partsResponse = await instance.post(getAllPartsRoute);
+    const partsResponse = await ApiServices.postRequest(getAllPartsRoute);
     const partsResponseData = partsResponse.data?.message ?? [];
 
-    const villageResponse = await instance.post(getAllVillageRoute);
+    const villageResponse = await ApiServices.postRequest(getAllVillageRoute);
     const villageResponseData = villageResponse.data?.message ?? [];
 
-    const navaratnaluResponse = await instance.post(getAllNavaratnaluRoute);
+    const navaratnaluResponse = await ApiServices.postRequest(getAllNavaratnaluRoute);
     const navaratanaluResponseData = navaratnaluResponse.data?.message ?? [];
 
-    const casteResponse = await instance.post(getAllCastesRoute);
+    const casteResponse = await ApiServices.postRequest(getAllCastesRoute);
     const casteResponseData = casteResponse.data?.message ?? [];
 
-    const religionResponse = await instance.post(getAllReligionRoute);
+    const religionResponse = await ApiServices.postRequest(getAllReligionRoute);
     const religionResponseData = religionResponse.data?.message ?? [];
 
-    const designationResponse = await instance.post(getAllDesignationsRoute);
+    const designationResponse = await ApiServices.postRequest(getAllDesignationsRoute);
     const designationResponseData = designationResponse.data?.message ?? [];
 
-    const ticketStatusResponse = await instance.post(getTicketStatusRoute);
+    const ticketStatusResponse = await ApiServices.postRequest(getTicketStatusRoute);
     const ticketStatusResponseData = ticketStatusResponse.data?.message ?? [];
 
-    const partiesResponse = await instance.post(getAllPartiesRoute);
+    const partiesResponse = await ApiServices.postRequest(getAllPartiesRoute);
     const partiesResponseData = partiesResponse.data?.message ?? [];
 
     // console.log("statusResponseData", statusResponseData);
@@ -84,27 +84,19 @@ export const getAllCommonData = (user) => async (dispatch) => {
     };
 
     if (user.mandal_pk != null) {
-      filtersData["mandals"] = mandalsResponseData.filter(
-        (e) => e.mandal_pk == user.mandal_pk
-      );
+      filtersData["mandals"] = mandalsResponseData.filter((e) => e.mandal_pk == user.mandal_pk);
     }
 
     if (user.division_pk != null) {
-      filtersData["divisions"] = divisionsResponseData.filter(
-        (e) => e.division_pk == user.division_pk
-      );
+      filtersData["divisions"] = divisionsResponseData.filter((e) => e.division_pk == user.division_pk);
     }
 
     if (user.sachivalayam_pk != null) {
-      filtersData["sachivalayams"] = sachivalayamResponseData.filter(
-        (e) => e.sachivalayam_pk == user.sachivalayam_pk
-      );
+      filtersData["sachivalayams"] = sachivalayamResponseData.filter((e) => e.sachivalayam_pk == user.sachivalayam_pk);
     }
 
     if (user.part_no != null) {
-      filtersData["parts"] = partsResponseData.filter(
-        (e) => e.part_no == user.part_no
-      );
+      filtersData["parts"] = partsResponseData.filter((e) => e.part_no == user.part_no);
     }
 
     // if (user.village_pk != null) {

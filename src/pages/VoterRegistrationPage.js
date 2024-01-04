@@ -16,6 +16,7 @@ import { showAlert } from "../actions/alert";
 import { addVoters } from "../utils/apis";
 import { useLocation, useNavigate } from "react-router-dom";
 import { is } from "date-fns/locale";
+import ApiServices from "../services/apiservices";
 
 const VoterRegistrationPage = ({ account, showAlert }) => {
   const props = useLocation().state;
@@ -44,7 +45,7 @@ const VoterRegistrationPage = ({ account, showAlert }) => {
     is_resident: Yup.boolean(),
     permenent_address: Yup.string(),
     current_address: Yup.string().required("Current address is required"),
-    part_slno: Yup.string().required("Part slno is required"),
+    part_slno: Yup.string(),
     gender: Yup.string().required("Gender is required"),
   });
 
@@ -88,11 +89,22 @@ const VoterRegistrationPage = ({ account, showAlert }) => {
   }, [isNewVoter]);
 
   const onSubmit = async (data) => {
-    clearErrors("voter_id");
+    clearErrors();
+
+    console.log("data", data.is_newregistration);
+    if (data.is_newregistration == false && data.part_slno == "") {
+      setError("part_slno", {
+        message: "Part SL No is required",
+      });
+
+      console.log("Part SL No is required");
+      return;
+    }
     if (data.is_newregistration == false && data.voter_id == "") {
       setError("voter_id", {
         message: "Voter ID is required",
       });
+      console.log("Voter ID is required");
       return;
     }
 
@@ -100,6 +112,7 @@ const VoterRegistrationPage = ({ account, showAlert }) => {
       setError("permenent_address", {
         message: "Permenent address is required",
       });
+      console.log("Permenent address is required");
       return;
     }
 
@@ -127,7 +140,7 @@ const VoterRegistrationPage = ({ account, showAlert }) => {
       hasErrors = true;
     }
 
-    if (!filterValues["partno"]) {
+    if (!filterValues["partno"] && data.is_newregistration == false) {
       filterRef.current.setErrors({ partno: "Part no is required" });
       hasErrors = true;
     }
@@ -144,9 +157,10 @@ const VoterRegistrationPage = ({ account, showAlert }) => {
       try {
         var jsonData = {
           ...data,
-          state_id: 5,
-          district_id: 6,
-          consistency_id: 3,
+          part_slno: data.part_slno == "" ? null : data.part_slno,
+          state_id: account.user?.state_pk ?? null,
+          district_id: account.user?.district_pk ?? null,
+          consistency_id: account.user?.consistency_pk ?? null,
           mandal_id: filterValues.mandal?.mandal_pk ?? null,
           division_id: filterValues.division?.division_pk ?? null,
           sachivalayam_id: filterValues.sachivalayam?.sachivalayam_pk ?? null,
@@ -155,7 +169,7 @@ const VoterRegistrationPage = ({ account, showAlert }) => {
           createdby: account.user.user_pk,
         };
 
-        await instance.post(addVoters, jsonData);
+        await ApiServices.postRequest(addVoters, jsonData);
         showAlert({ text: "Voter added successfully", color: "success" });
         reset();
         filterRef.current.reset();
@@ -171,9 +185,10 @@ const VoterRegistrationPage = ({ account, showAlert }) => {
       try {
         var jsonData = {
           ...data,
-          state_id: 5,
-          district_id: 6,
-          consistency_id: 3,
+          part_slno: data.part_slno == "" ? null : data.part_slno,
+          state_id: account.user?.state_pk ?? null,
+          district_id: account.user?.district_pk ?? null,
+          consistency_id: account.user?.consistency_pk ?? null,
           mandal_id: filterValues.mandal?.mandal_pk ?? null,
           division_id: filterValues.division?.division_pk ?? null,
           sachivalayam_id: filterValues.sachivalayam?.sachivalayam_pk ?? null,
@@ -182,7 +197,7 @@ const VoterRegistrationPage = ({ account, showAlert }) => {
           updatedby: account.user.user_pk,
         };
 
-        await instance.put(`${addVoters}/${props.voterData.voter_pkk}`, jsonData);
+        await ApiServices.putRequest(`${addVoters}/${props.voterData.voter_pkk}`, jsonData);
         showAlert({ text: "Voter Update successfully", color: "success" });
         reset();
         filterRef.current.reset();
@@ -214,7 +229,7 @@ const VoterRegistrationPage = ({ account, showAlert }) => {
                 marginBottom: "20px",
               }}
             >
-              <Grid item xs={12} md={6} lg={3}>
+              <Grid item xs={12} md={6} lg={6}>
                 {/* <RHFCheckbox name="is_newregistration" label="is New Voter?" /> */}
                 <RHFTextField name="is_newregistration" label="Voter Type?" select>
                   <MenuItem value={false}>New voter</MenuItem>
@@ -234,10 +249,10 @@ const VoterRegistrationPage = ({ account, showAlert }) => {
                 showSearchButton={false}
                 showPartNo={isNewVoter ? false : true}
                 onChanged={(value) => setFilterValues(value)}
-                lg={3}
+                lg={6}
               />
               {isNewVoter == false && (
-                <Grid item xs={12} md={6} lg={3}>
+                <Grid item xs={12} md={6} lg={6}>
                   <RHFTextField name="part_slno" label="Part SL No" />
                 </Grid>
               )}
@@ -245,14 +260,14 @@ const VoterRegistrationPage = ({ account, showAlert }) => {
               {/* <Typography sx={{ pb: 2 }}>Basic Info</Typography> */}
 
               {isNewVoter == false && (
-                <Grid item xs={12} md={6} lg={3}>
+                <Grid item xs={12} md={6} lg={6}>
                   <RHFTextField name="voter_id" label="Voter ID" />
                 </Grid>
               )}
-              <Grid item xs={12} md={6} lg={3}>
+              <Grid item xs={12} md={6} lg={6}>
                 <RHFTextField name="voter_name" label="Voter Name" />
               </Grid>
-              <Grid item xs={12} md={12} lg={4}>
+              <Grid item xs={12} md={12} lg={6}>
                 <RHFRadio
                   name="guardian"
                   filedLabel="Guardian"
@@ -273,25 +288,25 @@ const VoterRegistrationPage = ({ account, showAlert }) => {
                 />
               </Grid>
 
-              <Grid item xs={12} md={6} lg={3} alignSelf={"flex-end"}>
+              <Grid item xs={12} md={6} lg={6} alignSelf={"flex-end"}>
                 <RHFTextField name="guardian_name" label="Guardian Name" />
               </Grid>
 
-              <Grid item xs={12} md={6} lg={3} alignSelf={"flex-end"}>
+              <Grid item xs={12} md={6} lg={6} alignSelf={"flex-end"}>
                 <RHFTextField name="gender" label="Gender" select>
                   <MenuItem value={13}>Male</MenuItem>
                   <MenuItem value={14}>Female</MenuItem>
                   <MenuItem value={15}>Transgender</MenuItem>
                 </RHFTextField>
               </Grid>
-              <Grid item xs={12} md={6} lg={2} alignSelf={"flex-end"}>
+              <Grid item xs={12} md={6} lg={6} alignSelf={"flex-end"}>
                 <RHFTextField name="age" label="Age" />
               </Grid>
-              <Grid item xs={12} md={6} lg={3}>
+              <Grid item xs={12} md={6} lg={6}>
                 <RHFTextField name="phone_no" label="Phone Number" inputProps={{ maxLength: 10 }} />
               </Grid>
 
-              <Grid item xs={12} md={12} lg={12}>
+              <Grid item xs={12} md={12} lg={6}>
                 <RHFCheckbox name="is_resident" label="Is Resident" />
               </Grid>
 
@@ -305,7 +320,7 @@ const VoterRegistrationPage = ({ account, showAlert }) => {
                 <RHFTextField name="current_address" label="Current Address" multiline rows={4} fullWidth />
               </Grid>
 
-              <Grid item xs={12} md={6} lg={3}>
+              <Grid item xs={12} md={6} lg={6}>
                 <TextField
                   name="file"
                   type="file"

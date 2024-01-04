@@ -1,6 +1,6 @@
 import { LIMIT_PER_PAGE } from "../constants";
+import ApiServices from "../services/apiservices";
 import { changeOpinionPollRoute, createTicketHistoryRoute, createTicketRoute, getAllNavaratnaluRoute, getAllVotorsSurveyRoute, getVotersListTotals, saveOrupdatedSurvey } from "../utils/apis";
-import instance from "../utils/axios";
 
 export const clearVoterReducer = () => async (dispatch) => {
   dispatch({
@@ -18,14 +18,15 @@ export const getAllVotersSurvey =
     try {
       // console.log("jsonData", jsonData);
 
-      const response = await instance.post(`${getAllVotorsSurveyRoute}?page=${pageNo + 1}&&limit=${limit}`, data);
+      const response = await ApiServices.postRequest(`${getAllVotorsSurveyRoute}?page=${pageNo + 1}&&limit=${limit}`, data);
       const responseData = response.data;
       // const itemsList = responseData?.data ?? [];
       const itemsList = responseData?.message?.data ?? [];
-      // console.log("itemsList", itemsList);
-      const cardResponse = await instance.post(getVotersListTotals, data);
-      const cardResponseData = cardResponse.data;
-      const cardData = cardResponseData?.message?.data[0] ?? [];
+      console.log("itemsList", itemsList);
+      // const cardResponse = await ApiServices.postRequest(getVotersListTotals, data);
+      // const cardResponseData = cardResponse.data;
+      // const cardData = cardResponseData?.message?.data[0] ?? [];
+      const cardData = []
 
       // console.log(cardData);
 
@@ -33,9 +34,9 @@ export const getAllVotersSurvey =
         type: "VOTER_LOAD_SUCCESS",
         payload: {
           data: itemsList,
-          count: cardData.voters_count,
-          completed: cardData.surveyed_count,
-          pending: cardData.not_surveyed_count,
+          count: cardData?.voters_count ?? 0,
+          completed: cardData?.surveyed_count ?? 0,
+          pending: cardData?.not_surveyed_count ?? 0,
           page: pageNo,
           limit: limit,
         },
@@ -59,7 +60,7 @@ export const changeOpinionPoll = (id, value, volunteer_id) => async (dispatch) =
     };
     console.log(jsonData);
 
-    await instance.post(changeOpinionPollRoute, jsonData);
+    await ApiServices.postRequest(changeOpinionPollRoute, jsonData);
 
     dispatch({
       type: "VOTER_CHANGE_OPINION",
@@ -86,7 +87,7 @@ export const updateVoterDetails = (id, data) => async (dispatch) => {
       ...data,
     };
     console.log(jsonData);
-    await instance.post(saveOrupdatedSurvey, jsonData);
+    await ApiServices.postRequest(saveOrupdatedSurvey, jsonData);
 
     dispatch({
       type: "VOTER_UPDATE_SUCCESS",

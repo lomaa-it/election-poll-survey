@@ -9,8 +9,9 @@ import Button from "@mui/material/Button";
 import DistrictsList from "../sections/reports/DistrictsList";
 import { useEffect, useState } from "react";
 import { getAllDistrictsWithJoinRoute, getAllStatesRoute, createDistrictsRoute } from "../utils/apis";
-import instance from "../utils/axios";
+
 import { showAlert } from "../actions/alert";
+import ApiServices from "../services/apiservices";
 
 const DistrictsPage = ({ dashboard }) => {
   const [districtList, setDistrictList] = useState([]);
@@ -20,13 +21,13 @@ const DistrictsPage = ({ dashboard }) => {
 
   // fetch both states and districts
   const fetchDistricts = async () => {
-    const response = await instance.post(getAllDistrictsWithJoinRoute);
+    const response = await ApiServices.postRequest(getAllDistrictsWithJoinRoute);
     console.log("districts", response.data);
     setDistrictList(response.data.message);
   };
   useEffect(() => {
     const fetchStates = async () => {
-      const response = await instance.post(getAllStatesRoute);
+      const response = await ApiServices.postRequest(getAllStatesRoute);
       console.log("states", response.data.message);
       setStateList(response.data.message);
     };
@@ -46,7 +47,7 @@ const DistrictsPage = ({ dashboard }) => {
       showAlert("error", "Please select state");
       return;
     }
-    const response = await instance.post(createDistrictsRoute, {
+    const response = await ApiServices.postRequest(createDistrictsRoute, {
       district_name: districtName,
       state_id: stateId,
     });

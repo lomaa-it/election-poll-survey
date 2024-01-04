@@ -12,6 +12,7 @@ import { showAlert } from "../../../actions/alert";
 import { newPasswordUpdateRoute, saveNewPassword, userValidationwithPhonenoRoute } from "../../../utils/apis";
 import instance from "../../../utils/axios";
 import OtpSubmitForm from "./OtpSubmitForm";
+import ApiServices from "../../../services/apiservices";
 
 const ForgetForm = ({ showAlert, otpSent, setOtpSent, isVerified, setIsVerified }) => {
   const navigate = useNavigate();
@@ -50,7 +51,7 @@ const ForgetForm = ({ showAlert, otpSent, setOtpSent, isVerified, setIsVerified 
         username: data.username,
       };
       console.log("jsondata", jsonData);
-      const response = await instance.post(userValidationwithPhonenoRoute, jsonData);
+      const response = await ApiServices.postRequest(userValidationwithPhonenoRoute, jsonData);
       console.log("phione response", response);
       if (response.status == 200) {
         showAlert({ text: `${response.data?.message}`, color: "success" });
@@ -86,7 +87,7 @@ const ForgetForm = ({ showAlert, otpSent, setOtpSent, isVerified, setIsVerified 
         password: passwordDetails?.confirm_password,
       };
       console.log("jsondata", jsonData);
-      const response = await instance.post(saveNewPassword, jsonData);
+      const response = await ApiServices.postRequest(saveNewPassword, jsonData);
       console.log("phione response", response);
       if (response.status == 200) {
         showAlert({ text: `${response.data?.message}`, color: "success" });

@@ -5,7 +5,6 @@ import { LoadingButton } from "@mui/lab";
 import * as Yup from "yup";
 
 import { useEffect, useRef, useState } from "react";
-import instance from "../utils/axios";
 
 import { showAlert } from "../actions/alert";
 import SearchByFilter from "../sections/common/SearchByFilter";
@@ -15,6 +14,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 import { FormProvider, RHFCheckbox, RHFRadio, RHFTextField } from "../components/hook-form";
 import { createPartsRoute } from "../utils/apis";
+import ApiServices from "../services/apiservices";
 
 const AddPartsCard = ({ dashboard, common, showAlert, reFecthData }) => {
   const filterRef = useRef(null);
@@ -82,7 +82,7 @@ const AddPartsCard = ({ dashboard, common, showAlert, reFecthData }) => {
         sachivalayam_id: filterValues.sachivalayam?.sachivalayam_pk ?? null,
       };
       console.log("jsonData", jsonData);
-      await instance.post(createPartsRoute, jsonData);
+      await ApiServices.postRequest(createPartsRoute, jsonData);
       showAlert({ text: "Part added successfully", color: "success" });
       reset();
       filterRef.current.reset();

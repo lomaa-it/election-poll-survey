@@ -8,13 +8,13 @@ import Button from "@mui/material/Button";
 import VoterAndVolunteerMappingList from "../sections/reports/VoterAndVolunteerMappingList";
 import PartsList from "../sections/reports/PartsList";
 import { useEffect, useState } from "react";
-import instance from "../utils/axios";
 import { getAllConstituenciesRoute, getAllDistrictsRoute, getAllDivisionRoute, getAllMandalRoute, getAllSachivalayamRoute, getAllStatesRoute, getAllPartsRoute, createPartsRoute, getallpartsbysachivalayamidRoute } from "../utils/apis";
 import { set } from "date-fns";
 import { showAlert } from "../actions/alert";
 import SearchByFilter from "../sections/common/SearchByFilter";
 import { searchFiltercolor } from "../constants";
 import AddPartsCard from "../components/AddPartsCard";
+import ApiServices from "../services/apiservices";
 
 const PartsPage = ({ dashboard, common }) => {
   const [fetchedData, setFetchedData] = useState([{}]);
@@ -27,7 +27,7 @@ const PartsPage = ({ dashboard, common }) => {
     console.log("HI Im Recalled");
     setIsFetching(true);
     try {
-      const response = await instance.post(getallpartsbysachivalayamidRoute, initialValues);
+      const response = await ApiServices.postRequest(getallpartsbysachivalayamidRoute, initialValues);
       console.log("response", response.data.message);
       setFetchedData(response.data.message);
       setIsFetching(false);
@@ -42,7 +42,7 @@ const PartsPage = ({ dashboard, common }) => {
     console.log("searchFiltersData sa", data.sachivalayam_id);
     setIsFetching(true);
     try {
-      const response = await instance.post(getallpartsbysachivalayamidRoute, data);
+      const response = await ApiServices.postRequest(getallpartsbysachivalayamidRoute, data);
       console.log("response", response.data.message);
       setFetchedData(response.data.message);
       setIsFetching(false);
