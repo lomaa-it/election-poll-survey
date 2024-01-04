@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Typography, Card, Stack, Grid, Switch, Divider, Box, Chip, TextField, FormControlLabel } from "@mui/material";
+import { Typography, Card, Stack, Grid, Switch, Divider, Box, Chip, TextField, FormControlLabel, Popover, Button, MenuItem } from "@mui/material";
 import { CheckBox } from "@mui/icons-material";
 import { connect } from "react-redux";
 import { showAlert } from "../../actions/alert";
@@ -9,11 +9,25 @@ import Sachivalayam from "../../pages/Sachivalayam";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import CustomMuiDataTable from "../../components/CustomMuiDataTable";
+import { set } from "date-fns";
+import CircularProgress from "@mui/material/CircularProgress";
 
-const ConstituenciesList = ({ showAlert, constituenciesList, setConstituenciesList }) => {
-  console.log("constituenciesList", constituenciesList);
+import ApiServices from "../../services/apiservices";
+import { UpdateAndDeleteConstituenciesRoute } from "../../utils/apis";
+
+const ConstituenciesList = ({ showAlert, constituenciesList, fetchedData, setFetchedData, refresh, setRefresh }) => {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [selectedValues, setSelectedValues] = useState({
+    state_id: "",
+    district_id: "",
+    consistency_id: "",
+    consistency_name: "",
+  });
 
   const columns = [
+    { label: "State Name" },
     {
       label: "District Name",
     },
@@ -31,36 +45,253 @@ const ConstituenciesList = ({ showAlert, constituenciesList, setConstituenciesLi
     selectableRows: "none",
     responsive: "standard",
   };
-  const renderEditAndDelete = () => {
+
+  const handleClick = (event, data) => {
+    setAnchorEl(event.currentTarget);
+
+    // find state id based on district id
+    const district = fetchedData.district.find((district) => district.district_pk === data.district_pk);
+    const state_id = district ? district.state_id : null;
+
+    setSelectedValues((prevState) => ({
+      ...prevState,
+      state_id: state_id,
+      district_id: data.district_pk,
+      consistency_id: data.consistency_pk,
+      consistency_name: data.consistency_name,
+    }));
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+    setSelectedValues({
+      state_id: "",
+      district_id: "",
+      consistency_id: "",
+      consistency_name: "",
+    });
+  };
+
+  const onCancel = () => {
+    setAnchorEl(null);
+    setSelectedValues({
+      state_id: "",
+      district_id: "",
+      consistency_id: "",
+      consistency_name: "",
+    });
+  };
+
+  const handleSubmit = async () => {
+    if (!selectedValues.state_id) {
+      showAlert({ text: "Please select state", color: "error" });
+      return;
+    }
+
+    if (!selectedValues.district_id) {
+      showAlert({ text: "Please select district", color: "error" });
+      return;
+    }
+
+    if (!selectedValues.consistency_name) {
+      showAlert({ text: "Please enter constituency name", color: "error" });
+
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      const response = await ApiServices.putRequest(UpdateAndDeleteConstituenciesRoute + selectedValues.consistency_id, {
+        district_pk: selectedValues.district_id,
+        consistency_name: selectedValues.consistency_name,
+      });
+
+      setIsLoading(false);
+      showAlert({ text: "Constituency Updated Successfully11", color: "success" });
+      setRefresh((prevState) => !prevState);
+      setSelectedValues({
+        state_id: "",
+        district_id: "",
+        consistency_id: "",
+        consistency_name: "",
+      });
+      setAnchorEl(null);
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false);
+      showAlert({ text: "Something went wrong", color: "error" });
+      setRefresh((prevState) => !prevState);
+    }
+  };
+  const handleDelete = async (id) => {
+    try {
+      setIsLoading(true);
+      const response = await ApiServices.deleteRequest(UpdateAndDeleteConstituenciesRoute + id);
+      setIsLoading(false);
+      showAlert({ text: "Constituency Deleted Successfully", color: "success" });
+      setRefresh((prevState) => !prevState);
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false);
+      showAlert({ text: "Something went wrong", color: "error" });
+      setRefresh((prevState) => !prevState);
+    }
+  };
+
+  const renderEditAndDelete = (data) => {
+    const open = Boolean(anchorEl);
+    const id = open ? `simple-popover-${data.consistency_pk}` : undefined;
+
     return (
       <Box>
-        <EditNoteIcon
-          sx={{
-            color: "#1976d2",
+        <Button
+          aria-describedby={id}
+          variant="contained"
+          onClick={(e) => {
+            handleClick(e, data);
           }}
-        />
-        <DeleteForeverIcon
+          sx={{
+            marginRight: "10px",
+          }}
+        >
+          <EditNoteIcon />
+        </Button>
+        <Button
+          sx={{
+            backgroundColor: "red",
+          }}
+          variant="contained"
+          onClick={() => {
+            handleDelete(data.consistency_pk);
+          }}
+        >
+          {isLoading ? <CircularProgress size={20} /> : <DeleteForeverIcon />}
+        </Button>
+        <Popover
+          id={id}
+          open={open}
+          anchorEl={anchorEl}
+          onClose={handleClose}
+          anchorOrigin={{
+            vertical: "center",
+            horizontal: "left",
+          }}
+          transformOrigin={{
+            vertical: "center",
+            horizontal: "center",
+          }}
+        >
+          <Card sx={{ p: 3 }}>
+            <Grid container spacing={2} alignItems="center">
+              <Grid
+                item
+                xs={12}
+                md={6}
+                lg={12}
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "15px",
+                }}
+              >
+                <TextField
+                  size="small"
+                  label="Select State"
+                  fullWidth
+                  select
+                  value={selectedValues.state_id}
+                  onChange={(e) => {
+                    setSelectedValues((prevState) => ({
+                      ...prevState,
+                      state_id: e.target.value,
+                      district_id: "",
+                      consistency_id: "",
+                    }));
+                  }}
+                >
+                  {fetchedData.states.map((state) => {
+                    return <MenuItem value={state.state_pk}>{state.state_name}</MenuItem>;
+                  })}
+                </TextField>
+                <TextField
+                  size="small"
+                  label="Select District"
+                  fullWidth
+                  select
+                  value={selectedValues.district_id}
+                  onChange={(e) => {
+                    setSelectedValues((prevState) => ({
+                      ...prevState,
+                      district_id: e.target.value,
+                      consistency_id: "",
+                    }));
+                  }}
+                >
+                  {/* filter districk based on state_id */}
+                  {fetchedData.district
+                    .filter((district) => district.state_id === selectedValues.state_id)
+                    .map((district) => {
+                      return <MenuItem value={district.district_pk}>{district.district_name}</MenuItem>;
+                    })}
+                </TextField>
+
+                <TextField
+                  size="small"
+                  label="Constitency Name"
+                  fullWidth
+                  value={selectedValues.consistency_name}
+                  onChange={(e) => {
+                    setSelectedValues((prevState) => ({
+                      ...prevState,
+                      consistency_name: e.target.value,
+                    }));
+                  }}
+                />
+                <LoadingButton
+                  loading={isLoading}
+                  onClick={handleSubmit}
+                  variant="contained"
+                  sx={{
+                    padding: "15px",
+                  }}
+                >
+                  Update
+                </LoadingButton>
+                <LoadingButton
+                  onClick={onCancel}
+                  variant="contained"
+                  sx={{
+                    padding: "10px",
+                    backgroundColor: "#f44336",
+                  }}
+                >
+                  Cancel
+                </LoadingButton>
+              </Grid>
+            </Grid>
+          </Card>
+        </Popover>
+        {/* <DeleteForeverIcon
           sx={{
             color: "#f44336",
             marginLeft: "10px",
           }}
-        />
+        /> */}
       </Box>
     );
   };
 
-  //convert constituenciesList format to MUIDataTable format
-  const constituenciesListForTable = constituenciesList.map((constituency) => {
-    console.log("constituency", constituency);
-    return [constituency.district_name, constituency.consistency_name, renderEditAndDelete()];
+  const formartedData = fetchedData.consistency.map((consistency) => {
+    return [consistency.state_name || "state name", consistency.district_name || "district name", consistency.consistency_name, renderEditAndDelete(consistency)];
   });
 
+  console.log("fetchedData.con", fetchedData.consistency);
   return (
     <Card elevation={1}>
       <Stack>
         <Divider />
 
-        <CustomMuiDataTable title="" columns={columns} data={constituenciesListForTable} options={options} />
+        <CustomMuiDataTable title="" columns={columns} data={formartedData} options={options} />
       </Stack>
     </Card>
   );

@@ -1,12 +1,4 @@
-import {
-  Grid,
-  Container,
-  Typography,
-  Box,
-  TextField,
-  Card,
-  MenuItem,
-} from "@mui/material";
+import { Grid, Container, Typography, Box, TextField, Card, MenuItem } from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -14,20 +6,12 @@ import { LoadingButton } from "@mui/lab";
 import SachivalayamList from "../sections/reports/SachivalayamList";
 import { useEffect, useState } from "react";
 import instance from "../utils/axios";
-import {
-  getAllConstituenciesRoute,
-  getAllDistrictsRoute,
-  getAllDivisionRoute,
-  getAllMandalRoute,
-  getAllStatesRoute,
-  getAllSachivalayamRoute,
-  createSachivalayamRoute,
-} from "../utils/apis";
+import { getAllConstituenciesRoute, getAllDistrictsRoute, getAllDivisionRoute, getAllMandalRoute, getAllStatesRoute, getAllSachivalayamRoute, createSachivalayamRoute } from "../utils/apis";
 import { showAlert } from "../actions/alert";
 import { set } from "date-fns";
 import ApiServices from "../services/apiservices";
 
-const Sachivalayam = ({ dashboard }) => {
+const Sachivalayam = ({ dashboard, showAlert }) => {
   const [refresh, setRefresh] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -60,9 +44,7 @@ const Sachivalayam = ({ dashboard }) => {
         // console.log("districts", districtsResponse.data.message);
 
         /// get all constituencies
-        const constituenciesResponse = await ApiServices.postRequest(
-          getAllConstituenciesRoute
-        );
+        const constituenciesResponse = await ApiServices.postRequest(getAllConstituenciesRoute);
         // console.log("constituencies", constituenciesResponse.data.message);
 
         /// get all mandals
@@ -92,9 +74,7 @@ const Sachivalayam = ({ dashboard }) => {
     const fecthOptionsData = async () => {
       try {
         /// get all sachivalayam
-        const sachivalayamResponse = await ApiServices.postRequest(
-          getAllSachivalayamRoute
-        );
+        const sachivalayamResponse = await ApiServices.postRequest(getAllSachivalayamRoute);
         console.log("sachivalayam", sachivalayamResponse.data.message);
 
         /// state update
@@ -151,15 +131,7 @@ const Sachivalayam = ({ dashboard }) => {
         <Card sx={{ p: 3 }}>
           <Grid container spacing={2} alignItems="center">
             <Grid item xs={12} md={6} lg={9}>
-              <SachivalayamList
-                sachivalayamList={fetchedData.sachivalayam}
-                fetchedData={fetchedData}
-                setFetchedData={setFetchedData}
-                selectedValues={selectedValues}
-                setSelectedValues={setSelectedValues}
-                refresh={refresh}
-                setRefresh={setRefresh}
-              />
+              <SachivalayamList sachivalayamList={fetchedData.sachivalayam} fetchedData={fetchedData} setFetchedData={setFetchedData} selectedValues={selectedValues} setSelectedValues={setSelectedValues} refresh={refresh} setRefresh={setRefresh} />
             </Grid>
             <Grid
               item
@@ -190,11 +162,7 @@ const Sachivalayam = ({ dashboard }) => {
                 }}
               >
                 {fetchedData.states.map((state) => {
-                  return (
-                    <MenuItem value={state.state_pk}>
-                      {state.state_name}
-                    </MenuItem>
-                  );
+                  return <MenuItem value={state.state_pk}>{state.state_name}</MenuItem>;
                 })}
               </TextField>
               <TextField
@@ -215,15 +183,9 @@ const Sachivalayam = ({ dashboard }) => {
               >
                 {/* filter districk based on state_id */}
                 {fetchedData.district
-                  .filter(
-                    (district) => district.state_id === selectedValues.state_id
-                  )
+                  .filter((district) => district.state_id === selectedValues.state_id)
                   .map((district) => {
-                    return (
-                      <MenuItem value={district.district_pk}>
-                        {district.district_name}
-                      </MenuItem>
-                    );
+                    return <MenuItem value={district.district_pk}>{district.district_name}</MenuItem>;
                   })}
               </TextField>
               <TextField
@@ -243,16 +205,9 @@ const Sachivalayam = ({ dashboard }) => {
               >
                 {/* filter constituency based on district_id */}
                 {fetchedData.consistency
-                  .filter(
-                    (consistency) =>
-                      consistency.district_pk === selectedValues.district_id
-                  )
+                  .filter((consistency) => consistency.district_pk === selectedValues.district_id)
                   .map((consistency) => {
-                    return (
-                      <MenuItem value={consistency.consistency_pk}>
-                        {consistency.consistency_name}
-                      </MenuItem>
-                    );
+                    return <MenuItem value={consistency.consistency_pk}>{consistency.consistency_name}</MenuItem>;
                   })}
               </TextField>
               <TextField
@@ -271,16 +226,9 @@ const Sachivalayam = ({ dashboard }) => {
               >
                 {/* filter mandal based on consistency_id */}
                 {fetchedData.mandal
-                  .filter(
-                    (mandal) =>
-                      mandal.consistency_id === selectedValues.consistency_id
-                  )
+                  .filter((mandal) => mandal.consistency_id === selectedValues.consistency_id)
                   .map((mandal) => {
-                    return (
-                      <MenuItem value={mandal.mandal_pk}>
-                        {mandal.mandal_name}
-                      </MenuItem>
-                    );
+                    return <MenuItem value={mandal.mandal_pk}>{mandal.mandal_name}</MenuItem>;
                   })}
               </TextField>
               <TextField
@@ -298,16 +246,9 @@ const Sachivalayam = ({ dashboard }) => {
               >
                 {/* filter division based on mandal_id */}
                 {fetchedData.division
-                  .filter(
-                    (division) =>
-                      division.mandal_id === selectedValues.mandal_id
-                  )
+                  .filter((division) => division.mandal_id === selectedValues.mandal_id)
                   .map((division) => {
-                    return (
-                      <MenuItem value={division.division_pk}>
-                        {division.division_name}
-                      </MenuItem>
-                    );
+                    return <MenuItem value={division.division_pk}>{division.division_name}</MenuItem>;
                   })}
               </TextField>
               <TextField
@@ -348,4 +289,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, null)(Sachivalayam);
+export default connect(mapStateToProps, { showAlert })(Sachivalayam);

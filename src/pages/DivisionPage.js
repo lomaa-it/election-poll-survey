@@ -1,12 +1,4 @@
-import {
-  Grid,
-  Container,
-  Typography,
-  Box,
-  TextField,
-  Card,
-  MenuItem,
-} from "@mui/material";
+import { Grid, Container, Typography, Box, TextField, Card, MenuItem } from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -17,18 +9,11 @@ import Button from "@mui/material/Button";
 import DivisionList from "../sections/reports/DivisionList";
 import { useEffect, useState } from "react";
 import instance from "../utils/axios";
-import {
-  getAllConstituenciesRoute,
-  getAllDistrictsRoute,
-  getAllMandalRoute,
-  getAllStatesRoute,
-  getAllDivisionRoute,
-  createDivisionsRoute,
-} from "../utils/apis";
+import { getAllConstituenciesRoute, getAllDistrictsRoute, getAllMandalRoute, getAllStatesRoute, getAllDivisionRoute, createDivisionsRoute } from "../utils/apis";
 import { showAlert } from "../actions/alert";
 import ApiServices from "../services/apiservices";
 
-const DivisionPage = ({ dashboard }) => {
+const DivisionPage = ({ dashboard, showAlert }) => {
   const [refresh, setRefresh] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -59,9 +44,7 @@ const DivisionPage = ({ dashboard }) => {
         console.log("districts", districtsResponse.data.message);
 
         /// get all constituencies
-        const constituenciesResponse = await ApiServices.postRequest(
-          getAllConstituenciesRoute
-        );
+        const constituenciesResponse = await ApiServices.postRequest(getAllConstituenciesRoute);
         console.log("constituencies", constituenciesResponse.data.message);
 
         /// get all mandals
@@ -109,6 +92,31 @@ const DivisionPage = ({ dashboard }) => {
   }, [refresh]);
 
   const handleSubmit = async () => {
+    if (!selectedValues.state_id) {
+      showAlert({ text: "Please select state", color: "error" });
+      return;
+    }
+
+    if (!selectedValues.district_id) {
+      showAlert({ text: "Please select district", color: "error" });
+      return;
+    }
+
+    if (!selectedValues.consistency_id) {
+      showAlert({ text: "Please select constituency", color: "error" });
+      return;
+    }
+
+    if (!selectedValues.mandal_id) {
+      showAlert({ text: "Please select mandal", color: "error" });
+      return;
+    }
+
+    if (!selectedValues.division_name) {
+      showAlert({ text: "Please enter division name", color: "error" });
+      return;
+    }
+
     console.log(selectedValues);
     try {
       setIsLoading(true);
@@ -147,14 +155,7 @@ const DivisionPage = ({ dashboard }) => {
         <Card sx={{ p: 3 }}>
           <Grid container spacing={2} alignItems="center">
             <Grid item xs={12} md={6} lg={9}>
-              <DivisionList
-                fetchedData={fetchedData}
-                setFetchedData={setFetchedData}
-                selectedValues={selectedValues}
-                setSelectedValues={setSelectedValues}
-                refresh={refresh}
-                setRefresh={setRefresh}
-              />
+              <DivisionList fetchedData={fetchedData} setFetchedData={setFetchedData} selectedValues={selectedValues} setSelectedValues={setSelectedValues} refresh={refresh} setRefresh={setRefresh} />
             </Grid>
             <Grid
               item
@@ -184,17 +185,14 @@ const DivisionPage = ({ dashboard }) => {
                 }}
               >
                 {fetchedData.states.map((state) => {
-                  return (
-                    <MenuItem value={state.state_pk}>
-                      {state.state_name}
-                    </MenuItem>
-                  );
+                  return <MenuItem value={state.state_pk}>{state.state_name}</MenuItem>;
                 })}
               </TextField>
               <TextField
                 size="small"
                 label="Select District"
                 fullWidth
+                required
                 select
                 value={selectedValues.district_id}
                 onChange={(e) => {
@@ -208,21 +206,16 @@ const DivisionPage = ({ dashboard }) => {
               >
                 {/* filter districk based on state_id */}
                 {fetchedData.district
-                  .filter(
-                    (district) => district.state_id === selectedValues.state_id
-                  )
+                  .filter((district) => district.state_id === selectedValues.state_id)
                   .map((district) => {
-                    return (
-                      <MenuItem value={district.district_pk}>
-                        {district.district_name}
-                      </MenuItem>
-                    );
+                    return <MenuItem value={district.district_pk}>{district.district_name}</MenuItem>;
                   })}
               </TextField>
               <TextField
                 size="small"
                 label="Select Constituency"
                 fullWidth
+                required
                 select
                 value={selectedValues.consistency_id}
                 onChange={(e) => {
@@ -235,22 +228,16 @@ const DivisionPage = ({ dashboard }) => {
               >
                 {/* filter constituency based on district_id */}
                 {fetchedData.consistency
-                  .filter(
-                    (consistency) =>
-                      consistency.district_pk === selectedValues.district_id
-                  )
+                  .filter((consistency) => consistency.district_pk === selectedValues.district_id)
                   .map((consistency) => {
-                    return (
-                      <MenuItem value={consistency.consistency_pk}>
-                        {consistency.consistency_name}
-                      </MenuItem>
-                    );
+                    return <MenuItem value={consistency.consistency_pk}>{consistency.consistency_name}</MenuItem>;
                   })}
               </TextField>
               <TextField
                 size="small"
                 label="Select Mandal"
                 fullWidth
+                required
                 select
                 value={selectedValues.mandal_id}
                 onChange={(e) => {
@@ -262,16 +249,9 @@ const DivisionPage = ({ dashboard }) => {
               >
                 {/* filter mandal based on consistency_id */}
                 {fetchedData.mandal
-                  .filter(
-                    (mandal) =>
-                      mandal.consistency_id === selectedValues.consistency_id
-                  )
+                  .filter((mandal) => mandal.consistency_id === selectedValues.consistency_id)
                   .map((mandal) => {
-                    return (
-                      <MenuItem value={mandal.mandal_pk}>
-                        {mandal.mandal_name}
-                      </MenuItem>
-                    );
+                    return <MenuItem value={mandal.mandal_pk}>{mandal.mandal_name}</MenuItem>;
                   })}
               </TextField>
 
@@ -279,6 +259,7 @@ const DivisionPage = ({ dashboard }) => {
                 size="small"
                 label="Division Name"
                 fullWidth
+                required
                 value={selectedValues.division_name}
                 onChange={(e) => {
                   setSelectedValues((prevState) => ({
@@ -313,4 +294,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, null)(DivisionPage);
+export default connect(mapStateToProps, { showAlert })(DivisionPage);

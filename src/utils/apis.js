@@ -2,7 +2,6 @@
 // export const baseServerUrl = "https://poll-7ks0.onrender.com";
 // export const baseServerUrl = "https://cd30-123-201-175-198.ngrok-free.app";
 
-
 import LsService from "../services/localstorage";
 
 // new api for baseServerUrl
@@ -11,11 +10,13 @@ import LsService from "../services/localstorage";
 // export const baseServerUrl = "https://d1ef-123-201-174-192.ngrok-free.app";
 export const baseServerUrl = "https://mumbaiapi.cgrysrcongress.in";
 // export const baseServerUrl = "http://192.168.0.102:8080";
+// export const baseServerUrl = "http://192.168.133.177:8080";
 /// new
 // export const baseServerUrl = "https://poll2.onrender.com";
 
 // Access Management Api's
 export const getallAccessPermissions = "/getall_access_permissions";
+export const getPermissionListRoute = "/getpermissionlist"
 
 // Survey Dashboard Apis
 export const getDashBoardbyTotalVoters = "/getdashboardbytotalvoters";
@@ -122,6 +123,7 @@ export const updateMandalByIdRoute = "/mandals/";
 export const updateDivisionByIdRoute = "/divisions/";
 export const designationMappingRoute = "/designationmappingtousers";
 export const sendCredsToUsersRoute = "/sendcredstousers";
+export const UpdateAndDeleteConstituenciesRoute = "/constituencies/";
 
 // export const postRequest = (route, data) => {
 //   let user = LsService.getCurrentUser();

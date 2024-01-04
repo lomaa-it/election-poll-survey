@@ -105,6 +105,32 @@ const DivisionList = ({ showAlert, divisionList, fetchedData, setFetchedData, re
   // update details
   const handleSubmit = async () => {
     console.log("selectedValues", selectedValues);
+
+    if (!selectedValues.state_id) {
+      showAlert({ text: "Please select state", color: "error" });
+      return;
+    }
+
+    if (!selectedValues.district_id) {
+      showAlert({ text: "Please select district", color: "error" });
+      return;
+    }
+
+    if (!selectedValues.consistency_id) {
+      showAlert({ text: "Please select constituency", color: "error" });
+      return;
+    }
+
+    if (!selectedValues.mandal_id) {
+      showAlert({ text: "Please select mandal", color: "error" });
+      return;
+    }
+
+    if (!selectedValues.division_name) {
+      showAlert({ text: "Please enter division name", color: "error" });
+      return;
+    }
+
     try {
       setIsLoading(true);
       const response = await ApiServices.putRequest(updateDivisionByIdRoute + selectedValues.division_id, {
@@ -134,6 +160,23 @@ const DivisionList = ({ showAlert, divisionList, fetchedData, setFetchedData, re
     }
   };
 
+  const handleDelete = async (id) => {
+    console.log("Division Id", id);
+    try {
+      setIsLoading(true);
+      const response = await ApiServices.deleteRequest(updateDivisionByIdRoute + id);
+      console.log("Division Deleted", response.data.message);
+      showAlert({ text: "Division Deleted Successfully", color: "success" });
+      setIsLoading(false);
+      setRefresh((prevState) => !prevState);
+    } catch (error) {
+      console.log(error);
+      showAlert({ text: "Something went wrong", color: "error" });
+      setIsLoading(false);
+      setRefresh((prevState) => !prevState);
+    }
+  };
+
   const renderEditAndDelete = (data) => {
     // Create a popover for the mandal
     const open = Boolean(anchorEl);
@@ -147,8 +190,22 @@ const DivisionList = ({ showAlert, divisionList, fetchedData, setFetchedData, re
           onClick={(e) => {
             handleClick(e, data);
           }}
+          sx={{
+            marginRight: "10px",
+          }}
         >
           <EditNoteIcon />
+        </Button>
+        <Button
+          sx={{
+            backgroundColor: "red",
+          }}
+          variant="contained"
+          onClick={() => {
+            handleDelete(data.division_pk);
+          }}
+        >
+          <DeleteForeverIcon />
         </Button>
         <Popover
           id={id}
@@ -307,7 +364,7 @@ const DivisionList = ({ showAlert, divisionList, fetchedData, setFetchedData, re
       </Box>
     );
   };
-
+  console.log("Division List", fetchedData.division);
   const formartedData = fetchedData.division.map((division) => {
     return [division.district_name || "District", division.consitency_name || "Constituency", division.mandal_name || "Mandal", division.division_name || "Division", renderEditAndDelete(division)];
   });

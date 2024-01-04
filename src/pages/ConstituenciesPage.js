@@ -1,4 +1,4 @@
-import { Grid, Container, Typography, Box, TextField, Card } from "@mui/material";
+import { Grid, Container, Typography, Box, TextField, Card, MenuItem } from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -7,82 +7,113 @@ import ViewUsersList from "../sections/reports/ViewUsersList";
 import Button from "@mui/material/Button";
 import ConstituenciesList from "../sections/reports/ConstituenciesList";
 import { useEffect, useState } from "react";
-import { getAllStatesRoute, getAllConstituenciesWithJoinRoute, createConstituenciesRoute, getAllDistrictsRoute } from "../utils/apis";
+import { getAllStatesRoute, getAllConstituenciesWithJoinRoute, createConstituenciesRoute, getAllDistrictsRoute, getAllConstituenciesRoute } from "../utils/apis";
 
 import { showAlert } from "../actions/alert";
 import { set } from "date-fns";
 import ApiServices from "../services/apiservices";
 
-const ConstituenciesPage = ({ dashboard }) => {
-  const [constituenciesList, setConstituenciesList] = useState([]);
-  const [stateList, setStateList] = useState([]);
-  const [districtList, setDistrictList] = useState([]);
-  const [stateId, setStateId] = useState("");
-  const [districtId, setDistrictId] = useState("");
-  const [consituencyName, setConsituencyName] = useState("");
-
-  // const fetchConstituencies = async () => {
-  //   const response = await ApiServices.postRequest(getAllConstituenciesWithJoinRoute);
-  //   console.log("constituencies", response.data.message);
-  //   setConstituenciesList(response.data.message);
-  // };
-
-  const fetchStates = async () => {
-    const response = await ApiServices.postRequestt(getAllStatesRoute);
-    console.log("states", response.data.message);
-    setStateList(response.data.message);
-  };
-
-  const fecthDistricts = async () => {
-    const response = await ApiServices.postRequest(getAllDistrictsRoute);
-    console.log("districts", response.data.message);
-    setDistrictList(response.data.message);
-  };
-
-  useEffect(() => {
-    fecthDistricts();
-    // fetchConstituencies();
-    fetchStates();
-  }, []);
-  const stateOptions = stateList.map((state) => {
-    return { label: state.state_name, value: state.state_pk };
+const ConstituenciesPage = ({ dashboard, showAlert }) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [refresh, setRefresh] = useState(false);
+  const [fetchedData, setFetchedData] = useState({
+    states: [{}],
+    district: [{}],
+    consistency: [{}],
   });
 
-  // covert districts to options and filter based on state id
-  const districtOptions = districtList
-    .filter((district) => district.state_id === stateId)
-    .map((district) => {
-      return { label: district.district_name, value: district.district_pk };
-    });
+  const [selectedValues, setSelectedValues] = useState({
+    state_id: "",
+    district_id: "",
+    consistency_name: "",
+  });
 
-  const addConsituency = async () => {
-    console.log("stateId", stateId);
-    console.log("districtId", districtId);
-    console.log("consituencyName", consituencyName);
-    if (consituencyName === "") {
-      showAlert("error", "Please enter consituency name");
+  useEffect(() => {
+    const fecthOptionsData = async () => {
+      try {
+        /// get all states
+        const statesResponse = await ApiServices.postRequest(getAllStatesRoute);
+        console.log("states", statesResponse.data.message);
+        /// get all districts
+        const districtsResponse = await ApiServices.postRequest(getAllDistrictsRoute);
+        console.log("districts", districtsResponse.data.message);
+
+        /// get all constituencies
+        const constituenciesResponse = await ApiServices.postRequest(getAllConstituenciesRoute);
+        console.log("constituencies", constituenciesResponse.data.message);
+
+        /// state update
+        setFetchedData((prevState) => ({
+          ...prevState,
+          states: statesResponse.data.message,
+          district: districtsResponse.data.message,
+          consistency: constituenciesResponse.data.message,
+        }));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fecthOptionsData();
+  }, []);
+
+  useEffect(() => {
+    const fecthOptionsData = async () => {
+      try {
+        /// get all constituencies
+        const constituenciesResponse = await ApiServices.postRequest(getAllConstituenciesRoute);
+        console.log("constituencies", constituenciesResponse.data.message);
+
+        /// state update
+        setFetchedData((prevState) => ({
+          ...prevState,
+          consistency: constituenciesResponse.data.message,
+        }));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fecthOptionsData();
+  }, [refresh]);
+
+  const handleSubmit = async () => {
+    if (!selectedValues.state_id) {
+      showAlert({ text: "Please Select State", color: "error" });
       return;
     }
-    if (stateId === "") {
-      showAlert("error", "Please select state");
+
+    if (!selectedValues.district_id) {
+      showAlert({ text: "Please Select District", color: "error" });
       return;
     }
-    if (districtId === "") {
-      showAlert("error", "Please select district");
+
+    if (!selectedValues.consistency_name) {
+      showAlert({ text: "Please Enter Constituency Name", color: "error" });
       return;
     }
-    const response = await ApiServices.postRequest(createConstituenciesRoute, {
-      consistency_id: 2,
-      consistency_name: consituencyName,
-      district_pk: districtId,
-    });
-    setConsituencyName("");
 
-    setDistrictId("");
-    setStateId("");
+    console.log(selectedValues);
 
-    console.log("creat", response.data);
-    // fetchConstituencies();
+    try {
+      setIsLoading(true);
+      const response = await ApiServices.postRequest(createConstituenciesRoute, {
+        consistency_name: selectedValues.consistency_name,
+        district_pk: selectedValues.district_id,
+      });
+      console.log("response", response);
+      setIsLoading(false);
+      setRefresh(!refresh);
+      showAlert({ text: "Constituency Added Successfully", color: "success" });
+      setSelectedValues((prevState) => ({
+        ...prevState,
+        state_id: "",
+        district_id: "",
+        consistency_name: "",
+      }));
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false);
+      showAlert({ text: "Something went wrong", color: "error" });
+    }
   };
 
   return (
@@ -95,7 +126,7 @@ const ConstituenciesPage = ({ dashboard }) => {
         <Card sx={{ p: 3 }}>
           <Grid container spacing={2} alignItems="center">
             <Grid item xs={12} md={6} lg={9}>
-              <ConstituenciesList constituenciesList={constituenciesList} setConstituenciesList={setConstituenciesList} />
+              <ConstituenciesList fetchedData={fetchedData} setFetchedData={setFetchedData} selectedValues={selectedValues} setSelectedValues={setSelectedValues} refresh={refresh} setRefresh={setRefresh} />
             </Grid>
             <Grid
               item
@@ -108,42 +139,65 @@ const ConstituenciesPage = ({ dashboard }) => {
                 gap: "15px",
               }}
             >
-              {" "}
-              <Autocomplete
-                options={stateOptions}
-                renderInput={(params) => <TextField size="small" {...params} label="Select State" fullWidth />}
-                onChange={(event, value) => {
-                  console.log("value", value);
-                  if (value) {
-                    setStateId(value.value);
-                  }
-                }}
-              />
-              <Autocomplete
-                options={districtOptions}
-                renderInput={(params) => <TextField size="small" {...params} label="Select District" fullWidth />}
-                onChange={(event, value) => {
-                  console.log("value", value);
-                  if (value) {
-                    setDistrictId(value.value);
-                  }
-                }}
-              />
               <TextField
                 size="small"
-                label="Consituency Name"
+                label="Select State"
                 fullWidth
-                value={consituencyName}
+                select
+                required
+                value={selectedValues.state_id}
+                onChange={(e) => {
+                  setSelectedValues((prevState) => ({
+                    ...prevState,
+                    state_id: e.target.value,
+                    district_id: "",
+                  }));
+                }}
+              >
+                {fetchedData.states.map((state) => {
+                  return <MenuItem value={state.state_pk}>{state.state_name}</MenuItem>;
+                })}
+              </TextField>
+              <TextField
+                size="small"
+                label="Select District"
+                fullWidth
+                required
+                select
+                value={selectedValues.district_id}
+                onChange={(e) => {
+                  setSelectedValues((prevState) => ({
+                    ...prevState,
+                    district_id: e.target.value,
+                  }));
+                }}
+              >
+                {/* filter districk based on state_id */}
+                {fetchedData.district
+                  .filter((district) => district.state_id === selectedValues.state_id)
+                  .map((district) => {
+                    return <MenuItem value={district.district_pk}>{district.district_name}</MenuItem>;
+                  })}
+              </TextField>
+              <TextField
+                size="small"
+                label="Constituency Name"
+                fullWidth
+                value={selectedValues.consistency_name}
                 onChange={(event) => {
-                  setConsituencyName(event.target.value);
+                  setSelectedValues((prevState) => ({
+                    ...prevState,
+                    consistency_name: event.target.value,
+                  }));
                 }}
               />
               <LoadingButton
+                loading={isLoading}
                 variant="contained"
                 sx={{
                   padding: "15px",
                 }}
-                onClick={addConsituency}
+                onClick={handleSubmit}
               >
                 Add
               </LoadingButton>
@@ -163,4 +217,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, null)(ConstituenciesPage);
+export default connect(mapStateToProps, { showAlert })(ConstituenciesPage);

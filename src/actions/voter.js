@@ -23,10 +23,10 @@ export const getAllVotersSurvey =
       // const itemsList = responseData?.data ?? [];
       const itemsList = responseData?.message?.data ?? [];
       console.log("itemsList", itemsList);
-      // const cardResponse = await ApiServices.postRequest(getVotersListTotals, data);
-      // const cardResponseData = cardResponse.data;
-      // const cardData = cardResponseData?.message?.data[0] ?? [];
-      const cardData = []
+      const cardResponse = await ApiServices.postRequest(getVotersListTotals, data);
+      const cardResponseData = cardResponse.data;
+      const cardData = cardResponseData?.message?.data[0] ?? [];
+      // const cardData = []
 
       // console.log(cardData);
 

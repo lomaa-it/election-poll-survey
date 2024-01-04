@@ -9,6 +9,7 @@ import { HeaderColor } from "../../../utils/constants";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { connect } from "react-redux";
 
 const NAV_WIDTH = 280;
 
@@ -37,7 +38,7 @@ Header.propTypes = {
   onOpenNav: PropTypes.func,
 };
 
-export default function Header({ onOpenNav }) {
+function Header({ onOpenNav, account }) {
   // const location = useLocation();
 
   // const [title, setTitle] = useState(document.title);
@@ -60,6 +61,8 @@ export default function Header({ onOpenNav }) {
     return () => observer.disconnect();
   }, []);
 
+  console.log("dsdsdsddsds", account);
+
   return (
     <StyledRoot elevation={5}>
       <StyledToolbar>
@@ -80,7 +83,7 @@ export default function Header({ onOpenNav }) {
               padding: 0,
             }}
           >
-            Andhra Pradesh &#8594; Tirupathi
+            {account.user.state_name} &#8594; {account.user.district_name}
           </Typography>
           <br />
           <Typography
@@ -123,3 +126,11 @@ export default function Header({ onOpenNav }) {
     </StyledRoot>
   );
 }
+
+const mapStateToProps = (state) => {
+  return {
+    account: state.auth,
+  };
+};
+
+export default connect(mapStateToProps)(Header);

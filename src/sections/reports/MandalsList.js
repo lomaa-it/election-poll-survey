@@ -14,6 +14,7 @@ import { updateMandalByIdRoute } from "../../utils/apis";
 import instance from "../../utils/axios";
 import CustomMuiDataTable from "../../components/CustomMuiDataTable";
 import ApiServices from "../../services/apiservices";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const MandalsList = ({ showAlert, mandalsList, fetchedData, setFetchedData, refresh, setRefresh }) => {
   useEffect(() => {}, []);
@@ -30,10 +31,7 @@ const MandalsList = ({ showAlert, mandalsList, fetchedData, setFetchedData, refr
 
   const columns = [
     {
-      label: "District Name",
-    },
-    {
-      label: "Constituency Name",
+      label: "Constituency ID",
     },
     {
       label: "Mandal Name",
@@ -98,6 +96,26 @@ const MandalsList = ({ showAlert, mandalsList, fetchedData, setFetchedData, refr
   const handleSubmit = async () => {
     // console.log("selectedValues", selectedValues);
 
+    if (!selectedValues.state_id) {
+      showAlert({ text: "Please select state", color: "error" });
+      return;
+    }
+
+    if (!selectedValues.district_id) {
+      showAlert({ text: "Please select district", color: "error" });
+      return;
+    }
+
+    if (!selectedValues.consistency_id) {
+      showAlert({ text: "Please select constituency", color: "error" });
+      return;
+    }
+
+    if (!selectedValues.mandal_name) {
+      showAlert({ text: "Please enter mandal name", color: "error" });
+      return;
+    }
+
     try {
       setIsLoading(true);
       const response = await ApiServices.putRequest(updateMandalByIdRoute + selectedValues.mandal_id, {
@@ -125,6 +143,21 @@ const MandalsList = ({ showAlert, mandalsList, fetchedData, setFetchedData, refr
     }
   };
 
+  const handleDelete = async (id) => {
+    try {
+      setIsLoading(true);
+      const response = await ApiServices.deleteRequest(updateMandalByIdRoute + id);
+      showAlert({ text: "Mandal Deleted Successfully", color: "success" });
+      setIsLoading(false);
+      setRefresh((prevState) => !prevState);
+    } catch (error) {
+      console.log(error);
+      showAlert({ text: "Something went wrong", color: "error" });
+      setIsLoading(false);
+      setRefresh((prevState) => !prevState);
+    }
+  };
+
   const renderEditAndDelete = (data) => {
     // Create a popover for the mandal
     const open = Boolean(anchorEl);
@@ -138,8 +171,22 @@ const MandalsList = ({ showAlert, mandalsList, fetchedData, setFetchedData, refr
           onClick={(e) => {
             handleClick(e, data);
           }}
+          sx={{
+            marginRight: "10px",
+          }}
         >
           <EditNoteIcon />
+        </Button>
+        <Button
+          sx={{
+            backgroundColor: "red",
+          }}
+          variant="contained"
+          onClick={() => {
+            handleDelete(data.mandal_pk);
+          }}
+        >
+          {isLoading ? <CircularProgress size={20} /> : <DeleteForeverIcon />}
         </Button>
         <Popover
           id={id}
@@ -276,8 +323,10 @@ const MandalsList = ({ showAlert, mandalsList, fetchedData, setFetchedData, refr
   };
 
   const formartedData = fetchedData.mandal.map((mandal) => {
-    return [mandal.district_name || "District", mandal.consistency_id, mandal.mandal_name, renderEditAndDelete(mandal)];
+    return [mandal.consistency_id, mandal.mandal_name, renderEditAndDelete(mandal)];
   });
+
+  console.log("fetchedData.mandal222222", fetchedData.mandal);
 
   return (
     <Card elevation={1}>

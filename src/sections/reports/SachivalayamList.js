@@ -54,7 +54,10 @@ const SachivalayamList = ({ showAlert, sachivalayamList, fetchedData, setFetched
     responsive: "standard",
   };
 
-  const handleClick = (event, data) => {};
+  const handleClick = (event, data) => {
+    setAnchorEl(event.currentTarget);
+    
+  };
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -84,11 +87,14 @@ const SachivalayamList = ({ showAlert, sachivalayamList, fetchedData, setFetched
 
   // update details
   const handleSubmit = async () => {};
+  const handleDelete = async (id) => {};
+
+  console.log("sachivalayamList", sachivalayamList);
 
   const renderEditAndDelete = (data) => {
     // Create a popover for the mandal
     const open = Boolean(anchorEl);
-    const id = open ? `simple-popover-${data.mandal_pk}` : undefined;
+    const id = open ? `simple-popover-${data.sachivalayam_pk}` : undefined;
 
     return (
       <Box>
@@ -100,6 +106,17 @@ const SachivalayamList = ({ showAlert, sachivalayamList, fetchedData, setFetched
           }}
         >
           <EditNoteIcon />
+        </Button>
+        <Button
+          sx={{
+            backgroundColor: "red",
+          }}
+          variant="contained"
+          onClick={() => {
+            handleDelete(data.sachivalayam_pk);
+          }}
+        >
+          <DeleteForeverIcon />
         </Button>
         <Popover
           id={id}

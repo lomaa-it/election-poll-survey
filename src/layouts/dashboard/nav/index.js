@@ -67,7 +67,7 @@ const Nav = ({ account, openNav, onCloseNav }) => {
         <Box component="img" src={PUBLIC_URL + "/static/logo.png"} sx={{ width: "60px", height: "60px" }} />
 
         <Typography variant="subtitle1" color="text.white" sx={{ pl: 2 }}>
-          CHANDRAGIRI CONSTITUENCY
+          {account.user.consistency_name.toUpperCase()} CONSTITUENCY
         </Typography>
       </Box>
 
