@@ -30,8 +30,10 @@ const MandalsList = ({ showAlert, mandalsList, fetchedData, setFetchedData, refr
   });
 
   const columns = [
+    { label: "State Name" },
+    { label: "District Name" },
     {
-      label: "Constituency ID",
+      label: "Constituency Name",
     },
     {
       label: "Mandal Name",
@@ -177,7 +179,7 @@ const MandalsList = ({ showAlert, mandalsList, fetchedData, setFetchedData, refr
         >
           <EditNoteIcon />
         </Button>
-        <Button
+        {/* <Button
           sx={{
             backgroundColor: "red",
           }}
@@ -187,7 +189,7 @@ const MandalsList = ({ showAlert, mandalsList, fetchedData, setFetchedData, refr
           }}
         >
           {isLoading ? <CircularProgress size={20} /> : <DeleteForeverIcon />}
-        </Button>
+        </Button> */}
         <Popover
           id={id}
           open={open}
@@ -323,7 +325,7 @@ const MandalsList = ({ showAlert, mandalsList, fetchedData, setFetchedData, refr
   };
 
   const formartedData = fetchedData.mandal.map((mandal) => {
-    return [mandal.consistency_id, mandal.mandal_name, renderEditAndDelete(mandal)];
+    return [mandal.state_name, mandal.district_name, mandal.consistency_name, mandal.mandal_name, renderEditAndDelete(mandal)];
   });
 
   console.log("fetchedData.mandal222222", fetchedData.mandal);

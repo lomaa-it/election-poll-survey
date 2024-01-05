@@ -43,6 +43,13 @@ const DesignationPage = ({ dashboard, showAlert }) => {
 
   const handleSubmit = async () => {
     setIsLoading(true);
+
+    if (selectedValues.lookup_valuename === "") {
+      showAlert({ text: "Please enter designation name", color: "error" });
+      setIsLoading(false);
+      return;
+    }
+
     try {
       const response = await ApiServices.postRequest(createDesignationsRoute, {
         lookup_name: selectedValues.lookup_name,
@@ -75,7 +82,7 @@ const DesignationPage = ({ dashboard, showAlert }) => {
         <Card sx={{ p: 3 }}>
           <Grid container spacing={2} alignItems="center">
             <Grid item xs={12} md={6} lg={9}>
-              <DesignationList designationlist={fetchedData.designation} setRefresh={setRefresh} />
+              <DesignationList fetchedData={fetchedData} setFetchedData={setFetchedData} selectedValues={selectedValues} setSelectedValues={setSelectedValues} refresh={refresh} setRefresh={setRefresh} />
             </Grid>
             <Grid
               item

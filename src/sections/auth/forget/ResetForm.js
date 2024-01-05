@@ -3,13 +3,7 @@ import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import {
-  Stack,
-  IconButton,
-  InputAdornment,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Stack, IconButton, InputAdornment, TextField, Typography } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { FormProvider, RHFTextField } from "../../../components/hook-form";
 import { connect } from "react-redux";
@@ -28,9 +22,7 @@ const ResetForm = ({ showAlert }) => {
   const [isLoading, setLoading] = useState(false);
 
   const LoginSchema = Yup.object().shape({
-    newpswd: Yup.string()
-      .required("Password is required")
-      .min(8, "Password must be at least 8 characters"),
+    newpswd: Yup.string().required("Password is required").min(8, "Password must be at least 8 characters"),
     // .matches(
     //   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
     //   "Password must have at least: 1 uppercase, 1 lowercase, 1 number, and 1 special character"
@@ -62,7 +54,7 @@ const ResetForm = ({ showAlert }) => {
         password: data.newpswd,
       };
 
-      await ApiServices.postRequest(resetPswdRoute, jsonData);
+      await instance.post(resetPswdRoute, jsonData);
 
       setLoading(false);
       showAlert({ text: "Password reset completed", color: "success" });
@@ -86,13 +78,8 @@ const ResetForm = ({ showAlert }) => {
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <IconButton
-                  onClick={() => setShowPassword(!showPassword)}
-                  edge="end"
-                >
-                  <Iconify
-                    icon={showPassword ? "eva:eye-fill" : "eva:eye-off-fill"}
-                  />
+                <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                  <Iconify icon={showPassword ? "eva:eye-fill" : "eva:eye-off-fill"} />
                 </IconButton>
               </InputAdornment>
             ),
@@ -107,15 +94,8 @@ const ResetForm = ({ showAlert }) => {
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <IconButton
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  edge="end"
-                >
-                  <Iconify
-                    icon={
-                      showConfirmPassword ? "eva:eye-fill" : "eva:eye-off-fill"
-                    }
-                  />
+                <IconButton onClick={() => setShowConfirmPassword(!showConfirmPassword)} edge="end">
+                  <Iconify icon={showConfirmPassword ? "eva:eye-fill" : "eva:eye-off-fill"} />
                 </IconButton>
               </InputAdornment>
             ),
@@ -123,13 +103,7 @@ const ResetForm = ({ showAlert }) => {
         />
       </Stack>
 
-      <LoadingButton
-        fullWidth
-        loading={isLoading}
-        size="large"
-        type="submit"
-        variant="contained"
-      >
+      <LoadingButton fullWidth loading={isLoading} size="large" type="submit" variant="contained">
         Submit
       </LoadingButton>
     </FormProvider>

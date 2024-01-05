@@ -8,15 +8,15 @@ import LsService from "../services/localstorage";
 // export const baseServerUrl = "https://c1f8-123-201-171-181.ngrok-free.app/";
 
 // export const baseServerUrl = "https://d1ef-123-201-174-192.ngrok-free.app";
-export const baseServerUrl = "https://mumbaiapi.cgrysrcongress.in";
-// export const baseServerUrl = "http://192.168.0.102:8080";
+export const baseServerUrl = "https://backendapi.cgrysrcongress.in";
+// export const baseServerUrl = "http://192.168.0.122:8080";
 // export const baseServerUrl = "http://192.168.133.177:8080";
 /// new
 // export const baseServerUrl = "https://poll2.onrender.com";
 
 // Access Management Api's
 export const getallAccessPermissions = "/getall_access_permissions";
-export const getPermissionListRoute = "/getpermissionlist"
+export const getPermissionListRoute = "/getpermissionlist";
 
 // Survey Dashboard Apis
 export const getDashBoardbyTotalVoters = "/getdashboardbytotalvoters";
@@ -124,7 +124,7 @@ export const updateDivisionByIdRoute = "/divisions/";
 export const designationMappingRoute = "/designationmappingtousers";
 export const sendCredsToUsersRoute = "/sendcredstousers";
 export const UpdateAndDeleteConstituenciesRoute = "/constituencies/";
-
+export const updateAndDeleteSachivalayam = "/sachivalayam/";
 // export const postRequest = (route, data) => {
 //   let user = LsService.getCurrentUser();
 //   var accesstoken = user.user_pk;

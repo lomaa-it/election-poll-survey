@@ -156,7 +156,7 @@ const ConstituenciesList = ({ showAlert, constituenciesList, fetchedData, setFet
         >
           <EditNoteIcon />
         </Button>
-        <Button
+        {/* <Button
           sx={{
             backgroundColor: "red",
           }}
@@ -166,7 +166,7 @@ const ConstituenciesList = ({ showAlert, constituenciesList, fetchedData, setFet
           }}
         >
           {isLoading ? <CircularProgress size={20} /> : <DeleteForeverIcon />}
-        </Button>
+        </Button> */}
         <Popover
           id={id}
           open={open}

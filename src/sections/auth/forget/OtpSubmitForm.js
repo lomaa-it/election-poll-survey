@@ -41,7 +41,7 @@ const OtpSubmitForm = ({ formValues, showAlert }) => {
     console.log(data);
     setLoading(true);
     try {
-      const response = await ApiServices.postRequest(saveNewPassword, {
+      const response = await instance.post(saveNewPassword, {
         otp: data.otp,
         username: formValues.username,
         password: data.confirm_password,

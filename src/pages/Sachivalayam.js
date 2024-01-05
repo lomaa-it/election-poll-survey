@@ -96,6 +96,7 @@ const Sachivalayam = ({ dashboard, showAlert }) => {
       setIsLoading(true);
       const response = await ApiServices.postRequest(createSachivalayamRoute, {
         sachivalayam_name: selectedValues.sachivalayam_name,
+        division_pk: selectedValues.division_id,
         division_id: selectedValues.division_id,
       });
       console.log("created", response.data.message);

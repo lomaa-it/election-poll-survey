@@ -10,6 +10,9 @@ import Sachivalayam from "../../pages/Sachivalayam";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import CustomMuiDataTable from "../../components/CustomMuiDataTable";
+import { updateAndDeleteSachivalayam } from "../../utils/apis";
+import ApiServices from "../../services/apiservices";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const SachivalayamList = ({ showAlert, sachivalayamList, fetchedData, setFetchedData, refresh, setRefresh }) => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -26,6 +29,9 @@ const SachivalayamList = ({ showAlert, sachivalayamList, fetchedData, setFetched
   });
 
   const columns = [
+    {
+      label: "State Name",
+    },
     {
       label: "District Name",
     },
@@ -56,7 +62,38 @@ const SachivalayamList = ({ showAlert, sachivalayamList, fetchedData, setFetched
 
   const handleClick = (event, data) => {
     setAnchorEl(event.currentTarget);
-    
+    console.log("data", data);
+    console.log("fetchedData", fetchedData);
+
+    const division = fetchedData.division.find((division) => division.division_pk === data.division_pk);
+    const mandal_id = division ? division.mandal_id : null;
+    console.log("division", division);
+    console.log("mandal_id", mandal_id);
+
+    const mandal = fetchedData.mandal.find((mandal) => mandal.mandal_pk === mandal_id);
+    const consistency_id = mandal ? mandal.consistency_id : null;
+    console.log("consistency_id", consistency_id);
+
+    const consistency = fetchedData.consistency.find((consistency) => consistency.consistency_pk === consistency_id);
+    const district_id = consistency ? consistency.district_pk : null;
+
+    console.log("district_id", district_id);
+
+    const district = fetchedData.district.find((district) => district.district_pk === district_id);
+    const state_id = district ? district.state_id : null;
+
+    console.log("state_id", state_id);
+
+    setSelectedValues((prevState) => ({
+      ...prevState,
+      state_id: state_id,
+      district_id: district_id,
+      consistency_id: consistency_id,
+      mandal_id: mandal_id,
+      division_id: data.division_pk,
+      sachivalayam_id: data.sachivalayam_pk,
+      sachivalayam_name: data.sachivalayam_name,
+    }));
   };
 
   const handleClose = () => {
@@ -86,10 +123,85 @@ const SachivalayamList = ({ showAlert, sachivalayamList, fetchedData, setFetched
   };
 
   // update details
-  const handleSubmit = async () => {};
-  const handleDelete = async (id) => {};
+  const handleSubmit = async () => {
+    console.log("selectedValues", selectedValues);
+    if (!selectedValues.state_id) {
+      showAlert({ text: "Please select state", color: "error" });
+      return;
+    }
+    if (!selectedValues.district_id) {
+      showAlert({ text: "Please select district", color: "error" });
+      return;
+    }
+    if (!selectedValues.consistency_id) {
+      showAlert({ text: "Please select constituency", color: "error" });
+      return;
+    }
+    if (!selectedValues.mandal_id) {
+      showAlert({ text: "Please select mandal", color: "error" });
+      return;
+    }
+    if (!selectedValues.division_id) {
+      showAlert({ text: "Please select division", color: "error" });
+      return;
+    }
+    if (!selectedValues.sachivalayam_name) {
+      showAlert({ text: "Please enter sachivalayam name", color: "error" });
+      return;
+    }
 
-  console.log("sachivalayamList", sachivalayamList);
+    try {
+      setIsLoading(true);
+      const response = await ApiServices.putRequest(updateAndDeleteSachivalayam + selectedValues.sachivalayam_id, {
+        sachivalayam_name: selectedValues.sachivalayam_name,
+        division_pk: selectedValues.division_id,
+      });
+      showAlert({ text: "Sachivalayam Updated Successfully", color: "success" });
+      console.log(response.data.message);
+      setIsLoading(false);
+      setSelectedValues({
+        state_id: "",
+        district_id: "",
+        consistency_id: "",
+        mandal_id: "",
+        division_id: "",
+        sachivalayam_id: "",
+        sachivalayam_name: "",
+      });
+      setRefresh(!refresh);
+      handleClose();
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false);
+      showAlert({ text: "Something went wrong", color: "error" });
+      setRefresh(!refresh);
+    }
+  };
+  const handleDelete = async (id) => {
+    try {
+      setIsLoading(true);
+      const response = await ApiServices.deleteRequest(updateAndDeleteSachivalayam + id);
+      showAlert({ text: "Sachivalayam Deleted Successfully", color: "success" });
+      console.log(response.data.message);
+      setIsLoading(false);
+      setSelectedValues({
+        state_id: "",
+        district_id: "",
+        consistency_id: "",
+        mandal_id: "",
+        division_id: "",
+        sachivalayam_id: "",
+        sachivalayam_name: "",
+      });
+      setRefresh(!refresh);
+      handleClose();
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false);
+      showAlert({ text: "Something went wrong", color: "error" });
+      setRefresh(!refresh);
+    }
+  };
 
   const renderEditAndDelete = (data) => {
     // Create a popover for the mandal
@@ -98,26 +210,37 @@ const SachivalayamList = ({ showAlert, sachivalayamList, fetchedData, setFetched
 
     return (
       <Box>
-        <Button
-          aria-describedby={id}
-          variant="contained"
-          onClick={(e) => {
-            handleClick(e, data);
-          }}
-        >
-          <EditNoteIcon />
-        </Button>
-        <Button
+        <Box
           sx={{
-            backgroundColor: "red",
-          }}
-          variant="contained"
-          onClick={() => {
-            handleDelete(data.sachivalayam_pk);
+            display: "flex",
+            gap: "5px",
           }}
         >
-          <DeleteForeverIcon />
-        </Button>
+          <Button
+            aria-describedby={id}
+            variant="contained"
+            onClick={(e) => {
+              handleClick(e, data);
+            }}
+            sx={{
+              marginRight: "10px",
+            }}
+          >
+            <EditNoteIcon />
+          </Button>
+          {/* <Button
+            sx={{
+              backgroundColor: "red",
+            }}
+            variant="contained"
+            onClick={() => {
+              handleDelete(data.sachivalayam_pk);
+            }}
+          >
+            {isLoading ? <CircularProgress size={20} /> : <DeleteForeverIcon />}
+          </Button> */}
+        </Box>
+
         <Popover
           id={id}
           open={open}
@@ -301,12 +424,13 @@ const SachivalayamList = ({ showAlert, sachivalayamList, fetchedData, setFetched
 
   const formartedData = fetchedData.sachivalayam.map((sachivalayam) => {
     return [
+      sachivalayam.state_name || "State",
       sachivalayam.district_name || "District",
       sachivalayam.consitency_name || "Constituency",
       sachivalayam.mandal_name || "Mandal",
       sachivalayam.division_name || "Division",
       sachivalayam.sachivalayam_name || "Sachivalayam",
-      renderEditAndDelete(),
+      renderEditAndDelete(sachivalayam),
     ];
   });
 

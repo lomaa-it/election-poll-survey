@@ -3,13 +3,7 @@ import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import {
-  Stack,
-  IconButton,
-  InputAdornment,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Stack, IconButton, InputAdornment, TextField, Typography } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { FormProvider, RHFTextField } from "../../../components/hook-form";
 import { connect } from "react-redux";
@@ -25,9 +19,7 @@ const ForgetResetForm = ({ showAlert }) => {
   const [isLoading, setLoading] = useState(false);
 
   const LoginSchema = Yup.object().shape({
-    newpswd: Yup.string()
-      .required("Password is required")
-      .min(8, "Password must be at least 8 characters"),
+    newpswd: Yup.string().required("Password is required").min(8, "Password must be at least 8 characters"),
     // .matches(
     //   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
     //   "Password must have at least: 1 uppercase, 1 lowercase, 1 number, and 1 special character"
@@ -59,7 +51,7 @@ const ForgetResetForm = ({ showAlert }) => {
         password: data.newpswd,
       };
 
-      await ApiServices.postRequest(resetPswdRoute, jsonData);
+      await instance.post(resetPswdRoute, jsonData);
 
       setLoading(false);
       showAlert({ text: "Password reset completed", color: "success" });
@@ -80,13 +72,7 @@ const ForgetResetForm = ({ showAlert }) => {
         <RHFTextField name="confirmpswd" label="Confirm New Password" />
       </Stack>
 
-      <LoadingButton
-        fullWidth
-        loading={isLoading}
-        size="large"
-        type="submit"
-        variant="contained"
-      >
+      <LoadingButton fullWidth loading={isLoading} size="large" type="submit" variant="contained">
         Submit
       </LoadingButton>
     </FormProvider>

@@ -12,6 +12,7 @@ import { set } from "date-fns";
 import instance from "../../utils/axios";
 import CustomMuiDataTable from "../../components/CustomMuiDataTable";
 import ApiServices from "../../services/apiservices";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const DivisionList = ({ showAlert, divisionList, fetchedData, setFetchedData, refresh, setRefresh }) => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -27,6 +28,7 @@ const DivisionList = ({ showAlert, divisionList, fetchedData, setFetchedData, re
   });
 
   const columns = [
+    { label: "State Name" },
     {
       label: "District Name",
     },
@@ -180,7 +182,7 @@ const DivisionList = ({ showAlert, divisionList, fetchedData, setFetchedData, re
   const renderEditAndDelete = (data) => {
     // Create a popover for the mandal
     const open = Boolean(anchorEl);
-    const id = open ? `simple-popover-${data.mandal_pk}` : undefined;
+    const id = open ? `simple-popover-${data.division_pk}` : undefined;
 
     return (
       <Box>
@@ -196,7 +198,7 @@ const DivisionList = ({ showAlert, divisionList, fetchedData, setFetchedData, re
         >
           <EditNoteIcon />
         </Button>
-        <Button
+        {/* <Button
           sx={{
             backgroundColor: "red",
           }}
@@ -205,8 +207,8 @@ const DivisionList = ({ showAlert, divisionList, fetchedData, setFetchedData, re
             handleDelete(data.division_pk);
           }}
         >
-          <DeleteForeverIcon />
-        </Button>
+          {isLoading ? <CircularProgress size={20} /> : <DeleteForeverIcon />}
+        </Button> */}
         <Popover
           id={id}
           open={open}
@@ -366,7 +368,7 @@ const DivisionList = ({ showAlert, divisionList, fetchedData, setFetchedData, re
   };
   console.log("Division List", fetchedData.division);
   const formartedData = fetchedData.division.map((division) => {
-    return [division.district_name || "District", division.consitency_name || "Constituency", division.mandal_name || "Mandal", division.division_name || "Division", renderEditAndDelete(division)];
+    return [division.state_name || "State", division.district_name || "District", division.consistency_name || "Constituency", division.mandal_name || "Mandal", division.division_name || "Division", renderEditAndDelete(division)];
   });
 
   return (

@@ -51,7 +51,7 @@ const ForgetForm = ({ showAlert, otpSent, setOtpSent, isVerified, setIsVerified 
         username: data.username,
       };
       console.log("jsondata", jsonData);
-      const response = await ApiServices.postRequest(userValidationwithPhonenoRoute, jsonData);
+      const response = await instance.post(userValidationwithPhonenoRoute, jsonData);
       console.log("phione response", response);
       if (response.status == 200) {
         showAlert({ text: `${response.data?.message}`, color: "success" });
@@ -87,7 +87,7 @@ const ForgetForm = ({ showAlert, otpSent, setOtpSent, isVerified, setIsVerified 
         password: passwordDetails?.confirm_password,
       };
       console.log("jsondata", jsonData);
-      const response = await ApiServices.postRequest(saveNewPassword, jsonData);
+      const response = await instance.post(saveNewPassword, jsonData);
       console.log("phione response", response);
       if (response.status == 200) {
         showAlert({ text: `${response.data?.message}`, color: "success" });

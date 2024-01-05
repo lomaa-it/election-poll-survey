@@ -41,6 +41,19 @@ const PartiesPage = ({ dashboard, showAlert }) => {
 
   const handleSubmit = async () => {
     setIsLoading(true);
+
+    if (selectedValues.lookup_sequence === "") {
+      showAlert({ text: "Please enter sequence number", color: "error" });
+      setIsLoading(false);
+      return;
+    }
+
+    if (selectedValues.lookup_valuename === "") {
+      showAlert({ text: "Please enter party name", color: "error" });
+      setIsLoading(false);
+      return;
+    }
+
     try {
       const response = await ApiServices.postRequest(createPartyRoute, {
         lookup_sequence: selectedValues.lookup_sequence,
@@ -76,7 +89,7 @@ const PartiesPage = ({ dashboard, showAlert }) => {
         <Card sx={{ p: 3 }}>
           <Grid container spacing={2} alignItems="center">
             <Grid item xs={12} md={6} lg={9}>
-              <PartiesList partiesList={fetchedData.parties} setRefresh={setRefresh} />
+              <PartiesList fetchedData={fetchedData} setFetchedData={setFetchedData} selectedValues={selectedValues} setSelectedValues={setSelectedValues} refresh={refresh} setRefresh={setRefresh} />
             </Grid>
             <Grid
               item
@@ -95,10 +108,11 @@ const PartiesPage = ({ dashboard, showAlert }) => {
                 label="Sequence Number"
                 fullWidth
                 value={selectedValues.lookup_sequence}
-                onChange={(e) => {
+                onChange={(event) => {
+                  console.log(event.target.value);
                   setSelectedValues({
                     ...selectedValues,
-                    lookup_sequence: e.target.value,
+                    lookup_sequence: event.target.value,
                   });
                 }}
               />{" "}

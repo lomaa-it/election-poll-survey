@@ -1,4 +1,4 @@
-import { Grid, Container, Typography, Box, TextField, Card } from "@mui/material";
+import { Grid, Container, Typography, Box, TextField, Card, MenuItem } from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -8,58 +8,101 @@ import ViewUsersList from "../sections/reports/ViewUsersList";
 import Button from "@mui/material/Button";
 import DistrictsList from "../sections/reports/DistrictsList";
 import { useEffect, useState } from "react";
-import { getAllDistrictsWithJoinRoute, getAllStatesRoute, createDistrictsRoute } from "../utils/apis";
+import { getAllDistrictsWithJoinRoute, getAllStatesRoute, createDistrictsRoute, getAllDistrictsRoute } from "../utils/apis";
 
 import { showAlert } from "../actions/alert";
 import ApiServices from "../services/apiservices";
 
-const DistrictsPage = ({ dashboard }) => {
-  const [districtList, setDistrictList] = useState([]);
-  const [stateList, setStateList] = useState([]);
-  const [districtName, setDistrictName] = useState("");
-  const [stateId, setStateId] = useState("");
-
-  // fetch both states and districts
-  const fetchDistricts = async () => {
-    const response = await ApiServices.postRequest(getAllDistrictsWithJoinRoute);
-    console.log("districts", response.data);
-    setDistrictList(response.data.message);
-  };
-  useEffect(() => {
-    const fetchStates = async () => {
-      const response = await ApiServices.postRequest(getAllStatesRoute);
-      console.log("states", response.data.message);
-      setStateList(response.data.message);
-    };
-    fetchDistricts();
-    fetchStates();
-  }, []);
-  const stateOptions = stateList.map((state) => {
-    return { label: state.state_name, value: state.state_pk };
+const DistrictsPage = ({ dashboard, showAlert }) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [refresh, setRefresh] = useState(false);
+  const [fetchedData, setFetchedData] = useState({
+    states: [{}],
+    district: [{}],
   });
 
-  const addDistrict = async () => {
-    if (districtName === "") {
-      showAlert("error", "Please enter district name");
-      return;
-    }
-    if (stateId === "") {
-      showAlert("error", "Please select state");
-      return;
-    }
-    const response = await ApiServices.postRequest(createDistrictsRoute, {
-      district_name: districtName,
-      state_id: stateId,
-    });
+  const [selectedValues, setSelectedValues] = useState({
+    state_id: "",
+    district_name: "",
+  });
 
-    console.log(response.data);
-    if (response.data.status === "success") {
-      showAlert("success", "District added successfully");
+  useEffect(() => {
+    const fecthOptionsData = async () => {
+      try {
+        /// get all states
+        const statesResponse = await ApiServices.postRequest(getAllStatesRoute);
+        console.log("states", statesResponse.data.message);
+        /// get all districts
+        const districtsResponse = await ApiServices.postRequest(getAllDistrictsRoute);
+        console.log("districts", districtsResponse.data.message);
+
+        /// state update
+        setFetchedData((prevState) => ({
+          ...prevState,
+          states: statesResponse.data.message,
+          district: districtsResponse.data.message,
+        }));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fecthOptionsData();
+  }, []);
+
+  useEffect(() => {
+    const fecthOptionsData = async () => {
+      try {
+        /// get all districts
+        const districtsResponse = await ApiServices.postRequest(getAllDistrictsRoute);
+        console.log("districts", districtsResponse.data.message);
+
+        /// state update
+        setFetchedData((prevState) => ({
+          ...prevState,
+          district: districtsResponse.data.message,
+        }));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fecthOptionsData();
+  }, [refresh]);
+
+  const handleSubmit = async () => {
+    if (!selectedValues.state_id) {
+      showAlert({ text: "Please select state", color: "error" });
+      return;
     }
-    setDistrictName("");
-    fetchDistricts();
+
+    if (!selectedValues.district_name) {
+      showAlert({ text: "Please enter district name", color: "error" });
+
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      const response = await ApiServices.postRequest(createDistrictsRoute, {
+        state_id: selectedValues.state_id,
+        district_name: selectedValues.district_name,
+      });
+
+      setIsLoading(false);
+      showAlert({ text: "District Added Successfully", color: "success" });
+      setRefresh((prevState) => !prevState);
+      setSelectedValues({
+        state_id: "",
+        district_name: "",
+      });
+    } catch (error) {
+      console.log(error);
+      showAlert({ text: "District Not Added", color: "error" });
+      setIsLoading(false);
+      setRefresh((prevState) => !prevState);
+    }
   };
 
+  console.log("fetchedData", fetchedData);
   return (
     <Page title="Districts">
       <Container maxWidth="xl">
@@ -70,7 +113,7 @@ const DistrictsPage = ({ dashboard }) => {
         <Card sx={{ p: 3 }}>
           <Grid container spacing={2} alignItems="center">
             <Grid item xs={12} md={6} lg={9}>
-              <DistrictsList districtList={districtList} />
+              <DistrictsList fetchedData={fetchedData} setFetchedData={setFetchedData} selectedValues={selectedValues} setSelectedValues={setSelectedValues} refresh={refresh} setRefresh={setRefresh} />
             </Grid>
             <Grid
               item
@@ -83,31 +126,44 @@ const DistrictsPage = ({ dashboard }) => {
                 gap: "15px",
               }}
             >
-              <Autocomplete
-                options={stateOptions}
-                renderInput={(params) => <TextField size="small" {...params} label="Select State" fullWidth />}
-                onChange={(event, value) => {
-                  console.log(value);
-                  if (value) {
-                    setStateId(value.value);
-                  }
+              <TextField
+                size="small"
+                label="Select State"
+                fullWidth
+                select
+                required
+                value={selectedValues.state_id}
+                onChange={(e) => {
+                  setSelectedValues((prevState) => ({
+                    ...prevState,
+                    state_id: e.target.value,
+                    district_id: "",
+                  }));
                 }}
-              />
+              >
+                {fetchedData.states.map((state) => {
+                  return <MenuItem value={state.state_pk}>{state.state_name}</MenuItem>;
+                })}
+              </TextField>
               <TextField
                 size="small"
                 label="District Name"
                 fullWidth
-                value={districtName}
-                onChange={(event) => {
-                  setDistrictName(event.target.value);
+                value={selectedValues.district_name}
+                onChange={(e) => {
+                  setSelectedValues((prevState) => ({
+                    ...prevState,
+                    district_name: e.target.value,
+                  }));
                 }}
               />
               <LoadingButton
+                loading={isLoading}
                 variant="contained"
                 sx={{
                   padding: "15px",
                 }}
-                onClick={addDistrict}
+                onClick={handleSubmit}
               >
                 Add
               </LoadingButton>
@@ -127,4 +183,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, null)(DistrictsPage);
+export default connect(mapStateToProps, { showAlert })(DistrictsPage);
