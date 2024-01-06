@@ -7,19 +7,6 @@ const AccessManagementPage = () => {
   return (
     <Page title="Assign Authority">
       <Container maxWidth="xl">
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <Typography variant="h4" sx={{ mb: 1 }}>
-            Assign Authority
-          </Typography>
-          <LoadingButton variant="contained">Save</LoadingButton>
-        </Box>
-
         <AccessMangementList />
       </Container>
     </Page>
