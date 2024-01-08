@@ -32,9 +32,9 @@ const PartiesList = ({ showAlert, partiesList, fetchedData, setFetchedData, refr
       label: "Party Name",
     },
 
-    {
-      label: "Edit/Delete",
-    },
+    // {
+    //   label: "Edit/Delete",
+    // },
   ];
 
   const options = {
@@ -43,6 +43,10 @@ const PartiesList = ({ showAlert, partiesList, fetchedData, setFetchedData, refr
     responsive: "standard",
     rowsPerPageOptions: [100, 150, 200],
     rowsPerPage: 100,
+    download: false,
+    print: false,
+    viewColumns: false,
+    filter: false,
   };
 
   const handleClick = (event, data) => {
@@ -138,7 +142,7 @@ const PartiesList = ({ showAlert, partiesList, fetchedData, setFetchedData, refr
 
     return (
       <Box>
-        <Button
+        {/* <Button
           aria-describedby={id}
           onClick={(e) => {
             handleClick(e, data);
@@ -148,7 +152,7 @@ const PartiesList = ({ showAlert, partiesList, fetchedData, setFetchedData, refr
           }}
         >
           <EditNoteIcon />
-        </Button>
+        </Button> */}
         {/* <Button
           sx={{
             color: "red",

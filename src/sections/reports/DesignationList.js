@@ -30,9 +30,9 @@ const DesignationList = ({ showAlert, designationlist, fetchedData, setFetchedDa
       label: "Designation Name",
     },
 
-    {
-      label: "Edit/Delete",
-    },
+    // {
+    //   label: "Edit/Delete",
+    // },
   ];
 
   const options = {
@@ -41,6 +41,10 @@ const DesignationList = ({ showAlert, designationlist, fetchedData, setFetchedDa
     responsive: "standard",
     rowsPerPageOptions: [100, 150, 200],
     rowsPerPage: 100,
+    download: false,
+    print: false,
+    viewColumns: false,
+    filter: false,
   };
 
   const handleClick = (event, data) => {
@@ -127,7 +131,7 @@ const DesignationList = ({ showAlert, designationlist, fetchedData, setFetchedDa
 
     return (
       <Box>
-        <Button
+        {/* <Button
           aria-describedby={id}
           onClick={(e) => {
             handleClick(e, data);
@@ -137,7 +141,7 @@ const DesignationList = ({ showAlert, designationlist, fetchedData, setFetchedDa
           }}
         >
           <EditNoteIcon />
-        </Button>
+        </Button> */}
         {/* <Button
           sx={{
             color: "red",

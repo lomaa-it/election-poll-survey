@@ -34,9 +34,9 @@ const ConstituenciesList = ({ showAlert, constituenciesList, fetchedData, setFet
       label: "Constituency Name",
     },
 
-    {
-      label: "Edit/Delete",
-    },
+    // {
+    //   label: "Edit/Delete",
+    // },
   ];
 
   const options = {
@@ -45,6 +45,10 @@ const ConstituenciesList = ({ showAlert, constituenciesList, fetchedData, setFet
     responsive: "standard",
     rowsPerPageOptions: [100, 150, 200],
     rowsPerPage: 100,
+    download: false,
+    print: false,
+    viewColumns: false,
+    filter: false,
   };
 
   const handleClick = (event, data) => {
@@ -140,7 +144,7 @@ const ConstituenciesList = ({ showAlert, constituenciesList, fetchedData, setFet
 
     return (
       <Box>
-        <Button
+        {/* <Button
           aria-describedby={id}
           onClick={(e) => {
             handleClick(e, data);
@@ -150,7 +154,7 @@ const ConstituenciesList = ({ showAlert, constituenciesList, fetchedData, setFet
           }}
         >
           <EditNoteIcon />
-        </Button>
+        </Button> */}
         {/* <Button
           sx={{
             color: "red",

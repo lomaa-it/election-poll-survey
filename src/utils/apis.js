@@ -9,7 +9,7 @@ import LsService from "../services/localstorage";
 
 // export const baseServerUrl = "https://d1ef-123-201-174-192.ngrok-free.app";
 export const baseServerUrl = "https://backendapi.cgrysrcongress.in";
-// export const baseServerUrl = "http://192.168.0.122:8080";
+
 // export const baseServerUrl = "http://192.168.0.129:8080";
 /// new
 // export const baseServerUrl = "https://poll2.onrender.com";
@@ -80,6 +80,11 @@ export const getAllMandalsWithJoinRoute = "/getallmandalswithjoin";
 
 export const getOpinionDashboardRoute = "/getopinionpolldashboard";
 export const getOpinionResultRoute = "/getopinionreports";
+
+
+// opinion report routes
+export const getSurveySummaryByConstituency = "/getsurveysummarybyconstituency";
+export const getSurveyResultsByConstituency = "/getsurveyresultsbyconstituency";
 
 export const getAllVotorsSurveyRoute = "/getallvoterswithjoinandwhere";
 export const changeOpinionPollRoute = "/poll_survey";

@@ -249,7 +249,8 @@ const VoterRegistrationPage = ({ account, showAlert }) => {
                 showSearchButton={false}
                 showPartNo={isNewVoter ? false : true}
                 onChanged={(value) => setFilterValues(value)}
-                lg={6}
+                addVoterVillageLg={6}
+                lg={3}
               />
               {isNewVoter == false && (
                 <Grid item xs={12} md={6} lg={6}>
@@ -302,13 +303,6 @@ const VoterRegistrationPage = ({ account, showAlert }) => {
               <Grid item xs={12} md={6} lg={6} alignSelf={"flex-end"}>
                 <RHFTextField name="age" label="Age" />
               </Grid>
-              <Grid item xs={12} md={6} lg={6}>
-                <RHFTextField name="phone_no" label="Phone Number" inputProps={{ maxLength: 10 }} />
-              </Grid>
-
-              <Grid item xs={12} md={12} lg={6}>
-                <RHFCheckbox name="is_resident" label="Is Resident" />
-              </Grid>
 
               {resident == true && (
                 <Grid item xs={12} md={6} lg={6}>
@@ -318,6 +312,12 @@ const VoterRegistrationPage = ({ account, showAlert }) => {
 
               <Grid item xs={12} md={6} lg={6}>
                 <RHFTextField name="current_address" label="Current Address" multiline rows={4} fullWidth />
+              </Grid>
+              <Grid item xs={12} md={6} lg={6}>
+                <RHFTextField name="phone_no" label="Phone Number" inputProps={{ maxLength: 10 }} />
+              </Grid>
+              <Grid item xs={12} md={12} lg={6}>
+                <RHFCheckbox name="is_resident" label="Is Resident" />
               </Grid>
 
               <Grid item xs={12} md={6} lg={6}>

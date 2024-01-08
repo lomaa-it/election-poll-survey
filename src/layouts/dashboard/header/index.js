@@ -83,7 +83,8 @@ function Header({ onOpenNav, account }) {
               padding: 0,
             }}
           >
-            {account.user.state_name} &#8594; {account.user.district_name}
+            {account.user.state_name}
+            {account.user.desgination_name == "CM" ? "" : <>&#8594; {account.user.district_name}</>}
           </Typography>
           <br />
           <Typography
@@ -106,11 +107,17 @@ function Header({ onOpenNav, account }) {
             sm: 1,
           }}
         >
-          <Box component="img" src={PUBLIC_URL + "/static/images/imgs-1.png"} sx={{ width: 60, height: 60 }} />
+          {account.user.desgination_name == "CM" ? (
+            <Box component="img" src={PUBLIC_URL + "/static/images/" + account.user.party_leader_img} sx={{ width: 60, height: 60 }} />
+          ) : (
+            <>
+              <Box component="img" src={PUBLIC_URL + "/static/images/" + account.user.mla_img} sx={{ width: 60, height: 60 }} />
 
-          <Box component="img" src={PUBLIC_URL + "/static/images/imgs-2.png"} sx={{ width: 60, height: 60 }} />
+              <Box component="img" src={PUBLIC_URL + "/static/images/" + account.user.party_2ndleader_img} sx={{ width: 60, height: 60 }} />
 
-          <Box component="img" src={PUBLIC_URL + "/static/images/imgs-3.png"} sx={{ width: 60, height: 60 }} />
+              <Box component="img" src={PUBLIC_URL + "/static/images/" + account.user.party_leader_img} sx={{ width: 60, height: 60 }} />
+            </>
+          )}
 
           <Box p={0.5} />
 

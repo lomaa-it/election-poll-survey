@@ -32,6 +32,7 @@ const SearchByFilter = forwardRef(
       showOtherFilters = true,
       showSearchButton = true,
       children,
+      addVoterVillageLg,
     },
     ref
   ) => {
@@ -257,6 +258,8 @@ const SearchByFilter = forwardRef(
       reset: handleReset,
     }));
 
+    console.log("add", addVoterVillageLg);
+
     return (
       <>
         {showMandal && (
@@ -298,7 +301,7 @@ const SearchByFilter = forwardRef(
               name="sachivalayam"
               label="Select Sachivalayam"
               value={formValues.sachivalayam}
-              options={common?.sachivalayams.filter((e) => e.division_id == formValues?.division?.division_pk)}
+              options={common?.sachivalayams.filter((e) => e.division_pk == formValues?.division?.division_pk)}
               getOptionLabel={(option) => option.sachivalayam_name}
               onChange={handleChange}
               disabled={account?.user.sachivalayam_pk != null}
@@ -357,7 +360,7 @@ const SearchByFilter = forwardRef(
         )}
 
         {showVillage && (
-          <Grid item xs={12} md={6} lg={lg}>
+          <Grid item xs={12} md={6} lg={addVoterVillageLg == undefined ? lg : addVoterVillageLg}>
             <RHFAutoComplete
               name="village"
               label="Select Village"

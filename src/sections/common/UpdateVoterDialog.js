@@ -52,6 +52,8 @@ const UpdateVoterDialog = ({ account, common, voterData, showAlert, updateVoterD
     current_address: Yup.string(),
     permenent_address: Yup.string().required("Permanent address is required"),
     intrested_party: Yup.string().required("Interested party is required"),
+    nr_state: Yup.string(),
+    nr_city: Yup.string(),
   });
 
   const defaultValues = {
@@ -64,6 +66,8 @@ const UpdateVoterDialog = ({ account, common, voterData, showAlert, updateVoterD
     current_address: voterData.current_address ?? "",
     permenent_address: voterData.permenent_address ?? "",
     intrested_party: voterData.opinionparty ?? "",
+    nr_state: voterData.nr_state ?? "",
+    nr_city: voterData.nr_city ?? "",
   };
 
   const methods = useForm({
@@ -146,9 +150,17 @@ const UpdateVoterDialog = ({ account, common, voterData, showAlert, updateVoterD
                   />
                 </Grid>
                 {residential == 0 && (
-                  <Grid item xs={12} md={12} lg={12}>
-                    <RHFTextField name="current_address" label="Current Address" required />
-                  </Grid>
+                  <>
+                    <Grid item xs={12} md={12} lg={12}>
+                      <RHFTextField name="current_address" label="Current Address" required />
+                    </Grid>
+                    <Grid item xs={12} md={12} lg={6}>
+                      <RHFTextField name="nr_state" label="State" required />
+                    </Grid>
+                    <Grid item xs={12} md={12} lg={6}>
+                      <RHFTextField name="nr_city" label="City" required />
+                    </Grid>
+                  </>
                 )}
 
                 <Grid item xs={12} md={12} lg={12}>

@@ -13,6 +13,8 @@ import {
   getDashBoardbyageGroup,
   getOpinionDashboardRoute,
   getOpinionResultRoute,
+  getSurveyResultsByConstituency,
+  getSurveySummaryByConstituency,
 } from "../utils/apis";
 import ApiServices from "../services/apiservices";
 
@@ -255,11 +257,19 @@ export const getOpinionResults = (data) => async (dispatch) => {
     const response = await ApiServices.postRequest(getOpinionResultRoute, data);
     const responseData = response.data?.message ?? [];
 
-    console.log(responseData);
+    const surveyReportsResponse = await ApiServices.postRequest(getSurveySummaryByConstituency, data);
+    const surveyReportsResponseData = surveyReportsResponse.data?.message ?? [];
+
+    const getSurveyResultsByConstituencyResponse = await ApiServices.postRequest(getSurveyResultsByConstituency, data);
+    const getSurveyResultsByConstituencyResponseData = getSurveyResultsByConstituencyResponse.data?.message ?? [];
 
     dispatch({
       type: "OPINION_RESULTS_LOAD_SUCCESS",
-      payload: responseData,
+      payload: {
+        opinionResults: responseData,
+        surveyReports1: surveyReportsResponseData,
+        surveyReports2: getSurveyResultsByConstituencyResponseData,
+      },
     });
   } catch (err) {
     console.log(err);

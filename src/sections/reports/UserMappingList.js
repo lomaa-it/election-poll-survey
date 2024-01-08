@@ -99,6 +99,10 @@ const UserMappingList = ({ common, user, filterValues, showAlert, checkOrUncheck
     elevation: 0,
     selectableRows: "none",
     responsive: "standard",
+    download: false,
+    print: false,
+    viewColumns: false,
+    filter: false,
     ...(account.user?.desgination_name != "MLA" && {
       filter: false,
       search: false,

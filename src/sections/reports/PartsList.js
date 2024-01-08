@@ -97,6 +97,10 @@ const PartsList = ({ showAlert, partsList, common, account, checkOrUncheckUser, 
   const options = {
     elevation: 0,
     selectableRows: "none",
+    download: false,
+    print: false,
+    viewColumns: false,
+    filter: false,
     responsive: "standard",
     ...(account.user?.desgination_name != "MLA" && {
       filter: false,

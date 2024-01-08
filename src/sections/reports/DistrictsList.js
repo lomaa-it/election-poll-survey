@@ -29,9 +29,9 @@ const DistrictsList = ({ showAlert, districtList, fetchedData, setFetchedData, r
       label: "District Name",
     },
 
-    {
-      label: "Edit/Delete",
-    },
+    // {
+    //   label: "Edit/Delete",
+    // },
   ];
 
   const options = {
@@ -40,6 +40,10 @@ const DistrictsList = ({ showAlert, districtList, fetchedData, setFetchedData, r
     responsive: "standard",
     rowsPerPageOptions: [100, 150, 200],
     rowsPerPage: 100,
+    download: false,
+    print: false,
+    viewColumns: false,
+    filter: false,
   };
 
   const handleClick = (event, data) => {
@@ -133,7 +137,7 @@ const DistrictsList = ({ showAlert, districtList, fetchedData, setFetchedData, r
 
     return (
       <Box>
-        <Button
+        {/* <Button
           aria-describedby={id}
           onClick={(e) => {
             handleClick(e, data);
@@ -143,7 +147,7 @@ const DistrictsList = ({ showAlert, districtList, fetchedData, setFetchedData, r
           }}
         >
           <EditNoteIcon />
-        </Button>
+        </Button> */}
         {/* <Button
           sx={{
             color: "red",

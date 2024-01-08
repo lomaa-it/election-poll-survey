@@ -37,7 +37,9 @@ export default function dashboardReducer(state = initialState, action) {
       return {
         ...state,
         isLoading: false,
-        opinionResults: payload,
+        opinionResults: payload.opinionResults,
+        surveyReports1: payload.surveyReports1,
+        surveyReports2: payload.surveyReports2,
       };
 
     case "DASHBOARD_LOAD_ERROR":

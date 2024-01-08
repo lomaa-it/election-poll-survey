@@ -51,9 +51,9 @@ const VillagesList = ({ showAlert, villageList, fetchedData, setFetchedData, ref
       label: "Village Name",
     },
 
-    {
-      label: "Edit/Delete",
-    },
+    // {
+    //   label: "Edit/Delete",
+    // },
   ];
 
   const options = {
@@ -62,6 +62,10 @@ const VillagesList = ({ showAlert, villageList, fetchedData, setFetchedData, ref
     responsive: "standard",
     rowsPerPageOptions: [100, 150, 200],
     rowsPerPage: 100,
+    download: false,
+    print: false,
+    viewColumns: false,
+    filter: false,
   };
 
   const handleClick = (event, data) => {
@@ -243,7 +247,7 @@ const VillagesList = ({ showAlert, villageList, fetchedData, setFetchedData, ref
             gap: "5px",
           }}
         >
-          <Button
+          {/* <Button
             aria-describedby={id}
             onClick={(e) => {
               handleClick(e, data);
@@ -253,7 +257,7 @@ const VillagesList = ({ showAlert, villageList, fetchedData, setFetchedData, ref
             }}
           >
             <EditNoteIcon />
-          </Button>
+          </Button> */}
           {/* <Button
             sx={{
               color: "red",

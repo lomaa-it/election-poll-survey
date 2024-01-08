@@ -46,9 +46,9 @@ const SachivalayamList = ({ showAlert, account, sachivalayamList, fetchedData, s
       label: "Sachivalayam",
     },
 
-    {
-      label: "Edit/Delete",
-    },
+    // {
+    //   label: "Edit/Delete",
+    // },
   ];
 
   const options = {
@@ -57,6 +57,10 @@ const SachivalayamList = ({ showAlert, account, sachivalayamList, fetchedData, s
     responsive: "standard",
     rowsPerPageOptions: [100, 150, 200],
     rowsPerPage: 100,
+    download: false,
+    print: false,
+    viewColumns: false,
+    filter: false,
   };
 
   const handleClick = (event, data) => {
@@ -215,7 +219,7 @@ const SachivalayamList = ({ showAlert, account, sachivalayamList, fetchedData, s
             gap: "5px",
           }}
         >
-          <Button
+          {/* <Button
             aria-describedby={id}
             onClick={(e) => {
               handleClick(e, data);
@@ -225,7 +229,7 @@ const SachivalayamList = ({ showAlert, account, sachivalayamList, fetchedData, s
             }}
           >
             <EditNoteIcon />
-          </Button>
+          </Button> */}
           {/* <Button
             sx={{
               color: "red",

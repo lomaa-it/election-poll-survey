@@ -91,6 +91,10 @@ const ViewTicketsList = ({ isUser, common, ticket, showAlert, checkOrUncheckTick
     elevation: 0,
     selectableRows: "none",
     responsive: "standard",
+    download: false,
+    print: false,
+    viewColumns: false,
+    filter: false,
     ...(account.user?.desgination_name != "MLA" && {
       filter: false,
       search: false,
@@ -124,7 +128,7 @@ const ViewTicketsList = ({ isUser, common, ticket, showAlert, checkOrUncheckTick
   //   console.log("requestBody", requestBody);
   //   try {
   //     setLoading(true);
-      // await ApiServices.putRequest(updateTicketStatusRoute, requestBody);
+  // await ApiServices.putRequest(updateTicketStatusRoute, requestBody);
   //     showAlert({
   //       text: "Ticket status updated successfully",
   //       color: "success",

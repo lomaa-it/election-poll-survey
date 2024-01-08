@@ -41,9 +41,9 @@ const DivisionList = ({ showAlert, divisionList, fetchedData, setFetchedData, re
       label: "Division Name",
     },
 
-    {
-      label: "Edit/Delete",
-    },
+    // {
+    //   label: "Edit/Delete",
+    // },
   ];
 
   const options = {
@@ -52,6 +52,10 @@ const DivisionList = ({ showAlert, divisionList, fetchedData, setFetchedData, re
     responsive: "standard",
     rowsPerPageOptions: [100, 150, 200],
     rowsPerPage: 100,
+    download: false,
+    print: false,
+    viewColumns: false,
+    filter: false,
   };
 
   const handleClick = (event, data) => {
@@ -187,7 +191,7 @@ const DivisionList = ({ showAlert, divisionList, fetchedData, setFetchedData, re
 
     return (
       <Box>
-        <Button
+        {/* <Button
           aria-describedby={id}
           onClick={(e) => {
             handleClick(e, data);
@@ -197,7 +201,7 @@ const DivisionList = ({ showAlert, divisionList, fetchedData, setFetchedData, re
           }}
         >
           <EditNoteIcon />
-        </Button>
+        </Button> */}
         {/* <Button
           sx={{
             color: "red",

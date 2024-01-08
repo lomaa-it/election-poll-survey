@@ -38,9 +38,9 @@ const MandalsList = ({ showAlert, mandalsList, fetchedData, setFetchedData, refr
       label: "Mandal Name",
     },
 
-    {
-      label: "Edit/Delete",
-    },
+    // {
+    //   label: "Edit/Delete",
+    // },
   ];
 
   const options = {
@@ -49,6 +49,10 @@ const MandalsList = ({ showAlert, mandalsList, fetchedData, setFetchedData, refr
     responsive: "standard",
     rowsPerPageOptions: [100, 150, 200],
     rowsPerPage: 100,
+    download: false,
+    print: false,
+    viewColumns: false,
+    filter: false,
   };
 
   const handleClick = (event, data) => {
@@ -168,7 +172,7 @@ const MandalsList = ({ showAlert, mandalsList, fetchedData, setFetchedData, refr
 
     return (
       <Box>
-        <Button
+        {/* <Button
           aria-describedby={id}
           onClick={(e) => {
             handleClick(e, data);
@@ -178,7 +182,7 @@ const MandalsList = ({ showAlert, mandalsList, fetchedData, setFetchedData, refr
           }}
         >
           <EditNoteIcon />
-        </Button>
+        </Button> */}
         {/* <Button
           sx={{
            color: "red",

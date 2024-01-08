@@ -180,6 +180,14 @@ const OpinionPollSurveyList = forwardRef(({ isUser, voter, account, showAlert, c
             },
           },
           {
+            name: "nr_state",
+            label: "State",
+          },
+          {
+            name: "nr_city",
+            label: "City",
+          },
+          {
             name: "opinionparty",
             label: "Neutral",
             options: {
@@ -348,6 +356,10 @@ const OpinionPollSurveyList = forwardRef(({ isUser, voter, account, showAlert, c
     serverSide: true,
     filter: false,
     search: false,
+    download: false,
+    print: false,
+    viewColumns: false,
+
     ...(account.user?.desgination_name != "MLA" && {
       download: false,
       print: false,

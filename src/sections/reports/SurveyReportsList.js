@@ -9,11 +9,17 @@ import { BarChartWidget } from "../common";
 import { BJPColor, CONGRESSColor, JSPColor, NETURALColor, OTHERColor, TDPColor, YSRCPColor } from "../../utils/constants";
 import { searchFiltercolor } from "../../constants";
 import { useLocation } from "react-router-dom";
+import { RHFAutoComplete } from "../../components/hook-form";
 
-const SurveyReportsList = ({ dashboard, getOpinionResults, clearDashboardReducer, account }) => {
+const SurveyReportsList = ({ dashboard, getOpinionResults, clearDashboardReducer, account, common }) => {
   const [filterValues, setFilterValues] = useState(null);
   const [isLoading, setLoading] = useState(false);
   const [reset, setReset] = useState(false);
+
+  const [otherFilterValues, setOtherFilterValues] = useState({
+    intrested_party: null,
+    is_resident: null,
+  });
   let location = useLocation();
   const buttonRef = useRef();
 
@@ -22,14 +28,66 @@ const SurveyReportsList = ({ dashboard, getOpinionResults, clearDashboardReducer
   }, []);
 
   const handleSubmit = async (filterValues) => {
-    await getOpinionResults(filterValues);
+    const jsonData = {
+      ...filterValues,
+      intrested_party: otherFilterValues.intrested_party?.value ?? null,
+      is_resident: otherFilterValues.is_resident?.value ?? null,
+    };
+
+    await getOpinionResults(jsonData);
   };
 
   return (
     <>
       <Card sx={{ p: 3, backgroundColor: searchFiltercolor }}>
         <Grid container spacing={2} alignItems="center">
-          <SearchByFilter onSubmit={handleSubmit} />
+          <SearchByFilter
+            onSubmit={handleSubmit}
+            children={
+              <>
+                <Grid item xs={12} md={6} lg={2}>
+                  <RHFAutoComplete
+                    name="intrested_party"
+                    label="Select Party"
+                    value={otherFilterValues.intrested_party}
+                    options={common?.parties}
+                    getOptionLabel={(option) => option.label}
+                    onChange={(name, value) =>
+                      setOtherFilterValues((state) => ({
+                        ...state,
+                        [name]: value,
+                      }))
+                    }
+                  />
+                </Grid>
+
+                <Grid item xs={12} md={6} lg={2}>
+                  <RHFAutoComplete
+                    name="is_resident"
+                    label="Select Residence"
+                    value={otherFilterValues.is_resident}
+                    options={[
+                      {
+                        label: "Resident",
+                        value: 1,
+                      },
+                      {
+                        label: "Non-Resident",
+                        value: 0,
+                      },
+                    ]}
+                    getOptionLabel={(option) => option.label}
+                    onChange={(name, value) =>
+                      setOtherFilterValues((state) => ({
+                        ...state,
+                        [name]: value,
+                      }))
+                    }
+                  />
+                </Grid>
+              </>
+            }
+          />
         </Grid>
       </Card>
 
@@ -41,35 +99,28 @@ const SurveyReportsList = ({ dashboard, getOpinionResults, clearDashboardReducer
         </Box>
       )}
 
-      {!dashboard.isLoading && (
+      {!dashboard.isLoading && dashboard.surveyReports1 && (
         <Grid container spacing={1}>
           <Grid item xs={12} md={6}>
             <CustomizedTables
               labels={["S.No", "Mandal Name", "No of Polling Stations", "Male", "Female", "TG", "Total"]}
-              rows={[
-                ["1", "Yerravanipalem", "29", "11,398", "11,360", "2", "22,600"],
-                ["2", "Yerravanipalem", "29", "11,398", "11,360", "2", "22,600"],
-                ["3", "Yerravanipalem", "29", "11,398", "11,360", "2", "22,600"],
-                ["3", "Yerravanipalem", "29", "11,398", "11,360", "2", "22,600"],
-                ["3", "Yerravanipalem", "29", "11,398", "11,360", "2", "22,600"],
-                ["3", "Yerravanipalem", "29", "11,398", "11,360", "2", "22,600"],
+              rows={dashboard.surveyReports1.survey_summary_by_constituency.map((item, index) => [index + 1, item.mandal_name, item.parts_count, item.male_voters, item.female_voters, item.other_voters, item.total_voters])}
+              total={[
+                "",
+                "Total",
+                dashboard.surveyReports1?.all_totals?.final_polling_totals ?? 0,
+                dashboard.surveyReports1?.all_totals?.final_male_total ?? 0,
+                dashboard.surveyReports1?.all_totals?.final_female_total ?? 0,
+                dashboard.surveyReports1?.all_totals?.final_others_total ?? 0,
+                dashboard.surveyReports1?.all_totals?.final_total ?? 0,
               ]}
-              total={["", "Total", "29", "11,398", "11,360", "2", "22,600"]}
             />
           </Grid>
 
           <Grid item xs={12} md={6}>
             <CustomizedTables
-              labels={["Neutral", "YCP", "TDP", "JSP", "Congress"]}
-              rows={[
-                ["999", "888", "111", "112", "111"],
-                ["999", "888", "111", "112", "111"],
-                ["999", "888", "111", "112", "111"],
-                ["999", "888", "111", "112", "111"],
-                ["999", "888", "111", "112", "111"],
-                ["999", "888", "111", "112", "111"],
-                ["999", "888", "111", "112", "111"],
-              ]}
+              labels={["Neutral", "YCP", "TDP", "JSP", "Others", "Not Traced"]}
+              rows={dashboard.surveyReports2?.survey_results_by_constituency.map((item, index) => [item.neutral, item.ysrcp, item.tdp, item.janasena, item.others, item.not_traced])}
             />
           </Grid>
 
@@ -79,18 +130,17 @@ const SurveyReportsList = ({ dashboard, getOpinionResults, clearDashboardReducer
                 <BarChartWidget
                   distributed={true}
                   withCard={false}
-                  chartLabels={["Neutral", "YCP", "TDP", "JSP", "Congress", "BJP", "Others"]}
+                  chartLabels={["Neutral", "YCP", "TDP", "JSP", "Others", "Not Traced"]}
                   chartData={[
                     {
                       name: "Total",
                       data: [
-                        dashboard.opinionResults.reduce((sum, e) => sum + e.neutral, 0),
-                        dashboard.opinionResults.reduce((sum, e) => sum + e.ysrcp, 0),
-                        dashboard.opinionResults.reduce((sum, e) => sum + e.tdp, 0),
-                        dashboard.opinionResults.reduce((sum, e) => sum + e.janasena, 0),
-                        dashboard.opinionResults.reduce((sum, e) => sum + e.congress, 0),
-                        dashboard.opinionResults.reduce((sum, e) => sum + e.bjp, 0),
-                        dashboard.opinionResults.reduce((sum, e) => sum + e.otherss, 0),
+                        dashboard.surveyReports2?.survey_results_by_constituency[0]?.neutral ?? 0,
+                        dashboard.surveyReports2?.survey_results_by_constituency[0]?.ysrcp ?? 0,
+                        dashboard.surveyReports2?.survey_results_by_constituency[0]?.tdp ?? 0,
+                        dashboard.surveyReports2?.survey_results_by_constituency[0]?.janasena ?? 0,
+                        dashboard.surveyReports2?.survey_results_by_constituency[0]?.others ?? 0,
+                        dashboard.surveyReports2?.survey_results_by_constituency[0]?.not_traced ?? 0,
                       ],
                     },
                   ]}
@@ -102,16 +152,8 @@ const SurveyReportsList = ({ dashboard, getOpinionResults, clearDashboardReducer
 
           <Grid item xs={12} md={6}>
             <CustomizedTables
-              labels={["Neutral", "YCP", "TDP", "JSP", "Congress"]}
-              rows={[
-                ["10%", "20%", "50%", "3%", "2%"],
-                ["10%", "20%", "50%", "3%", "2%"],
-                ["10%", "20%", "50%", "3%", "2%"],
-                ["10%", "20%", "50%", "3%", "2%"],
-                ["10%", "20%", "50%", "3%", "2%"],
-                ["10%", "20%", "50%", "3%", "2%"],
-                ["10%", "20%", "50%", "3%", "2%"],
-              ]}
+              labels={["Neutral", "YCP", "TDP", "JSP", "Others", "Not Traced"]}
+              rows={dashboard.surveyReports2?.survey_results_by_constituency.map((item, index) => [item.neutral_percent, item.ysrcp_percent, item.tdp_percent, item.janasena_percent, item.others_percent, item.not_traced_percent])}
             />
           </Grid>
         </Grid>
@@ -160,6 +202,7 @@ const mapStateToProps = (state) => {
   return {
     dashboard: state.dashboard,
     account: state.auth,
+    common: state.common,
   };
 };
 
