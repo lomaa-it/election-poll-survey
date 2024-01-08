@@ -5,7 +5,7 @@
 import LsService from "../services/localstorage";
 
 // new api for baseServerUrl
-// export const baseServerUrl = "https://c1f8-123-201-171-181.ngrok-free.app/";
+// export const baseServerUrl = "https://b768-219-91-202-204.ngrok-free.app/";
 
 // export const baseServerUrl = "https://d1ef-123-201-174-192.ngrok-free.app";
 export const baseServerUrl = "https://backendapi.cgrysrcongress.in";
@@ -17,6 +17,7 @@ export const baseServerUrl = "https://backendapi.cgrysrcongress.in";
 // Access Management Api's
 export const getallAccessPermissions = "/getall_access_permissions";
 export const getPermissionListRoute = "/getpermissionlist";
+export const updatePermissionListRoute = "/updatepermissionlist";
 
 // Survey Dashboard Apis
 export const getDashBoardbyTotalVoters = "/getdashboardbytotalvoters";
