@@ -1,5 +1,5 @@
 import ApiServices from "../services/apiservices";
-import { getPermissionListRoute } from "../utils/apis";
+import { getPermissionListRoute, updatePermissionListRoute } from "../utils/apis";
 
 export const clearOtherReducer = () => async (dispatch) => {
   dispatch({
@@ -7,7 +7,7 @@ export const clearOtherReducer = () => async (dispatch) => {
   });
 };
 
-export const getAllAcessPermissions = () => async (dispatch) => {
+export const getAllAccessPermissions = () => async (dispatch) => {
   dispatch({
     type: "OTHER_LOAD_START",
   });
@@ -26,5 +26,24 @@ export const getAllAcessPermissions = () => async (dispatch) => {
       type: "OTHER_LOAD_ERROR",
       payload: err.message,
     });
+  }
+};
+
+export const updateAccessPermission = (name, value, jsonData) => async (dispatch) => {
+  var data = { ...jsonData, [name]: value ? 1 : 0 };
+  var updatedData = { [`${name}_${data.design_id}`]: value ? 1 : 0 };
+  dispatch({
+    type: "OTHER_UPDATE_ACCESS",
+    payload: { data, updatedData },
+  });
+};
+
+export const saveAccessPermission = async (data) => {
+  try {
+    await ApiServices.postRequest(updatePermissionListRoute, { message: data });
+    return true;
+  } catch (err) {
+    console.log(err);
+    return false;
   }
 };
