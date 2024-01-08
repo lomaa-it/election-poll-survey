@@ -13,7 +13,7 @@ import { getAllDistrictsWithJoinRoute, getAllStatesRoute, createDistrictsRoute, 
 import { showAlert } from "../actions/alert";
 import ApiServices from "../services/apiservices";
 
-const DistrictsPage = ({ dashboard, showAlert }) => {
+const DistrictsPage = ({ dashboard, showAlert, account }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [refresh, setRefresh] = useState(false);
   const [fetchedData, setFetchedData] = useState({
@@ -69,11 +69,6 @@ const DistrictsPage = ({ dashboard, showAlert }) => {
   }, [refresh]);
 
   const handleSubmit = async () => {
-    if (!selectedValues.state_id) {
-      showAlert({ text: "Please select state", color: "error" });
-      return;
-    }
-
     if (!selectedValues.district_name) {
       showAlert({ text: "Please enter district name", color: "error" });
 
@@ -83,7 +78,7 @@ const DistrictsPage = ({ dashboard, showAlert }) => {
     try {
       setIsLoading(true);
       const response = await ApiServices.postRequest(createDistrictsRoute, {
-        state_id: selectedValues.state_id,
+        state_id: account.user.state_pk,
         district_name: selectedValues.district_name,
       });
 
@@ -132,7 +127,7 @@ const DistrictsPage = ({ dashboard, showAlert }) => {
                 fullWidth
                 select
                 required
-                value={selectedValues.state_id}
+                value={account.user.state_pk}
                 onChange={(e) => {
                   setSelectedValues((prevState) => ({
                     ...prevState,
@@ -140,6 +135,7 @@ const DistrictsPage = ({ dashboard, showAlert }) => {
                     district_id: "",
                   }));
                 }}
+                disabled
               >
                 {fetchedData.states.map((state) => {
                   return <MenuItem value={state.state_pk}>{state.state_name}</MenuItem>;
@@ -180,6 +176,7 @@ const DistrictsPage = ({ dashboard, showAlert }) => {
 const mapStateToProps = (state) => {
   return {
     dashboard: state.dashboard,
+    account: state.auth,
   };
 };
 

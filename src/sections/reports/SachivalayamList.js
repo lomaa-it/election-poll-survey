@@ -14,7 +14,7 @@ import { updateAndDeleteSachivalayam } from "../../utils/apis";
 import ApiServices from "../../services/apiservices";
 import CircularProgress from "@mui/material/CircularProgress";
 
-const SachivalayamList = ({ showAlert, sachivalayamList, fetchedData, setFetchedData, refresh, setRefresh }) => {
+const SachivalayamList = ({ showAlert, account, sachivalayamList, fetchedData, setFetchedData, refresh, setRefresh }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -29,9 +29,6 @@ const SachivalayamList = ({ showAlert, sachivalayamList, fetchedData, setFetched
   });
 
   const columns = [
-    {
-      label: "State Name",
-    },
     {
       label: "District Name",
     },
@@ -58,6 +55,8 @@ const SachivalayamList = ({ showAlert, sachivalayamList, fetchedData, setFetched
     elevation: 0,
     selectableRows: "none",
     responsive: "standard",
+    rowsPerPageOptions: [100, 150, 200],
+    rowsPerPage: 100,
   };
 
   const handleClick = (event, data) => {
@@ -218,7 +217,6 @@ const SachivalayamList = ({ showAlert, sachivalayamList, fetchedData, setFetched
         >
           <Button
             aria-describedby={id}
-            variant="contained"
             onClick={(e) => {
               handleClick(e, data);
             }}
@@ -230,9 +228,8 @@ const SachivalayamList = ({ showAlert, sachivalayamList, fetchedData, setFetched
           </Button>
           {/* <Button
             sx={{
-              backgroundColor: "red",
+              color: "red",
             }}
-            variant="contained"
             onClick={() => {
               handleDelete(data.sachivalayam_pk);
             }}
@@ -284,6 +281,7 @@ const SachivalayamList = ({ showAlert, sachivalayamList, fetchedData, setFetched
                       division_id: "",
                     }));
                   }}
+                  disabled
                 >
                   {fetchedData.states.map((state) => {
                     return <MenuItem value={state.state_pk}>{state.state_name}</MenuItem>;
@@ -424,9 +422,8 @@ const SachivalayamList = ({ showAlert, sachivalayamList, fetchedData, setFetched
 
   const formartedData = fetchedData.sachivalayam.map((sachivalayam) => {
     return [
-      sachivalayam.state_name || "State",
       sachivalayam.district_name || "District",
-      sachivalayam.consitency_name || "Constituency",
+      sachivalayam.consistency_name || "Constituency",
       sachivalayam.mandal_name || "Mandal",
       sachivalayam.division_name || "Division",
       sachivalayam.sachivalayam_name || "Sachivalayam",
@@ -449,6 +446,7 @@ const mapStateToProps = (state) => {
   return {
     batches: state.common,
     students: state.management,
+    account: state.auth,
   };
 };
 

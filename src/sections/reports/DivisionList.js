@@ -28,7 +28,6 @@ const DivisionList = ({ showAlert, divisionList, fetchedData, setFetchedData, re
   });
 
   const columns = [
-    { label: "State Name" },
     {
       label: "District Name",
     },
@@ -51,6 +50,8 @@ const DivisionList = ({ showAlert, divisionList, fetchedData, setFetchedData, re
     elevation: 0,
     selectableRows: "none",
     responsive: "standard",
+    rowsPerPageOptions: [100, 150, 200],
+    rowsPerPage: 100,
   };
 
   const handleClick = (event, data) => {
@@ -188,7 +189,6 @@ const DivisionList = ({ showAlert, divisionList, fetchedData, setFetchedData, re
       <Box>
         <Button
           aria-describedby={id}
-          variant="contained"
           onClick={(e) => {
             handleClick(e, data);
           }}
@@ -200,9 +200,9 @@ const DivisionList = ({ showAlert, divisionList, fetchedData, setFetchedData, re
         </Button>
         {/* <Button
           sx={{
-            backgroundColor: "red",
+            color: "red",
           }}
-          variant="contained"
+        
           onClick={() => {
             handleDelete(data.division_pk);
           }}
@@ -251,6 +251,7 @@ const DivisionList = ({ showAlert, divisionList, fetchedData, setFetchedData, re
                       mandal_id: "",
                     }));
                   }}
+                  disabled
                 >
                   {fetchedData.states.map((state) => {
                     return <MenuItem value={state.state_pk}>{state.state_name}</MenuItem>;
@@ -368,7 +369,7 @@ const DivisionList = ({ showAlert, divisionList, fetchedData, setFetchedData, re
   };
   console.log("Division List", fetchedData.division);
   const formartedData = fetchedData.division.map((division) => {
-    return [division.state_name || "State", division.district_name || "District", division.consistency_name || "Constituency", division.mandal_name || "Mandal", division.division_name || "Division", renderEditAndDelete(division)];
+    return [division.district_name || "District", division.consistency_name || "Constituency", division.mandal_name || "Mandal", division.division_name || "Division", renderEditAndDelete(division)];
   });
 
   return (

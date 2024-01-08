@@ -30,7 +30,6 @@ const MandalsList = ({ showAlert, mandalsList, fetchedData, setFetchedData, refr
   });
 
   const columns = [
-    { label: "State Name" },
     { label: "District Name" },
     {
       label: "Constituency Name",
@@ -48,6 +47,8 @@ const MandalsList = ({ showAlert, mandalsList, fetchedData, setFetchedData, refr
     elevation: 0,
     selectableRows: "none",
     responsive: "standard",
+    rowsPerPageOptions: [100, 150, 200],
+    rowsPerPage: 100,
   };
 
   const handleClick = (event, data) => {
@@ -169,7 +170,6 @@ const MandalsList = ({ showAlert, mandalsList, fetchedData, setFetchedData, refr
       <Box>
         <Button
           aria-describedby={id}
-          variant="contained"
           onClick={(e) => {
             handleClick(e, data);
           }}
@@ -181,9 +181,9 @@ const MandalsList = ({ showAlert, mandalsList, fetchedData, setFetchedData, refr
         </Button>
         {/* <Button
           sx={{
-            backgroundColor: "red",
+           color: "red",
           }}
-          variant="contained"
+       
           onClick={() => {
             handleDelete(data.mandal_pk);
           }}
@@ -231,6 +231,7 @@ const MandalsList = ({ showAlert, mandalsList, fetchedData, setFetchedData, refr
                       consistency_id: "",
                     }));
                   }}
+                  disabled
                 >
                   {fetchedData.states.map((state) => {
                     return <MenuItem value={state.state_pk}>{state.state_name}</MenuItem>;
@@ -325,7 +326,7 @@ const MandalsList = ({ showAlert, mandalsList, fetchedData, setFetchedData, refr
   };
 
   const formartedData = fetchedData.mandal.map((mandal) => {
-    return [mandal.state_name, mandal.district_name, mandal.consistency_name, mandal.mandal_name, renderEditAndDelete(mandal)];
+    return [mandal.district_name, mandal.consistency_name, mandal.mandal_name, renderEditAndDelete(mandal)];
   });
 
   console.log("fetchedData.mandal222222", fetchedData.mandal);

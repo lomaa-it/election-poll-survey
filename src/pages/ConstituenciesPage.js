@@ -13,7 +13,7 @@ import { showAlert } from "../actions/alert";
 import { set } from "date-fns";
 import ApiServices from "../services/apiservices";
 
-const ConstituenciesPage = ({ dashboard, showAlert }) => {
+const ConstituenciesPage = ({ dashboard, showAlert, account }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [refresh, setRefresh] = useState(false);
   const [fetchedData, setFetchedData] = useState({
@@ -76,11 +76,6 @@ const ConstituenciesPage = ({ dashboard, showAlert }) => {
   }, [refresh]);
 
   const handleSubmit = async () => {
-    if (!selectedValues.state_id) {
-      showAlert({ text: "Please Select State", color: "error" });
-      return;
-    }
-
     if (!selectedValues.district_id) {
       showAlert({ text: "Please Select District", color: "error" });
       return;
@@ -145,7 +140,7 @@ const ConstituenciesPage = ({ dashboard, showAlert }) => {
                 fullWidth
                 select
                 required
-                value={selectedValues.state_id}
+                value={account.user.state_pk}
                 onChange={(e) => {
                   setSelectedValues((prevState) => ({
                     ...prevState,
@@ -153,6 +148,7 @@ const ConstituenciesPage = ({ dashboard, showAlert }) => {
                     district_id: "",
                   }));
                 }}
+                disabled
               >
                 {fetchedData.states.map((state) => {
                   return <MenuItem value={state.state_pk}>{state.state_name}</MenuItem>;
@@ -174,7 +170,7 @@ const ConstituenciesPage = ({ dashboard, showAlert }) => {
               >
                 {/* filter districk based on state_id */}
                 {fetchedData.district
-                  .filter((district) => district.state_id === selectedValues.state_id)
+                  .filter((district) => district.state_id === account.user.state_pk)
                   .map((district) => {
                     return <MenuItem value={district.district_pk}>{district.district_name}</MenuItem>;
                   })}
@@ -214,6 +210,7 @@ const ConstituenciesPage = ({ dashboard, showAlert }) => {
 const mapStateToProps = (state) => {
   return {
     dashboard: state.dashboard,
+    account: state.auth,
   };
 };
 

@@ -39,6 +39,8 @@ const DesignationList = ({ showAlert, designationlist, fetchedData, setFetchedDa
     elevation: 0,
     selectableRows: "none",
     responsive: "standard",
+    rowsPerPageOptions: [100, 150, 200],
+    rowsPerPage: 100,
   };
 
   const handleClick = (event, data) => {
@@ -127,7 +129,6 @@ const DesignationList = ({ showAlert, designationlist, fetchedData, setFetchedDa
       <Box>
         <Button
           aria-describedby={id}
-          variant="contained"
           onClick={(e) => {
             handleClick(e, data);
           }}
@@ -139,9 +140,8 @@ const DesignationList = ({ showAlert, designationlist, fetchedData, setFetchedDa
         </Button>
         {/* <Button
           sx={{
-            backgroundColor: "red",
+            color: "red",
           }}
-          variant="contained"
           onClick={() => {
             handleDelete(data.lookup_pk);
           }}

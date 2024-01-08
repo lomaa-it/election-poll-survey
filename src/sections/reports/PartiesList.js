@@ -41,6 +41,8 @@ const PartiesList = ({ showAlert, partiesList, fetchedData, setFetchedData, refr
     elevation: 0,
     selectableRows: "none",
     responsive: "standard",
+    rowsPerPageOptions: [100, 150, 200],
+    rowsPerPage: 100,
   };
 
   const handleClick = (event, data) => {
@@ -138,7 +140,6 @@ const PartiesList = ({ showAlert, partiesList, fetchedData, setFetchedData, refr
       <Box>
         <Button
           aria-describedby={id}
-          variant="contained"
           onClick={(e) => {
             handleClick(e, data);
           }}
@@ -148,17 +149,17 @@ const PartiesList = ({ showAlert, partiesList, fetchedData, setFetchedData, refr
         >
           <EditNoteIcon />
         </Button>
-        <Button
+        {/* <Button
           sx={{
-            backgroundColor: "red",
+            color: "red",
           }}
-          variant="contained"
+        
           onClick={() => {
             handleDelete(data.lookup_pk);
           }}
         >
           {isLoading ? <CircularProgress size={20} /> : <DeleteForeverIcon />}
-        </Button>
+        </Button> */}
         <Popover
           id={id}
           open={open}

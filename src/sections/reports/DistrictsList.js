@@ -26,9 +26,6 @@ const DistrictsList = ({ showAlert, districtList, fetchedData, setFetchedData, r
 
   const columns = [
     {
-      label: "State Name",
-    },
-    {
       label: "District Name",
     },
 
@@ -41,6 +38,8 @@ const DistrictsList = ({ showAlert, districtList, fetchedData, setFetchedData, r
     elevation: 0,
     selectableRows: "none",
     responsive: "standard",
+    rowsPerPageOptions: [100, 150, 200],
+    rowsPerPage: 100,
   };
 
   const handleClick = (event, data) => {
@@ -136,7 +135,6 @@ const DistrictsList = ({ showAlert, districtList, fetchedData, setFetchedData, r
       <Box>
         <Button
           aria-describedby={id}
-          variant="contained"
           onClick={(e) => {
             handleClick(e, data);
           }}
@@ -148,9 +146,8 @@ const DistrictsList = ({ showAlert, districtList, fetchedData, setFetchedData, r
         </Button>
         {/* <Button
           sx={{
-            backgroundColor: "red",
+            color: "red",
           }}
-          variant="contained"
           onClick={() => {
             handleDelete(data.district_pk);
           }}
@@ -198,6 +195,7 @@ const DistrictsList = ({ showAlert, districtList, fetchedData, setFetchedData, r
                       consistency_id: "",
                     }));
                   }}
+                  disabled
                 >
                   {fetchedData.states.map((state) => {
                     return <MenuItem value={state.state_pk}>{state.state_name}</MenuItem>;
@@ -251,7 +249,7 @@ const DistrictsList = ({ showAlert, districtList, fetchedData, setFetchedData, r
   };
   // convert districtList to muitable format
   const formartedData = fetchedData.district.map((district) => {
-    return [district.state_name, district.district_name, renderEditAndDelete(district)];
+    return [district.district_name, renderEditAndDelete(district)];
   });
 
   console.log("fetchedData.district", fetchedData.district);

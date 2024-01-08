@@ -27,7 +27,6 @@ const ConstituenciesList = ({ showAlert, constituenciesList, fetchedData, setFet
   });
 
   const columns = [
-    { label: "State Name" },
     {
       label: "District Name",
     },
@@ -44,6 +43,8 @@ const ConstituenciesList = ({ showAlert, constituenciesList, fetchedData, setFet
     elevation: 0,
     selectableRows: "none",
     responsive: "standard",
+    rowsPerPageOptions: [100, 150, 200],
+    rowsPerPage: 100,
   };
 
   const handleClick = (event, data) => {
@@ -83,11 +84,6 @@ const ConstituenciesList = ({ showAlert, constituenciesList, fetchedData, setFet
   };
 
   const handleSubmit = async () => {
-    if (!selectedValues.state_id) {
-      showAlert({ text: "Please select state", color: "error" });
-      return;
-    }
-
     if (!selectedValues.district_id) {
       showAlert({ text: "Please select district", color: "error" });
       return;
@@ -146,7 +142,6 @@ const ConstituenciesList = ({ showAlert, constituenciesList, fetchedData, setFet
       <Box>
         <Button
           aria-describedby={id}
-          variant="contained"
           onClick={(e) => {
             handleClick(e, data);
           }}
@@ -158,9 +153,9 @@ const ConstituenciesList = ({ showAlert, constituenciesList, fetchedData, setFet
         </Button>
         {/* <Button
           sx={{
-            backgroundColor: "red",
+            color: "red",
           }}
-          variant="contained"
+         
           onClick={() => {
             handleDelete(data.consistency_pk);
           }}
@@ -208,6 +203,7 @@ const ConstituenciesList = ({ showAlert, constituenciesList, fetchedData, setFet
                       consistency_id: "",
                     }));
                   }}
+                  disabled
                 >
                   {fetchedData.states.map((state) => {
                     return <MenuItem value={state.state_pk}>{state.state_name}</MenuItem>;
@@ -282,7 +278,7 @@ const ConstituenciesList = ({ showAlert, constituenciesList, fetchedData, setFet
   };
 
   const formartedData = fetchedData.consistency.map((consistency) => {
-    return [consistency.state_name || "state name", consistency.district_name || "district name", consistency.consistency_name, renderEditAndDelete(consistency)];
+    return [consistency.district_name || "district name", consistency.consistency_name, renderEditAndDelete(consistency)];
   });
 
   console.log("fetchedData.con", fetchedData.consistency);

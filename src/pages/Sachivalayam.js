@@ -11,7 +11,7 @@ import { showAlert } from "../actions/alert";
 import { set } from "date-fns";
 import ApiServices from "../services/apiservices";
 
-const Sachivalayam = ({ dashboard, showAlert }) => {
+const Sachivalayam = ({ dashboard, showAlert, account }) => {
   const [refresh, setRefresh] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -92,6 +92,57 @@ const Sachivalayam = ({ dashboard, showAlert }) => {
 
   const handleSubmit = async () => {
     console.log("selectedValues", selectedValues);
+
+    if (selectedValues.district_id === "") {
+      showAlert({
+        text: "Please Select District",
+
+        color: "error",
+      });
+
+      return;
+    }
+
+    if (selectedValues.consistency_id === "") {
+      showAlert({
+        text: "Please Select Constituency",
+
+        color: "error",
+      });
+
+      return;
+    }
+
+    if (selectedValues.mandal_id === "") {
+      showAlert({
+        text: "Please Select Mandal",
+
+        color: "error",
+      });
+
+      return;
+    }
+
+    if (selectedValues.division_id === "") {
+      showAlert({
+        text: "Please Select Division",
+
+        color: "error",
+      });
+
+      return;
+    }
+
+    if (selectedValues.sachivalayam_name === "") {
+      showAlert({
+        text: "Please Enter Sachivalayam Name",
+
+        color: "error",
+      });
+
+      return;
+    }
+
     try {
       setIsLoading(true);
       const response = await ApiServices.postRequest(createSachivalayamRoute, {
@@ -119,6 +170,10 @@ const Sachivalayam = ({ dashboard, showAlert }) => {
     } catch (error) {
       console.log(error);
       setIsLoading(false);
+      showAlert({
+        text: "Sachivalayam Creation Failed",
+        color: "error",
+      });
     }
   };
 
@@ -150,7 +205,7 @@ const Sachivalayam = ({ dashboard, showAlert }) => {
                 label="Select State"
                 fullWidth
                 select
-                value={selectedValues.state_id}
+                value={account.user.state_pk}
                 onChange={(e) => {
                   setSelectedValues((prevState) => ({
                     ...prevState,
@@ -161,6 +216,7 @@ const Sachivalayam = ({ dashboard, showAlert }) => {
                     division_id: "",
                   }));
                 }}
+                disabled
               >
                 {fetchedData.states.map((state) => {
                   return <MenuItem value={state.state_pk}>{state.state_name}</MenuItem>;
@@ -184,7 +240,7 @@ const Sachivalayam = ({ dashboard, showAlert }) => {
               >
                 {/* filter districk based on state_id */}
                 {fetchedData.district
-                  .filter((district) => district.state_id === selectedValues.state_id)
+                  .filter((district) => district.state_id === account.user.state_pk)
                   .map((district) => {
                     return <MenuItem value={district.district_pk}>{district.district_name}</MenuItem>;
                   })}
@@ -287,6 +343,7 @@ const Sachivalayam = ({ dashboard, showAlert }) => {
 const mapStateToProps = (state) => {
   return {
     dashboard: state.dashboard,
+    account: state.auth,
   };
 };
 

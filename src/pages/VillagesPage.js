@@ -13,7 +13,7 @@ import { showAlert } from "../actions/alert";
 import { set } from "date-fns/esm";
 import ApiServices from "../services/apiservices";
 
-const VillagesPage = ({ dashboard }) => {
+const VillagesPage = ({ dashboard, showAlert, account }) => {
   const [refresh, setRefresh] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -40,33 +40,34 @@ const VillagesPage = ({ dashboard }) => {
   });
 
   useEffect(() => {
+    console.log("hi hi hi ");
     const fecthOptionsData = async () => {
       try {
         /// get all states
-        const statesResponse = await ApiServices.getRequest(getAllStatesRoute);
+        const statesResponse = await ApiServices.postRequest(getAllStatesRoute);
         // console.log("states", statesResponse.data.message);
         /// get all districts
-        const districtsResponse = await ApiServices.getRequest(getAllDistrictsRoute);
+        const districtsResponse = await ApiServices.postRequest(getAllDistrictsRoute);
         // console.log("districts", districtsResponse.data.message);
 
         /// get all constituencies
-        const constituenciesResponse = await ApiServices.getRequest(getAllConstituenciesRoute);
+        const constituenciesResponse = await ApiServices.postRequest(getAllConstituenciesRoute);
         // console.log("constituencies", constituenciesResponse.data.message);
 
         /// get all mandals
-        const mandalsResponse = await ApiServices.getRequest(getAllMandalRoute);
+        const mandalsResponse = await ApiServices.postRequest(getAllMandalRoute);
         // console.log("mandals", mandalsResponse.data.message);
 
         /// get all divisions
-        const divisionsResponse = await ApiServices.getRequest(getAllDivisionRoute);
+        const divisionsResponse = await ApiServices.postRequest(getAllDivisionRoute);
         // console.log("divisions", divisionsResponse.data.message);
 
         /// get all sachivalayam
-        const sachivalayamResponse = await ApiServices.getRequest(getAllSachivalayamRoute);
+        const sachivalayamResponse = await ApiServices.postRequest(getAllSachivalayamRoute);
         // console.log("sachivalayam", sachivalayamResponse.data.message);
 
         /// get all parts
-        const partsResponse = await ApiServices.getRequest(getAllPartsRoute);
+        const partsResponse = await ApiServices.postRequest(getAllPartsRoute);
         console.log("parts", partsResponse.data.message);
 
         /// state update
@@ -91,7 +92,7 @@ const VillagesPage = ({ dashboard }) => {
     const fecthOptionsData = async () => {
       try {
         /// get all villages
-        const villagesResponse = await ApiServices.getRequest(getAllVillageRoute);
+        const villagesResponse = await ApiServices.postRequest(getAllVillageRoute);
         console.log("villages", villagesResponse.data.message);
 
         /// state update
@@ -109,6 +110,41 @@ const VillagesPage = ({ dashboard }) => {
   const handleSubmit = async () => {
     console.log("selectedValues", selectedValues);
 
+    if (!selectedValues.district_id) {
+      showAlert({ text: "Please select district", color: "error" });
+      return;
+    }
+
+    if (!selectedValues.consistency_id) {
+      showAlert({ text: "Please select constituency", color: "error" });
+      return;
+    }
+
+    if (!selectedValues.mandal_id) {
+      showAlert({ text: "Please select mandal", color: "error" });
+      return;
+    }
+
+    if (!selectedValues.division_id) {
+      showAlert({ text: "Please select division", color: "error" });
+      return;
+    }
+
+    if (!selectedValues.sachivalayam_id) {
+      showAlert({ text: "Please select sachivalayam", color: "error" });
+      return;
+    }
+
+    if (!selectedValues.part_no) {
+      showAlert({ text: "Please select part", color: "error" });
+      return;
+    }
+
+    if (!selectedValues.village_name) {
+      showAlert({ text: "Please enter village name", color: "error" });
+      return;
+    }
+
     try {
       setIsLoading(true);
       const response = await ApiServices.postRequest(createVillagesRoute, {
@@ -117,7 +153,7 @@ const VillagesPage = ({ dashboard }) => {
       });
       console.log("response", response.data.message);
       showAlert({
-        text: "Part No Added Successfully",
+        text: "Village Created Successfully",
         color: "success",
       });
       setIsLoading(false);
@@ -139,9 +175,16 @@ const VillagesPage = ({ dashboard }) => {
       console.log(error);
       setIsLoading(false);
       setRefresh((prevState) => !prevState);
+      showAlert({
+        text: "Village Creation Failed",
+        color: "error",
+      });
     }
   };
 
+  console.log("fetchedData", fetchedData);
+
+  console.log("selectedValues", selectedValues);
   return (
     <Page title="Villages">
       <Container maxWidth="xl">
@@ -159,7 +202,7 @@ const VillagesPage = ({ dashboard }) => {
                 label="Select State"
                 fullWidth
                 select
-                value={selectedValues.state_id}
+                value={account.user.state_pk}
                 onChange={(e) => {
                   setSelectedValues((prevState) => ({
                     ...prevState,
@@ -172,6 +215,7 @@ const VillagesPage = ({ dashboard }) => {
                     part_no: "",
                   }));
                 }}
+                disabled
               >
                 {fetchedData.states.map((state) => {
                   return <MenuItem value={state.state_pk}>{state.state_name}</MenuItem>;
@@ -199,7 +243,7 @@ const VillagesPage = ({ dashboard }) => {
               >
                 {/* filter districk based on state_id */}
                 {fetchedData.district
-                  .filter((district) => district.state_id === selectedValues.state_id)
+                  .filter((district) => district.state_id === account.user.state_pk)
                   .map((district) => {
                     return <MenuItem value={district.district_pk}>{district.district_name}</MenuItem>;
                   })}
@@ -297,7 +341,7 @@ const VillagesPage = ({ dashboard }) => {
               >
                 {/* filter sachivalayam based on division_id */}
                 {fetchedData.sachivalayam
-                  .filter((sachivalayam) => sachivalayam.division_id === selectedValues.division_id)
+                  .filter((sachivalayam) => sachivalayam.division_pk === selectedValues.division_id)
                   .map((sachivalayam) => {
                     return <MenuItem value={sachivalayam.sachivalayam_pk}>{sachivalayam.sachivalayam_name}</MenuItem>;
                   })}
@@ -349,7 +393,7 @@ const VillagesPage = ({ dashboard }) => {
 
         <Box p={1} />
 
-        <VillagesList villageList={fetchedData.village} />
+        <VillagesList villageList={fetchedData.village} fetchedData={fetchedData} setFetchedData={setFetchedData} selectedValues={selectedValues} setSelectedValues={setSelectedValues} refresh={refresh} setRefresh={setRefresh} />
       </Container>
     </Page>
   );
@@ -358,7 +402,8 @@ const VillagesPage = ({ dashboard }) => {
 const mapStateToProps = (state) => {
   return {
     dashboard: state.dashboard,
+    account: state.auth,
   };
 };
 
-export default connect(mapStateToProps, null)(VillagesPage);
+export default connect(mapStateToProps, { showAlert })(VillagesPage);

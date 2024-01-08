@@ -13,7 +13,7 @@ import { getAllConstituenciesRoute, getAllDistrictsRoute, getAllMandalRoute, get
 import { showAlert } from "../actions/alert";
 import ApiServices from "../services/apiservices";
 
-const DivisionPage = ({ dashboard, showAlert }) => {
+const DivisionPage = ({ dashboard, showAlert, account }) => {
   const [refresh, setRefresh] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -92,11 +92,6 @@ const DivisionPage = ({ dashboard, showAlert }) => {
   }, [refresh]);
 
   const handleSubmit = async () => {
-    if (!selectedValues.state_id) {
-      showAlert({ text: "Please select state", color: "error" });
-      return;
-    }
-
     if (!selectedValues.district_id) {
       showAlert({ text: "Please select district", color: "error" });
       return;
@@ -173,7 +168,7 @@ const DivisionPage = ({ dashboard, showAlert }) => {
                 label="Select State"
                 fullWidth
                 select
-                value={selectedValues.state_id}
+                value={account.user.state_pk}
                 onChange={(e) => {
                   setSelectedValues((prevState) => ({
                     ...prevState,
@@ -183,6 +178,7 @@ const DivisionPage = ({ dashboard, showAlert }) => {
                     mandal_id: "",
                   }));
                 }}
+                disabled
               >
                 {fetchedData.states.map((state) => {
                   return <MenuItem value={state.state_pk}>{state.state_name}</MenuItem>;
@@ -206,7 +202,7 @@ const DivisionPage = ({ dashboard, showAlert }) => {
               >
                 {/* filter districk based on state_id */}
                 {fetchedData.district
-                  .filter((district) => district.state_id === selectedValues.state_id)
+                  .filter((district) => district.state_id === account.user.state_pk)
                   .map((district) => {
                     return <MenuItem value={district.district_pk}>{district.district_name}</MenuItem>;
                   })}
@@ -291,6 +287,7 @@ const DivisionPage = ({ dashboard, showAlert }) => {
 const mapStateToProps = (state) => {
   return {
     dashboard: state.dashboard,
+    account: state.auth,
   };
 };
 

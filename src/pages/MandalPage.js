@@ -13,7 +13,7 @@ import { set } from "date-fns";
 import { showAlert } from "../actions/alert";
 import ApiServices from "../services/apiservices";
 
-const MandalPage = ({ dashboard, showAlert }) => {
+const MandalPage = ({ dashboard, showAlert, account }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [refresh, setRefresh] = useState(false);
   const [fetchedData, setFetchedData] = useState({
@@ -78,21 +78,16 @@ const MandalPage = ({ dashboard, showAlert }) => {
   }, [refresh]);
 
   const handleSubmit = async () => {
-    if (!selectedValues.state_id) {
-      showAlert({ text: "State", color: "error" });
-      return;
-    }
     if (!selectedValues.district_id) {
-      showAlert({ text: "District", color: "error" });
+      showAlert({ text: "Please Select District", color: "error" });
       return;
     }
     if (!selectedValues.consistency_id) {
-      showAlert({ text: "Constituency", color: "error" });
+      showAlert({ text: "Please Select Constituency", color: "error" });
       return;
     }
-
     if (!selectedValues.mandal_name) {
-      showAlert({ text: "Mandal Name", color: "error" });
+      showAlert({ text: "Please enter mandal name", color: "error" });
       return;
     }
 
@@ -152,7 +147,7 @@ const MandalPage = ({ dashboard, showAlert }) => {
                 fullWidth
                 select
                 required
-                value={selectedValues.state_id}
+                value={account.user.state_pk}
                 onChange={(e) => {
                   setSelectedValues((prevState) => ({
                     ...prevState,
@@ -161,6 +156,7 @@ const MandalPage = ({ dashboard, showAlert }) => {
                     consistency_id: "",
                   }));
                 }}
+                disabled
               >
                 {fetchedData.states.map((state) => {
                   return <MenuItem value={state.state_pk}>{state.state_name}</MenuItem>;
@@ -183,7 +179,7 @@ const MandalPage = ({ dashboard, showAlert }) => {
               >
                 {/* filter districk based on state_id */}
                 {fetchedData.district
-                  .filter((district) => district.state_id === selectedValues.state_id)
+                  .filter((district) => district.state_id === account.user.state_pk)
                   .map((district) => {
                     return <MenuItem value={district.district_pk}>{district.district_name}</MenuItem>;
                   })}
@@ -245,6 +241,7 @@ const MandalPage = ({ dashboard, showAlert }) => {
 const mapStateToProps = (state) => {
   return {
     dashboard: state.dashboard,
+    account: state.auth,
   };
 };
 
