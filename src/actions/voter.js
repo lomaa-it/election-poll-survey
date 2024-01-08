@@ -87,12 +87,29 @@ export const updateVoterDetails = (id, data) => async (dispatch) => {
       ...data,
     };
     console.log(jsonData);
-    await ApiServices.postRequest(saveOrupdatedSurvey, jsonData);
+    const response = await ApiServices.postRequest(saveOrupdatedSurvey, jsonData);
+    const responseData = response.data?.data ?? {};
+
+    console.log(responseData);
 
     dispatch({
       type: "VOTER_UPDATE_SUCCESS",
       payload: { id: id, value: data },
     });
+
+    if (responseData.religion_id) {
+      dispatch({
+        type: "COMMON_ADD_RELIGION",
+        payload: { label: data.religion_name, value: responseData.religion_id },
+      });
+    }
+
+    if (responseData.caste_id) {
+      dispatch({
+        type: "COMMON_ADD_CASTE",
+        payload: { label: data.caste_name, value: responseData.caste_id },
+      });
+    }
 
     return true;
   } catch (err) {

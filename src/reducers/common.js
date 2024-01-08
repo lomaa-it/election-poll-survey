@@ -48,6 +48,22 @@ export default function commonReducer(state = initialState, action) {
         errorMessage: payload,
       };
 
+    case "COMMON_ADD_RELIGION":
+      var index = state.religion.findIndex((e) => e.value == payload.value);
+      if (index == -1) {
+        state.religion.push(payload);
+      }
+
+      return state;
+
+    case "COMMON_ADD_CASTE":
+      var index = state.caste.findIndex((e) => e.value == payload.value);
+      if (index == -1) {
+        state.caste.push(payload);
+      }
+
+      return state;
+
     case "COMMON_CLEAR_SUCCESS":
       return {
         isLoading: false,

@@ -5,11 +5,11 @@
 import LsService from "../services/localstorage";
 
 // new api for baseServerUrl
-// export const baseServerUrl = "https://b768-219-91-202-204.ngrok-free.app/";
+// export const baseServerUrl = "https://6eab-123-201-175-208.ngrok-free.app/";
 
 // export const baseServerUrl = "https://d1ef-123-201-174-192.ngrok-free.app";
 export const baseServerUrl = "https://backendapi.cgrysrcongress.in";
-
+// export const baseServerUrl = "http://192.168.0.122:8080";
 // export const baseServerUrl = "http://192.168.0.129:8080";
 /// new
 // export const baseServerUrl = "https://poll2.onrender.com";
@@ -73,14 +73,13 @@ export const getAllMandalRoute = "/mandals/getall";
 export const getAllDivisionRoute = "/divisions/getall";
 export const getAllSachivalayamRoute = "/sachivalayam/getall";
 export const getAllPartsRoute = "/parts/getall";
-export const getAllVillageRoute = "/villages/getall";
+export const getAllVillageRoute = "/villagesgetall";
 export const getAllDistrictsWithJoinRoute = "/getalldistrictswithjoin";
 export const getAllConstituenciesWithJoinRoute = "/getallconstituencieswithjoin";
 export const getAllMandalsWithJoinRoute = "/getallmandalswithjoin";
 
 export const getOpinionDashboardRoute = "/getopinionpolldashboard";
 export const getOpinionResultRoute = "/getopinionreports";
-
 
 // opinion report routes
 export const getSurveySummaryByConstituency = "/getsurveysummarybyconstituency";

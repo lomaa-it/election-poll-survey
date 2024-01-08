@@ -3,33 +3,28 @@ import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
 
-import ViewUsersList from "../sections/reports/ViewUsersList";
-import Button from "@mui/material/Button";
-import VoterAndVolunteerMappingList from "../sections/reports/VoterAndVolunteerMappingList";
 import VillagesList from "../sections/reports/VillagesList";
 import { useEffect, useState } from "react";
 import { getAllConstituenciesRoute, getAllDistrictsRoute, getAllDivisionRoute, getAllMandalRoute, getAllPartsRoute, getAllSachivalayamRoute, getAllStatesRoute, getAllVillageRoute, createVillagesRoute } from "../utils/apis";
 import { showAlert } from "../actions/alert";
-import { set } from "date-fns/esm";
 import ApiServices from "../services/apiservices";
 
-const VillagesPage = ({ dashboard, showAlert, account }) => {
-  const [refresh, setRefresh] = useState(false);
-
-  const [isLoading, setIsLoading] = useState(false);
+const VillagesPage = ({ account, showAlert }) => {
+  const [fetchLoading, setFetchLoading] = useState(false);
+  const [isLoading, setLoading] = useState(false);
+  const [isEditState, setEditState] = useState(false);
   const [fetchedData, setFetchedData] = useState({
-    states: [{}],
-    district: [{}],
-    consistency: [{}],
-    mandal: [{}],
-    division: [{}],
-    sachivalayam: [{}],
-    part: [{}],
-    village: [{}],
+    states: [],
+    district: [],
+    consistency: [],
+    mandal: [],
+    division: [],
+    sachivalayam: [],
+    part: [],
+    village: [],
   });
 
-  const [selectedValues, setSelectedValues] = useState({
-    state_id: "",
+  const [formValues, setFormValues] = useState({
     district_id: "",
     consistency_id: "",
     mandal_id: "",
@@ -40,160 +35,190 @@ const VillagesPage = ({ dashboard, showAlert, account }) => {
   });
 
   useEffect(() => {
-    console.log("hi hi hi ");
-    const fecthOptionsData = async () => {
-      try {
-        /// get all states
-        const statesResponse = await ApiServices.postRequest(getAllStatesRoute);
-        // console.log("states", statesResponse.data.message);
-        /// get all districts
-        const districtsResponse = await ApiServices.postRequest(getAllDistrictsRoute);
-        // console.log("districts", districtsResponse.data.message);
-
-        /// get all constituencies
-        const constituenciesResponse = await ApiServices.postRequest(getAllConstituenciesRoute);
-        // console.log("constituencies", constituenciesResponse.data.message);
-
-        /// get all mandals
-        const mandalsResponse = await ApiServices.postRequest(getAllMandalRoute);
-        // console.log("mandals", mandalsResponse.data.message);
-
-        /// get all divisions
-        const divisionsResponse = await ApiServices.postRequest(getAllDivisionRoute);
-        // console.log("divisions", divisionsResponse.data.message);
-
-        /// get all sachivalayam
-        const sachivalayamResponse = await ApiServices.postRequest(getAllSachivalayamRoute);
-        // console.log("sachivalayam", sachivalayamResponse.data.message);
-
-        /// get all parts
-        const partsResponse = await ApiServices.postRequest(getAllPartsRoute);
-        console.log("parts", partsResponse.data.message);
-
-        /// state update
-        setFetchedData((prevState) => ({
-          ...prevState,
-          states: statesResponse.data.message,
-          district: districtsResponse.data.message,
-          consistency: constituenciesResponse.data.message,
-          mandal: mandalsResponse.data.message,
-          division: divisionsResponse.data.message,
-          sachivalayam: sachivalayamResponse.data.message,
-          part: partsResponse.data.message,
-        }));
-      } catch (error) {
-        console.log(error);
-      }
-    };
     fecthOptionsData();
+    fecthVillageData();
   }, []);
 
-  useEffect(() => {
-    const fecthOptionsData = async () => {
-      try {
-        /// get all villages
-        const villagesResponse = await ApiServices.postRequest(getAllVillageRoute);
-        console.log("villages", villagesResponse.data.message);
+  const fecthOptionsData = async () => {
+    try {
+      /// get all states
+      const statesResponse = await ApiServices.postRequest(getAllStatesRoute);
+      // console.log("states", statesResponse.data.message);
+      /// get all districts
+      const districtsResponse = await ApiServices.postRequest(getAllDistrictsRoute);
+      // console.log("districts", districtsResponse.data.message);
 
-        /// state update
-        setFetchedData((prevState) => ({
-          ...prevState,
-          village: villagesResponse.data.message,
-        }));
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fecthOptionsData();
-  }, [refresh]);
+      /// get all constituencies
+      const constituenciesResponse = await ApiServices.postRequest(getAllConstituenciesRoute);
+      // console.log("constituencies", constituenciesResponse.data.message);
+
+      /// get all mandals
+      const mandalsResponse = await ApiServices.postRequest(getAllMandalRoute);
+      // console.log("mandals", mandalsResponse.data.message);
+
+      /// get all divisions
+      const divisionsResponse = await ApiServices.postRequest(getAllDivisionRoute);
+      // console.log("divisions", divisionsResponse.data.message);
+
+      /// get all sachivalayam
+      const sachivalayamResponse = await ApiServices.postRequest(getAllSachivalayamRoute);
+      // console.log("sachivalayam", sachivalayamResponse.data.message);
+
+      /// get all parts
+      const partsResponse = await ApiServices.postRequest(getAllPartsRoute);
+      // console.log("parts", partsResponse.data.message);
+
+      /// state update
+      setFetchedData((prevState) => ({
+        ...prevState,
+        states: statesResponse.data.message,
+        district: districtsResponse.data.message,
+        consistency: constituenciesResponse.data.message,
+        mandal: mandalsResponse.data.message,
+        division: divisionsResponse.data.message,
+        sachivalayam: sachivalayamResponse.data.message,
+        part: partsResponse.data.message,
+      }));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fecthVillageData = async () => {
+    setFetchLoading(true);
+    try {
+      const villagesResponse = await ApiServices.postRequest(getAllVillageRoute);
+
+      setFetchedData((prevState) => ({
+        ...prevState,
+        village: villagesResponse.data?.message ?? [],
+      }));
+    } catch (error) {
+      console.log(error);
+    }
+    setFetchLoading(false);
+  };
+
+  const handleEdit = async (data) => {
+    setEditState(true);
+    setFormValues({
+      village_id: data.village_id,
+      district_id: data.district_id,
+      consistency_id: data.consistency_id,
+      mandal_id: data.mandal_id,
+      division_id: data.division_id,
+      sachivalayam_id: data.sachivalayam_id,
+      part_no: data.part_no,
+      village_name: data.village_name,
+    });
+  };
 
   const handleSubmit = async () => {
-    console.log("selectedValues", selectedValues);
+    console.log("formValues", formValues);
 
-    if (!selectedValues.district_id) {
+    if (!formValues.district_id) {
       showAlert({ text: "Please select district", color: "error" });
       return;
     }
 
-    if (!selectedValues.consistency_id) {
+    if (!formValues.consistency_id) {
       showAlert({ text: "Please select constituency", color: "error" });
       return;
     }
 
-    if (!selectedValues.mandal_id) {
+    if (!formValues.mandal_id) {
       showAlert({ text: "Please select mandal", color: "error" });
       return;
     }
 
-    if (!selectedValues.division_id) {
+    if (!formValues.division_id) {
       showAlert({ text: "Please select division", color: "error" });
       return;
     }
 
-    if (!selectedValues.sachivalayam_id) {
+    if (!formValues.sachivalayam_id) {
       showAlert({ text: "Please select sachivalayam", color: "error" });
       return;
     }
 
-    if (!selectedValues.part_no) {
+    if (!formValues.part_no) {
       showAlert({ text: "Please select part", color: "error" });
       return;
     }
 
-    if (!selectedValues.village_name) {
+    if (!formValues.village_name) {
       showAlert({ text: "Please enter village name", color: "error" });
       return;
     }
 
+    setLoading(true);
+
+    var body = {
+      part_no: formValues.part_no,
+      village_name: formValues.village_name,
+    };
+
+    if (!isEditState) {
+      await addVillage(body);
+    } else {
+      await updateVillage(formValues.village_id, body);
+    }
+
+    setLoading(false);
+  };
+
+  const handleReset = () => {
+    setEditState(false);
+    setFormValues({
+      district_id: "",
+      consistency_id: "",
+      mandal_id: "",
+      division_id: "",
+      sachivalayam_id: "",
+      part_no: "",
+      village_name: "",
+    });
+  };
+
+  const addVillage = async (data) => {
     try {
-      setIsLoading(true);
-      const response = await ApiServices.postRequest(createVillagesRoute, {
-        part_no: selectedValues.part_no,
-        village_name: selectedValues.village_name,
-      });
-      console.log("response", response.data.message);
+      await ApiServices.postRequest(createVillagesRoute, data);
+
       showAlert({
         text: "Village Created Successfully",
         color: "success",
       });
-      setIsLoading(false);
 
-      setSelectedValues((prevState) => ({
-        ...prevState,
-        state_id: "",
-        district_id: "",
-        consistency_id: "",
-        mandal_id: "",
-        division_id: "",
-        sachivalayam_id: "",
-        part_no: "",
-        village_name: "",
-      }));
-
-      setRefresh((prevState) => !prevState);
+      fecthVillageData();
+      handleReset();
     } catch (error) {
       console.log(error);
-      setIsLoading(false);
-      setRefresh((prevState) => !prevState);
-      showAlert({
-        text: "Village Creation Failed",
-        color: "error",
-      });
+      showAlert({ text: "Village Creation Failed" });
     }
   };
 
-  console.log("fetchedData", fetchedData);
+  const updateVillage = async (id, data) => {
+    try {
+      await ApiServices.putRequest(`${createVillagesRoute}${id}`, data);
 
-  console.log("selectedValues", selectedValues);
+      showAlert({
+        text: "Village Updated Successfully",
+        color: "success",
+      });
+
+      fecthVillageData();
+      handleReset();
+    } catch (error) {
+      console.log(error);
+      showAlert({ text: "Village Updation Failed" });
+    }
+  };
+
   return (
     <Page title="Villages">
       <Container maxWidth="xl">
-        {/* <Typography variant="h4" sx={{ mb: 1 }}>
-          Villages
-        </Typography> */}
-
         <Card sx={{ p: 3 }}>
-          <Typography sx={{ pb: 2 }}>Add Village</Typography>
+          <Typography sx={{ pb: 2 }}>{isEditState ? "Edit Village" : "Add Village"}</Typography>
 
           <Grid container spacing={2} alignItems="center">
             <Grid item xs={12} md={6} lg={2}>
@@ -204,7 +229,7 @@ const VillagesPage = ({ dashboard, showAlert, account }) => {
                 select
                 value={account.user.state_pk}
                 onChange={(e) => {
-                  setSelectedValues((prevState) => ({
+                  setFormValues((prevState) => ({
                     ...prevState,
                     state_id: e.target.value,
                     district_id: "",
@@ -217,9 +242,11 @@ const VillagesPage = ({ dashboard, showAlert, account }) => {
                 }}
                 disabled
               >
-                {fetchedData.states.map((state) => {
-                  return <MenuItem value={state.state_pk}>{state.state_name}</MenuItem>;
-                })}
+                {fetchedData.states.map((item, index) => (
+                  <MenuItem key={index} value={item.state_pk}>
+                    {item.state_name}
+                  </MenuItem>
+                ))}
               </TextField>
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
@@ -228,9 +255,9 @@ const VillagesPage = ({ dashboard, showAlert, account }) => {
                 label="Select District"
                 fullWidth
                 select
-                value={selectedValues.district_id}
+                value={formValues.district_id}
                 onChange={(e) => {
-                  setSelectedValues((prevState) => ({
+                  setFormValues((prevState) => ({
                     ...prevState,
                     district_id: e.target.value,
                     consistency_id: "",
@@ -255,9 +282,9 @@ const VillagesPage = ({ dashboard, showAlert, account }) => {
                 label="Select Constituency"
                 fullWidth
                 select
-                value={selectedValues.consistency_id}
+                value={formValues.consistency_id}
                 onChange={(e) => {
-                  setSelectedValues((prevState) => ({
+                  setFormValues((prevState) => ({
                     ...prevState,
                     consistency_id: e.target.value,
                     mandal_id: "",
@@ -269,7 +296,7 @@ const VillagesPage = ({ dashboard, showAlert, account }) => {
               >
                 {/* filter constituency based on district_id */}
                 {fetchedData.consistency
-                  .filter((consistency) => consistency.district_pk === selectedValues.district_id)
+                  .filter((consistency) => consistency.district_pk === formValues.district_id)
                   .map((consistency) => {
                     return <MenuItem value={consistency.consistency_pk}>{consistency.consistency_name}</MenuItem>;
                   })}
@@ -281,9 +308,9 @@ const VillagesPage = ({ dashboard, showAlert, account }) => {
                 label="Select Mandal"
                 fullWidth
                 select
-                value={selectedValues.mandal_id}
+                value={formValues.mandal_id}
                 onChange={(e) => {
-                  setSelectedValues((prevState) => ({
+                  setFormValues((prevState) => ({
                     ...prevState,
                     mandal_id: e.target.value,
                     division_id: "",
@@ -294,7 +321,7 @@ const VillagesPage = ({ dashboard, showAlert, account }) => {
               >
                 {/* filter mandal based on consistency_id */}
                 {fetchedData.mandal
-                  .filter((mandal) => mandal.consistency_id === selectedValues.consistency_id)
+                  .filter((mandal) => mandal.consistency_id === formValues.consistency_id)
                   .map((mandal) => {
                     return <MenuItem value={mandal.mandal_pk}>{mandal.mandal_name}</MenuItem>;
                   })}
@@ -306,9 +333,9 @@ const VillagesPage = ({ dashboard, showAlert, account }) => {
                 label="Select Division"
                 fullWidth
                 select
-                value={selectedValues.division_id}
+                value={formValues.division_id}
                 onChange={(e) => {
-                  setSelectedValues((prevState) => ({
+                  setFormValues((prevState) => ({
                     ...prevState,
                     division_id: e.target.value,
                     sachivalayam_id: "",
@@ -318,7 +345,7 @@ const VillagesPage = ({ dashboard, showAlert, account }) => {
               >
                 {/* filter division based on mandal_id */}
                 {fetchedData.division
-                  .filter((division) => division.mandal_id === selectedValues.mandal_id)
+                  .filter((division) => division.mandal_id === formValues.mandal_id)
                   .map((division) => {
                     return <MenuItem value={division.division_pk}>{division.division_name}</MenuItem>;
                   })}
@@ -330,9 +357,9 @@ const VillagesPage = ({ dashboard, showAlert, account }) => {
                 label="Select Sachivalayam "
                 fullWidth
                 select
-                value={selectedValues.sachivalayam_id}
+                value={formValues.sachivalayam_id}
                 onChange={(e) => {
-                  setSelectedValues((prevState) => ({
+                  setFormValues((prevState) => ({
                     ...prevState,
                     sachivalayam_id: e.target.value,
                     part_no: "",
@@ -341,7 +368,7 @@ const VillagesPage = ({ dashboard, showAlert, account }) => {
               >
                 {/* filter sachivalayam based on division_id */}
                 {fetchedData.sachivalayam
-                  .filter((sachivalayam) => sachivalayam.division_pk === selectedValues.division_id)
+                  .filter((sachivalayam) => sachivalayam.division_pk === formValues.division_id)
                   .map((sachivalayam) => {
                     return <MenuItem value={sachivalayam.sachivalayam_pk}>{sachivalayam.sachivalayam_name}</MenuItem>;
                   })}
@@ -353,9 +380,9 @@ const VillagesPage = ({ dashboard, showAlert, account }) => {
                 label="Select Part"
                 fullWidth
                 select
-                value={selectedValues.part_no}
+                value={formValues.part_no}
                 onChange={(e) => {
-                  setSelectedValues((prevState) => ({
+                  setFormValues((prevState) => ({
                     ...prevState,
                     part_no: e.target.value,
                   }));
@@ -363,7 +390,7 @@ const VillagesPage = ({ dashboard, showAlert, account }) => {
               >
                 {/* filter part based on sachivalayam_id */}
                 {fetchedData.part
-                  .filter((part) => part.sachivalayam_id === selectedValues.sachivalayam_id)
+                  .filter((part) => part.sachivalayam_id === formValues.sachivalayam_id)
                   .map((part) => {
                     return <MenuItem value={part.part_no}>{part.part_no}</MenuItem>;
                   })}
@@ -374,9 +401,9 @@ const VillagesPage = ({ dashboard, showAlert, account }) => {
                 size="small"
                 label="Village Name"
                 fullWidth
-                value={selectedValues.village_name}
+                value={formValues.village_name}
                 onChange={(e) => {
-                  setSelectedValues((prevState) => ({
+                  setFormValues((prevState) => ({
                     ...prevState,
                     village_name: e.target.value,
                   }));
@@ -384,16 +411,30 @@ const VillagesPage = ({ dashboard, showAlert, account }) => {
               />
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
-              <LoadingButton loading={isLoading} onClick={handleSubmit} variant="contained">
-                Add
-              </LoadingButton>
+              {!isEditState && (
+                <LoadingButton loading={isLoading} onClick={handleSubmit} variant="contained">
+                  Add
+                </LoadingButton>
+              )}
+
+              {isEditState && (
+                <Stack direction="row" spacing={1}>
+                  <LoadingButton loading={isLoading} onClick={handleSubmit} variant="contained">
+                    Update
+                  </LoadingButton>
+
+                  <LoadingButton loading={isLoading} onClick={handleReset} variant="contained">
+                    Cancel
+                  </LoadingButton>
+                </Stack>
+              )}
             </Grid>
           </Grid>
         </Card>
 
         <Box p={1} />
 
-        <VillagesList villageList={fetchedData.village} fetchedData={fetchedData} setFetchedData={setFetchedData} selectedValues={selectedValues} setSelectedValues={setSelectedValues} refresh={refresh} setRefresh={setRefresh} />
+        <VillagesList loading={fetchLoading} villageList={fetchedData.village} handleEdit={handleEdit} />
       </Container>
     </Page>
   );
@@ -401,7 +442,6 @@ const VillagesPage = ({ dashboard, showAlert, account }) => {
 
 const mapStateToProps = (state) => {
   return {
-    dashboard: state.dashboard,
     account: state.auth,
   };
 };

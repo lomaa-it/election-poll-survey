@@ -101,7 +101,7 @@ const AccessMangementList = ({ common, other, showAlert, getAllAccessPermissions
     rowsPerPageOptions: ROWS_PER_PAGE_OPTION,
     download: false,
     print: false,
-    viewColumns: false,
+    viewColumns: true,
     filter: false,
   };
 

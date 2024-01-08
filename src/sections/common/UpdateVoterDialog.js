@@ -2,7 +2,7 @@ import * as Yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import React, { useEffect, useState } from "react";
-import { Box, IconButton, Dialog, MenuItem, Grid, Radio, DialogContent, DialogTitle, FormControlLabel, DialogActions, Button, Typography, FormLabel } from "@mui/material";
+import { Box, IconButton, Dialog, MenuItem, Grid, Radio, DialogContent, DialogTitle, FormControlLabel, DialogActions, Button, Typography, FormLabel, createFilterOptions } from "@mui/material";
 import FormControl from "@mui/material/FormControl";
 import RadioGroup from "@mui/material/RadioGroup";
 
@@ -10,18 +10,25 @@ import { PARTY_ID, casteList, getTicketColorByValue, phoneRegExp, religionList }
 import { LoadingButton } from "@mui/lab";
 import EditIcon from "@mui/icons-material/Edit";
 import { BJPRadio, CongressRadio, JSPRadio, NeutralRadio, OthersRadio, TDPRadio, YCPRadio } from "./PartyRadioButtons";
-import { FormProvider, RHFRadio, RHFTextField } from "../../components/hook-form";
+import { FormProvider, RHFAutoComplete, RHFRadio, RHFTextField } from "../../components/hook-form";
 import { connect } from "react-redux";
 import { showAlert } from "../../actions/alert";
 import { updateVoterDetails } from "../../actions/voter";
+
+const filter = createFilterOptions();
 
 const UpdateVoterDialog = ({ account, common, voterData, showAlert, updateVoterDetails, isActive }) => {
   const [open, setOpen] = useState(false);
   const [isLoading, setLoading] = useState(false);
 
+  const [religion, setReligion] = useState(null);
+  const [caste, setCaste] = useState(null);
+
   useEffect(() => {
     if (open) {
       reset(defaultValues);
+      setReligion(common.religion.find((e) => e.value == voterData.religion_id) ?? null);
+      setCaste(common.caste.find((e) => e.value == voterData.caste_id) ?? null);
     }
   }, [open]);
 
@@ -45,8 +52,8 @@ const UpdateVoterDialog = ({ account, common, voterData, showAlert, updateVoterD
   const schema = Yup.object().shape({
     phone_no: Yup.string().matches(phoneRegExp, "Phone number is not valid").min(10, "Phone number must be at least 10 digits").required("Phone number is required"),
     is_resident: Yup.string().required("Resident status is required"),
-    religion_id: Yup.string().required("Religion is required"),
-    caste_id: Yup.string().required("Caste is required"),
+    // religion_id: Yup.string().required("Religion is required"),
+    // caste_id: Yup.string().required("Caste is required"),
     disability: Yup.string().required("Disability status is required"),
     govt_employee: Yup.string().required("Government employee status is required"),
     current_address: Yup.string(),
@@ -59,8 +66,8 @@ const UpdateVoterDialog = ({ account, common, voterData, showAlert, updateVoterD
   const defaultValues = {
     phone_no: voterData.voter_phone_no ?? "",
     is_resident: voterData.is_resident ?? "",
-    religion_id: voterData.religion_id ?? "",
-    caste_id: voterData.caste_id ?? "",
+    // religion_id: voterData.religion_id ?? "",
+    // caste_id: voterData.caste_id ?? "",
     disability: voterData.disability ?? "",
     govt_employee: voterData.govt_employee ?? 2,
     current_address: voterData.current_address ?? "",
@@ -84,6 +91,16 @@ const UpdateVoterDialog = ({ account, common, voterData, showAlert, updateVoterD
       return;
     }
 
+    if (religion == null) {
+      showAlert({ text: "Religion is required" });
+      return;
+    }
+
+    if (caste == null) {
+      showAlert({ text: "Caste is required" });
+      return;
+    }
+
     setLoading(true);
 
     const jsonData = {
@@ -91,8 +108,10 @@ const UpdateVoterDialog = ({ account, common, voterData, showAlert, updateVoterD
       volunteer_id: account.user.user_pk,
       voter_phone_no: data.phone_no,
       govt_employee: data.govt_employee == 2 ? null : data.govt_employee,
-      religion_name: common.religion.find((e) => e.value == data.religion_id)?.label ?? "",
-      caste_name: common.caste.find((e) => e.value == data.caste_id)?.label ?? "",
+      religion_id: religion.value,
+      religion_name: religion.label,
+      caste_id: caste.value,
+      caste_name: caste.label,
       createdby: account.user.user_pk,
       updatedby: account.user.user_pk,
     };
@@ -110,10 +129,7 @@ const UpdateVoterDialog = ({ account, common, voterData, showAlert, updateVoterD
     setOpen(false);
   };
 
-  console.log("voterData", voterData);
-
   const iconColor = getTicketColorByValue(voterData.status_id);
-  console.log("iconColor", iconColor);
 
   return (
     <>
@@ -168,23 +184,71 @@ const UpdateVoterDialog = ({ account, common, voterData, showAlert, updateVoterD
                 </Grid>
 
                 <Grid item xs={12} md={6} lg={6}>
-                  <RHFTextField name="religion_id" label="Religion" select required>
+                  <RHFAutoComplete
+                    freeSolo
+                    name="religion_id"
+                    label="Religion"
+                    value={religion}
+                    options={common.religion}
+                    getOptionLabel={(option) => option.label}
+                    isDialog={true}
+                    onChange={(name, value) => setReligion(value)}
+                    filterOptions={(options, params) => {
+                      const filtered = filter(options, params);
+                      const { inputValue } = params;
+                      const isExisting = options.some((option) => inputValue === option.label);
+                      if (inputValue !== "" && !isExisting) {
+                        filtered.push({
+                          value: null,
+                          label: inputValue,
+                        });
+                      }
+
+                      return filtered;
+                    }}
+                  />
+
+                  {/* <RHFTextField name="religion_id" label="Religion" select required>
                     {common.religion.map((item, index) => (
                       <MenuItem key={index} value={item.value}>
                         {item.label}
                       </MenuItem>
                     ))}
-                  </RHFTextField>
+                  </RHFTextField> */}
                 </Grid>
 
                 <Grid item xs={12} md={6} lg={6}>
-                  <RHFTextField name="caste_id" label="Caste" select required>
+                  <RHFAutoComplete
+                    freeSolo
+                    name="caste_id"
+                    label="Caste"
+                    value={caste}
+                    options={common.caste}
+                    getOptionLabel={(option) => option.label}
+                    isDialog={true}
+                    onChange={(name, value) => setCaste(value)}
+                    filterOptions={(options, params) => {
+                      const filtered = filter(options, params);
+                      const { inputValue } = params;
+                      const isExisting = options.some((option) => inputValue === option.label);
+                      if (inputValue !== "" && !isExisting) {
+                        filtered.push({
+                          value: null,
+                          label: inputValue,
+                        });
+                      }
+
+                      return filtered;
+                    }}
+                  />
+
+                  {/* <RHFTextField name="caste_id" label="Caste" select required>
                     {common.caste.map((item, index) => (
                       <MenuItem key={index} value={item.value}>
                         {item.label}
                       </MenuItem>
                     ))}
-                  </RHFTextField>
+                  </RHFTextField> */}
                 </Grid>
 
                 <Grid item xs={12} md={6} lg={5}>
@@ -253,12 +317,7 @@ const UpdateVoterDialog = ({ account, common, voterData, showAlert, updateVoterD
                       //   custom: <OthersRadio fontSize={22} />,
                       // },
                     ]}
-                    sx={{
-                      ".MuiFormControlLabel-label": {
-                        marginLeft: "8px",
-                        fontSize: "1rem",
-                      },
-                    }}
+                    componentsProps={{ typography: { fontSize: 12 } }}
                   />
                 </Grid>
               </Grid>

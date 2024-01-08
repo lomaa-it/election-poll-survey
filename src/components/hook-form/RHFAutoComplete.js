@@ -1,10 +1,11 @@
 import React from "react";
 import { Autocomplete, CircularProgress, TextField } from "@mui/material";
 
-export default function RHFAutoComplete({ name, value, options, getOptionLabel, onChange, loading, disabled = false, multiple = false, ...other }) {
+export default function RHFAutoComplete({ name, value, options, getOptionLabel, onChange, filterOptions, loading, disabled = false, multiple = false, freeSolo = false, isDialog = false, ...other }) {
   return (
     <Autocomplete
       fullWidth
+      freeSolo={freeSolo}
       multiple={multiple}
       size="small"
       name={name}
@@ -16,6 +17,7 @@ export default function RHFAutoComplete({ name, value, options, getOptionLabel, 
         borderRadius: "5px",
       }}
       disabled={disabled}
+      clearOnBlur
       renderInput={(params) => (
         <TextField
           {...params}
@@ -34,11 +36,12 @@ export default function RHFAutoComplete({ name, value, options, getOptionLabel, 
       slotProps={{
         popper: {
           sx: {
-            zIndex: 1000,
+            zIndex: isDialog ? 1300 : 1000,
           },
         },
       }}
       onChange={(e, value) => onChange(name, value)}
+      filterOptions={filterOptions}
     />
   );
 }
