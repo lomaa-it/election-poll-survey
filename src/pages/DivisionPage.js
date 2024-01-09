@@ -1,4 +1,4 @@
-import { Grid, Container, Typography, Box, TextField, Card, MenuItem } from "@mui/material";
+import { Grid, Container, Typography, Box, TextField, Card, Stack, MenuItem } from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -8,25 +8,25 @@ import Button from "@mui/material/Button";
 
 import DivisionList from "../sections/reports/DivisionList";
 import { useEffect, useState } from "react";
-import instance from "../utils/axios";
+
 import { getAllConstituenciesRoute, getAllDistrictsRoute, getAllMandalRoute, getAllStatesRoute, getAllDivisionRoute, createDivisionsRoute } from "../utils/apis";
 import { showAlert } from "../actions/alert";
 import ApiServices from "../services/apiservices";
+import { Edit } from "@mui/icons-material";
 
 const DivisionPage = ({ dashboard, showAlert, account }) => {
-  const [refresh, setRefresh] = useState(false);
-
-  const [isLoading, setIsLoading] = useState(false);
+  const [fetchLoading, setFetchLoading] = useState(false);
+  const [isLoading, setLoading] = useState(false);
+  const [isEditState, setEditState] = useState(false);
   const [fetchedData, setFetchedData] = useState({
-    states: [{}],
-    district: [{}],
-    consistency: [{}],
-    mandal: [{}],
-    division: [{}],
+    states: [],
+    district: [],
+    consistency: [],
+    mandal: [],
+    division: [],
   });
 
-  const [selectedValues, setSelectedValues] = useState({
-    state_id: "",
+  const [formValues, setFormValues] = useState({
     district_id: "",
     consistency_id: "",
     mandal_id: "",
@@ -34,135 +34,145 @@ const DivisionPage = ({ dashboard, showAlert, account }) => {
   });
 
   useEffect(() => {
-    const fecthOptionsData = async () => {
-      try {
-        /// get all states
-        const statesResponse = await ApiServices.postRequest(getAllStatesRoute);
-        console.log("states", statesResponse.data.message);
-        /// get all districts
-        const districtsResponse = await ApiServices.postRequest(getAllDistrictsRoute);
-        console.log("districts", districtsResponse.data.message);
-
-        /// get all constituencies
-        const constituenciesResponse = await ApiServices.postRequest(getAllConstituenciesRoute);
-        console.log("constituencies", constituenciesResponse.data.message);
-
-        /// get all mandals
-        const mandalsResponse = await ApiServices.postRequest(getAllMandalRoute);
-        console.log("mandals", mandalsResponse.data.message);
-
-        /// get all divisions
-        const divisionsResponse = await ApiServices.postRequest(getAllDivisionRoute);
-        console.log("divisions", divisionsResponse.data.message);
-
-        /// state update
-        setFetchedData((prevState) => ({
-          ...prevState,
-          states: statesResponse.data.message,
-          district: districtsResponse.data.message,
-          consistency: constituenciesResponse.data.message,
-          mandal: mandalsResponse.data.message,
-          division: divisionsResponse.data.message,
-        }));
-      } catch (error) {
-        console.log(error);
-      }
-    };
     fecthOptionsData();
+    fecthDivisionData();
   }, []);
 
-  useEffect(() => {
-    const fecthOptionsData = async () => {
-      try {
-        /// get all divisions
-        const divisionsResponse = await ApiServices.postRequest(getAllDivisionRoute);
-        console.log("divisions", divisionsResponse.data.message);
+  const fecthOptionsData = async () => {
+    try {
+      /// get all states
+      const statesResponse = await ApiServices.postRequest(getAllStatesRoute);
+      // console.log("states", statesResponse.data.message);
+      /// get all districts
+      const districtsResponse = await ApiServices.postRequest(getAllDistrictsRoute);
+      // console.log("districts", districtsResponse.data.message);
 
-        /// state update
-        setFetchedData((prevState) => ({
-          ...prevState,
+      /// get all constituencies
+      const constituenciesResponse = await ApiServices.postRequest(getAllConstituenciesRoute);
+      console.log("constituencies", constituenciesResponse.data.message);
 
-          division: divisionsResponse.data.message,
-        }));
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fecthOptionsData();
-  }, [refresh]);
+      /// get all mandals
+      const mandalsResponse = await ApiServices.postRequest(getAllMandalRoute);
+      // console.log("mandals", mandalsResponse.data.message);
+
+      /// state update
+      setFetchedData((prevState) => ({
+        ...prevState,
+        states: statesResponse.data.message,
+        district: districtsResponse.data.message,
+        consistency: constituenciesResponse.data.message,
+        mandal: mandalsResponse.data.message,
+      }));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fecthDivisionData = async () => {
+    try {
+      /// get all divisions
+      const divisionsResponse = await ApiServices.postRequest(getAllDivisionRoute);
+      console.log("divisions", divisionsResponse.data.message);
+
+      /// state update
+      setFetchedData((prevState) => ({
+        ...prevState,
+        division: divisionsResponse.data.message,
+      }));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleEdit = async (data) => {
+    setEditState(true);
+    console.log("data", data);
+    setFormValues({
+      district_id: data.district_id,
+      consistency_id: data.consistency_id,
+      mandal_id: data.mandal_id,
+      division_id: data.division_id,
+      division_name: data.division_name,
+    });
+  };
 
   const handleSubmit = async () => {
-    if (!selectedValues.district_id) {
+    console.log("formValues", formValues);
+
+    if (!formValues.district_id) {
       showAlert({ text: "Please select district", color: "error" });
       return;
     }
-
-    if (!selectedValues.consistency_id) {
+    if (!formValues.consistency_id) {
       showAlert({ text: "Please select constituency", color: "error" });
       return;
     }
-
-    if (!selectedValues.mandal_id) {
+    if (!formValues.mandal_id) {
       showAlert({ text: "Please select mandal", color: "error" });
       return;
     }
-
-    if (!selectedValues.division_name) {
+    if (!formValues.division_name) {
       showAlert({ text: "Please enter division name", color: "error" });
       return;
     }
+    setLoading(true);
 
-    console.log(selectedValues);
+    var body = {
+      division_name: formValues.division_name,
+      mandal_id: formValues.mandal_id,
+    };
+
+    if (!isEditState) {
+      await addDivision(body);
+    } else {
+      await updateDivision(formValues.division_id, body);
+    }
+    setLoading(false);
+  };
+
+  const handleReset = () => {
+    setEditState(false);
+    setFormValues({
+      district_id: "",
+      consistency_id: "",
+      mandal_id: "",
+      division_name: "",
+    });
+  };
+
+  const addDivision = async (body) => {
     try {
-      setIsLoading(true);
-      const response = await ApiServices.postRequest(createDivisionsRoute, {
-        division_name: selectedValues.division_name,
-        mandal_id: selectedValues.mandal_id,
-      });
+      await ApiServices.postRequest(createDivisionsRoute, body);
 
-      console.log(response.data.message);
       showAlert({ text: "Division Created Successfully", color: "success" });
-      setIsLoading(false);
-
-      setSelectedValues((prevState) => ({
-        ...prevState,
-        state_id: "",
-        district_id: "",
-        consistency_id: "",
-        mandal_id: "",
-        division_name: "",
-      }));
-      setRefresh((prevState) => !prevState);
+      fecthDivisionData();
+      handleReset();
     } catch (error) {
       console.log(error);
-      setIsLoading(false);
-      setRefresh((prevState) => !prevState);
+      showAlert({ text: "Division Created Failed", color: "error" });
+    }
+  };
+
+  const updateDivision = async (id, body) => {
+    try {
+      await ApiServices.putRequest(`${createDivisionsRoute}${id}`, body);
+
+      showAlert({ text: "Division Updated Successfully", color: "success" });
+      fecthDivisionData();
+      handleReset();
+    } catch (error) {
+      console.log(error);
+      showAlert({ text: "Division Updated Failed", color: "error" });
     }
   };
 
   return (
     <Page title="Divisions">
       <Container maxWidth="xl">
-        {/* <Typography variant="h4" sx={{ mb: 1 }}>
-          Division
-        </Typography> */}
-
         <Card sx={{ p: 3 }}>
+          <Typography sx={{ pb: 2 }}>{isEditState ? "Edit Division" : "Add Division"}</Typography>
           <Grid container spacing={2} alignItems="center">
-            <Grid item xs={12} md={6} lg={9}>
-              <DivisionList fetchedData={fetchedData} setFetchedData={setFetchedData} selectedValues={selectedValues} setSelectedValues={setSelectedValues} refresh={refresh} setRefresh={setRefresh} />
-            </Grid>
-            <Grid
-              item
-              xs={12}
-              md={6}
-              lg={3}
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "15px",
-              }}
-            >
+            <Grid item xs={12} md={6} lg={2}>
               <TextField
                 size="small"
                 label="Select State"
@@ -170,7 +180,7 @@ const DivisionPage = ({ dashboard, showAlert, account }) => {
                 select
                 value={account.user.state_pk}
                 onChange={(e) => {
-                  setSelectedValues((prevState) => ({
+                  setFormValues((prevState) => ({
                     ...prevState,
                     state_id: e.target.value,
                     district_id: "",
@@ -180,19 +190,24 @@ const DivisionPage = ({ dashboard, showAlert, account }) => {
                 }}
                 disabled
               >
-                {fetchedData.states.map((state) => {
-                  return <MenuItem value={state.state_pk}>{state.state_name}</MenuItem>;
+                {fetchedData.states.map((state, index) => {
+                  return (
+                    <MenuItem key={index} value={state.state_pk}>
+                      {state.state_name}
+                    </MenuItem>
+                  );
                 })}
               </TextField>
+            </Grid>
+            <Grid item xs={12} md={6} lg={2}>
               <TextField
                 size="small"
                 label="Select District"
                 fullWidth
-                required
                 select
-                value={selectedValues.district_id}
+                value={formValues.district_id}
                 onChange={(e) => {
-                  setSelectedValues((prevState) => ({
+                  setFormValues((prevState) => ({
                     ...prevState,
                     district_id: e.target.value,
                     consistency_id: "",
@@ -203,19 +218,24 @@ const DivisionPage = ({ dashboard, showAlert, account }) => {
                 {/* filter districk based on state_id */}
                 {fetchedData.district
                   .filter((district) => district.state_id === account.user.state_pk)
-                  .map((district) => {
-                    return <MenuItem value={district.district_pk}>{district.district_name}</MenuItem>;
+                  .map((district, index) => {
+                    return (
+                      <MenuItem key={index} value={district.district_id}>
+                        {district.district_name}
+                      </MenuItem>
+                    );
                   })}
               </TextField>
+            </Grid>
+            <Grid item xs={12} md={6} lg={2}>
               <TextField
                 size="small"
                 label="Select Constituency"
                 fullWidth
-                required
                 select
-                value={selectedValues.consistency_id}
+                value={formValues.consistency_id}
                 onChange={(e) => {
-                  setSelectedValues((prevState) => ({
+                  setFormValues((prevState) => ({
                     ...prevState,
                     consistency_id: e.target.value,
                     mandal_id: "",
@@ -224,20 +244,25 @@ const DivisionPage = ({ dashboard, showAlert, account }) => {
               >
                 {/* filter constituency based on district_id */}
                 {fetchedData.consistency
-                  .filter((consistency) => consistency.district_pk === selectedValues.district_id)
-                  .map((consistency) => {
-                    return <MenuItem value={consistency.consistency_pk}>{consistency.consistency_name}</MenuItem>;
+                  .filter((consistency) => consistency.district_id === formValues.district_id)
+                  .map((consistency, index) => {
+                    return (
+                      <MenuItem key={index} value={consistency.consistency_id}>
+                        {consistency.consistency_name}
+                      </MenuItem>
+                    );
                   })}
               </TextField>
+            </Grid>
+            <Grid item xs={12} md={6} lg={2}>
               <TextField
                 size="small"
                 label="Select Mandal"
                 fullWidth
-                required
                 select
-                value={selectedValues.mandal_id}
+                value={formValues.mandal_id}
                 onChange={(e) => {
-                  setSelectedValues((prevState) => ({
+                  setFormValues((prevState) => ({
                     ...prevState,
                     mandal_id: e.target.value,
                   }));
@@ -245,40 +270,54 @@ const DivisionPage = ({ dashboard, showAlert, account }) => {
               >
                 {/* filter mandal based on consistency_id */}
                 {fetchedData.mandal
-                  .filter((mandal) => mandal.consistency_id === selectedValues.consistency_id)
-                  .map((mandal) => {
-                    return <MenuItem value={mandal.mandal_pk}>{mandal.mandal_name}</MenuItem>;
+                  .filter((mandal) => mandal.consistency_id === formValues.consistency_id)
+                  .map((mandal, index) => {
+                    return (
+                      <MenuItem key={index} value={mandal.mandal_id}>
+                        {mandal.mandal_name}
+                      </MenuItem>
+                    );
                   })}
               </TextField>
-
+            </Grid>
+            <Grid item xs={12} md={6} lg={2}>
               <TextField
                 size="small"
                 label="Division Name"
                 fullWidth
                 required
-                value={selectedValues.division_name}
+                value={formValues.division_name}
                 onChange={(e) => {
-                  setSelectedValues((prevState) => ({
+                  setFormValues((prevState) => ({
                     ...prevState,
                     division_name: e.target.value,
                   }));
                 }}
               />
-              <LoadingButton
-                loading={isLoading}
-                onClick={handleSubmit}
-                variant="contained"
-                sx={{
-                  padding: "15px",
-                }}
-              >
-                Add
-              </LoadingButton>
+            </Grid>
+            <Grid item xs={12} md={6} lg={2}>
+              {!isEditState && (
+                <LoadingButton loading={isLoading} onClick={handleSubmit} variant="contained">
+                  Add
+                </LoadingButton>
+              )}
+              {isEditState && (
+                <Stack direction="row" spacing={1}>
+                  <LoadingButton loading={isLoading} onClick={handleSubmit} variant="contained">
+                    Update
+                  </LoadingButton>
+
+                  <LoadingButton loading={isLoading} onClick={handleReset} variant="contained">
+                    Cancel
+                  </LoadingButton>
+                </Stack>
+              )}
             </Grid>
           </Grid>
         </Card>
 
         <Box p={1} />
+        <DivisionList loading={fetchLoading} divisionList={fetchedData.division} handleEdit={handleEdit} />
       </Container>
     </Page>
   );

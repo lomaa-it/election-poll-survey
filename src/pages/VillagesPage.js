@@ -101,6 +101,9 @@ const VillagesPage = ({ account, showAlert }) => {
 
   const handleEdit = async (data) => {
     setEditState(true);
+
+    console.log("data", data);
+
     setFormValues({
       village_id: data.village_id,
       district_id: data.district_id,
@@ -271,8 +274,12 @@ const VillagesPage = ({ account, showAlert }) => {
                 {/* filter districk based on state_id */}
                 {fetchedData.district
                   .filter((district) => district.state_id === account.user.state_pk)
-                  .map((district) => {
-                    return <MenuItem value={district.district_pk}>{district.district_name}</MenuItem>;
+                  .map((district, index) => {
+                    return (
+                      <MenuItem key={index} value={district.district_id}>
+                        {district.district_name}
+                      </MenuItem>
+                    );
                   })}
               </TextField>
             </Grid>
@@ -296,9 +303,13 @@ const VillagesPage = ({ account, showAlert }) => {
               >
                 {/* filter constituency based on district_id */}
                 {fetchedData.consistency
-                  .filter((consistency) => consistency.district_pk === formValues.district_id)
-                  .map((consistency) => {
-                    return <MenuItem value={consistency.consistency_pk}>{consistency.consistency_name}</MenuItem>;
+                  .filter((consistency) => consistency.district_id === formValues.district_id)
+                  .map((consistency, index) => {
+                    return (
+                      <MenuItem key={index} value={consistency.consistency_id}>
+                        {consistency.consistency_name}
+                      </MenuItem>
+                    );
                   })}
               </TextField>
             </Grid>
@@ -322,8 +333,12 @@ const VillagesPage = ({ account, showAlert }) => {
                 {/* filter mandal based on consistency_id */}
                 {fetchedData.mandal
                   .filter((mandal) => mandal.consistency_id === formValues.consistency_id)
-                  .map((mandal) => {
-                    return <MenuItem value={mandal.mandal_pk}>{mandal.mandal_name}</MenuItem>;
+                  .map((mandal, index) => {
+                    return (
+                      <MenuItem key={index} value={mandal.mandal_id}>
+                        {mandal.mandal_name}
+                      </MenuItem>
+                    );
                   })}
               </TextField>
             </Grid>
@@ -346,8 +361,12 @@ const VillagesPage = ({ account, showAlert }) => {
                 {/* filter division based on mandal_id */}
                 {fetchedData.division
                   .filter((division) => division.mandal_id === formValues.mandal_id)
-                  .map((division) => {
-                    return <MenuItem value={division.division_pk}>{division.division_name}</MenuItem>;
+                  .map((division, index) => {
+                    return (
+                      <MenuItem key={index} value={division.division_id}>
+                        {division.division_name}
+                      </MenuItem>
+                    );
                   })}
               </TextField>
             </Grid>
@@ -368,9 +387,13 @@ const VillagesPage = ({ account, showAlert }) => {
               >
                 {/* filter sachivalayam based on division_id */}
                 {fetchedData.sachivalayam
-                  .filter((sachivalayam) => sachivalayam.division_pk === formValues.division_id)
-                  .map((sachivalayam) => {
-                    return <MenuItem value={sachivalayam.sachivalayam_pk}>{sachivalayam.sachivalayam_name}</MenuItem>;
+                  .filter((sachivalayam) => sachivalayam.division_id === formValues.division_id)
+                  .map((sachivalayam, index) => {
+                    return (
+                      <MenuItem key={index} value={sachivalayam.sachivalayam_id}>
+                        {sachivalayam.sachivalayam_name}
+                      </MenuItem>
+                    );
                   })}
               </TextField>
             </Grid>

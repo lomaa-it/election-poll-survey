@@ -1,4 +1,4 @@
-import { Grid, Container, Typography, Box, TextField, Card, MenuItem } from "@mui/material";
+import { Grid, Container, Typography, Box, TextField, Card, Stack, MenuItem } from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -12,20 +12,19 @@ import { set } from "date-fns";
 import ApiServices from "../services/apiservices";
 
 const Sachivalayam = ({ dashboard, showAlert, account }) => {
-  const [refresh, setRefresh] = useState(false);
-
-  const [isLoading, setIsLoading] = useState(false);
+  const [fetchLoading, setFetchLoading] = useState(false);
+  const [isLoading, setLoading] = useState(false);
+  const [isEditState, setEditState] = useState(false);
   const [fetchedData, setFetchedData] = useState({
-    states: [{}],
-    district: [{}],
-    consistency: [{}],
-    mandal: [{}],
-    division: [{}],
-    sachivalayam: [{}],
+    states: [],
+    district: [],
+    consistency: [],
+    mandal: [],
+    division: [],
+    sachivalayam: [],
   });
 
-  const [selectedValues, setSelectedValues] = useState({
-    state_id: "",
+  const [formValues, setFormValues] = useState({
     district_id: "",
     consistency_id: "",
     mandal_id: "",
@@ -34,172 +33,189 @@ const Sachivalayam = ({ dashboard, showAlert, account }) => {
   });
 
   useEffect(() => {
-    const fecthOptionsData = async () => {
-      try {
-        /// get all states
-        const statesResponse = await ApiServices.postRequest(getAllStatesRoute);
-        // console.log("states", statesResponse.data.message);
-        /// get all districts
-        const districtsResponse = await ApiServices.postRequest(getAllDistrictsRoute);
-        // console.log("districts", districtsResponse.data.message);
-
-        /// get all constituencies
-        const constituenciesResponse = await ApiServices.postRequest(getAllConstituenciesRoute);
-        // console.log("constituencies", constituenciesResponse.data.message);
-
-        /// get all mandals
-        const mandalsResponse = await ApiServices.postRequest(getAllMandalRoute);
-        // console.log("mandals", mandalsResponse.data.message);
-
-        /// get all divisions
-        const divisionsResponse = await ApiServices.postRequest(getAllDivisionRoute);
-        // console.log("divisions", divisionsResponse.data.message);
-
-        /// state update
-        setFetchedData((prevState) => ({
-          ...prevState,
-          states: statesResponse.data.message,
-          district: districtsResponse.data.message,
-          consistency: constituenciesResponse.data.message,
-          mandal: mandalsResponse.data.message,
-          division: divisionsResponse.data.message,
-        }));
-      } catch (error) {
-        console.log(error);
-      }
-    };
     fecthOptionsData();
+    fecthSachivalayamData();
   }, []);
-  useEffect(() => {
-    const fecthOptionsData = async () => {
-      try {
-        /// get all sachivalayam
-        const sachivalayamResponse = await ApiServices.postRequest(getAllSachivalayamRoute);
-        console.log("sachivalayam", sachivalayamResponse.data.message);
 
-        /// state update
-        setFetchedData((prevState) => ({
-          ...prevState,
+  const fecthOptionsData = async () => {
+    try {
+      /// get all states
+      const statesResponse = await ApiServices.postRequest(getAllStatesRoute);
+      // console.log("states", statesResponse.data.message);
+      /// get all districts
+      const districtsResponse = await ApiServices.postRequest(getAllDistrictsRoute);
+      // console.log("districts", districtsResponse.data.message);
 
-          sachivalayam: sachivalayamResponse.data.message,
-        }));
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fecthOptionsData();
-  }, [refresh]);
+      /// get all constituencies
+      const constituenciesResponse = await ApiServices.postRequest(getAllConstituenciesRoute);
+      // console.log("constituencies", constituenciesResponse.data.message);
+
+      /// get all mandals
+      const mandalsResponse = await ApiServices.postRequest(getAllMandalRoute);
+      // console.log("mandals", mandalsResponse.data.message);
+
+      /// get all divisions
+      const divisionsResponse = await ApiServices.postRequest(getAllDivisionRoute);
+      // console.log("divisions", divisionsResponse.data.message);
+
+      /// state update
+      setFetchedData((prevState) => ({
+        ...prevState,
+        states: statesResponse.data.message,
+        district: districtsResponse.data.message,
+        consistency: constituenciesResponse.data.message,
+        mandal: mandalsResponse.data.message,
+        division: divisionsResponse.data.message,
+      }));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fecthSachivalayamData = async () => {
+    try {
+      /// get all sachivalayam
+      const sachivalayamResponse = await ApiServices.postRequest(getAllSachivalayamRoute);
+      console.log("sachivalayam", sachivalayamResponse.data.message);
+
+      /// state update
+      setFetchedData((prevState) => ({
+        ...prevState,
+
+        sachivalayam: sachivalayamResponse.data.message,
+      }));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleEdit = async (data) => {
+    setEditState(true);
+    console.log("data", data);
+    setFormValues({
+      district_id: data.district_id,
+      consistency_id: data.consistency_id,
+      mandal_id: data.mandal_id,
+      division_id: data.division_id,
+      sachivalayam_id: data.sachivalayam_id,
+      sachivalayam_name: data.sachivalayam_name,
+    });
+  };
 
   const handleSubmit = async () => {
-    console.log("selectedValues", selectedValues);
+    console.log("formValues", formValues);
 
-    if (selectedValues.district_id === "") {
+    if (!formValues.district_id) {
       showAlert({
         text: "Please Select District",
-
         color: "error",
       });
 
       return;
     }
 
-    if (selectedValues.consistency_id === "") {
+    if (!formValues.consistency_id) {
       showAlert({
         text: "Please Select Constituency",
-
         color: "error",
       });
 
       return;
     }
 
-    if (selectedValues.mandal_id === "") {
+    if (!formValues.mandal_id) {
       showAlert({
         text: "Please Select Mandal",
-
         color: "error",
       });
 
       return;
     }
 
-    if (selectedValues.division_id === "") {
+    if (!formValues.division_id) {
       showAlert({
         text: "Please Select Division",
-
         color: "error",
       });
 
       return;
     }
 
-    if (selectedValues.sachivalayam_name === "") {
+    if (!formValues.sachivalayam_name) {
       showAlert({
         text: "Please Enter Sachivalayam Name",
-
         color: "error",
       });
 
       return;
     }
 
+    setLoading(true);
+
+    var body = {
+      sachivalayam_name: formValues.sachivalayam_name,
+      division_pk: formValues.division_id,
+      division_id: formValues.division_id,
+    };
+
+    if (!isEditState) {
+      await addSachivalayam(body);
+    } else {
+      await updateSachivalayam(formValues.sachivalayam_id, body);
+    }
+    setLoading(false);
+  };
+
+  const handleReset = () => {
+    setEditState(false);
+    setFormValues({
+      district_id: "",
+      consistency_id: "",
+      mandal_id: "",
+      division_id: "",
+      sachivalayam_name: "",
+    });
+  };
+
+  const addSachivalayam = async (body) => {
     try {
-      setIsLoading(true);
-      const response = await ApiServices.postRequest(createSachivalayamRoute, {
-        sachivalayam_name: selectedValues.sachivalayam_name,
-        division_pk: selectedValues.division_id,
-        division_id: selectedValues.division_id,
-      });
-      console.log("created", response.data.message);
+      await ApiServices.postRequest(createSachivalayamRoute, body);
+
       showAlert({
         text: "Sachivalayam Created Successfully",
         color: "success",
       });
-      setIsLoading(false);
-      setSelectedValues((prevState) => ({
-        ...prevState,
-        state_id: "",
-        district_id: "",
-        consistency_id: "",
-        division_id: "",
-        mandal_id: "",
-        sachivalayam_name: "",
-      }));
-
-      setRefresh((prevState) => !prevState);
+      fecthSachivalayamData();
+      handleReset();
     } catch (error) {
       console.log(error);
-      setIsLoading(false);
+      showAlert({ text: "Sachivalayam Creation Failed" });
+    }
+  };
+
+  const updateSachivalayam = async (id, data) => {
+    try {
+      await ApiServices.putRequest(`${createSachivalayamRoute}${id}`, data);
+
       showAlert({
-        text: "Sachivalayam Creation Failed",
-        color: "error",
+        text: "Sachivalayam Updated Successfully",
+        color: "success",
       });
+      fecthSachivalayamData();
+      handleReset();
+    } catch (error) {
+      console.log(error);
+      showAlert({ text: "Sachivalayam Updation Failed" });
     }
   };
 
   return (
     <Page title="Sachivalayam">
       <Container maxWidth="xl">
-        {/* <Typography variant="h4" sx={{ mb: 1 }}>
-          Sachivalayam
-        </Typography> */}
-
         <Card sx={{ p: 3 }}>
+          <Typography sx={{ pb: 2 }}>{isEditState ? "Edit Sachivalayam" : "Add Sachivalayam"}</Typography>
           <Grid container spacing={2} alignItems="center">
-            <Grid item xs={12} md={6} lg={9}>
-              <SachivalayamList sachivalayamList={fetchedData.sachivalayam} fetchedData={fetchedData} setFetchedData={setFetchedData} selectedValues={selectedValues} setSelectedValues={setSelectedValues} refresh={refresh} setRefresh={setRefresh} />
-            </Grid>
-            <Grid
-              item
-              xs={12}
-              md={6}
-              lg={3}
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "15px",
-              }}
-            >
+            <Grid item xs={12} md={6} lg={2}>
               <TextField
                 size="small"
                 label="Select State"
@@ -207,7 +223,7 @@ const Sachivalayam = ({ dashboard, showAlert, account }) => {
                 select
                 value={account.user.state_pk}
                 onChange={(e) => {
-                  setSelectedValues((prevState) => ({
+                  setFormValues((prevState) => ({
                     ...prevState,
                     state_id: e.target.value,
                     district_id: "",
@@ -218,18 +234,24 @@ const Sachivalayam = ({ dashboard, showAlert, account }) => {
                 }}
                 disabled
               >
-                {fetchedData.states.map((state) => {
-                  return <MenuItem value={state.state_pk}>{state.state_name}</MenuItem>;
+                {fetchedData.states.map((state, index) => {
+                  return (
+                    <MenuItem key={index} value={state.state_pk}>
+                      {state.state_name}
+                    </MenuItem>
+                  );
                 })}
               </TextField>
+            </Grid>
+            <Grid item xs={12} md={6} lg={2}>
               <TextField
                 size="small"
                 label="Select District"
                 fullWidth
                 select
-                value={selectedValues.district_id}
+                value={formValues.district_id}
                 onChange={(e) => {
-                  setSelectedValues((prevState) => ({
+                  setFormValues((prevState) => ({
                     ...prevState,
                     district_id: e.target.value,
                     consistency_id: "",
@@ -241,18 +263,24 @@ const Sachivalayam = ({ dashboard, showAlert, account }) => {
                 {/* filter districk based on state_id */}
                 {fetchedData.district
                   .filter((district) => district.state_id === account.user.state_pk)
-                  .map((district) => {
-                    return <MenuItem value={district.district_pk}>{district.district_name}</MenuItem>;
+                  .map((district, index) => {
+                    return (
+                      <MenuItem key={index} value={district.district_id}>
+                        {district.district_name}
+                      </MenuItem>
+                    );
                   })}
               </TextField>
+            </Grid>
+            <Grid item xs={12} md={6} lg={2}>
               <TextField
                 size="small"
                 label="Select Constituency"
                 fullWidth
                 select
-                value={selectedValues.consistency_id}
+                value={formValues.consistency_id}
                 onChange={(e) => {
-                  setSelectedValues((prevState) => ({
+                  setFormValues((prevState) => ({
                     ...prevState,
                     consistency_id: e.target.value,
                     mandal_id: "",
@@ -262,19 +290,25 @@ const Sachivalayam = ({ dashboard, showAlert, account }) => {
               >
                 {/* filter constituency based on district_id */}
                 {fetchedData.consistency
-                  .filter((consistency) => consistency.district_pk === selectedValues.district_id)
-                  .map((consistency) => {
-                    return <MenuItem value={consistency.consistency_pk}>{consistency.consistency_name}</MenuItem>;
+                  .filter((consistency) => consistency.district_id === formValues.district_id)
+                  .map((consistency, index) => {
+                    return (
+                      <MenuItem key={index} value={consistency.consistency_id}>
+                        {consistency.consistency_name}
+                      </MenuItem>
+                    );
                   })}
               </TextField>
+            </Grid>
+            <Grid item xs={12} md={6} lg={2}>
               <TextField
                 size="small"
                 label="Select Mandal"
                 fullWidth
                 select
-                value={selectedValues.mandal_id}
+                value={formValues.mandal_id}
                 onChange={(e) => {
-                  setSelectedValues((prevState) => ({
+                  setFormValues((prevState) => ({
                     ...prevState,
                     mandal_id: e.target.value,
                     division_id: "",
@@ -283,19 +317,25 @@ const Sachivalayam = ({ dashboard, showAlert, account }) => {
               >
                 {/* filter mandal based on consistency_id */}
                 {fetchedData.mandal
-                  .filter((mandal) => mandal.consistency_id === selectedValues.consistency_id)
-                  .map((mandal) => {
-                    return <MenuItem value={mandal.mandal_pk}>{mandal.mandal_name}</MenuItem>;
+                  .filter((mandal) => mandal.consistency_id === formValues.consistency_id)
+                  .map((mandal, index) => {
+                    return (
+                      <MenuItem key={index} value={mandal.mandal_id}>
+                        {mandal.mandal_name}
+                      </MenuItem>
+                    );
                   })}
               </TextField>
+            </Grid>
+            <Grid item xs={12} md={6} lg={2}>
               <TextField
                 size="small"
                 label="Select Division"
                 fullWidth
                 select
-                value={selectedValues.division_id}
+                value={formValues.division_id}
                 onChange={(e) => {
-                  setSelectedValues((prevState) => ({
+                  setFormValues((prevState) => ({
                     ...prevState,
                     division_id: e.target.value,
                   }));
@@ -303,38 +343,54 @@ const Sachivalayam = ({ dashboard, showAlert, account }) => {
               >
                 {/* filter division based on mandal_id */}
                 {fetchedData.division
-                  .filter((division) => division.mandal_id === selectedValues.mandal_id)
-                  .map((division) => {
-                    return <MenuItem value={division.division_pk}>{division.division_name}</MenuItem>;
+                  .filter((division) => division.mandal_id === formValues.mandal_id)
+                  .map((division, index) => {
+                    return (
+                      <MenuItem key={index} value={division.division_id}>
+                        {division.division_name}
+                      </MenuItem>
+                    );
                   })}
               </TextField>
+            </Grid>
+            <Grid item xs={12} md={6} lg={2}>
               <TextField
                 size="small"
                 label="Sachivalayam Name"
                 fullWidth
-                value={selectedValues.sachivalayam_name}
+                value={formValues.sachivalayam_name}
                 onChange={(e) => {
-                  setSelectedValues((prevState) => ({
+                  setFormValues((prevState) => ({
                     ...prevState,
                     sachivalayam_name: e.target.value,
                   }));
                 }}
               />
-              <LoadingButton
-                loading={isLoading}
-                onClick={handleSubmit}
-                variant="contained"
-                sx={{
-                  padding: "15px",
-                }}
-              >
-                Add
-              </LoadingButton>
+            </Grid>
+            <Grid item xs={12} md={6} lg={2}>
+              {!isEditState && (
+                <LoadingButton loading={isLoading} onClick={handleSubmit} variant="contained">
+                  Add
+                </LoadingButton>
+              )}
+              {isEditState && (
+                <Stack direction="row" spacing={1}>
+                  <LoadingButton loading={isLoading} onClick={handleSubmit} variant="contained">
+                    Update
+                  </LoadingButton>
+
+                  <LoadingButton loading={isLoading} onClick={handleReset} variant="contained">
+                    Cancel
+                  </LoadingButton>
+                </Stack>
+              )}
             </Grid>
           </Grid>
         </Card>
 
         <Box p={1} />
+
+        <SachivalayamList loading={fetchLoading} sachivalayamList={fetchedData.sachivalayam} handleEdit={handleEdit} />
       </Container>
     </Page>
   );
@@ -342,7 +398,6 @@ const Sachivalayam = ({ dashboard, showAlert, account }) => {
 
 const mapStateToProps = (state) => {
   return {
-    dashboard: state.dashboard,
     account: state.auth,
   };
 };

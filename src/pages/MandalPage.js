@@ -1,4 +1,4 @@
-import { Grid, Container, Typography, Box, TextField, Card, MenuItem } from "@mui/material";
+import { Grid, Container, Typography, Box, TextField, Card, Stack, MenuItem } from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -9,21 +9,22 @@ import MandalsList from "../sections/reports/MandalsList";
 import { useEffect, useState } from "react";
 import instance from "../utils/axios";
 import { getAllMandalRoute, getAllStatesRoute, getAllDistrictsRoute, createMandalsRoute, getAllConstituenciesRoute } from "../utils/apis";
-import { set } from "date-fns";
+import { add, set } from "date-fns";
 import { showAlert } from "../actions/alert";
 import ApiServices from "../services/apiservices";
 
 const MandalPage = ({ dashboard, showAlert, account }) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [refresh, setRefresh] = useState(false);
+  const [fetchLoading, setFetchLoading] = useState(false);
+  const [isLoading, setLoading] = useState(false);
+  const [isEditState, setEditState] = useState(false);
   const [fetchedData, setFetchedData] = useState({
-    states: [{}],
-    district: [{}],
-    consistency: [{}],
-    mandal: [{}],
+    states: [],
+    district: [],
+    consistency: [],
+    mandal: [],
   });
 
-  const [selectedValues, setSelectedValues] = useState({
+  const [formValues, setFormValues] = useState({
     state_id: "",
     district_id: "",
     consistency_id: "",
@@ -31,125 +32,145 @@ const MandalPage = ({ dashboard, showAlert, account }) => {
   });
 
   useEffect(() => {
-    const fecthOptionsData = async () => {
-      try {
-        /// get all states
-        const statesResponse = await ApiServices.postRequest(getAllStatesRoute);
-        console.log("states", statesResponse.data.message);
-        /// get all districts
-        const districtsResponse = await ApiServices.postRequest(getAllDistrictsRoute);
-        console.log("districts", districtsResponse.data.message);
-
-        /// get all constituencies
-        const constituenciesResponse = await ApiServices.postRequest(getAllConstituenciesRoute);
-        console.log("constituencies", constituenciesResponse.data.message);
-
-        /// state update
-        setFetchedData((prevState) => ({
-          ...prevState,
-          states: statesResponse.data.message,
-          district: districtsResponse.data.message,
-          consistency: constituenciesResponse.data.message,
-        }));
-      } catch (error) {
-        console.log(error);
-      }
-    };
     fecthOptionsData();
+    fecthMandalData();
   }, []);
 
-  useEffect(() => {
-    const fecthOptionsData = async () => {
-      try {
-        /// get all mandals
-        const mandalsResponse = await ApiServices.postRequest(getAllMandalRoute);
-        console.log("mandals", mandalsResponse.data.message);
+  const fecthOptionsData = async () => {
+    try {
+      /// get all states
+      const statesResponse = await ApiServices.postRequest(getAllStatesRoute);
+      // console.log("states", statesResponse.data.message);
+      /// get all districts
+      const districtsResponse = await ApiServices.postRequest(getAllDistrictsRoute);
+      // console.log("districts", districtsResponse.data.message);
 
-        /// state update
-        setFetchedData((prevState) => ({
-          ...prevState,
-          mandal: mandalsResponse.data.message,
-        }));
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fecthOptionsData();
-  }, [refresh]);
+      /// get all constituencies
+      const constituenciesResponse = await ApiServices.postRequest(getAllConstituenciesRoute);
+      // console.log("constituencies", constituenciesResponse.data.message);
+
+      /// state update
+      setFetchedData((prevState) => ({
+        ...prevState,
+        states: statesResponse.data.message,
+        district: districtsResponse.data.message,
+        consistency: constituenciesResponse.data.message,
+      }));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fecthMandalData = async () => {
+    try {
+      /// get all mandals
+      const mandalsResponse = await ApiServices.postRequest(getAllMandalRoute);
+      console.log("mandals", mandalsResponse.data.message);
+
+      /// state update
+      setFetchedData((prevState) => ({
+        ...prevState,
+        mandal: mandalsResponse.data.message,
+      }));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleEdit = async (data) => {
+    setEditState(true);
+    console.log("data", data);
+    setFormValues({
+      district_id: data.district_id,
+      consistency_id: data.consistency_id,
+      mandal_id: data.mandal_id,
+      mandal_name: data.mandal_name,
+    });
+  };
 
   const handleSubmit = async () => {
-    if (!selectedValues.district_id) {
+    console.log("formValues", formValues);
+    if (!formValues.district_id) {
       showAlert({ text: "Please Select District", color: "error" });
       return;
     }
-    if (!selectedValues.consistency_id) {
+
+    if (!formValues.consistency_id) {
       showAlert({ text: "Please Select Constituency", color: "error" });
       return;
     }
-    if (!selectedValues.mandal_name) {
-      showAlert({ text: "Please enter mandal name", color: "error" });
+
+    if (!formValues.mandal_name) {
+      showAlert({ text: "Please Enter Mandal Name", color: "error" });
       return;
     }
 
-    console.log(selectedValues);
-    try {
-      setIsLoading(true);
-      const response = await ApiServices.postRequest(createMandalsRoute, {
-        mandal_name: selectedValues.mandal_name,
-        consistency_id: selectedValues.consistency_id,
-      });
-      showAlert({ text: "Mandal Created Successfully", color: "success" });
+    setLoading(true);
 
-      console.log(response.data.message);
-      setIsLoading(false);
-      setSelectedValues((prevState) => ({
-        ...prevState,
-        state_id: "",
-        district_id: "",
-        consistency_id: "",
-        mandal_name: "",
-      }));
-      setRefresh((prevState) => !prevState);
+    var body = {
+      consistency_id: formValues.consistency_id,
+      mandal_name: formValues.mandal_name,
+    };
+
+    if (!isEditState) {
+      await addMandal(body);
+    } else {
+      await updateMandal(formValues.mandal_id, body);
+    }
+    setLoading(false);
+  };
+
+  const handleReset = () => {
+    setEditState(false);
+    setFormValues({
+      district_id: "",
+      consistency_id: "",
+      mandal_name: "",
+    });
+  };
+
+  const addMandal = async (body) => {
+    console.log("addme");
+    try {
+      await ApiServices.postRequest(createMandalsRoute, body);
+      showAlert({ text: "Mandal Created Successfully", color: "success" });
+      fecthMandalData();
+      handleReset();
     } catch (error) {
       console.log(error);
-      setIsLoading(false);
-      showAlert({ text: "Something went wrong", color: "error" });
-      setRefresh((prevState) => !prevState);
+      showAlert({ text: "Mandal Created Failed", color: "error" });
+    }
+  };
+
+  const updateMandal = async (id, body) => {
+    console.log("updateme");
+    console.log(`${createMandalsRoute}${id}`);
+    try {
+      await ApiServices.putRequest(`${createMandalsRoute}${id}`, body);
+      showAlert({ text: "Mandal Updated Successfully", color: "success" });
+      fecthMandalData();
+      handleReset();
+    } catch (error) {
+      console.log(error);
+      showAlert({ text: "Mandal Updated Failed", color: "error" });
     }
   };
 
   return (
     <Page title="Mandals">
       <Container maxWidth="xl">
-        {/* <Typography variant="h4" sx={{ mb: 1 }}>
-          Mandals
-        </Typography> */}
-
         <Card sx={{ p: 3 }}>
+          <Typography sx={{ pb: 2 }}>{isEditState ? "Edit Mandal" : "Add Mandal"}</Typography>
           <Grid container spacing={2} alignItems="center">
-            <Grid item xs={12} md={6} lg={9}>
-              <MandalsList fetchedData={fetchedData} setFetchedData={setFetchedData} selectedValues={selectedValues} setSelectedValues={setSelectedValues} refresh={refresh} setRefresh={setRefresh} />
-            </Grid>
-            <Grid
-              item
-              xs={12}
-              md={6}
-              lg={3}
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "15px",
-              }}
-            >
+            <Grid item xs={12} md={6} lg={2}>
               <TextField
                 size="small"
                 label="Select State"
                 fullWidth
                 select
-                required
                 value={account.user.state_pk}
                 onChange={(e) => {
-                  setSelectedValues((prevState) => ({
+                  setFormValues((prevState) => ({
                     ...prevState,
                     state_id: e.target.value,
                     district_id: "",
@@ -158,19 +179,24 @@ const MandalPage = ({ dashboard, showAlert, account }) => {
                 }}
                 disabled
               >
-                {fetchedData.states.map((state) => {
-                  return <MenuItem value={state.state_pk}>{state.state_name}</MenuItem>;
+                {fetchedData.states.map((state, index) => {
+                  return (
+                    <MenuItem key={index} value={state.state_pk}>
+                      {state.state_name}
+                    </MenuItem>
+                  );
                 })}
               </TextField>
+            </Grid>
+            <Grid item xs={12} md={6} lg={2}>
               <TextField
                 size="small"
                 label="Select District"
                 fullWidth
-                required
                 select
-                value={selectedValues.district_id}
+                value={formValues.district_id}
                 onChange={(e) => {
-                  setSelectedValues((prevState) => ({
+                  setFormValues((prevState) => ({
                     ...prevState,
                     district_id: e.target.value,
                     consistency_id: "",
@@ -180,19 +206,24 @@ const MandalPage = ({ dashboard, showAlert, account }) => {
                 {/* filter districk based on state_id */}
                 {fetchedData.district
                   .filter((district) => district.state_id === account.user.state_pk)
-                  .map((district) => {
-                    return <MenuItem value={district.district_pk}>{district.district_name}</MenuItem>;
+                  .map((district, index) => {
+                    return (
+                      <MenuItem key={index} value={district.district_id}>
+                        {district.district_name}
+                      </MenuItem>
+                    );
                   })}
               </TextField>
+            </Grid>
+            <Grid item xs={12} md={6} lg={2}>
               <TextField
                 size="small"
                 label="Select Constituency"
                 fullWidth
-                required
                 select
-                value={selectedValues.consistency_id}
+                value={formValues.consistency_id}
                 onChange={(e) => {
-                  setSelectedValues((prevState) => ({
+                  setFormValues((prevState) => ({
                     ...prevState,
                     consistency_id: e.target.value,
                   }));
@@ -200,39 +231,54 @@ const MandalPage = ({ dashboard, showAlert, account }) => {
               >
                 {/* filter constituency based on district_id */}
                 {fetchedData.consistency
-                  .filter((consistency) => consistency.district_pk === selectedValues.district_id)
-                  .map((consistency) => {
-                    return <MenuItem value={consistency.consistency_pk}>{consistency.consistency_name}</MenuItem>;
+                  .filter((consistency) => consistency.district_id === formValues.district_id)
+                  .map((consistency, index) => {
+                    return (
+                      <MenuItem key={index} value={consistency.consistency_id}>
+                        {consistency.consistency_name}
+                      </MenuItem>
+                    );
                   })}
               </TextField>
+            </Grid>
+            <Grid item xs={12} md={6} lg={2}>
               <TextField
                 size="small"
                 label="Mandal Name"
                 fullWidth
                 required
-                value={selectedValues.mandal_name}
+                value={formValues.mandal_name}
                 onChange={(e) => {
-                  setSelectedValues((prevState) => ({
+                  setFormValues((prevState) => ({
                     ...prevState,
                     mandal_name: e.target.value,
                   }));
                 }}
               />
-              <LoadingButton
-                loading={isLoading}
-                onClick={handleSubmit}
-                variant="contained"
-                sx={{
-                  padding: "15px",
-                }}
-              >
-                Add
-              </LoadingButton>
+            </Grid>
+            <Grid item xs={12} md={6} lg={2}>
+              {!isEditState && (
+                <LoadingButton loading={isLoading} onClick={handleSubmit} variant="contained">
+                  Add
+                </LoadingButton>
+              )}
+              {isEditState && (
+                <Stack direction="row" spacing={1}>
+                  <LoadingButton loading={isLoading} onClick={handleSubmit} variant="contained">
+                    Update
+                  </LoadingButton>
+
+                  <LoadingButton loading={isLoading} onClick={handleReset} variant="contained">
+                    Cancel
+                  </LoadingButton>
+                </Stack>
+              )}
             </Grid>
           </Grid>
         </Card>
 
         <Box p={1} />
+        <MandalsList loading={fetchLoading} mandalList={fetchedData.mandal} handleEdit={handleEdit} />
       </Container>
     </Page>
   );
