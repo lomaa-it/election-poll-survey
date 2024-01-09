@@ -18,18 +18,6 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { ROWS_PER_PAGE_OPTION } from "../../constants";
 
 const MandalsList = ({ loading, showAlert, mandalList, handleEdit }) => {
-  useEffect(() => {}, []);
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const [selectedValues, setSelectedValues] = useState({
-    state_id: "",
-    district_id: "",
-    consistency_id: "",
-    mandal_id: "",
-    mandal_name: "",
-  });
-
   const columns = [
     {
       name: "district_name",

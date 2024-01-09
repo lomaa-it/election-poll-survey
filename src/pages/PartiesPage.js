@@ -1,4 +1,4 @@
-import { Grid, Container, Typography, Box, TextField, Card } from "@mui/material";
+import { Grid, Container, Typography, Box, TextField, Card, Stack } from "@mui/material";
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
@@ -11,91 +11,126 @@ import { useEffect, useState } from "react";
 
 import { showAlert } from "../actions/alert";
 import ApiServices from "../services/apiservices";
+import { add } from "date-fns";
 
 const PartiesPage = ({ dashboard, showAlert }) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [refresh, setRefresh] = useState(false);
+  const [fetchLoading, setFetchLoading] = useState(false);
+  const [isLoading, setLoading] = useState(false);
+  const [isEditState, setEditState] = useState(false);
   const [fetchedData, setFetchedData] = useState({
-    parties: [{}],
+    parties: [],
   });
 
-  const [selectedValues, setSelectedValues] = useState({
+  const [formValues, setFormValues] = useState({
     lookup_name: "party_list",
     lookup_valuename: "",
     lookup_sequence: 0,
   });
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await ApiServices.postRequest(getAllPartiesRoute);
-        console.log(response.data.message);
-        setFetchedData({
-          parties: response.data.message,
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchData();
-  }, [refresh]);
+    fetchPartiesData();
+  }, []);
 
-  const handleSubmit = async () => {
-    setIsLoading(true);
-
-    if (selectedValues.lookup_sequence === "") {
-      showAlert({ text: "Please enter sequence number", color: "error" });
-      setIsLoading(false);
-      return;
-    }
-
-    if (selectedValues.lookup_valuename === "") {
-      showAlert({ text: "Please enter party name", color: "error" });
-      setIsLoading(false);
-      return;
-    }
-
+  const fetchPartiesData = async () => {
     try {
-      const response = await ApiServices.postRequest(createPartyRoute, {
-        lookup_sequence: selectedValues.lookup_sequence,
-        lookup_name: selectedValues.lookup_name,
-        lookup_valuename: selectedValues.lookup_valuename,
-      });
+      const response = await ApiServices.postRequest(getAllPartiesRoute);
       console.log(response.data.message);
-      showAlert({ text: "Party Added", color: "success" });
-      setSelectedValues({
-        ...selectedValues,
-        lookup_valuename: "",
-        lookup_sequence: "",
+      setFetchedData({
+        parties: response.data.message,
       });
-
-      setIsLoading(false);
-      setRefresh((prev) => !prev);
     } catch (error) {
       console.log(error);
-      showAlert({ text: "Party Not Added", color: "error" });
-      setIsLoading(false);
-      setRefresh((prev) => !prev);
     }
   };
 
-  console.log(fetchedData);
+  const handleEdit = async (data) => {
+    setEditState(true);
+    console.log("data", data);
+    setFormValues((prevState) => ({
+      ...prevState,
+      lookup_sequence: data.lookup_sequence,
+      lookup_valuename: data.lookup_valuename,
+      lookup_id: data.lookup_id,
+    }));
+  };
+
+  const handleSubmit = async () => {
+    if (formValues.lookup_sequence === "") {
+      showAlert({ text: "Please enter sequence number", color: "error" });
+      return;
+    }
+
+    if (formValues.lookup_valuename === "") {
+      showAlert({ text: "Please enter party name", color: "error" });
+      return;
+    }
+
+    setLoading(true);
+
+    var body = {
+      lookup_name: "party_list",
+      lookup_valuename: formValues.lookup_valuename,
+      lookup_sequence: formValues.lookup_sequence,
+    };
+
+    if (!isEditState) {
+      await addParty(body);
+    } else {
+      await updateParty(formValues.lookup_id, body);
+    }
+    setLoading(false);
+  };
+
+  const handleReset = () => {
+    setEditState(false);
+    setFormValues({
+      lookup_name: "party_list",
+      lookup_valuename: "",
+      lookup_sequence: 0,
+    });
+  };
+
+  const addParty = async (body) => {
+    console.log("addme");
+    try {
+      await ApiServices.postRequest(createPartyRoute, body);
+
+      showAlert({ text: "Party Created Successfully", color: "success" });
+      fetchPartiesData();
+      handleReset();
+    } catch (error) {
+      console.log(error);
+      showAlert({ text: "Party Created Failed", color: "error" });
+    }
+  };
+
+  const updateParty = async (id, body) => {
+    console.log("addme");
+    try {
+      await ApiServices.putRequest(`${createPartyRoute}${id}`, body);
+
+      showAlert({ text: "Party Updated Successfully", color: "success" });
+      fetchPartiesData();
+      handleReset();
+    } catch (error) {
+      console.log(error);
+      showAlert({ text: "Party Updated Failed", color: "error" });
+    }
+  };
+
+  console.log("formValues", formValues);
+
   return (
     <Page title="Political Parties">
       <Container maxWidth="xl">
-        {/* <Typography variant="h4" sx={{ mb: 1 }}>
-          Parties
-        </Typography> */}
-
         <Card sx={{ p: 3 }}>
+          <Typography sx={{ pb: 2 }}>{isEditState ? "Edit Party" : "Add Party"}</Typography>
           <Grid container spacing={2} alignItems="center">
-            <Grid item xs={12} md={6} lg={9}>
-              <PartiesList fetchedData={fetchedData} setFetchedData={setFetchedData} selectedValues={selectedValues} setSelectedValues={setSelectedValues} refresh={refresh} setRefresh={setRefresh} />
-            </Grid>
             <Grid
               item
               xs={12}
               md={6}
-              lg={3}
+              lg={2}
               sx={{
                 display: "flex",
                 flexDirection: "column",
@@ -107,42 +142,54 @@ const PartiesPage = ({ dashboard, showAlert }) => {
                 type="number"
                 label="Sequence Number"
                 fullWidth
-                value={selectedValues.lookup_sequence}
+                value={formValues.lookup_sequence}
                 onChange={(event) => {
                   console.log(event.target.value);
-                  setSelectedValues({
-                    ...selectedValues,
+                  setFormValues({
+                    ...formValues,
                     lookup_sequence: event.target.value,
                   });
                 }}
-              />{" "}
+              />
+            </Grid>
+            <Grid item xs={12} md={6} lg={2}>
               <TextField
                 size="small"
                 label="Party Name"
                 fullWidth
-                value={selectedValues.lookup_valuename}
+                value={formValues.lookup_valuename}
                 onChange={(e) => {
-                  setSelectedValues({
-                    ...selectedValues,
+                  setFormValues({
+                    ...formValues,
                     lookup_valuename: e.target.value,
                   });
                 }}
               />
-              <LoadingButton
-                loading={isLoading}
-                onClick={handleSubmit}
-                variant="contained"
-                sx={{
-                  padding: "15px",
-                }}
-              >
-                Add
-              </LoadingButton>
+            </Grid>
+
+            <Grid item xs={12} md={6} lg={2}>
+              {!isEditState && (
+                <LoadingButton loading={isLoading} onClick={handleSubmit} variant="contained">
+                  Add
+                </LoadingButton>
+              )}
+              {isEditState && (
+                <Stack direction="row" spacing={1}>
+                  <LoadingButton loading={isLoading} onClick={handleSubmit} variant="contained">
+                    Update
+                  </LoadingButton>
+
+                  <LoadingButton loading={isLoading} onClick={handleReset} variant="contained">
+                    Cancel
+                  </LoadingButton>
+                </Stack>
+              )}
             </Grid>
           </Grid>
         </Card>
 
         <Box p={1} />
+        <PartiesList loading={fetchLoading} partiesList={fetchedData.parties} handleEdit={handleEdit} />
       </Container>
     </Page>
   );

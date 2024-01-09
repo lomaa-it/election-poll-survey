@@ -135,12 +135,12 @@ const SurveyReportsList = ({ dashboard, getOpinionResults, clearDashboardReducer
                     {
                       name: "Total",
                       data: [
-                        dashboard.surveyReports2?.survey_results_by_constituency[0]?.neutral ?? 0,
-                        dashboard.surveyReports2?.survey_results_by_constituency[0]?.ysrcp ?? 0,
-                        dashboard.surveyReports2?.survey_results_by_constituency[0]?.tdp ?? 0,
-                        dashboard.surveyReports2?.survey_results_by_constituency[0]?.janasena ?? 0,
-                        dashboard.surveyReports2?.survey_results_by_constituency[0]?.others ?? 0,
-                        dashboard.surveyReports2?.survey_results_by_constituency[0]?.not_traced ?? 0,
+                        dashboard.surveyReports2?.survey_results_by_constituency.map((item) => (item.neutral == null || Number.isNaN(Number(item.neutral)) ? 0 : parseInt(item.neutral))).reduce((a, b) => a + b, 0),
+                        dashboard.surveyReports2?.survey_results_by_constituency.map((item) => (item.ysrcp == null || Number.isNaN(Number(item.ysrcp)) ? 0 : parseInt(item.ysrcp))).reduce((a, b) => a + b, 0),
+                        dashboard.surveyReports2?.survey_results_by_constituency.map((item) => (item.tdp == null || Number.isNaN(Number(item.tdp)) ? 0 : parseInt(item.tdp))).reduce((a, b) => a + b, 0),
+                        dashboard.surveyReports2?.survey_results_by_constituency.map((item) => (item.janasena == null || Number.isNaN(Number(item.janasena)) ? 0 : parseInt(item.janasena))).reduce((a, b) => a + b, 0),
+                        dashboard.surveyReports2?.survey_results_by_constituency.map((item) => (item.others == null || Number.isNaN(Number(item.others)) ? 0 : parseInt(item.others))).reduce((a, b) => a + b, 0),
+                        dashboard.surveyReports2?.survey_results_by_constituency.map((item) => (item.not_traced == null || Number.isNaN(Number(item.not_traced)) ? 0 : parseInt(item.not_traced))).reduce((a, b) => a + b, 0),
                       ],
                     },
                   ]}
