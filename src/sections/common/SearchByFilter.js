@@ -1,15 +1,12 @@
 import React, { forwardRef, useImperativeHandle } from "react";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { Grid, Container, Typography, Box, TextField, Card, MenuItem, Stack } from "@mui/material";
-import { FormProvider, RHFAutoComplete } from "../../components/hook-form";
+import { Grid, Stack } from "@mui/material";
+import { RHFAutoComplete } from "../../components/hook-form";
 import { LoadingButton } from "@mui/lab";
-import { getAllCommonData } from "../../actions/common";
 
 import { ageDropdown } from "../../utils/dropdownconstants";
 import { getVillagesBySachivalayamIdRoute } from "../../utils/apis";
-import instance from "../../utils/axios";
-import { add } from "date-fns";
 import ApiServices from "../../services/apiservices";
 
 const SearchByFilter = forwardRef(
@@ -19,7 +16,6 @@ const SearchByFilter = forwardRef(
       common,
       addVoterVillage = false,
       defaultValues,
-      getAllCommonData,
       onChanged,
       onSubmit,
       onReset,
@@ -61,12 +57,6 @@ const SearchByFilter = forwardRef(
     const [isLoading, setLoading] = useState(false);
     const [submitFlag, setSubmitFlag] = useState(false);
     const [isLoadingVillage, setLoadingVillage] = useState(false);
-
-    useEffect(() => {
-      if (common?.mandals.length == 0) {
-        getAllCommonData(account?.user);
-      }
-    }, []);
 
     useEffect(() => {
       setIntialDefaultValues(true);
@@ -491,11 +481,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  {
-    getAllCommonData,
-  },
-  null,
-  { forwardRef: true }
-)(SearchByFilter);
+export default connect(mapStateToProps, null, null, { forwardRef: true })(SearchByFilter);

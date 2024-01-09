@@ -1,12 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
-// @mui
 import { styled } from "@mui/material/styles";
-//
 import Header from "./header";
 import Nav from "./nav";
-
-// ----------------------------------------------------------------------
+import { connect } from "react-redux";
+import { getAllCommonData } from "../../actions/common";
+import { useAlertContext } from "../../components/AlertProvider";
 
 const APP_BAR_MOBILE = 64;
 const APP_BAR_DESKTOP = 92;
@@ -30,8 +29,19 @@ const Main = styled("div")(({ theme }) => ({
   },
 }));
 
-export default function DashboardLayout() {
+const DashboardLayout = ({ account, getAllCommonData }) => {
   const [open, setOpen] = useState(false);
+  const { showLoading, hideLoading } = useAlertContext();
+
+  useEffect(() => {
+    getFiltersData();
+  }, []);
+
+  const getFiltersData = async () => {
+    showLoading();
+    await getAllCommonData(account?.user);
+    hideLoading();
+  };
 
   return (
     <StyledRoot>
@@ -44,4 +54,12 @@ export default function DashboardLayout() {
       </Main>
     </StyledRoot>
   );
-}
+};
+
+const mapStateToProps = (state) => {
+  return {
+    account: state.auth,
+  };
+};
+
+export default connect(mapStateToProps, { getAllCommonData })(DashboardLayout);

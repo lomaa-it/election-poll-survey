@@ -2,6 +2,7 @@ import Router from "./routes";
 import ThemeProvider from "./theme";
 import SnackBar from "./components/SnackBar";
 import { ErrorBoundary } from "react-error-boundary";
+import { AlertProvider } from "./components/AlertProvider";
 
 const FallbackComponent = ({ error, resetErrorBoundary }) => (
   <div>
@@ -17,7 +18,9 @@ function App() {
       <SnackBar />
 
       <ErrorBoundary FallbackComponent={FallbackComponent}>
-        <Router />
+        <AlertProvider>
+          <Router />
+        </AlertProvider>
       </ErrorBoundary>
     </ThemeProvider>
   );

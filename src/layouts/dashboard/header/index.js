@@ -61,8 +61,6 @@ function Header({ onOpenNav, account }) {
     return () => observer.disconnect();
   }, []);
 
-  console.log("dsdsdsddsds", account);
-
   return (
     <StyledRoot elevation={5}>
       <StyledToolbar>
