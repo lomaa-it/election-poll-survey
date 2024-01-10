@@ -6,7 +6,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 import ViewUsersList from "../sections/reports/ViewUsersList";
 import Button from "@mui/material/Button";
 import MandalsList from "../sections/reports/MandalsList";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import instance from "../utils/axios";
 import { getAllMandalRoute, getAllStatesRoute, getAllDistrictsRoute, createMandalsRoute, getAllConstituenciesRoute } from "../utils/apis";
 import { add, set } from "date-fns";
@@ -17,6 +17,7 @@ const MandalPage = ({ dashboard, showAlert, account }) => {
   const [fetchLoading, setFetchLoading] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const [isEditState, setEditState] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
   const [fetchedData, setFetchedData] = useState({
     states: [],
     district: [],
@@ -30,6 +31,15 @@ const MandalPage = ({ dashboard, showAlert, account }) => {
     consistency_id: "",
     mandal_name: "",
   });
+
+  const inputFieldRef = useRef();
+
+  useEffect(() => {
+    if (isEditState) {
+      inputFieldRef.current.focus();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, [isFocused, isEditState]);
 
   useEffect(() => {
     fecthOptionsData();
@@ -79,6 +89,7 @@ const MandalPage = ({ dashboard, showAlert, account }) => {
 
   const handleEdit = async (data) => {
     setEditState(true);
+    setIsFocused((prevState) => !prevState);
     console.log("data", data);
     setFormValues({
       district_id: data.district_id,
@@ -243,6 +254,7 @@ const MandalPage = ({ dashboard, showAlert, account }) => {
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
               <TextField
+                inputRef={inputFieldRef}
                 size="small"
                 label="Mandal Name"
                 fullWidth

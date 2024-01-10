@@ -6,18 +6,20 @@ import { LoadingButton } from "@mui/lab";
 import ViewUsersList from "../sections/reports/ViewUsersList";
 import Button from "@mui/material/Button";
 import DesignationList from "../sections/reports/DesignationList";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { getAllDesignationsRoute, createDesignationsRoute } from "../utils/apis";
 
 import { add, set } from "date-fns";
 import { showAlert } from "../actions/alert";
 import ApiServices from "../services/apiservices";
 import { Edit } from "@mui/icons-material";
+import { is } from "date-fns/locale";
 
 const DesignationPage = ({ dashboard, showAlert }) => {
   const [fetchLoading, setFetchLoading] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const [isEditState, setEditState] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
   const [fetchedData, setFetchedData] = useState({
     designation: [],
   });
@@ -26,6 +28,15 @@ const DesignationPage = ({ dashboard, showAlert }) => {
     lookup_name: "designationlist",
     lookup_valuename: "",
   });
+
+  const inputFieldRef = useRef();
+
+  useEffect(() => {
+    if (isEditState) {
+      inputFieldRef.current.focus();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, [isFocused, isEditState]);
 
   useEffect(() => {
     fetchDesignationData();
@@ -45,6 +56,7 @@ const DesignationPage = ({ dashboard, showAlert }) => {
 
   const handleEdit = async (data) => {
     setEditState(true);
+    setIsFocused((prevState) => !prevState);
     console.log("data", data);
     setFormValues((prevState) => ({
       ...prevState,
@@ -128,6 +140,7 @@ const DesignationPage = ({ dashboard, showAlert }) => {
               }}
             >
               <TextField
+                inputRef={inputFieldRef}
                 size="small"
                 label="Designation Name"
                 fullWidth

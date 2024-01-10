@@ -29,6 +29,7 @@ const SearchByFilter = forwardRef(
       showSearchButton = true,
       children,
       addVoterVillageLg,
+      isNewVoter,
     },
     ref
   ) => {
@@ -72,15 +73,16 @@ const SearchByFilter = forwardRef(
       const getVillagesBySachivalayamId = async () => {
         setLoadingVillage(true);
         const response = await ApiServices.postRequest(getVillagesBySachivalayamIdRoute, {
-          sachivalayam_id: formValues.sachivalayam?.sachivalayam_pk,
+          sachivalayam_id: formValues.sachivalayam?.sachivalayam_id,
         });
         const data = response.data?.message ?? [];
         console.log("data", data);
         setAddVoterVillageData(data);
         setLoadingVillage(false);
       };
-
-      getVillagesBySachivalayamId();
+      if (isNewVoter) {
+        getVillagesBySachivalayamId();
+      }
     }, [formValues.sachivalayam]);
 
     const setIntialDefaultValues = (allowSubmit) => {
@@ -158,11 +160,11 @@ const SearchByFilter = forwardRef(
         state_id: account?.user?.state_pk ?? null,
         district_id: account?.user?.district_pk ?? null,
         consistency_id: account?.user?.consistency_pk ?? null,
-        mandal_id: formValues.mandal?.mandal_pk ?? null,
-        division_id: formValues.division?.division_pk ?? null,
-        sachivalayam_id: formValues.sachivalayam?.sachivalayam_pk ?? null,
+        mandal_id: formValues.mandal?.mandal_id ?? null,
+        division_id: formValues.division?.division_id ?? null,
+        sachivalayam_id: formValues.sachivalayam?.sachivalayam_id ?? null,
         part_no: formValues.partno?.part_no ?? null,
-        village_id: formValues.village?.village_pk ?? null,
+        village_id: formValues.village?.village_id ?? null,
         gender: formValues.gender?.value ?? null,
         religion_id: formValues.religion?.value ?? null,
         caste_id: formValues.caste?.value ?? null,
@@ -248,7 +250,7 @@ const SearchByFilter = forwardRef(
       reset: handleReset,
     }));
 
-    console.log("add", addVoterVillageLg);
+    // console.log("formValues in SearchFilter", formValues);
 
     return (
       <>
@@ -275,7 +277,7 @@ const SearchByFilter = forwardRef(
               name="division"
               label="Select Division"
               value={formValues.division}
-              options={common?.divisions.filter((e) => e.mandal_id == formValues?.mandal?.mandal_pk)}
+              options={common?.divisions.filter((e) => e.mandal_id == formValues?.mandal?.mandal_id)}
               getOptionLabel={(option) => option.division_name}
               onChange={handleChange}
               disabled={account?.user.division_pk != null}
@@ -291,7 +293,7 @@ const SearchByFilter = forwardRef(
               name="sachivalayam"
               label="Select Sachivalayam"
               value={formValues.sachivalayam}
-              options={common?.sachivalayams.filter((e) => e.division_pk == formValues?.division?.division_pk)}
+              options={common?.sachivalayams.filter((e) => e.division_id == formValues?.division?.division_id)}
               getOptionLabel={(option) => option.sachivalayam_name}
               onChange={handleChange}
               disabled={account?.user.sachivalayam_pk != null}
@@ -307,7 +309,7 @@ const SearchByFilter = forwardRef(
               name="partno"
               label="Select Part/Booth No"
               value={formValues.partno}
-              options={common?.parts.filter((e) => e.sachivalayam_id == formValues?.sachivalayam?.sachivalayam_pk)}
+              options={common?.parts.filter((e) => e.sachivalayam_id == formValues?.sachivalayam?.sachivalayam_id)}
               getOptionLabel={(option) => String(option.part_no)}
               onChange={handleChange}
               disabled={account.user.part_no != null}
@@ -323,7 +325,7 @@ const SearchByFilter = forwardRef(
               name="partno"
               label="Select Part/Booth No"
               value={formValues.partno}
-              options={common?.parts.filter((e) => e.sachivalayam_id == formValues?.sachivalayam?.sachivalayam_pk)}
+              options={common?.parts.filter((e) => e.sachivalayam_id == formValues?.sachivalayam?.sachivalayam_id)}
               getOptionLabel={(option) => String(option.part_no)}
               onChange={handleChange}
               disabled={account.user.part_no != null}

@@ -8,15 +8,17 @@ import LsService from "../services/localstorage";
 // export const baseServerUrl = "https://6eab-123-201-175-208.ngrok-free.app/";
 
 // export const baseServerUrl = "https://d1ef-123-201-174-192.ngrok-free.app";
-export const baseServerUrl = "https://backendapi.cgrysrcongress.in";
+// export const baseServerUrl = "https://backendapi.cgrysrcongress.in";
 // export const baseServerUrl = "http://192.168.137.25:8080";
-// export const baseServerUrl = "http://192.168.0.129:8080";
+export const baseServerUrl = "http://192.168.222.177:8080";
 /// new
 // export const baseServerUrl = "https://poll2.onrender.com";
 
 // Access Management Api's
 export const getallAccessPermissions = "/getall_access_permissions";
 export const getPermissionListRoute = "/getpermissionlist";
+export const getAuthPermissionListRoute = "/getauthpermissionlist";
+
 export const updatePermissionListRoute = "/updatepermissionlist";
 
 // Survey Dashboard Apis

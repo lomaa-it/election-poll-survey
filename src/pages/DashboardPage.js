@@ -32,6 +32,9 @@ const DashboardApp = ({ dashboard, getOpinionDashboard, clearDashboardReducer, c
       is_resident: otherFilterValues.is_resident?.value ?? null,
       isSurveyed: otherFilterValues.isSurveyed?.value ?? null,
     };
+
+    console.log("values in dash", values);
+
     await getOpinionDashboard(values);
   };
 

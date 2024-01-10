@@ -6,7 +6,7 @@ import useResponsive from "../../../hooks/useResponsive";
 import Logo from "../../../components/logo";
 import Scrollbar from "../../../components/Scrollbar";
 import NavSection from "../../../components/NavSection";
-import { adminNavConfig, mlaNavConfig, operatorNavConfig, userNavConfig } from "./config";
+import { accessNavConfig, adminNavConfig, mlaNavConfig, operatorNavConfig, userNavConfig } from "./config";
 import { connect } from "react-redux";
 import { LOGIN_TYPES, PUBLIC_URL } from "../../../constants";
 
@@ -28,18 +28,24 @@ const Nav = ({ account, openNav, onCloseNav }) => {
 
   const userDesignation = account.user?.desgination_name;
 
-  useEffect(() => {
-    let navbar = [];
-    if (userDesignation == LOGIN_TYPES[0]) {
-      navbar = mlaNavConfig;
-    } else if (userDesignation == LOGIN_TYPES[7]) {
-      navbar = adminNavConfig;
-    } else if (userDesignation == LOGIN_TYPES[8]) {
-      navbar = operatorNavConfig;
-    } else {
-      navbar = userNavConfig;
-    }
+  // useEffect(() => {
+  //   let navbar = [];
+  //   if (userDesignation == LOGIN_TYPES[0]) {
+  //     navbar = mlaNavConfig;
+  //   } else if (userDesignation == LOGIN_TYPES[7]) {
+  //     navbar = adminNavConfig;
+  //   } else if (userDesignation == LOGIN_TYPES[8]) {
+  //     navbar = operatorNavConfig;
+  //   } else {
+  //     navbar = userNavConfig;
+  //   }
 
+  //   setNavConfig(navbar);
+  // }, []);
+
+  useEffect(() => {
+    let navbar = accessNavConfig;
+    console.log("navbar123456", navbar);
     setNavConfig(navbar);
   }, []);
 

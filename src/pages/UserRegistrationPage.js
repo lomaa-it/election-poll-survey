@@ -110,12 +110,14 @@ const UserRegistrationPage = ({ account, common, showAlert }) => {
         state_id: account.user?.state_pk ?? null,
         district_id: account.user?.district_pk ?? null,
         consistency_id: account.user?.consistency_pk ?? null,
-        mandal_id: filterValues.mandal?.mandal_pk ?? null,
-        division_id: filterValues.division?.division_pk ?? null,
-        sachivalayam_id: filterValues.sachivalayam?.sachivalayam_pk ?? null,
+        mandal_id: filterValues.mandal?.mandal_id ?? null,
+        division_id: filterValues.division?.division_id ?? null,
+        sachivalayam_id: filterValues.sachivalayam?.sachivalayam_id ?? null,
         part_no: filterValues.partno?.part_no ?? null,
-        village_id: filterValues.village?.village_pk ?? null,
+        village_id: filterValues.village?.village_id ?? null,
       };
+
+      console.log("jsonData in add User", jsonData);
 
       if (props?.userData != null) {
         await ApiServices.putRequest(`${createUsersRoute}/${props.userData.user_pk}`, { ...jsonData, updatedby: account.user?.user_pk });
@@ -189,7 +191,14 @@ const UserRegistrationPage = ({ account, common, showAlert }) => {
               </Grid>
 
               <Grid item xs={12} md={6} lg={3}>
-                <RHFTextField name="age" label="Age" />
+                <RHFTextField
+                  name="age"
+                  label="Age"
+                  onInput={(event) => {
+                    // Replace any non-numeric characters with an empty string
+                    event.target.value = event.target.value.replace(/[^0-9]/g, "");
+                  }}
+                />
               </Grid>
 
               <Grid item xs={12} md={6} lg={3}>

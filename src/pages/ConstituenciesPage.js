@@ -6,7 +6,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 import ViewUsersList from "../sections/reports/ViewUsersList";
 import Button from "@mui/material/Button";
 import ConstituenciesList from "../sections/reports/ConstituenciesList";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { getAllStatesRoute, getAllConstituenciesWithJoinRoute, createConstituenciesRoute, getAllDistrictsRoute, getAllConstituenciesRoute } from "../utils/apis";
 
 import { showAlert } from "../actions/alert";
@@ -17,6 +17,7 @@ const ConstituenciesPage = ({ dashboard, showAlert, account }) => {
   const [fetchLoading, setFetchLoading] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const [isEditState, setEditState] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
   const [fetchedData, setFetchedData] = useState({
     states: [],
     district: [],
@@ -28,6 +29,15 @@ const ConstituenciesPage = ({ dashboard, showAlert, account }) => {
     district_id: "",
     consistency_name: "",
   });
+
+  const inputFieldRef = useRef();
+
+  useEffect(() => {
+    if (isEditState) {
+      inputFieldRef.current.focus();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, [isFocused, isEditState]);
 
   useEffect(() => {
     fecthOptionsData();
@@ -71,6 +81,7 @@ const ConstituenciesPage = ({ dashboard, showAlert, account }) => {
 
   const handleEdit = async (data) => {
     setEditState(true);
+    setIsFocused((prevState) => !prevState);
     console.log("data", data);
     setFormValues({
       district_id: data.district_id,
@@ -202,6 +213,7 @@ const ConstituenciesPage = ({ dashboard, showAlert, account }) => {
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
               <TextField
+                inputRef={inputFieldRef}
                 size="small"
                 label="Constituency Name"
                 fullWidth

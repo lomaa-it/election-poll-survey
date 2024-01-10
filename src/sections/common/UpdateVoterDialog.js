@@ -145,12 +145,19 @@ const UpdateVoterDialog = ({ account, common, voterData, showAlert, updateVoterD
 
       <Dialog open={open} onClose={handleClose}>
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-          <DialogTitle>Update Details</DialogTitle>
+          <DialogTitle
+            sx={{
+              fontWeight: 600,
+            }}
+          >
+            Update Details
+          </DialogTitle>
           <DialogContent>
             <Box py={1}>
-              <Typography sx={{ mb: 1 }}>Voter ID: {voterData.voter_id}</Typography>
-              <Typography sx={{ mb: 3 }}>Name: {voterData.voter_name}</Typography>
-
+              <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}>
+                <Typography>Voter ID: {voterData.voter_id}</Typography>
+                <Typography>Name: {voterData.voter_name}</Typography>
+              </Box>
               <Grid container spacing={3} alignItems="center">
                 <Grid item xs={12} md={12} lg={12}>
                   <RHFTextField name="phone_no" label="Phone Number" type="text" required inputProps={{ maxLength: 10 }} />

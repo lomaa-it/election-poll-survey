@@ -13,7 +13,7 @@ import { authSuccess } from "../../../actions/auth";
 import { showAlert } from "../../../actions/alert";
 import { LOGIN_TYPES, PUBLIC_URL, phoneRegExp } from "../../../constants";
 import instance from "../../../utils/axios";
-import { getPermissionListRoute, loginRoute } from "../../../utils/apis";
+import { getAuthPermissionListRoute, getPermissionListRoute, loginRoute } from "../../../utils/apis";
 import { he } from "date-fns/locale";
 import CachedIcon from "@mui/icons-material/Cached";
 import ApiServices from "../../../services/apiservices";
@@ -107,7 +107,7 @@ const LoginForm = ({ showAlert, authSuccess }) => {
     try {
       const response = await instance.post(loginRoute, data);
       const responseData = response.data?.message ?? [];
-      const userPermissionsResponse = await instance.post(getPermissionListRoute, { designation_id: responseData?.desgination_id ?? null });
+      const userPermissionsResponse = await instance.post(getAuthPermissionListRoute, { designation_id: responseData?.desgination_id ?? null });
       const userPermissionsData = userPermissionsResponse.data?.message ?? [];
       responseData.permissions = userPermissionsData;
 

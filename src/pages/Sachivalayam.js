@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
 
 import SachivalayamList from "../sections/reports/SachivalayamList";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import instance from "../utils/axios";
 import { getAllConstituenciesRoute, getAllDistrictsRoute, getAllDivisionRoute, getAllMandalRoute, getAllStatesRoute, getAllSachivalayamRoute, createSachivalayamRoute } from "../utils/apis";
 import { showAlert } from "../actions/alert";
@@ -15,6 +15,7 @@ const Sachivalayam = ({ dashboard, showAlert, account }) => {
   const [fetchLoading, setFetchLoading] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const [isEditState, setEditState] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
   const [fetchedData, setFetchedData] = useState({
     states: [],
     district: [],
@@ -31,6 +32,15 @@ const Sachivalayam = ({ dashboard, showAlert, account }) => {
     division_id: "",
     sachivalayam_name: "",
   });
+
+  const inputFieldRef = useRef();
+
+  useEffect(() => {
+    if (isEditState) {
+      inputFieldRef.current.focus();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, [isFocused, isEditState]);
 
   useEffect(() => {
     fecthOptionsData();
@@ -91,6 +101,7 @@ const Sachivalayam = ({ dashboard, showAlert, account }) => {
 
   const handleEdit = async (data) => {
     setEditState(true);
+    setIsFocused((prevState) => !prevState);
     console.log("data", data);
     setFormValues({
       district_id: data.district_id,
@@ -355,6 +366,7 @@ const Sachivalayam = ({ dashboard, showAlert, account }) => {
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
               <TextField
+                inputRef={inputFieldRef}
                 size="small"
                 label="Sachivalayam Name"
                 fullWidth

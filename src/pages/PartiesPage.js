@@ -7,7 +7,7 @@ import ViewUsersList from "../sections/reports/ViewUsersList";
 import Button from "@mui/material/Button";
 import PartiesList from "../sections/reports/PartiesList";
 import { createPartyRoute, getAllPartiesRoute } from "../utils/apis";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 import { showAlert } from "../actions/alert";
 import ApiServices from "../services/apiservices";
@@ -17,6 +17,7 @@ const PartiesPage = ({ dashboard, showAlert }) => {
   const [fetchLoading, setFetchLoading] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const [isEditState, setEditState] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
   const [fetchedData, setFetchedData] = useState({
     parties: [],
   });
@@ -26,6 +27,15 @@ const PartiesPage = ({ dashboard, showAlert }) => {
     lookup_valuename: "",
     lookup_sequence: 0,
   });
+
+  const inputFieldRef = useRef();
+
+  useEffect(() => {
+    if (isEditState) {
+      inputFieldRef.current.focus();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, [isFocused, isEditState]);
 
   useEffect(() => {
     fetchPartiesData();
@@ -45,6 +55,7 @@ const PartiesPage = ({ dashboard, showAlert }) => {
 
   const handleEdit = async (data) => {
     setEditState(true);
+    setIsFocused((prevState) => !prevState);
     console.log("data", data);
     setFormValues((prevState) => ({
       ...prevState,
@@ -154,6 +165,7 @@ const PartiesPage = ({ dashboard, showAlert }) => {
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
               <TextField
+                inputRef={inputFieldRef}
                 size="small"
                 label="Party Name"
                 fullWidth

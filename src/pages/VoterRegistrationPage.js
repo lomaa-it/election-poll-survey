@@ -90,6 +90,8 @@ const VoterRegistrationPage = ({ account, showAlert }) => {
 
   const onSubmit = async (data) => {
     clearErrors();
+    console.log("data", data);
+    console.log("filterValues", filterValues);
 
     console.log("data", data.is_newregistration);
     if (data.is_newregistration == false && data.part_slno == "") {
@@ -161,14 +163,15 @@ const VoterRegistrationPage = ({ account, showAlert }) => {
           state_id: account.user?.state_pk ?? null,
           district_id: account.user?.district_pk ?? null,
           consistency_id: account.user?.consistency_pk ?? null,
-          mandal_id: filterValues.mandal?.mandal_pk ?? null,
-          division_id: filterValues.division?.division_pk ?? null,
-          sachivalayam_id: filterValues.sachivalayam?.sachivalayam_pk ?? null,
+          mandal_id: filterValues.mandal?.mandal_id ?? null,
+          division_id: filterValues.division?.division_id ?? null,
+          sachivalayam_id: filterValues.sachivalayam?.sachivalayam_id ?? null,
           part_no: filterValues.partno?.part_no ?? null,
-          village_id: filterValues.village?.village_pk ?? null,
+          village_id: filterValues.village?.village_id ?? null,
           createdby: account.user.user_pk,
         };
 
+        console.log("jsonData as payload", jsonData);
         await ApiServices.postRequest(addVoters, jsonData);
         showAlert({ text: "Voter added successfully", color: "success" });
         reset();
@@ -189,11 +192,11 @@ const VoterRegistrationPage = ({ account, showAlert }) => {
           state_id: account.user?.state_pk ?? null,
           district_id: account.user?.district_pk ?? null,
           consistency_id: account.user?.consistency_pk ?? null,
-          mandal_id: filterValues.mandal?.mandal_pk ?? null,
-          division_id: filterValues.division?.division_pk ?? null,
-          sachivalayam_id: filterValues.sachivalayam?.sachivalayam_pk ?? null,
+          mandal_id: filterValues.mandal?.mandal_id ?? null,
+          division_id: filterValues.division?.division_id ?? null,
+          sachivalayam_id: filterValues.sachivalayam?.sachivalayam_id ?? null,
           part_no: filterValues.partno?.part_no ?? null,
-          village_id: filterValues.village?.village_pk ?? null,
+          village_id: filterValues.village?.village_id ?? null,
           updatedby: account.user.user_pk,
         };
 
@@ -212,6 +215,7 @@ const VoterRegistrationPage = ({ account, showAlert }) => {
       }
     }
   };
+  console.log("filterValues in add Voter", filterValues);
 
   return (
     <Page title={pageName}>
@@ -251,10 +255,18 @@ const VoterRegistrationPage = ({ account, showAlert }) => {
                 onChanged={(value) => setFilterValues(value)}
                 addVoterVillageLg={6}
                 lg={3}
+                isNewVoter={isNewVoter}
               />
               {isNewVoter == false && (
                 <Grid item xs={12} md={6} lg={6}>
-                  <RHFTextField name="part_slno" label="Part SL No" />
+                  <RHFTextField
+                    name="part_slno"
+                    label="Part SL No"
+                    onInput={(event) => {
+                      // Replace any non-numeric characters with an empty string
+                      event.target.value = event.target.value.replace(/[^0-9]/g, "");
+                    }}
+                  />
                 </Grid>
               )}
 
@@ -301,7 +313,14 @@ const VoterRegistrationPage = ({ account, showAlert }) => {
                 </RHFTextField>
               </Grid>
               <Grid item xs={12} md={6} lg={6} alignSelf={"flex-end"}>
-                <RHFTextField name="age" label="Age" />
+                <RHFTextField
+                  name="age"
+                  label="Age"
+                  onInput={(event) => {
+                    // Replace any non-numeric characters with an empty string
+                    event.target.value = event.target.value.replace(/[^0-9]/g, "");
+                  }}
+                />
               </Grid>
 
               {resident == true && (
@@ -314,7 +333,15 @@ const VoterRegistrationPage = ({ account, showAlert }) => {
                 <RHFTextField name="current_address" label="Current Address" multiline rows={4} fullWidth />
               </Grid>
               <Grid item xs={12} md={6} lg={6}>
-                <RHFTextField name="phone_no" label="Phone Number" inputProps={{ maxLength: 10 }} />
+                <RHFTextField
+                  name="phone_no"
+                  label="Phone Number"
+                  inputProps={{ maxLength: 10 }}
+                  onInput={(event) => {
+                    // Replace any non-numeric characters with an empty string
+                    event.target.value = event.target.value.replace(/[^0-9]/g, "");
+                  }}
+                />
               </Grid>
               <Grid item xs={12} md={12} lg={6}>
                 <RHFCheckbox name="is_resident" label="Is Resident" />

@@ -23,6 +23,10 @@ const ConstituenciesList = ({ loading, showAlert, constituenciesList, handleEdit
       label: "District Name",
     },
     {
+      name: "consistency_no",
+      label: "Constituency No",
+    },
+    {
       name: "consistency_name",
       label: "Constituency Name",
     },

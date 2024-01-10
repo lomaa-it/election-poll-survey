@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
 
 import VillagesList from "../sections/reports/VillagesList";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { getAllConstituenciesRoute, getAllDistrictsRoute, getAllDivisionRoute, getAllMandalRoute, getAllPartsRoute, getAllSachivalayamRoute, getAllStatesRoute, getAllVillageRoute, createVillagesRoute } from "../utils/apis";
 import { showAlert } from "../actions/alert";
 import ApiServices from "../services/apiservices";
@@ -13,6 +13,7 @@ const VillagesPage = ({ account, showAlert }) => {
   const [fetchLoading, setFetchLoading] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const [isEditState, setEditState] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
   const [fetchedData, setFetchedData] = useState({
     states: [],
     district: [],
@@ -33,6 +34,15 @@ const VillagesPage = ({ account, showAlert }) => {
     part_no: "",
     village_name: "",
   });
+
+  const inputFieldRef = useRef();
+
+  useEffect(() => {
+    if (isEditState) {
+      inputFieldRef.current.focus();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, [isFocused, isEditState]);
 
   useEffect(() => {
     fecthOptionsData();
@@ -101,6 +111,7 @@ const VillagesPage = ({ account, showAlert }) => {
 
   const handleEdit = async (data) => {
     setEditState(true);
+    setIsFocused((prevState) => !prevState);
 
     console.log("data", data);
 
@@ -421,6 +432,7 @@ const VillagesPage = ({ account, showAlert }) => {
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
               <TextField
+                inputRef={inputFieldRef}
                 size="small"
                 label="Village Name"
                 fullWidth
