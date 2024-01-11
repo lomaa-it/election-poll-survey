@@ -2,6 +2,7 @@ import { Grid, Container, Typography, Box, TextField, Card, Stack } from "@mui/m
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
+import Tooltip from "@material-ui/core/Tooltip";
 
 import ViewUsersList from "../sections/reports/ViewUsersList";
 import Button from "@mui/material/Button";
@@ -13,7 +14,11 @@ import { showAlert } from "../actions/alert";
 import ApiServices from "../services/apiservices";
 import { add } from "date-fns";
 
-const PartiesPage = ({ dashboard, showAlert }) => {
+const PartiesPage = ({ dashboard, showAlert, account }) => {
+  const userPermission = account.user && account.user.permissions ? account.user.permissions : [];
+  const pageActions = userPermission.filter((p) => p.page_id === 142)[0];
+  console.log("pageActions1", pageActions);
+
   const [fetchLoading, setFetchLoading] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const [isEditState, setEditState] = useState(false);
@@ -63,6 +68,22 @@ const PartiesPage = ({ dashboard, showAlert }) => {
       lookup_valuename: data.lookup_valuename,
       lookup_id: data.lookup_id,
     }));
+  };
+
+  const handleDelete = async (data) => {
+    setLoading(true);
+    console.log("data852852852", data);
+    try {
+      await ApiServices.deleteRequest(createPartyRoute + data.lookup_id);
+      showAlert({ text: "Party Deleted", color: "success" });
+      fetchPartiesData();
+      handleReset();
+    } catch (error) {
+      console.log(error);
+
+      showAlert({ text: "Party Not Deleted", color: "error" });
+    }
+    setLoading(false);
   };
 
   const handleSubmit = async () => {
@@ -181,9 +202,13 @@ const PartiesPage = ({ dashboard, showAlert }) => {
 
             <Grid item xs={12} md={6} lg={2}>
               {!isEditState && (
-                <LoadingButton loading={isLoading} onClick={handleSubmit} variant="contained">
-                  Add
-                </LoadingButton>
+                <Tooltip title={pageActions.add_perm != 1 ? "You don't have access to add" : ""}>
+                  <span>
+                    <LoadingButton loading={isLoading} onClick={handleSubmit} variant="contained" disabled={pageActions.add_perm != 1}>
+                      Add
+                    </LoadingButton>
+                  </span>
+                </Tooltip>
               )}
               {isEditState && (
                 <Stack direction="row" spacing={1}>
@@ -201,7 +226,7 @@ const PartiesPage = ({ dashboard, showAlert }) => {
         </Card>
 
         <Box p={1} />
-        <PartiesList loading={fetchLoading} partiesList={fetchedData.parties} handleEdit={handleEdit} />
+        <PartiesList pageActions={pageActions} loading={fetchLoading} partiesList={fetchedData.parties} handleEdit={handleEdit} handleDelete={handleDelete} />
       </Container>
     </Page>
   );
@@ -210,6 +235,7 @@ const PartiesPage = ({ dashboard, showAlert }) => {
 const mapStateToProps = (state) => {
   return {
     dashboard: state.dashboard,
+    account: state.auth,
   };
 };
 

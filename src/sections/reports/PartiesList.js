@@ -10,13 +10,14 @@ import Sachivalayam from "../../pages/Sachivalayam";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import CustomMuiDataTable from "../../components/CustomMuiDataTable";
+import Tooltip from "@material-ui/core/Tooltip";
 import CircularProgress from "@mui/material/CircularProgress";
 import { set } from "date-fns";
 import { createPartyRoute } from "../../utils/apis";
 import ApiServices from "../../services/apiservices";
 import { ROWS_PER_PAGE_OPTION } from "../../constants";
 
-const PartiesList = ({ loading, showAlert, partiesList, handleEdit }) => {
+const PartiesList = ({ loading, showAlert, partiesList, handleEdit, pageActions, handleDelete }) => {
   const columns = [
     { name: "lookup_sequence", label: "Sequence Number" },
     { name: "lookup_valuename", label: "Party Name" },
@@ -30,12 +31,20 @@ const PartiesList = ({ loading, showAlert, partiesList, handleEdit }) => {
 
           return (
             <Stack direction="row">
-              <IconButton color="primary" onClick={(e) => handleEdit(partiesList[index])}>
-                <EditNoteIcon />
-              </IconButton>
-              {/* <IconButton color="error">
-              <DeleteForeverIcon />
-            </IconButton> */}
+              <Tooltip title={pageActions.edit_perm != 1 ? "You don't have access to edit" : ""}>
+                <span>
+                  <IconButton color="primary" onClick={(e) => handleEdit(partiesList[index])} disabled={pageActions.edit_perm != 1}>
+                    <EditNoteIcon />
+                  </IconButton>
+                </span>
+              </Tooltip>
+              <Tooltip title={pageActions.delete_perm != 1 ? "You don't have access to delete" : ""}>
+                <span>
+                  <IconButton color="error" onClick={(e) => handleDelete(partiesList[index])} disabled={pageActions.delete_perm != 1}>
+                    <DeleteForeverIcon />
+                  </IconButton>
+                </span>
+              </Tooltip>
             </Stack>
           );
         },

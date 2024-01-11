@@ -65,7 +65,7 @@ const ViewUsersList = ({ user, showAlert, checkOrUncheckUser, deleteUserInRedux,
       label: "Username",
     },
     { name: "user_displayname", label: "Full Name" },
-    { name: "lookup_valuename", label: "Designation" },
+    { name: "designation_name", label: "Designation" },
     {
       name: "mandal_name",
       label: "Mandal Name",

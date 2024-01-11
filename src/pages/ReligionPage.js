@@ -11,16 +11,12 @@ import { getAllReligionRoute, createReligionRoute } from "../utils/apis";
 import { showAlert } from "../actions/alert";
 import ApiServices from "../services/apiservices";
 
-import LsService from "../services/localstorage";
+const ReligionPage = ({ dashboard, showAlert, account }) => {
+  const userPermission = account.user && account.user.permissions ? account.user.permissions : [];
+  const pageActions = userPermission.filter((p) => p.page_id === 175)[0];
 
-const user = LsService.getCurrentUser();
-console.log("user1234", user);
-const userPermission = user && user.permissions ? user.permissions : [];
-const pageActions = userPermission.filter((p) => p.page_id === 141)[0];
+  console.log("pageActions", pageActions);
 
-console.log("pageActions", pageActions);
-
-const ReligionPage = ({ dashboard, showAlert }) => {
   const [fetchLoading, setFetchLoading] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const [isEditState, setEditState] = useState(false);
@@ -209,6 +205,7 @@ const ReligionPage = ({ dashboard, showAlert }) => {
 const mapStateToProps = (state) => {
   return {
     dashboard: state.dashboard,
+    account: state.auth,
   };
 };
 

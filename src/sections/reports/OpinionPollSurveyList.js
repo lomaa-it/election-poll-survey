@@ -5,7 +5,7 @@ import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "re
 import { useNavigate } from "react-router-dom";
 import { Card, Stack, Box, CircularProgress, IconButton, Typography, Divider, TextField, Grid, MenuItem, Button } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
-
+import Tooltip from "@material-ui/core/Tooltip";
 import MUIDataTable from "mui-datatables";
 import { connect } from "react-redux";
 import { showAlert } from "../../actions/alert";
@@ -21,6 +21,10 @@ import { FormProvider, RHFTextField } from "../../components/hook-form";
 import CustomMuiDataTable from "../../components/CustomMuiDataTable";
 
 const OpinionPollSurveyList = forwardRef(({ isUser, voter, account, showAlert, changeOpinionPoll, handleSubmit, handlePaginationSubmit }, ref) => {
+  const userPermission = account.user && account.user.permissions ? account.user.permissions : [];
+  const pageActions = userPermission.filter((p) => p.page_id === 114)[0];
+  console.log("pageActions12", pageActions);
+
   const navigate = useNavigate();
 
   const schema = Yup.object().shape({
@@ -55,18 +59,23 @@ const OpinionPollSurveyList = forwardRef(({ isUser, voter, account, showAlert, c
           // console.log("voter.data[index]", voter.data[index]);
           return (
             <Stack direction="row" spacing={1}>
-              <UpdateVoterDialog voterData={voter.data[index]} isActive={isActive} />
+              <UpdateVoterDialog voterData={voter.data[index]} isActive={isActive} pageActions={pageActions} />
 
               {voter.data[index].opinionparty == PARTY_ID.NEUTRAL && (
-                <IconButton
-                  onClick={() => handleEdit(voter.data[index])}
-                  sx={{
-                    p: 0,
-                    color: getTicketColorByValue(voter.data[index]?.status_id),
-                  }}
-                >
-                  <EditNoteIcon />
-                </IconButton>
+                <Tooltip title={pageActions.add_perm != 1 ? "You don't have access to create" : ""}>
+                  <span>
+                    <IconButton
+                      disabled={pageActions.add_perm != 1}
+                      onClick={() => handleEdit(voter.data[index])}
+                      sx={{
+                        p: 0,
+                        color: getTicketColorByValue(voter.data[index]?.status_id),
+                      }}
+                    >
+                      <EditNoteIcon />
+                    </IconButton>
+                  </span>
+                </Tooltip>
               )}
             </Stack>
           );
@@ -195,16 +204,20 @@ const OpinionPollSurveyList = forwardRef(({ isUser, voter, account, showAlert, c
                 var data = tableMeta.rowData;
                 var partyId = PARTY_ID.NEUTRAL;
                 return (
-                  <NeutralRadio
-                    sx={{
-                      p: 0,
-                    }}
-                    disabled={account.user?.desgination_name == "MLA"}
-                    checked={value == partyId}
-                    onChange={() => {
-                      handleChange(data[0], partyId);
-                    }}
-                  />
+                  <Tooltip title={pageActions.edit_perm != 1 ? "You don't have access to select" : ""}>
+                    <span>
+                      <NeutralRadio
+                        sx={{
+                          p: 0,
+                        }}
+                        disabled={pageActions.edit_perm != 1}
+                        checked={value == partyId}
+                        onChange={() => {
+                          handleChange(data[0], partyId);
+                        }}
+                      />
+                    </span>
+                  </Tooltip>
                 );
               },
             },
@@ -217,14 +230,18 @@ const OpinionPollSurveyList = forwardRef(({ isUser, voter, account, showAlert, c
                 var data = tableMeta.rowData;
                 var partyId = PARTY_ID.YSRCP;
                 return (
-                  <YCPRadio
-                    sx={{
-                      p: 0,
-                    }}
-                    disabled={account.user?.desgination_name == "MLA"}
-                    checked={value == partyId}
-                    onChange={() => handleChange(data[0], partyId)}
-                  />
+                  <Tooltip title={pageActions.edit_perm != 1 ? "You don't have access to select" : ""}>
+                    <span>
+                      <YCPRadio
+                        sx={{
+                          p: 0,
+                        }}
+                        disabled={pageActions.edit_perm != 1}
+                        checked={value == partyId}
+                        onChange={() => handleChange(data[0], partyId)}
+                      />
+                    </span>
+                  </Tooltip>
                 );
               },
             },
@@ -237,14 +254,18 @@ const OpinionPollSurveyList = forwardRef(({ isUser, voter, account, showAlert, c
                 var data = tableMeta.rowData;
                 var partyId = PARTY_ID.TDP;
                 return (
-                  <TDPRadio
-                    sx={{
-                      p: 0,
-                    }}
-                    disabled={account.user?.desgination_name == "MLA"}
-                    checked={value == partyId}
-                    onChange={() => handleChange(data[0], partyId)}
-                  />
+                  <Tooltip title={pageActions.edit_perm != 1 ? "You don't have access to select" : ""}>
+                    <span>
+                      <TDPRadio
+                        sx={{
+                          p: 0,
+                        }}
+                        disabled={pageActions.edit_perm != 1}
+                        checked={value == partyId}
+                        onChange={() => handleChange(data[0], partyId)}
+                      />
+                    </span>
+                  </Tooltip>
                 );
               },
             },
@@ -257,14 +278,18 @@ const OpinionPollSurveyList = forwardRef(({ isUser, voter, account, showAlert, c
                 var data = tableMeta.rowData;
                 var partyId = PARTY_ID.JANASENA;
                 return (
-                  <JSPRadio
-                    sx={{
-                      p: 0,
-                    }}
-                    disabled={account.user?.desgination_name == "MLA"}
-                    checked={value == partyId}
-                    onChange={() => handleChange(data[0], partyId)}
-                  />
+                  <Tooltip title={pageActions.edit_perm != 1 ? "You don't have access to select" : ""}>
+                    <span>
+                      <JSPRadio
+                        sx={{
+                          p: 0,
+                        }}
+                        disabled={pageActions.edit_perm != 1}
+                        checked={value == partyId}
+                        onChange={() => handleChange(data[0], partyId)}
+                      />
+                    </span>
+                  </Tooltip>
                 );
               },
             },
@@ -277,14 +302,18 @@ const OpinionPollSurveyList = forwardRef(({ isUser, voter, account, showAlert, c
                 var data = tableMeta.rowData;
                 var partyId = PARTY_ID.BJP;
                 return (
-                  <CongressRadio
-                    sx={{
-                      p: 0,
-                    }}
-                    disabled={account.user?.desgination_name == "MLA"}
-                    checked={value == partyId}
-                    onChange={() => handleChange(data[0], partyId)}
-                  />
+                  <Tooltip title={pageActions.edit_perm != 1 ? "You don't have access to select" : ""}>
+                    <span>
+                      <CongressRadio
+                        sx={{
+                          p: 0,
+                        }}
+                        disabled={pageActions.edit_perm != 1}
+                        checked={value == partyId}
+                        onChange={() => handleChange(data[0], partyId)}
+                      />
+                    </span>
+                  </Tooltip>
                 );
               },
             },
@@ -297,14 +326,18 @@ const OpinionPollSurveyList = forwardRef(({ isUser, voter, account, showAlert, c
                 var data = tableMeta.rowData;
                 var partyId = PARTY_ID.CONGRESS;
                 return (
-                  <BJPRadio
-                    sx={{
-                      p: 0,
-                    }}
-                    disabled={account.user?.desgination_name == "MLA"}
-                    checked={value == partyId}
-                    onChange={() => handleChange(data[0], partyId)}
-                  />
+                  <Tooltip title={pageActions.edit_perm != 1 ? "You don't have access to select" : ""}>
+                    <span>
+                      <BJPRadio
+                        sx={{
+                          p: 0,
+                        }}
+                        disabled={pageActions.edit_perm != 1}
+                        checked={value == partyId}
+                        onChange={() => handleChange(data[0], partyId)}
+                      />
+                    </span>
+                  </Tooltip>
                 );
               },
             },

@@ -13,14 +13,12 @@ import ApiServices from "../services/apiservices";
 
 import LsService from "../services/localstorage";
 
-const user = LsService.getCurrentUser();
-console.log("user1234", user);
-const userPermission = user && user.permissions ? user.permissions : [];
-const pageActions = userPermission.filter((p) => p.page_id === 141)[0];
+const CastePage = ({ dashboard, showAlert, account }) => {
+  const userPermission = account.user && account.user.permissions ? account.user.permissions : [];
+  const pageActions = userPermission.filter((p) => p.page_id === 174)[0];
 
-console.log("pageActions", pageActions);
+  console.log("pageActions", pageActions);
 
-const CastePage = ({ dashboard, showAlert }) => {
   const [fetchLoading, setFetchLoading] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const [isEditState, setEditState] = useState(false);
@@ -209,6 +207,7 @@ const CastePage = ({ dashboard, showAlert }) => {
 const mapStateToProps = (state) => {
   return {
     dashboard: state.dashboard,
+    account: state.auth,
   };
 };
 

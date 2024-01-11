@@ -851,14 +851,12 @@ const getAccessNavConfig = (permissions) => {
     if (item.children?.length > 0) {
       // Filter and modify children
       item.children = item.children.filter((childItem) => {
-        console.log("childItem", childItem);
         var index = permissions.findIndex((x) => x.page_id === childItem.page_id);
 
         if (index === -1 || permissions[index].page_access !== 1) {
           return false; // Exclude child item
         }
 
-        console.log("pageAccess1withchildren", permissions[index]);
         return true; // Include child item
       });
 
@@ -870,15 +868,11 @@ const getAccessNavConfig = (permissions) => {
         return false; // Exclude item without children
       }
 
-      console.log("pageAccess2", permissions[index]);
       return true; // Include item without children
     }
   });
 
-  console.log("mainNavConfig", filteredConfig);
-
   return filteredConfig;
 };
-console.log("accessNavConfig", accessNavConfig);
 
 export { userNavConfig, operatorNavConfig, mlaNavConfig, adminNavConfig, accessNavConfig, getAccessNavConfig };

@@ -14,7 +14,7 @@ import { RHFAutoComplete } from "../components/hook-form";
 import { UncontrolledTextField } from "../components/hook-form/RHFTextField";
 import { ClearAllOutlined } from "@mui/icons-material";
 
-const OpinionPollSurveyPage = ({ isUser, getAllVotersSurvey, clearVoterReducer, common }) => {
+const OpinionPollSurveyPage = ({ isUser, getAllVotersSurvey, clearVoterReducer, common, account }) => {
   const filterRef = useRef(null);
   const searchRef = useRef(null);
 
@@ -213,6 +213,7 @@ const OpinionPollSurveyPage = ({ isUser, getAllVotersSurvey, clearVoterReducer, 
 const mapStateToProps = (state) => {
   return {
     common: state.common,
+    account: state.auth,
   };
 };
 

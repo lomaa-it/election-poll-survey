@@ -127,7 +127,8 @@ export const deleteStatesByIdRoute = "/states/";
 // Update By Id
 export const updateTicketStatusRoute = "/updateticketstatus";
 export const updateStatesByIdRoute = "/states/";
-export const saveOrupdatedSurvey = "/save_or_updated_survey";
+// export const saveOrupdatedSurvey = "/save_or_updated_survey";
+export const saveOrupdatedSurvey = "/saveorupdatedsurveynew2";
 export const updateMandalByIdRoute = "/mandals/";
 export const updateDivisionByIdRoute = "/divisions/";
 export const designationMappingRoute = "/designationmappingtousers";

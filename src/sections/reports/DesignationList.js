@@ -16,6 +16,7 @@ import { set } from "date-fns";
 import { createDesignationsRoute } from "../../utils/apis";
 import ApiServices from "../../services/apiservices";
 import { ROWS_PER_PAGE_OPTION } from "../../constants";
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 
 const DesignationList = ({ loading, showAlert, designationList, handleEdit, pageActions, handleDelete }) => {
   const columns = [

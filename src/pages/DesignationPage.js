@@ -16,16 +16,11 @@ import ApiServices from "../services/apiservices";
 import { Edit } from "@mui/icons-material";
 import { is } from "date-fns/locale";
 
-import LsService from "../services/localstorage";
+const DesignationPage = ({ dashboard, showAlert, account }) => {
+  const userPermission = account.user && account.user.permissions ? account.user.permissions : [];
+  const pageActions = userPermission.filter((p) => p.page_id === 141)[0];
+  console.log("pageActions1", pageActions);
 
-const user = LsService.getCurrentUser();
-console.log("user1234", user);
-const userPermission = user && user.permissions ? user.permissions : [];
-const pageActions = userPermission.filter((p) => p.page_id === 141)[0];
-
-console.log("pageActions", pageActions);
-
-const DesignationPage = ({ dashboard, showAlert }) => {
   const [fetchLoading, setFetchLoading] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const [isEditState, setEditState] = useState(false);
@@ -215,6 +210,7 @@ const DesignationPage = ({ dashboard, showAlert }) => {
 const mapStateToProps = (state) => {
   return {
     dashboard: state.dashboard,
+    account: state.auth,
   };
 };
 
