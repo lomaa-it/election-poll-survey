@@ -6,7 +6,7 @@ import useResponsive from "../../../hooks/useResponsive";
 import Logo from "../../../components/logo";
 import Scrollbar from "../../../components/Scrollbar";
 import NavSection from "../../../components/NavSection";
-import { accessNavConfig, adminNavConfig, mlaNavConfig, operatorNavConfig, userNavConfig } from "./config";
+import { accessNavConfig, adminNavConfig, getAccessNavConfig, mlaNavConfig, operatorNavConfig, userNavConfig } from "./config";
 import { connect } from "react-redux";
 import { LOGIN_TYPES, PUBLIC_URL } from "../../../constants";
 
@@ -44,7 +44,7 @@ const Nav = ({ account, openNav, onCloseNav }) => {
   // }, []);
 
   useEffect(() => {
-    let navbar = accessNavConfig;
+    let navbar = getAccessNavConfig(account.user.permissions);
     console.log("navbar123456", navbar);
     setNavConfig(navbar);
   }, []);

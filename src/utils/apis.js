@@ -10,7 +10,7 @@ import LsService from "../services/localstorage";
 // export const baseServerUrl = "https://d1ef-123-201-174-192.ngrok-free.app";
 // export const baseServerUrl = "https://backendapi.cgrysrcongress.in";
 // export const baseServerUrl = "http://192.168.137.25:8080";
-export const baseServerUrl = "http://192.168.222.177:8080";
+export const baseServerUrl = "http://192.168.0.129:8080";
 /// new
 // export const baseServerUrl = "https://poll2.onrender.com";
 
@@ -107,6 +107,8 @@ export const getVillageById = "/villages-get-by-id/";
 // Create
 export const createUsersRoute = "/users";
 export const createDesignationsRoute = "/lookup/";
+export const createReligionRoute = "/lookup/";
+export const createCasteRoute = "/lookup/";
 export const createStatesRoute = "/states/";
 export const createDistrictsRoute = "/districts/";
 export const createConstituenciesRoute = "/constituencies/";

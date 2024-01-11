@@ -47,6 +47,8 @@ import ViewTicketsHistoryPage from "./pages/ViewTicketsHistoryPage";
 import ForgetResetPage from "./pages/ForgetResetPage";
 import AccessManagementPage from "./pages/AccessManagementPage";
 import { Page404, PageSessionTimeout } from "./pages/Page404";
+import ReligionPage from "./pages/ReligionPage";
+import CastePage from "./pages/CastePage";
 
 const Router = () => {
   return (
@@ -95,6 +97,8 @@ const Router = () => {
           <Route path="villages" element={<VillagesPage />} />
           <Route path="parties" element={<PartiesPage />} />
           <Route path="designations" element={<DesignationPage />} />
+          <Route path="religion" element={<ReligionPage />} />
+          <Route path="caste" element={<CastePage />} />
         </Route>
       </Route>
 

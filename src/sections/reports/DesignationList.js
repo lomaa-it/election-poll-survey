@@ -10,14 +10,14 @@ import Sachivalayam from "../../pages/Sachivalayam";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import CustomMuiDataTable from "../../components/CustomMuiDataTable";
-
+import Tooltip from "@material-ui/core/Tooltip";
 import CircularProgress from "@mui/material/CircularProgress";
 import { set } from "date-fns";
 import { createDesignationsRoute } from "../../utils/apis";
 import ApiServices from "../../services/apiservices";
 import { ROWS_PER_PAGE_OPTION } from "../../constants";
 
-const DesignationList = ({ loading, showAlert, designationList, handleEdit }) => {
+const DesignationList = ({ loading, showAlert, designationList, handleEdit, pageActions, handleDelete }) => {
   const columns = [
     { name: "lookup_valuename", label: "Designation Name" },
     {
@@ -28,9 +28,20 @@ const DesignationList = ({ loading, showAlert, designationList, handleEdit }) =>
           var index = designationList.findIndex((e) => e.lookup_id == value);
           return (
             <Stack direction="row">
-              <IconButton color="primary" onClick={(e) => handleEdit(designationList[index])}>
-                <EditNoteIcon />
-              </IconButton>
+              <Tooltip title={pageActions.edit_perm != 1 ? "You don't have access to edit" : ""}>
+                <span>
+                  <IconButton color="primary" onClick={(e) => handleEdit(designationList[index])} disabled={pageActions.edit_perm != 1}>
+                    <EditNoteIcon />
+                  </IconButton>
+                </span>
+              </Tooltip>
+              <Tooltip title={pageActions.delete_perm != 1 ? "You don't have access to delete" : ""}>
+                <span>
+                  <IconButton color="error" onClick={(e) => handleDelete(designationList[index])} disabled={pageActions.delete_perm != 1}>
+                    <DeleteForeverIcon />
+                  </IconButton>
+                </span>
+              </Tooltip>
             </Stack>
           );
         },
@@ -79,22 +90,6 @@ const DesignationList = ({ loading, showAlert, designationList, handleEdit }) =>
   //     setIsLoading(false);
   //     showAlert({ text: "Designation Not Updated", color: "error" });
   //     setAnchorEl(null);
-  //     setRefresh(!refresh);
-  //   }
-  // };
-
-  // const handleDelete = async (id) => {
-  //   setIsLoading(true);
-  //   try {
-  //     const response = await ApiServices.deleteRequest(createDesignationsRoute + id);
-  //     console.log(response.data.message);
-  //     showAlert({ text: "Designation Deleted", color: "success" });
-  //     setIsLoading(false);
-  //     setRefresh(!refresh);
-  //   } catch (error) {
-  //     console.log(error);
-  //     setIsLoading(false);
-  //     showAlert({ text: "Designation Not Deleted", color: "error" });
   //     setRefresh(!refresh);
   //   }
   // };

@@ -386,6 +386,172 @@ const adminNavConfig = [
   },
 ];
 
+/// main config for access
+const mainNavConfig = [
+  {
+    page_id: 113,
+    title: "Survey Dashboard",
+    path: "/dashboard",
+    icon: <Iconify icon="ic:round-dashboard" width="24px" height="24px" />,
+  },
+  {
+    title: "Opinion Survey ",
+    path: "/opinionsurvey",
+    icon: <Iconify icon="mdi:report-box-outline" width="24px" height="24px" />,
+    children: [
+      {
+        page_id: 114,
+        title: "Opinion Survey",
+        path: "/opinionsurvey/survey",
+        icon: <Iconify icon="ic:round-person" width="24px" height="24px" />,
+      },
+      // {
+      //   title: "Opinion Results",
+      //   path: "/opinionsurvey/results",
+      //   icon: <Iconify icon="ic:round-person" width="24px" height="24px" />,
+      // },
+      {
+        page_id: 136,
+        title: "Opinion Reports",
+        path: "/opinionsurvey/reports",
+      },
+    ],
+  },
+
+  {
+    title: "User Management",
+    path: "/user-management",
+    icon: <Iconify icon="ic:baseline-people" width="24px" height="24px" />,
+    children: [
+      {
+        page_id: 135,
+        title: "View User",
+        path: "/user-management/view-user",
+      },
+      {
+        page_id: 134,
+        title: "Add User",
+        path: "/user-management/user-registration",
+      },
+    ],
+  },
+  {
+    title: "Voter Management",
+    path: "/reports",
+    icon: <Iconify icon="formkit:people" width="24px" height="24px" />,
+    children: [
+      {
+        page_id: 139,
+        title: "View Voter",
+        path: "/view-voter",
+      },
+      {
+        page_id: 115,
+        title: "Add Voter",
+        path: "/voter-registration",
+      },
+    ],
+  },
+  {
+    title: "Ticket Management",
+    path: "/reports",
+    icon: <Iconify icon="ion:ticket" width="24px" height="24px" />,
+    children: [
+      {
+        page_id: 140,
+        title: "View Tickets",
+        path: "/tickets",
+      },
+    ],
+  },
+  {
+    page_id: 137,
+    title: "Access Management",
+    path: "/access-management",
+    icon: <Iconify icon="uis:lock-access" width="24px" height="24px" />,
+  },
+  {
+    title: "Configuration",
+    path: "/reports",
+    icon: <Iconify icon="ri:mind-map" width="24px" height="24px" />,
+    children: [
+      {
+        page_id: 138,
+        title: "User Mapping",
+        path: "/user-mapping",
+      },
+    ],
+  },
+  {
+    title: "Administration",
+    path: "/admin",
+    icon: <Iconify icon="eos-icons:admin" width="24px" height="24px" />,
+    children: [
+      {
+        page_id: 141,
+        title: "Designations",
+        path: "/designations",
+      },
+      {
+        page_id: 142,
+        title: "Political Parties",
+        path: "/parties",
+      },
+      // {
+      //   title: "States",
+      //   path: "/states",
+      //   icon: <Iconify icon="bi:building" width="24px" height="24px" />,
+      // },
+      {
+        page_id: 143,
+        title: "Districts",
+        path: "/districts",
+      },
+      {
+        page_id: 144,
+        title: "Constituencies",
+        path: "/constituencies",
+      },
+
+      {
+        page_id: 145,
+        title: "Mandals",
+        path: "/mandals",
+      },
+      {
+        page_id: 146,
+        title: "Divisions",
+        path: "/divisions",
+      },
+      {
+        page_id: 147,
+        title: "Sachivalayam",
+        path: "/sachivalayam",
+      },
+      {
+        page_id: 148,
+        title: "Parts",
+        path: "/parts",
+      },
+      {
+        page_id: 149,
+        title: "Villages",
+        path: "/villages",
+      },
+      {
+        page_id: 175,
+        title: "Religion",
+        path: "/religion",
+      },
+      {
+        page_id: 174,
+        title: "Caste",
+        path: "/caste",
+      },
+    ],
+  },
+];
+
 let isOpinionSurveyMenuRendered = false;
 let opinionSurveyMenu = {
   title: "Opinion Survey ",
@@ -649,6 +815,28 @@ const accessNavConfig = userPermission
         return administrationMenu;
       }
     }
+    if (item.page_access == 1 && item.page_id == 175) {
+      administrationMenu.children.push({
+        title: "Religion",
+        path: "/religion",
+      });
+
+      if (!isAdministrationMenuRendered) {
+        isAdministrationMenuRendered = true;
+        return administrationMenu;
+      }
+    }
+    if (item.page_access == 1 && item.page_id == 174) {
+      administrationMenu.children.push({
+        title: "Caste",
+        path: "/caste",
+      });
+
+      if (!isAdministrationMenuRendered) {
+        isAdministrationMenuRendered = true;
+        return administrationMenu;
+      }
+    }
 
     return {
       title: "",
@@ -656,6 +844,41 @@ const accessNavConfig = userPermission
   })
   .filter((item) => item.title !== "");
 
+const getAccessNavConfig = (permissions) => {
+  var filteredConfig = mainNavConfig.filter((item) => {
+    console.log("item", item);
+
+    if (item.children?.length > 0) {
+      // Filter and modify children
+      item.children = item.children.filter((childItem) => {
+        console.log("childItem", childItem);
+        var index = permissions.findIndex((x) => x.page_id === childItem.page_id);
+
+        if (index === -1 || permissions[index].page_access !== 1) {
+          return false; // Exclude child item
+        }
+
+        console.log("pageAccess1withchildren", permissions[index]);
+        return true; // Include child item
+      });
+
+      return item.children.length > 0; // Include parent item if it has filtered children
+    } else {
+      var index = permissions.findIndex((x) => x.page_id === item.page_id);
+
+      if (index === -1 || permissions[index].page_access !== 1) {
+        return false; // Exclude item without children
+      }
+
+      console.log("pageAccess2", permissions[index]);
+      return true; // Include item without children
+    }
+  });
+
+  console.log("mainNavConfig", filteredConfig);
+
+  return filteredConfig;
+};
 console.log("accessNavConfig", accessNavConfig);
 
-export { userNavConfig, operatorNavConfig, mlaNavConfig, adminNavConfig, accessNavConfig };
+export { userNavConfig, operatorNavConfig, mlaNavConfig, adminNavConfig, accessNavConfig, getAccessNavConfig };
