@@ -9,6 +9,7 @@ import { LoadingButton } from "@mui/lab";
 import ViewUserPage from "../../pages/ViewUserPage";
 import Sachivalayam from "../../pages/Sachivalayam";
 import EditNoteIcon from "@mui/icons-material/EditNote";
+import Tooltip from "@material-ui/core/Tooltip";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -21,8 +22,9 @@ import { set } from "date-fns";
 import { sachivalayammappingtopartsRoute } from "../../utils/apis";
 import CustomMuiDataTable from "../../components/CustomMuiDataTable";
 import ApiServices from "../../services/apiservices";
+import { ROWS_PER_PAGE_OPTION } from "../../constants";
 
-const PartsList = ({ showAlert, partsList, common, account, checkOrUncheckUser, reFecthData, isFetching }) => {
+const PartsList = ({ showAlert, partsList, common, account, checkOrUncheckUser, reFecthData, isFetching, pageActions }) => {
   const filterRef = useRef(null);
   const [isLoading, setLoading] = useState(false);
   const [filterValues, setFilterValues] = useState({
@@ -97,6 +99,8 @@ const PartsList = ({ showAlert, partsList, common, account, checkOrUncheckUser, 
   const options = {
     elevation: 0,
     selectableRows: "none",
+    rowsPerPageOptions: ROWS_PER_PAGE_OPTION,
+    rowsPerPage: 100,
     download: false,
     print: false,
     viewColumns: false,
@@ -197,9 +201,13 @@ const PartsList = ({ showAlert, partsList, common, account, checkOrUncheckUser, 
               <SearchByFilter ref={filterRef} showPartNo={false} showVillage={false} showOtherFilters={false} onChanged={(value) => setFilterValues(value)} showSearchButton={false} />
 
               <Grid item xs={12} md={6} lg={2}>
-                <LoadingButton type="submit" loading={isLoading} onClick={handleSubmit} variant="contained">
-                  Assign Part
-                </LoadingButton>
+                <Tooltip title={pageActions.edit_perm != 1 ? "You don't have access to Assign Part" : ""}>
+                  <span>
+                    <LoadingButton loading={isLoading} onClick={handleSubmit} variant="contained" disabled={pageActions.edit_perm != 1}>
+                      Assign Part
+                    </LoadingButton>
+                  </span>
+                </Tooltip>
               </Grid>
             </Grid>
           </Box>

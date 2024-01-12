@@ -2,7 +2,7 @@ import { Grid, Container, Typography, Box, TextField, Card, Stack, MenuItem } fr
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
-
+import Tooltip from "@material-ui/core/Tooltip";
 import VillagesList from "../sections/reports/VillagesList";
 import { useEffect, useState, useRef } from "react";
 import { getAllConstituenciesRoute, getAllDistrictsRoute, getAllDivisionRoute, getAllMandalRoute, getAllPartsRoute, getAllSachivalayamRoute, getAllStatesRoute, getAllVillageRoute, createVillagesRoute } from "../utils/apis";
@@ -10,6 +10,10 @@ import { showAlert } from "../actions/alert";
 import ApiServices from "../services/apiservices";
 
 const VillagesPage = ({ account, showAlert }) => {
+  const userPermission = account.user && account.user.permissions ? account.user.permissions : [];
+  const pageActions = userPermission.filter((p) => p.page_id === 149)[0];
+  console.log("pageActions1", pageActions);
+
   const [fetchLoading, setFetchLoading] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const [isEditState, setEditState] = useState(false);
@@ -125,6 +129,22 @@ const VillagesPage = ({ account, showAlert }) => {
       part_no: data.part_no,
       village_name: data.village_name,
     });
+  };
+
+  const handleDelete = async (data) => {
+    setLoading(true);
+    console.log("data852852852", data);
+    try {
+      await ApiServices.deleteRequest(createVillagesRoute + data.village_id);
+      showAlert({ text: "Sachivalayam Deleted", color: "success" });
+      fecthVillageData();
+      handleReset();
+    } catch (error) {
+      console.log(error);
+
+      showAlert({ text: "Sachivalayam Not Deleted", color: "error" });
+    }
+    setLoading(false);
   };
 
   const handleSubmit = async () => {
@@ -447,9 +467,13 @@ const VillagesPage = ({ account, showAlert }) => {
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
               {!isEditState && (
-                <LoadingButton loading={isLoading} onClick={handleSubmit} variant="contained">
-                  Add
-                </LoadingButton>
+                <Tooltip title={pageActions.add_perm != 1 ? "You don't have access to add" : ""}>
+                  <span>
+                    <LoadingButton loading={isLoading} onClick={handleSubmit} variant="contained" disabled={pageActions.add_perm != 1}>
+                      Add
+                    </LoadingButton>
+                  </span>
+                </Tooltip>
               )}
 
               {isEditState && (
@@ -469,7 +493,7 @@ const VillagesPage = ({ account, showAlert }) => {
 
         <Box p={1} />
 
-        <VillagesList loading={fetchLoading} villageList={fetchedData.village} handleEdit={handleEdit} />
+        <VillagesList pageActions={pageActions} loading={fetchLoading} villageList={fetchedData.village} handleEdit={handleEdit} handleDelete={handleDelete} />
       </Container>
     </Page>
   );

@@ -17,8 +17,13 @@ import { addVoters } from "../utils/apis";
 import { useLocation, useNavigate } from "react-router-dom";
 import { is } from "date-fns/locale";
 import ApiServices from "../services/apiservices";
+import Tooltip from "@material-ui/core/Tooltip";
 
 const VoterRegistrationPage = ({ account, showAlert }) => {
+  const userPermission = account.user && account.user.permissions ? account.user.permissions : [];
+  const pageActions = userPermission.filter((p) => p.page_id === 115)[0];
+  console.log("pageActions1", pageActions);
+
   const props = useLocation().state;
   const navigate = useNavigate();
   const filterRef = useRef(null);
@@ -61,16 +66,16 @@ const VoterRegistrationPage = ({ account, showAlert }) => {
     current_address: props?.voterData?.current_address ?? "",
     part_slno: props?.voterData?.part_slno ?? "",
     gender: props?.voterData?.gender ?? "",
-    is_newregistration: props?.voterData?.is_newregistration ?? false,
-    is_resident: props?.voterData?.is_resident ?? false,
+    is_newregistration: props?.voterData?.is_newregistration === 1 ? true : false ?? false,
+    is_resident: props?.voterData?.is_resident === 1 ? true : false ?? false,
   };
 
   const filterDefaultValues = {
-    mandal_pk: props?.voterData?.mandal_id ?? "",
-    division_pk: props?.voterData?.division_id ?? "",
-    sachivalayam_pk: props?.voterData?.sachivalayam_id ?? "",
+    mandal_id: props?.voterData?.mandal_id ?? "",
+    division_id: props?.voterData?.division_id ?? "",
+    sachivalayam_id: props?.voterData?.sachivalayam_id ?? "",
     part_no: props?.voterData?.part_no ?? null,
-    village_pk: props?.voterData?.village_id ?? null,
+    village_id: props?.voterData?.village_id ?? null,
   };
 
   const methods = useForm({
@@ -370,16 +375,21 @@ const VoterRegistrationPage = ({ account, showAlert }) => {
                   justifyContent: "flex-end",
                 }}
               >
-                <LoadingButton
-                  type="submit"
-                  loading={isLoading}
-                  variant="contained"
-                  sx={{
-                    padding: "15px 40px",
-                  }}
-                >
-                  Submit
-                </LoadingButton>
+                <Tooltip title={pageActions.add_perm != 1 ? "You don't have access to Create Voter" : ""}>
+                  <span>
+                    <LoadingButton
+                      type="submit"
+                      loading={isLoading}
+                      variant="contained"
+                      sx={{
+                        padding: "15px 40px",
+                      }}
+                      disabled={pageActions.add_perm != 1}
+                    >
+                      Submit
+                    </LoadingButton>
+                  </span>
+                </Tooltip>
               </Grid>
             </Grid>
           </Card>

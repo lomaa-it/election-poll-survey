@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Card, Stack, Grid, Switch, Divider, Box, Chip, TextField, FormControlLabel, Typography, Checkbox, CircularProgress, Button, MenuItem } from "@mui/material";
+import Tooltip from "@material-ui/core/Tooltip";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { CheckBox } from "@mui/icons-material";
 import { connect } from "react-redux";
@@ -12,6 +13,9 @@ import CustomMuiDataTable from "../../components/CustomMuiDataTable";
 import ApiServices from "../../services/apiservices";
 
 const UserMappingList = ({ common, user, filterValues, showAlert, checkOrUncheckUser, clearUserReducer, account }) => {
+  const userPermission = account.user && account.user.permissions ? account.user.permissions : [];
+  const pageActions = userPermission.filter((p) => p.page_id === 140)[0];
+  console.log("pageActions1", pageActions);
   const [isLoading, setLoading] = useState(false);
   const [formValues, setFormValues] = useState({
     partno: "",
@@ -47,8 +51,8 @@ const UserMappingList = ({ common, user, filterValues, showAlert, checkOrUncheck
       options: { display: false },
     },
     { name: "user_displayname", label: "Full Name" },
-    { name: "phone_no", label: "Phone" },
-    { name: "lookup_valuename", label: "Designation" },
+    { name: "username", label: "Phone" },
+    { name: "designation_name", label: "Designation" },
     {
       name: "mandal_name",
       label: "Mandal Name",
@@ -184,9 +188,13 @@ const UserMappingList = ({ common, user, filterValues, showAlert, checkOrUncheck
               </Grid>
 
               <Grid item xs={12} md={6} lg={3}>
-                <LoadingButton loading={isLoading} variant="outlined" onClick={handleSubmit}>
-                  Assign Part No
-                </LoadingButton>
+                <Tooltip title={pageActions.approved_perm != 1 ? "You don't have access to Assign Part No" : ""}>
+                  <span>
+                    <LoadingButton loading={isLoading} variant="outlined" onClick={handleSubmit} disabled={pageActions.approved_perm != 1}>
+                      Assign Part No
+                    </LoadingButton>
+                  </span>
+                </Tooltip>
               </Grid>
             </Grid>
           </Box>

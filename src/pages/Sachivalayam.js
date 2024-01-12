@@ -2,7 +2,7 @@ import { Grid, Container, Typography, Box, TextField, Card, Stack, MenuItem } fr
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
-
+import Tooltip from "@material-ui/core/Tooltip";
 import SachivalayamList from "../sections/reports/SachivalayamList";
 import { useEffect, useState, useRef } from "react";
 import instance from "../utils/axios";
@@ -12,6 +12,10 @@ import { set } from "date-fns";
 import ApiServices from "../services/apiservices";
 
 const Sachivalayam = ({ dashboard, showAlert, account }) => {
+  const userPermission = account.user && account.user.permissions ? account.user.permissions : [];
+  const pageActions = userPermission.filter((p) => p.page_id === 147)[0];
+  console.log("pageActions1", pageActions);
+
   const [fetchLoading, setFetchLoading] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const [isEditState, setEditState] = useState(false);
@@ -111,6 +115,22 @@ const Sachivalayam = ({ dashboard, showAlert, account }) => {
       sachivalayam_id: data.sachivalayam_id,
       sachivalayam_name: data.sachivalayam_name,
     });
+  };
+
+  const handleDelete = async (data) => {
+    setLoading(true);
+    console.log("data852852852", data);
+    try {
+      await ApiServices.deleteRequest(createSachivalayamRoute + data.sachivalayam_id);
+      showAlert({ text: "Sachivalayam Deleted", color: "success" });
+      fecthSachivalayamData();
+      handleReset();
+    } catch (error) {
+      console.log(error);
+
+      showAlert({ text: "Sachivalayam Not Deleted", color: "error" });
+    }
+    setLoading(false);
   };
 
   const handleSubmit = async () => {
@@ -381,9 +401,13 @@ const Sachivalayam = ({ dashboard, showAlert, account }) => {
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
               {!isEditState && (
-                <LoadingButton loading={isLoading} onClick={handleSubmit} variant="contained">
-                  Add
-                </LoadingButton>
+                <Tooltip title={pageActions.add_perm != 1 ? "You don't have access to add" : ""}>
+                  <span>
+                    <LoadingButton loading={isLoading} onClick={handleSubmit} variant="contained" disabled={pageActions.add_perm != 1}>
+                      Add
+                    </LoadingButton>
+                  </span>
+                </Tooltip>
               )}
               {isEditState && (
                 <Stack direction="row" spacing={1}>
@@ -402,7 +426,7 @@ const Sachivalayam = ({ dashboard, showAlert, account }) => {
 
         <Box p={1} />
 
-        <SachivalayamList loading={fetchLoading} sachivalayamList={fetchedData.sachivalayam} handleEdit={handleEdit} />
+        <SachivalayamList pageActions={pageActions} loading={fetchLoading} sachivalayamList={fetchedData.sachivalayam} handleEdit={handleEdit} handleDelete={handleDelete} />
       </Container>
     </Page>
   );

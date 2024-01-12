@@ -7,7 +7,7 @@ import { showAlert } from "../../actions/alert";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import { ThemeProvider } from "@mui/material/styles";
 import { getTicketStatusById } from "../../constants";
-
+import Tooltip from "@material-ui/core/Tooltip";
 import { checkOrUncheckTicket } from "../../actions/ticket";
 import AnalyticsCard from "../common/AnalyticsCard";
 import { fToNow } from "../../utils/formatTime";
@@ -15,6 +15,10 @@ import CustomMuiDataTable from "../../components/CustomMuiDataTable";
 import ApiServices from "../../services/apiservices";
 
 const ViewTicketsList = ({ isUser, common, ticket, showAlert, checkOrUncheckTicket, account }) => {
+  const userPermission = account.user && account.user.permissions ? account.user.permissions : [];
+  const pageActions = userPermission.filter((p) => p.page_id === 140)[0];
+  console.log("pageActions1", pageActions);
+
   const navigate = useNavigate();
   const [isLoading, setLoading] = useState(false);
   const [formValues, setFormValues] = useState({
@@ -78,9 +82,13 @@ const ViewTicketsList = ({ isUser, common, ticket, showAlert, checkOrUncheckTick
           var index = ticket.data.findIndex((e) => e.ticket_master_pk == value);
 
           return (
-            <IconButton onClick={() => handleEdit(ticket.data[index])}>
-              <EditNoteIcon />
-            </IconButton>
+            <Tooltip title={pageActions.edit_perm != 1 ? "You don't have access to edit" : ""}>
+              <span>
+                <IconButton onClick={() => handleEdit(ticket.data[index])} disabled={pageActions.edit_perm != 1}>
+                  <EditNoteIcon />
+                </IconButton>
+              </span>
+            </Tooltip>
           );
         },
       },

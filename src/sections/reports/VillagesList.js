@@ -3,7 +3,7 @@ import { Typography, Card, Stack, Grid, Switch, Divider, Box, Chip, TextField, B
 import { CheckBox } from "@mui/icons-material";
 import { connect } from "react-redux";
 import { showAlert } from "../../actions/alert";
-
+import Tooltip from "@material-ui/core/Tooltip";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import CustomMuiDataTable from "../../components/CustomMuiDataTable";
@@ -13,8 +13,10 @@ import ApiServices from "../../services/apiservices";
 import { createVillagesRoute } from "../../utils/apis";
 import CircularProgress from "@mui/material/CircularProgress";
 import { ROWS_PER_PAGE_OPTION } from "../../constants";
+import { useAlertContext } from "../../components/AlertProvider";
 
-const VillagesList = ({ loading, showAlert, villageList, handleEdit }) => {
+const VillagesList = ({ loading, showAlert, villageList, handleEdit, pageActions, handleDelete }) => {
+  const { showLoading, hideLoading, showAlertDialog } = useAlertContext();
   const columns = [
     {
       name: "district_name",
@@ -53,12 +55,21 @@ const VillagesList = ({ loading, showAlert, villageList, handleEdit }) => {
 
           return (
             <Stack direction="row">
-              <IconButton color="primary" onClick={(e) => handleEdit(villageList[index])}>
-                <EditNoteIcon />
-              </IconButton>
-              {/* <IconButton color="error">
-                <DeleteForeverIcon />
-              </IconButton> */}
+              <Tooltip title={pageActions.edit_perm != 1 ? "You don't have access to edit" : ""}>
+                <span>
+                  <IconButton color="primary" onClick={(e) => handleEdit(villageList[index])} disabled={pageActions.edit_perm != 1}>
+                    <EditNoteIcon />
+                  </IconButton>
+                </span>
+              </Tooltip>
+
+              <Tooltip title={pageActions.delete_perm != 1 ? "You don't have access to delete" : ""}>
+                <span>
+                  <IconButton color="error" onClick={(e) => handleConfirmDelete(villageList[index])} disabled={pageActions.delete_perm != 1}>
+                    <DeleteForeverIcon />
+                  </IconButton>
+                </span>
+              </Tooltip>
             </Stack>
           );
         },
@@ -76,6 +87,17 @@ const VillagesList = ({ loading, showAlert, villageList, handleEdit }) => {
     print: false,
     viewColumns: false,
     filter: false,
+  };
+
+  const handleConfirmDelete = (data) => {
+    showAlertDialog({
+      description: "Are you sure? Do you want to delete this village?",
+      agreeCallback: async () => {
+        showLoading();
+        await handleDelete(data);
+        hideLoading();
+      },
+    });
   };
 
   // const handleSubmit = async () => {

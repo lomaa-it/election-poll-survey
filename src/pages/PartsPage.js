@@ -16,7 +16,11 @@ import { searchFiltercolor } from "../constants";
 import AddPartsCard from "../components/AddPartsCard";
 import ApiServices from "../services/apiservices";
 
-const PartsPage = ({ dashboard, common }) => {
+const PartsPage = ({ dashboard, common, account }) => {
+  const userPermission = account.user && account.user.permissions ? account.user.permissions : [];
+  const pageActions = userPermission.filter((p) => p.page_id === 148)[0];
+  console.log("pageActions1", pageActions);
+
   const [fetchedData, setFetchedData] = useState([{}]);
   const [initialValues, setInitialValues] = useState({
     sachivalayam_id: null,
@@ -66,11 +70,11 @@ const PartsPage = ({ dashboard, common }) => {
 
         <Box p={1} />
         {/* add part card section */}
-        <AddPartsCard reFecthData={reFecthData} />
+        <AddPartsCard pageActions={pageActions} reFecthData={reFecthData} />
 
         <Box p={1} />
 
-        <PartsList partsList={fetchedData} reFecthData={reFecthData} isFetching={isFetching} />
+        <PartsList partsList={fetchedData} reFecthData={reFecthData} isFetching={isFetching} pageActions={pageActions} />
       </Container>
     </Page>
   );
@@ -80,6 +84,7 @@ const mapStateToProps = (state) => {
   return {
     dashboard: state.dashboard,
     common: state.common,
+    account: state.auth,
   };
 };
 

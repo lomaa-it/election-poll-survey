@@ -8,7 +8,7 @@ import { useEffect, useRef, useState } from "react";
 
 import { showAlert } from "../actions/alert";
 import SearchByFilter from "../sections/common/SearchByFilter";
-
+import Tooltip from "@material-ui/core/Tooltip";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
@@ -16,7 +16,7 @@ import { FormProvider, RHFCheckbox, RHFRadio, RHFTextField } from "../components
 import { createPartsRoute } from "../utils/apis";
 import ApiServices from "../services/apiservices";
 
-const AddPartsCard = ({ dashboard, common, showAlert, reFecthData }) => {
+const AddPartsCard = ({ dashboard, common, showAlert, reFecthData, pageActions }) => {
   const filterRef = useRef(null);
   const [isLoading, setLoading] = useState(false);
   const [filterValues, setFilterValues] = useState({
@@ -79,7 +79,7 @@ const AddPartsCard = ({ dashboard, common, showAlert, reFecthData }) => {
     try {
       const jsonData = {
         ...data,
-        sachivalayam_id: filterValues.sachivalayam?.sachivalayam_pk ?? null,
+        sachivalayam_id: filterValues.sachivalayam?.sachivalayam_id ?? null,
       };
       console.log("jsonData", jsonData);
       await ApiServices.postRequest(createPartsRoute, jsonData);
@@ -121,9 +121,13 @@ const AddPartsCard = ({ dashboard, common, showAlert, reFecthData }) => {
           </Grid>
 
           <Grid item xs={12} md={6} lg={2}>
-            <LoadingButton type="submit" loading={isLoading} onClick={handleSubmit} variant="contained">
-              Add
-            </LoadingButton>
+            <Tooltip title={pageActions.add_perm != 1 ? "You don't have access to add" : ""}>
+              <span>
+                <LoadingButton type="submit" loading={isLoading} onClick={handleSubmit} variant="contained" disabled={pageActions.add_perm != 1}>
+                  Add
+                </LoadingButton>
+              </span>
+            </Tooltip>
           </Grid>
         </Grid>
       </Card>

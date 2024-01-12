@@ -4,19 +4,27 @@ import { Typography, Card, Stack, Grid, Divider, Box, CircularProgress, IconButt
 import { connect } from "react-redux";
 import { showAlert } from "../../actions/alert";
 import { LoadingButton } from "@mui/lab";
+import Tooltip from "@material-ui/core/Tooltip";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { ROWS_PER_PAGE_OPTION } from "../../constants";
-import { getAllVotersSurvey } from "../../actions/voter";
+import { deleteVoterInRedux, getAllVotersSurvey } from "../../actions/voter";
 import { UncontrolledTextField } from "../../components/hook-form/RHFTextField";
 import SearchIcon from "@mui/icons-material/Search";
 import SearchByFilter from "../common/SearchByFilter";
-import { sachivalayamMappingtoVotersRoute } from "../../utils/apis";
+import { deleteVotersById, sachivalayamMappingtoVotersRoute } from "../../utils/apis";
 import instance from "../../utils/axios";
 import CustomMuiDataTable from "../../components/CustomMuiDataTable";
 import ApiServices from "../../services/apiservices";
+import { useAlertContext } from "../../components/AlertProvider";
 
-const ViewVotersList = ({ voter, filterValues, showAlert, getAllVotersSurvey, account }) => {
+const ViewVotersList = ({ voter, filterValues, showAlert, getAllVotersSurvey, account, deleteVoterInRedux }) => {
+  const userPermission = account.user && account.user.permissions ? account.user.permissions : [];
+  const pageActions = userPermission.filter((p) => p.page_id === 139)[0];
+  console.log("pageActions1", pageActions);
+
+  const { showLoading, hideLoading, showAlertDialog } = useAlertContext();
+
   const fieldname = useRef();
   const fieldvalue = useRef();
   const filterRef = useRef(null);
@@ -122,13 +130,20 @@ const ViewVotersList = ({ voter, filterValues, showAlert, getAllVotersSurvey, ac
         customBodyRender: (value, tableMeta, updateValue) => {
           return (
             <Stack direction="row">
-              <IconButton color="primary" onClick={() => handleEdit(value)}>
-                <EditNoteIcon />
-              </IconButton>
-
-              <IconButton color="error">
-                <DeleteForeverIcon />
-              </IconButton>
+              <Tooltip title={pageActions.edit_perm != 1 ? "You don't have access to edit" : ""}>
+                <span>
+                  <IconButton color="primary" onClick={() => handleEdit(value)} disabled={pageActions.edit_perm != 1}>
+                    <EditNoteIcon />
+                  </IconButton>
+                </span>
+              </Tooltip>
+              <Tooltip title={pageActions.delete_perm != 1 ? "You don't have access to delete" : ""}>
+                <span>
+                  <IconButton color="error" onClick={() => handleConfirmDelete(value)} disabled={pageActions.delete_perm != 1}>
+                    <DeleteForeverIcon />
+                  </IconButton>
+                </span>
+              </Tooltip>
             </Stack>
           );
         },
@@ -200,7 +215,22 @@ const ViewVotersList = ({ voter, filterValues, showAlert, getAllVotersSurvey, ac
       fieldvalue: fieldvalue.current.value,
     };
 
+    console.log("tableState", tableState);
+
     getAllVotersSurvey({ ...filterValues, ...searchForm }, tableState.page, tableState.rowsPerPage);
+  };
+
+  const handleConfirmDelete = (id) => {
+    var index = voter.data.findIndex((e) => e.voter_pkk == id);
+    const voterId = voter.data[index].voter_id;
+    showAlertDialog({
+      description: `Do you want to delete this Voter(Voter Id : ${voterId})?`,
+      agreeCallback: async () => {
+        showLoading();
+        await handleDelete(id);
+        hideLoading();
+      },
+    });
   };
 
   const handleEdit = (id) => {
@@ -209,6 +239,26 @@ const ViewVotersList = ({ voter, filterValues, showAlert, getAllVotersSurvey, ac
       navigate("/voter-registration", {
         state: { voterData: voter.data[index] },
       });
+    }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      setLoading(true);
+      // console.log("deleteUserPk",deleteUserPk);
+      // var index = voter.data.findIndex((e) => e.voter_pkk == id);
+      console.log("voter_pkk", id);
+      console.log("voter", voter);
+
+      const response = await ApiServices.deleteRequest(`${deleteVotersById + id}`);
+      console.log(response);
+      showAlert({ text: "Voter Deleted Successfully", color: "success" });
+      await getAllVotersSurvey({ ...filterValues }, 1, 50);
+      setLoading(false);
+    } catch (error) {
+      console.error(error);
+      showAlert({ text: "Failed to delete Voter", color: "danger" });
+      setLoading(false);
     }
   };
 
@@ -311,9 +361,13 @@ const ViewVotersList = ({ voter, filterValues, showAlert, getAllVotersSurvey, ac
               <SearchByFilter ref={filterRef} showPartNo={false} showVillage={false} showOtherFilters={false} onChanged={(value) => setAssignValues(value)} showSearchButton={false} />
 
               <Grid item xs={12} md={6} lg={3}>
-                <LoadingButton type="submit" loading={isLoading} onClick={handleSubmit} variant="contained">
-                  Assign Sachivalayam
-                </LoadingButton>
+                <Tooltip title={pageActions.approved_perm != 1 ? "You don't have access to Assign Sachivalayam" : ""}>
+                  <span>
+                    <LoadingButton type="submit" loading={isLoading} onClick={handleSubmit} variant="contained" disabled={pageActions.approved_perm != 1}>
+                      Assign Sachivalayam
+                    </LoadingButton>
+                  </span>
+                </Tooltip>
               </Grid>
             </Grid>
           </Box>
@@ -335,4 +389,5 @@ const mapStateToProps = (state) => {
 export default connect(mapStateToProps, {
   showAlert,
   getAllVotersSurvey,
+  deleteVoterInRedux,
 })(ViewVotersList);

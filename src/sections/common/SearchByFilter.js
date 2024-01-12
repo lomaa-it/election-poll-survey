@@ -138,10 +138,10 @@ const SearchByFilter = forwardRef(
           console.log(defaultValues);
           setFormValues((state) => ({
             ...state,
-            mandal: defaultValues.mandal_pk ? common?.mandals.find((e) => e.mandal_pk === defaultValues.mandal_pk) : state.mandal,
-            division: defaultValues.division_pk ? common?.divisions.find((e) => e.division_pk === defaultValues.division_pk) : state.division,
-            sachivalayam: defaultValues.sachivalayam_pk ? common?.sachivalayams.find((e) => e.sachivalayam_pk === defaultValues.sachivalayam_pk) : state.sachivalayam,
-            village: defaultValues.village_pk ? common?.villages.find((e) => e.village_pk === defaultValues.village_pk) : state.village,
+            mandal: defaultValues.mandal_id ? common?.mandals.find((e) => e.mandal_id === defaultValues.mandal_id) : state.mandal,
+            division: defaultValues.division_id ? common?.divisions.find((e) => e.division_id === defaultValues.division_id) : state.division,
+            sachivalayam: defaultValues.sachivalayam_id ? common?.sachivalayams.find((e) => e.sachivalayam_id === defaultValues.sachivalayam_id) : state.sachivalayam,
+            village: defaultValues.village_id ? common?.villages.find((e) => e.village_id === defaultValues.village_id) : state.village,
             partno: defaultValues.part_no ? common?.parts.find((e) => e.part_no === defaultValues.part_no) : state.partno,
           }));
         }
@@ -215,7 +215,7 @@ const SearchByFilter = forwardRef(
         handleSubmit();
         setSubmitFlag(false);
       }
-    }, [formValues]);
+    }, [formValues, submitFlag]);
 
     const handleReset = () => {
       setFormValues((state) => ({

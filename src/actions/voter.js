@@ -118,3 +118,19 @@ export const updateVoterDetails = (id, data) => async (dispatch) => {
     return false;
   }
 };
+
+export const deleteVoterInRedux = (id, voter) => async (dispatch) => {
+  console.log("data", voter);
+  const newData = voter.data.filter((item) => {
+    return item.voter_pkk !== id;
+  });
+  console.log(newData);
+  console.log("id", id);
+  dispatch({
+    type: "VOTER_LOAD_SUCCESS",
+    payload: {
+      ...voter,
+      data: newData,
+    },
+  });
+};

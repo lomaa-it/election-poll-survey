@@ -64,13 +64,13 @@ const ViewVoterPage = ({ getAllVotersSurvey }) => {
 
         <ViewVotersList filterValues={filterValues} />
 
-        <Card sx={{ p: 3, marginTop: "10px" }}>
+        {/* <Card sx={{ p: 3, marginTop: "10px" }}>
           <Stack direction="row" spacing={2}>
             <Button variant="outlined">Add</Button>
 
             <Button variant="outlined">Upload</Button>
           </Stack>
-        </Card>
+        </Card> */}
       </Container>
     </Page>
   );

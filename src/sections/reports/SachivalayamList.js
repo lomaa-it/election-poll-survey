@@ -4,7 +4,9 @@ import { CheckBox } from "@mui/icons-material";
 import MUIDataTable from "mui-datatables";
 import { connect } from "react-redux";
 import { showAlert } from "../../actions/alert";
+import Tooltip from "@material-ui/core/Tooltip";
 import { LoadingButton } from "@mui/lab";
+
 import ViewUserPage from "../../pages/ViewUserPage";
 import Sachivalayam from "../../pages/Sachivalayam";
 import EditNoteIcon from "@mui/icons-material/EditNote";
@@ -15,8 +17,10 @@ import ApiServices from "../../services/apiservices";
 import CircularProgress from "@mui/material/CircularProgress";
 import { ROWS_PER_PAGE_OPTION } from "../../constants";
 import { is } from "date-fns/locale";
+import { useAlertContext } from "../../components/AlertProvider";
 
-const SachivalayamList = ({ loading, showAlert, sachivalayamList, handleEdit }) => {
+const SachivalayamList = ({ loading, showAlert, sachivalayamList, handleEdit, pageActions, handleDelete }) => {
+  const { showLoading, hideLoading, showAlertDialog } = useAlertContext();
   const columns = [
     {
       name: "district_name",
@@ -47,12 +51,21 @@ const SachivalayamList = ({ loading, showAlert, sachivalayamList, handleEdit }) 
 
           return (
             <Stack direction="row">
-              <IconButton color="primary" onClick={(e) => handleEdit(sachivalayamList[index])}>
-                <EditNoteIcon />
-              </IconButton>
-              {/* <IconButton color="error">
-                <DeleteForeverIcon />
-              </IconButton> */}
+              <Tooltip title={pageActions.edit_perm != 1 ? "You don't have access to edit" : ""}>
+                <span>
+                  <IconButton color="primary" onClick={(e) => handleEdit(sachivalayamList[index])} disabled={pageActions.edit_perm != 1}>
+                    <EditNoteIcon />
+                  </IconButton>
+                </span>
+              </Tooltip>
+
+              <Tooltip title={pageActions.delete_perm != 1 ? "You don't have access to delete" : ""}>
+                <span>
+                  <IconButton color="error" onClick={(e) => handleConfirmDelete(sachivalayamList[index])} disabled={pageActions.delete_perm != 1}>
+                    <DeleteForeverIcon />
+                  </IconButton>
+                </span>
+              </Tooltip>
             </Stack>
           );
         },
@@ -70,6 +83,17 @@ const SachivalayamList = ({ loading, showAlert, sachivalayamList, handleEdit }) 
     print: false,
     viewColumns: false,
     filter: false,
+  };
+
+  const handleConfirmDelete = (data) => {
+    showAlertDialog({
+      description: "Are you sure? Do you want to delete this sachivalayam?",
+      agreeCallback: async () => {
+        showLoading();
+        await handleDelete(data);
+        hideLoading();
+      },
+    });
   };
 
   // update details

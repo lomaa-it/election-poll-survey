@@ -16,6 +16,7 @@ import { FormProvider, RHFTextField } from "../components/hook-form";
 import SearchByFilter from "../sections/common/SearchByFilter";
 import { phoneRegExp } from "../constants";
 import ApiServices from "../services/apiservices";
+import Tooltip from "@material-ui/core/Tooltip";
 
 const PRIORITY1 = [33, 34, 35, 36, 37, 38];
 const PRIORITY2 = [34, 35, 36, 37, 38];
@@ -23,6 +24,10 @@ const PRIORITY3 = [35, 36, 37, 38];
 const PRIORITY4 = [36, 37, 38];
 
 const UserRegistrationPage = ({ account, common, showAlert }) => {
+  const userPermission = account.user && account.user.permissions ? account.user.permissions : [];
+  const pageActions = userPermission.filter((p) => p.page_id === 134)[0];
+  console.log("pageActions1", pageActions);
+
   const props = useLocation().state;
   const navigate = useNavigate();
   const filterRef = useRef(null);
@@ -55,11 +60,11 @@ const UserRegistrationPage = ({ account, common, showAlert }) => {
     age: props?.userData?.age ?? "",
     email: props?.userData?.email ?? "",
     designation_id: props?.userData?.designation_id ?? "",
-    mandal_pk: props?.userData?.mandal_pk ?? "",
-    division_pk: props?.userData?.division_pk ?? "",
-    sachivalayam_pk: props?.userData?.sachivalayam_pk ?? "",
+    mandal_id: props?.userData?.mandal_id ?? "",
+    division_id: props?.userData?.division_id ?? "",
+    sachivalayam_id: props?.userData?.sachivalayam_id ?? "",
     part_no: props?.userData?.part_no ?? null,
-    village_pk: props?.userData?.village_pk ?? null,
+    village_id: props?.userData?.village_id ?? null,
   };
 
   const methods = useForm({
@@ -246,9 +251,13 @@ const UserRegistrationPage = ({ account, common, showAlert }) => {
           </Card>
 
           <Box sx={{ pt: 2, textAlign: "end" }}>
-            <LoadingButton type="submit" variant="contained" loading={isLoading}>
-              Submit
-            </LoadingButton>
+            <Tooltip title={pageActions.add_perm != 1 ? "You don't have access to Create User" : ""}>
+              <span>
+                <LoadingButton type="submit" variant="contained" loading={isLoading} disabled={pageActions.add_perm != 1}>
+                  Submit
+                </LoadingButton>
+              </span>
+            </Tooltip>
           </Box>
 
           {/* <Card sx={{ p: 3, mt: 1 }}>

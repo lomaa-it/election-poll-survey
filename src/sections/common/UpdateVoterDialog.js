@@ -292,32 +292,32 @@ const UpdateVoterDialog = ({ account, common, voterData, showAlert, updateVoterD
                       {
                         label: "Neutral",
                         value: PARTY_ID.NEUTRAL,
-                        custom: <NeutralRadio fontSize={22} disabled={pageActions.edit_perm != 1} />,
+                        custom: <NeutralRadio fontSize={22} disabled={pageActions.survey_perm != 1} />,
                       },
                       {
                         label: "YSRCP",
                         value: PARTY_ID.YSRCP,
-                        custom: <YCPRadio fontSize={22} disabled={pageActions.edit_perm != 1} />,
+                        custom: <YCPRadio fontSize={22} disabled={pageActions.survey_perm != 1} />,
                       },
                       {
                         label: "TDP",
                         value: PARTY_ID.TDP,
-                        custom: <TDPRadio fontSize={22} disabled={pageActions.edit_perm != 1} />,
+                        custom: <TDPRadio fontSize={22} disabled={pageActions.survey_perm != 1} />,
                       },
                       {
                         label: "JSP",
                         value: PARTY_ID.JANASENA,
-                        custom: <JSPRadio fontSize={22} disabled={pageActions.edit_perm != 1} />,
+                        custom: <JSPRadio fontSize={22} disabled={pageActions.survey_perm != 1} />,
                       },
                       {
                         label: "Others",
                         value: PARTY_ID.BJP,
-                        custom: <CongressRadio fontSize={22} disabled={pageActions.edit_perm != 1} />,
+                        custom: <CongressRadio fontSize={22} disabled={pageActions.survey_perm != 1} />,
                       },
                       {
                         label: "Not Traced",
                         value: PARTY_ID.CONGRESS,
-                        custom: <BJPRadio fontSize={22} disabled={pageActions.edit_perm != 1} />,
+                        custom: <BJPRadio fontSize={22} disabled={pageActions.survey_perm != 1} />,
                       },
                       // {
                       //   label: "Others",
@@ -336,9 +336,9 @@ const UpdateVoterDialog = ({ account, common, voterData, showAlert, updateVoterD
             <Button onClick={handleClose} variant="contained" color="error">
               Cancel
             </Button>
-            <Tooltip title={pageActions.edit_perm != 1 ? "You don't have access to submit" : ""}>
+            <Tooltip title={pageActions.survey_perm != 1 ? "You don't have access to submit" : ""}>
               <span>
-                <LoadingButton type="submit" variant="contained" loading={isLoading} disabled={pageActions.edit_perm != 1}>
+                <LoadingButton type="submit" variant="contained" loading={isLoading} disabled={pageActions.survey_perm != 1}>
                   Submit
                 </LoadingButton>
               </span>

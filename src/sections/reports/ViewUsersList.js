@@ -10,6 +10,7 @@ import { LoadingButton } from "@mui/lab";
 import instance from "../../utils/axios";
 import { deleteUserById, postRequest, sendCredsToUsersRoute } from "../../utils/apis";
 
+import Tooltip from "@material-ui/core/Tooltip";
 // pop up
 
 import Dialog from "@mui/material/Dialog";
@@ -25,6 +26,9 @@ import { useAlertContext } from "../../components/AlertProvider";
 //
 
 const ViewUsersList = ({ user, showAlert, checkOrUncheckUser, deleteUserInRedux, clearUserReducer, account }) => {
+  const userPermission = account.user && account.user.permissions ? account.user.permissions : [];
+  const pageActions = userPermission.filter((p) => p.page_id === 135)[0];
+  console.log("pageActions1", pageActions);
   const { showLoading, hideLoading, showAlertDialog } = useAlertContext();
 
   const navigate = useNavigate();
@@ -128,14 +132,22 @@ const ViewUsersList = ({ user, showAlert, checkOrUncheckUser, deleteUserInRedux,
               }}
             >
               <>
-                <IconButton color="primary" onClick={() => handleEdit(value)}>
-                  <EditNoteIcon />
-                </IconButton>
+                <Tooltip title={pageActions.edit_perm != 1 ? "You don't have access to edit" : ""}>
+                  <span>
+                    <IconButton color="primary" onClick={() => handleEdit(value)} disabled={pageActions.edit_perm != 1}>
+                      <EditNoteIcon />
+                    </IconButton>
+                  </span>
+                </Tooltip>
                 <>
                   {tableMeta.rowData[5] !== account.user.desgination_name ? (
-                    <IconButton color="error" onClick={() => handleConfirmDelete(value)}>
-                      <DeleteForeverIcon />
-                    </IconButton>
+                    <Tooltip title={pageActions.delete_perm != 1 ? "You don't have access to delete" : ""}>
+                      <span>
+                        <IconButton color="error" onClick={() => handleConfirmDelete(value)} disabled={pageActions.delete_perm != 1}>
+                          <DeleteForeverIcon />
+                        </IconButton>
+                      </span>
+                    </Tooltip>
                   ) : null}
 
                   <Dialog
@@ -347,9 +359,13 @@ const ViewUsersList = ({ user, showAlert, checkOrUncheckUser, deleteUserInRedux,
 
             <Grid container spacing={2} alignItems="center">
               <Grid item xs={12} md={6} lg={6}>
-                <LoadingButton loading={isLoading} variant="outlined" onClick={handleSubmit}>
-                  Send Login Credentials
-                </LoadingButton>
+                <Tooltip title={pageActions.approved_perm != 1 ? "You don't have access to Send Login Credentials" : ""}>
+                  <span>
+                    <LoadingButton loading={isLoading} variant="outlined" onClick={handleSubmit} disabled={pageActions.approved_perm != 1}>
+                      Send Login Credentials
+                    </LoadingButton>
+                  </span>
+                </Tooltip>
               </Grid>
             </Grid>
           </Box>

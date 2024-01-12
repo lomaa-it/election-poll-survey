@@ -62,10 +62,10 @@ const OpinionPollSurveyList = forwardRef(({ isUser, voter, account, showAlert, c
               <UpdateVoterDialog voterData={voter.data[index]} isActive={isActive} pageActions={pageActions} />
 
               {voter.data[index].opinionparty == PARTY_ID.NEUTRAL && (
-                <Tooltip title={pageActions.add_perm != 1 ? "You don't have access to create" : ""}>
+                <Tooltip title={pageActions.survey_perm != 1 ? "You don't have access to create" : ""}>
                   <span>
                     <IconButton
-                      disabled={pageActions.add_perm != 1}
+                      disabled={pageActions.survey_perm != 1}
                       onClick={() => handleEdit(voter.data[index])}
                       sx={{
                         p: 0,
@@ -204,13 +204,13 @@ const OpinionPollSurveyList = forwardRef(({ isUser, voter, account, showAlert, c
                 var data = tableMeta.rowData;
                 var partyId = PARTY_ID.NEUTRAL;
                 return (
-                  <Tooltip title={pageActions.edit_perm != 1 ? "You don't have access to select" : ""}>
+                  <Tooltip title={pageActions.survey_perm != 1 ? "You don't have access to select" : ""}>
                     <span>
                       <NeutralRadio
                         sx={{
                           p: 0,
                         }}
-                        disabled={pageActions.edit_perm != 1}
+                        disabled={pageActions.survey_perm != 1}
                         checked={value == partyId}
                         onChange={() => {
                           handleChange(data[0], partyId);
@@ -230,13 +230,13 @@ const OpinionPollSurveyList = forwardRef(({ isUser, voter, account, showAlert, c
                 var data = tableMeta.rowData;
                 var partyId = PARTY_ID.YSRCP;
                 return (
-                  <Tooltip title={pageActions.edit_perm != 1 ? "You don't have access to select" : ""}>
+                  <Tooltip title={pageActions.survey_perm != 1 ? "You don't have access to select" : ""}>
                     <span>
                       <YCPRadio
                         sx={{
                           p: 0,
                         }}
-                        disabled={pageActions.edit_perm != 1}
+                        disabled={pageActions.survey_perm != 1}
                         checked={value == partyId}
                         onChange={() => handleChange(data[0], partyId)}
                       />
@@ -254,13 +254,13 @@ const OpinionPollSurveyList = forwardRef(({ isUser, voter, account, showAlert, c
                 var data = tableMeta.rowData;
                 var partyId = PARTY_ID.TDP;
                 return (
-                  <Tooltip title={pageActions.edit_perm != 1 ? "You don't have access to select" : ""}>
+                  <Tooltip title={pageActions.survey_perm != 1 ? "You don't have access to select" : ""}>
                     <span>
                       <TDPRadio
                         sx={{
                           p: 0,
                         }}
-                        disabled={pageActions.edit_perm != 1}
+                        disabled={pageActions.survey_perm != 1}
                         checked={value == partyId}
                         onChange={() => handleChange(data[0], partyId)}
                       />
@@ -278,13 +278,13 @@ const OpinionPollSurveyList = forwardRef(({ isUser, voter, account, showAlert, c
                 var data = tableMeta.rowData;
                 var partyId = PARTY_ID.JANASENA;
                 return (
-                  <Tooltip title={pageActions.edit_perm != 1 ? "You don't have access to select" : ""}>
+                  <Tooltip title={pageActions.survey_perm != 1 ? "You don't have access to select" : ""}>
                     <span>
                       <JSPRadio
                         sx={{
                           p: 0,
                         }}
-                        disabled={pageActions.edit_perm != 1}
+                        disabled={pageActions.survey_perm != 1}
                         checked={value == partyId}
                         onChange={() => handleChange(data[0], partyId)}
                       />
@@ -302,13 +302,13 @@ const OpinionPollSurveyList = forwardRef(({ isUser, voter, account, showAlert, c
                 var data = tableMeta.rowData;
                 var partyId = PARTY_ID.BJP;
                 return (
-                  <Tooltip title={pageActions.edit_perm != 1 ? "You don't have access to select" : ""}>
+                  <Tooltip title={pageActions.survey_perm != 1 ? "You don't have access to select" : ""}>
                     <span>
                       <CongressRadio
                         sx={{
                           p: 0,
                         }}
-                        disabled={pageActions.edit_perm != 1}
+                        disabled={pageActions.survey_perm != 1}
                         checked={value == partyId}
                         onChange={() => handleChange(data[0], partyId)}
                       />
@@ -326,13 +326,13 @@ const OpinionPollSurveyList = forwardRef(({ isUser, voter, account, showAlert, c
                 var data = tableMeta.rowData;
                 var partyId = PARTY_ID.CONGRESS;
                 return (
-                  <Tooltip title={pageActions.edit_perm != 1 ? "You don't have access to select" : ""}>
+                  <Tooltip title={pageActions.survey_perm != 1 ? "You don't have access to select" : ""}>
                     <span>
                       <BJPRadio
                         sx={{
                           p: 0,
                         }}
-                        disabled={pageActions.edit_perm != 1}
+                        disabled={pageActions.survey_perm != 1}
                         checked={value == partyId}
                         onChange={() => handleChange(data[0], partyId)}
                       />
