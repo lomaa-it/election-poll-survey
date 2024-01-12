@@ -26,7 +26,7 @@ const Nav = ({ account, openNav, onCloseNav }) => {
 
   const isDesktop = useResponsive("up", "lg");
 
-  const userDesignation = account.user?.desgination_name;
+  // const userDesignation = account.user?.desgination_name;
 
   // useEffect(() => {
   //   let navbar = [];
@@ -45,7 +45,6 @@ const Nav = ({ account, openNav, onCloseNav }) => {
 
   useEffect(() => {
     let navbar = getAccessNavConfig(account.user.permissions);
-    console.log("navbar123456", navbar);
     setNavConfig(navbar);
   }, []);
 

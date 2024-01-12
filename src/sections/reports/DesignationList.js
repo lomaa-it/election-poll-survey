@@ -1,24 +1,17 @@
 import { useEffect, useState } from "react";
 import { Typography, Card, Stack, Grid, Switch, Divider, Box, Chip, TextField, FormControlLabel, Popover, Button, MenuItem, IconButton } from "@mui/material";
-import { CheckBox } from "@mui/icons-material";
-import MUIDataTable from "mui-datatables";
-import { connect } from "react-redux";
-import { showAlert } from "../../actions/alert";
-import { LoadingButton } from "@mui/lab";
-import ViewUserPage from "../../pages/ViewUserPage";
-import Sachivalayam from "../../pages/Sachivalayam";
+
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import CustomMuiDataTable from "../../components/CustomMuiDataTable";
 import Tooltip from "@material-ui/core/Tooltip";
 import CircularProgress from "@mui/material/CircularProgress";
-import { set } from "date-fns";
-import { createDesignationsRoute } from "../../utils/apis";
-import ApiServices from "../../services/apiservices";
 import { ROWS_PER_PAGE_OPTION } from "../../constants";
-import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
+import { useAlertContext } from "../../components/AlertProvider";
 
-const DesignationList = ({ loading, showAlert, designationList, handleEdit, pageActions, handleDelete }) => {
+const DesignationList = ({ loading, designationList, handleEdit, pageActions, handleDelete }) => {
+  const { showLoading, hideLoading, showAlertDialog } = useAlertContext();
+
   const columns = [
     { name: "lookup_valuename", label: "Designation Name" },
     {
@@ -36,9 +29,10 @@ const DesignationList = ({ loading, showAlert, designationList, handleEdit, page
                   </IconButton>
                 </span>
               </Tooltip>
+
               <Tooltip title={pageActions.delete_perm != 1 ? "You don't have access to delete" : ""}>
                 <span>
-                  <IconButton color="error" onClick={(e) => handleDelete(designationList[index])} disabled={pageActions.delete_perm != 1}>
+                  <IconButton color="error" onClick={(e) => handleConfirmDelete(designationList[index])} disabled={pageActions.delete_perm != 1}>
                     <DeleteForeverIcon />
                   </IconButton>
                 </span>
@@ -60,6 +54,17 @@ const DesignationList = ({ loading, showAlert, designationList, handleEdit, page
     print: false,
     viewColumns: false,
     filter: false,
+  };
+
+  const handleConfirmDelete = (data) => {
+    showAlertDialog({
+      description: "Are you sure? Do you want to delete this designation?",
+      agreeCallback: async () => {
+        showLoading();
+        await handleDelete(data);
+        hideLoading();
+      },
+    });
   };
 
   // const handleSubmit = async () => {
@@ -108,13 +113,4 @@ const DesignationList = ({ loading, showAlert, designationList, handleEdit, page
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    batches: state.common,
-    students: state.management,
-  };
-};
-
-export default connect(mapStateToProps, {
-  showAlert,
-})(DesignationList);
+export default DesignationList;

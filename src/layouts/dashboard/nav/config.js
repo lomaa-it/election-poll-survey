@@ -2,10 +2,10 @@ import Iconify from "../../../components/Iconify";
 import LsService from "../../../services/localstorage";
 
 const user = LsService.getCurrentUser();
-console.log("user123", user);
+// console.log("user123", user);
 const userPermission = user && user.permissions ? user.permissions : [];
 
-console.log("userPermission", userPermission);
+// console.log("userPermission", userPermission);
 
 const userNavConfig = [
   {
@@ -602,7 +602,7 @@ let administrationMenu = {
 
 const accessNavConfig = userPermission
   .map((item) => {
-    console.log("item", item);
+    // console.log("item", item);
     if (item.page_access == 1 && item.page_id == 113) {
       return {
         title: "Survey Dashboard",
@@ -846,31 +846,32 @@ const accessNavConfig = userPermission
 
 const getAccessNavConfig = (permissions) => {
   var filteredConfig = mainNavConfig.filter((item) => {
-    console.log("item", item);
+    // console.log("item", item);
 
     if (item.children?.length > 0) {
-      // Filter and modify children
-      item.children = item.children.filter((childItem) => {
+      var filteredChildren = item.children.filter((childItem) => {
         var index = permissions.findIndex((x) => x.page_id === childItem.page_id);
 
         if (index === -1 || permissions[index].page_access !== 1) {
-          return false; // Exclude child item
+          return false;
         }
 
-        return true; // Include child item
+        return true;
       });
 
-      return item.children.length > 0; // Include parent item if it has filtered children
+      return filteredChildren.length > 0;
     } else {
       var index = permissions.findIndex((x) => x.page_id === item.page_id);
 
       if (index === -1 || permissions[index].page_access !== 1) {
-        return false; // Exclude item without children
+        return false;
       }
 
-      return true; // Include item without children
+      return true;
     }
   });
+
+  console.log("filtered", mainNavConfig);
 
   return filteredConfig;
 };

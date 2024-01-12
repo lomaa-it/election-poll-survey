@@ -32,6 +32,7 @@ const CustomCheckboxWithLabel = ({ label, ...props }) => (
 const AccessMangementList = ({ common, other, showAlert, getAllAccessPermissions, updateAccessPermission, clearOtherReducer }) => {
   const [loading, setLoading] = useState(false);
   const [designation, setDesignation] = useState(common.designation[0]?.value || "");
+  const [searchedDes, setSearchedDes] = useState("");
 
   useEffect(() => {
     handleSearch();
@@ -96,7 +97,7 @@ const AccessMangementList = ({ common, other, showAlert, getAllAccessPermissions
 
     {
       name: `access_permissions_pk`,
-      label: common.designation?.find((e) => e.value)?.label || "Designation",
+      label: common.designation?.find((e) => e.value == searchedDes)?.label || "Designation",
       options: {
         customBodyRender: (value, tableMeta, updateValue) => {
           var pageId = tableMeta.rowData[0];
@@ -105,7 +106,7 @@ const AccessMangementList = ({ common, other, showAlert, getAllAccessPermissions
 
           var data = {
             page_id: pageId,
-            design_id: designation,
+            design_id: searchedDes,
             ...accessData,
           };
 
@@ -146,6 +147,7 @@ const AccessMangementList = ({ common, other, showAlert, getAllAccessPermissions
     }
 
     setLoading(true);
+    setSearchedDes(designation);
     await getAllAccessPermissions(designation);
     setLoading(false);
   };
