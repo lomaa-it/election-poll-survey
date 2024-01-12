@@ -1,4 +1,4 @@
-const minutes = 30999;
+const minutes = 60;
 
 class LsService {
   ls = window.sessionStorage;
