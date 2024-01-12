@@ -95,7 +95,7 @@ const SearchByFilter = forwardRef(
         }
 
         if (account?.user.division_pk != null) {
-          var initialDivision = common?.divisions.filter((e) => e.mandal_id == initialMandal?.mandal_pk)[0];
+          var initialDivision = common?.divisions.filter((e) => e.mandal_id == initialMandal?.mandal_id)[0];
           if (common?.divisions.length > 0) {
             setFormValues((state) => ({
               ...state,
@@ -105,7 +105,7 @@ const SearchByFilter = forwardRef(
         }
 
         if (account?.user.sachivalayam_pk != null) {
-          var initialSachivalayam = common?.sachivalayams.filter((e) => e.division_id == initialDivision?.division_pk)[0];
+          var initialSachivalayam = common?.sachivalayams.filter((e) => e.division_id == initialDivision?.division_id)[0];
           console.log("initialSachivalayam", initialSachivalayam);
           if (common?.sachivalayams.length > 0) {
             setFormValues((state) => ({
@@ -115,19 +115,18 @@ const SearchByFilter = forwardRef(
           }
         }
 
-        var initialPart = common?.parts.filter((e) => e.sachivalayam_id == initialSachivalayam?.sachivalayam_pk)[0];
-        console.log("initialPart", initialPart);
-        if (account?.user.part_no == null) {
-          setFormValues((state) => ({ ...state, partno: account?.user.part_no }));
-        } else {
+        if (account?.user.part_no != null) {
+          var initialPart = common?.parts.filter((e) => e.sachivalayam_id == initialSachivalayam?.sachivalayam_id)[0];
+          console.log("initialPart", initialPart);
           if (common?.parts.length > 0) {
-            setFormValues((state) => ({ ...state, partno: initialPart ?? null }));
+            setFormValues((state) => ({
+              ...state,
+              partno: initialPart ?? null,
+            }));
           }
         }
 
-        // var initialVillage = common?.villages.filter(
-        //   (e) => e.part_no == initialPart?.part_no
-        // )[0];
+        // var initialVillage = common?.villages.filter((e) => e.part_no == initialPart?.part_no)[0];
         // if (common?.villages.length > 0) {
         //   setFormValues((state) => ({
         //     ...state,
@@ -303,7 +302,23 @@ const SearchByFilter = forwardRef(
           </Grid>
         )}
 
-        {showPartNo && account?.user?.desgination_name != "MLA" && (
+        {showPartNo && (
+          <Grid item xs={12} md={6} lg={lg}>
+            <RHFAutoComplete
+              name="partno"
+              label="Select Part/Booth No"
+              value={formValues.partno}
+              options={account?.user?.desgination_name === "MLA" && formValues?.mandal === null ? common?.parts : common?.parts.filter((e) => e.sachivalayam_id === formValues?.sachivalayam?.sachivalayam_id)}
+              getOptionLabel={(option) => String(option.part_no)}
+              onChange={handleChange}
+              disabled={account.user.part_no != null}
+              error={!!errors.partno}
+              helperText={errors.partno}
+            />
+          </Grid>
+        )}
+
+        {/* {showPartNo && account?.user?.desgination_name != "MLA" && (
           <Grid item xs={12} md={6} lg={lg}>
             <RHFAutoComplete
               name="partno"
@@ -335,7 +350,6 @@ const SearchByFilter = forwardRef(
           </Grid>
         )}
 
-        {/* /// show in mla login and it shoukd display all part no's */}
         {showPartNo && account?.user?.desgination_name == "MLA" && formValues?.mandal === null && (
           <Grid item xs={12} md={6} lg={lg}>
             <RHFAutoComplete
@@ -349,7 +363,7 @@ const SearchByFilter = forwardRef(
               helperText={errors.partno}
             />
           </Grid>
-        )}
+        )} */}
 
         {showVillage && (
           <Grid item xs={12} md={6} lg={addVoterVillageLg == undefined ? lg : addVoterVillageLg}>

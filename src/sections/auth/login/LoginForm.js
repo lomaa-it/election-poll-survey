@@ -17,6 +17,7 @@ import { getAuthPermissionListRoute, getPermissionListRoute, loginRoute } from "
 import { he } from "date-fns/locale";
 import CachedIcon from "@mui/icons-material/Cached";
 import ApiServices from "../../../services/apiservices";
+import { getAccessNavConfig } from "../../../layouts/dashboard/nav/config";
 
 const LoginForm = ({ showAlert, authSuccess }) => {
   const navigate = useNavigate();
@@ -122,14 +123,12 @@ const LoginForm = ({ showAlert, authSuccess }) => {
         } else {
           authSuccess(userData);
 
-          if (LOGIN_TYPES[0] == userData.desgination_name) {
-            navigate("/dashboard", { replace: true });
-          } else if (LOGIN_TYPES[7] == userData.desgination_name) {
-            navigate("/dashboard", { replace: true });
-          } else if (LOGIN_TYPES[8] == userData.desgination_name) {
-            navigate("/user-management/view-user", { replace: true });
+          const accessPages = getAccessNavConfig(userData.permissions);
+          if (accessPages.length > 0) {
+            const accessPath = accessPages[0].children ? accessPages[0].children[0].path : accessPages[0].path;
+            navigate(accessPath, { replace: true });
           } else {
-            navigate("/user/opinionsurvey/survey", { replace: true });
+            console.log("No pages available");
           }
         }
 

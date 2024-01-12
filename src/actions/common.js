@@ -84,15 +84,15 @@ export const getAllCommonData = (user) => async (dispatch) => {
     };
 
     if (user.mandal_pk != null) {
-      filtersData["mandals"] = mandalsResponseData.filter((e) => e.mandal_pk == user.mandal_pk);
+      filtersData["mandals"] = mandalsResponseData.filter((e) => e.mandal_id == user.mandal_pk);
     }
 
     if (user.division_pk != null) {
-      filtersData["divisions"] = divisionsResponseData.filter((e) => e.division_pk == user.division_pk);
+      filtersData["divisions"] = divisionsResponseData.filter((e) => e.division_id == user.division_pk);
     }
 
     if (user.sachivalayam_pk != null) {
-      filtersData["sachivalayams"] = sachivalayamResponseData.filter((e) => e.sachivalayam_pk == user.sachivalayam_pk);
+      filtersData["sachivalayams"] = sachivalayamResponseData.filter((e) => e.sachivalayam_id == user.sachivalayam_pk);
     }
 
     if (user.part_no != null) {
