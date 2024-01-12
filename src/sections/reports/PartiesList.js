@@ -16,8 +16,10 @@ import { set } from "date-fns";
 import { createPartyRoute } from "../../utils/apis";
 import ApiServices from "../../services/apiservices";
 import { ROWS_PER_PAGE_OPTION } from "../../constants";
+import { useAlertContext } from "../../components/AlertProvider";
 
 const PartiesList = ({ loading, showAlert, partiesList, handleEdit, pageActions, handleDelete }) => {
+  const { showLoading, hideLoading, showAlertDialog } = useAlertContext();
   const columns = [
     { name: "lookup_sequence", label: "Sequence Number" },
     { name: "lookup_valuename", label: "Party Name" },
@@ -40,7 +42,7 @@ const PartiesList = ({ loading, showAlert, partiesList, handleEdit, pageActions,
               </Tooltip>
               <Tooltip title={pageActions.delete_perm != 1 ? "You don't have access to delete" : ""}>
                 <span>
-                  <IconButton color="error" onClick={(e) => handleDelete(partiesList[index])} disabled={pageActions.delete_perm != 1}>
+                  <IconButton color="error" onClick={(e) => handleConfirmDelete(partiesList[index])} disabled={pageActions.delete_perm != 1}>
                     <DeleteForeverIcon />
                   </IconButton>
                 </span>
@@ -62,6 +64,18 @@ const PartiesList = ({ loading, showAlert, partiesList, handleEdit, pageActions,
     print: false,
     viewColumns: false,
     filter: false,
+  };
+
+
+  const handleConfirmDelete = (data) => {
+    showAlertDialog({
+      description: "Are you sure? Do you want to delete this party?",
+      agreeCallback: async () => {
+        showLoading();
+        await handleDelete(data);
+        hideLoading();
+      },
+    });
   };
 
   // const handleSubmit = async () => {

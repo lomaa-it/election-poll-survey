@@ -5,6 +5,8 @@ import MUIDataTable from "mui-datatables";
 import { connect } from "react-redux";
 import { showAlert } from "../../actions/alert";
 import { LoadingButton } from "@mui/lab";
+
+import Tooltip from "@material-ui/core/Tooltip";
 import ViewUserPage from "../../pages/ViewUserPage";
 import Sachivalayam from "../../pages/Sachivalayam";
 import EditNoteIcon from "@mui/icons-material/EditNote";
@@ -16,8 +18,10 @@ import CustomMuiDataTable from "../../components/CustomMuiDataTable";
 import ApiServices from "../../services/apiservices";
 import CircularProgress from "@mui/material/CircularProgress";
 import { ROWS_PER_PAGE_OPTION } from "../../constants";
+import { useAlertContext } from "../../components/AlertProvider";
 
-const MandalsList = ({ loading, showAlert, mandalList, handleEdit }) => {
+const MandalsList = ({ loading, showAlert, mandalList, handleEdit, pageActions, handleDelete }) => {
+  const { showLoading, hideLoading, showAlertDialog } = useAlertContext();
   const columns = [
     {
       name: "district_name",
@@ -41,12 +45,21 @@ const MandalsList = ({ loading, showAlert, mandalList, handleEdit }) => {
 
           return (
             <Stack direction="row">
-              <IconButton color="primary" onClick={(e) => handleEdit(mandalList[index])}>
-                <EditNoteIcon />
-              </IconButton>
-              {/* <IconButton color="error">
-                <DeleteForeverIcon />
-              </IconButton> */}
+              <Tooltip title={pageActions.edit_perm != 1 ? "You don't have access to edit" : ""}>
+                <span>
+                  <IconButton color="primary" onClick={(e) => handleEdit(mandalList[index])} disabled={pageActions.edit_perm != 1}>
+                    <EditNoteIcon />
+                  </IconButton>
+                </span>
+              </Tooltip>
+
+              <Tooltip title={pageActions.delete_perm != 1 ? "You don't have access to delete" : ""}>
+                <span>
+                  <IconButton color="error" onClick={(e) => handleConfirmDelete(mandalList[index])} disabled={pageActions.delete_perm != 1}>
+                    <DeleteForeverIcon />
+                  </IconButton>
+                </span>
+              </Tooltip>
             </Stack>
           );
         },
@@ -64,6 +77,17 @@ const MandalsList = ({ loading, showAlert, mandalList, handleEdit }) => {
     print: false,
     viewColumns: false,
     filter: false,
+  };
+
+  const handleConfirmDelete = (data) => {
+    showAlertDialog({
+      description: "Are you sure? Do you want to delete this mandal?",
+      agreeCallback: async () => {
+        showLoading();
+        await handleDelete(data);
+        hideLoading();
+      },
+    });
   };
 
   // // update details

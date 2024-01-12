@@ -16,8 +16,10 @@ import { set } from "date-fns";
 import { createDesignationsRoute } from "../../utils/apis";
 import ApiServices from "../../services/apiservices";
 import { ROWS_PER_PAGE_OPTION } from "../../constants";
+import { useAlertContext } from "../../components/AlertProvider";
 
 const ReligionList = ({ loading, showAlert, religionList, handleEdit, pageActions, handleDelete }) => {
+  const { showLoading, hideLoading, showAlertDialog } = useAlertContext();
   const columns = [
     { name: "lookup_valuename", label: "Religion Name" },
     {
@@ -38,7 +40,7 @@ const ReligionList = ({ loading, showAlert, religionList, handleEdit, pageAction
               </Tooltip>
               <Tooltip title={pageActions.delete_perm != 1 ? "You don't have access to delete" : ""}>
                 <span>
-                  <IconButton color="error" onClick={(e) => handleDelete(religionList[index])} disabled={pageActions.delete_perm != 1}>
+                  <IconButton color="error" onClick={(e) => handleConfirmDelete(religionList[index])} disabled={pageActions.delete_perm != 1}>
                     <DeleteForeverIcon />
                   </IconButton>
                 </span>
@@ -60,6 +62,17 @@ const ReligionList = ({ loading, showAlert, religionList, handleEdit, pageAction
     print: false,
     viewColumns: false,
     filter: false,
+  };
+
+  const handleConfirmDelete = (data) => {
+    showAlertDialog({
+      description: "Are you sure? Do you want to delete this religion?",
+      agreeCallback: async () => {
+        showLoading();
+        await handleDelete(data);
+        hideLoading();
+      },
+    });
   };
 
   // const handleSubmit = async () => {

@@ -9,12 +9,16 @@ import Button from "@mui/material/Button";
 import DistrictsList from "../sections/reports/DistrictsList";
 import { useEffect, useState, useRef } from "react";
 import { getAllDistrictsWithJoinRoute, getAllStatesRoute, createDistrictsRoute, getAllDistrictsRoute } from "../utils/apis";
-
+import Tooltip from "@material-ui/core/Tooltip";
 import { showAlert } from "../actions/alert";
 import ApiServices from "../services/apiservices";
 import { add } from "date-fns";
 
 const DistrictsPage = ({ dashboard, showAlert, account }) => {
+  const userPermission = account.user && account.user.permissions ? account.user.permissions : [];
+  const pageActions = userPermission.filter((p) => p.page_id === 143)[0];
+  console.log("pageActions1", pageActions);
+
   const [fetchLoading, setFetchLoading] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const [isEditState, setEditState] = useState(false);
@@ -84,6 +88,22 @@ const DistrictsPage = ({ dashboard, showAlert, account }) => {
       district_id: data.district_id,
       district_name: data.district_name,
     });
+  };
+
+  const handleDelete = async (data) => {
+    setLoading(true);
+    console.log("data852852852", data);
+    try {
+      await ApiServices.deleteRequest(createDistrictsRoute + data.district_id);
+      showAlert({ text: "District Deleted", color: "success" });
+      fecthDistrictData();
+      handleReset();
+    } catch (error) {
+      console.log(error);
+
+      showAlert({ text: "District Not Deleted", color: "error" });
+    }
+    setLoading(false);
   };
 
   const handleSubmit = async () => {
@@ -191,9 +211,13 @@ const DistrictsPage = ({ dashboard, showAlert, account }) => {
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
               {!isEditState && (
-                <LoadingButton loading={isLoading} onClick={handleSubmit} variant="contained">
-                  Add
-                </LoadingButton>
+                <Tooltip title={pageActions.add_perm != 1 ? "You don't have access to add" : ""}>
+                  <span>
+                    <LoadingButton loading={isLoading} onClick={handleSubmit} variant="contained" disabled={pageActions.add_perm != 1}>
+                      Add
+                    </LoadingButton>
+                  </span>
+                </Tooltip>
               )}
               {isEditState && (
                 <Stack direction="row" spacing={1}>
@@ -211,7 +235,7 @@ const DistrictsPage = ({ dashboard, showAlert, account }) => {
         </Card>
 
         <Box p={1} />
-        <DistrictsList loading={fetchLoading} districtsList={fetchedData.district} handleEdit={handleEdit} />
+        <DistrictsList pageActions={pageActions} loading={fetchLoading} districtsList={fetchedData.district} handleEdit={handleEdit} handleDelete={handleDelete} />
       </Container>
     </Page>
   );

@@ -2,6 +2,8 @@ import { Grid, Container, Typography, Box, TextField, Card, Stack, MenuItem } fr
 import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
+
+import Tooltip from "@material-ui/core/Tooltip";
 import Autocomplete from "@mui/material/Autocomplete";
 import ViewUsersList from "../sections/reports/ViewUsersList";
 import Button from "@mui/material/Button";
@@ -14,6 +16,10 @@ import { showAlert } from "../actions/alert";
 import ApiServices from "../services/apiservices";
 
 const MandalPage = ({ dashboard, showAlert, account }) => {
+  const userPermission = account.user && account.user.permissions ? account.user.permissions : [];
+  const pageActions = userPermission.filter((p) => p.page_id === 145)[0];
+  console.log("pageActions1", pageActions);
+
   const [fetchLoading, setFetchLoading] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const [isEditState, setEditState] = useState(false);
@@ -97,6 +103,22 @@ const MandalPage = ({ dashboard, showAlert, account }) => {
       mandal_id: data.mandal_id,
       mandal_name: data.mandal_name,
     });
+  };
+
+  const handleDelete = async (data) => {
+    setLoading(true);
+    console.log("data852852852", data);
+    try {
+      await ApiServices.deleteRequest(createMandalsRoute + data.mandal_id);
+      showAlert({ text: "Mandal Deleted", color: "success" });
+      fecthMandalData();
+      handleReset();
+    } catch (error) {
+      console.log(error);
+
+      showAlert({ text: "Mandal Not Deleted", color: "error" });
+    }
+    setLoading(false);
   };
 
   const handleSubmit = async () => {
@@ -270,9 +292,13 @@ const MandalPage = ({ dashboard, showAlert, account }) => {
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
               {!isEditState && (
-                <LoadingButton loading={isLoading} onClick={handleSubmit} variant="contained">
-                  Add
-                </LoadingButton>
+                <Tooltip title={pageActions.add_perm != 1 ? "You don't have access to add" : ""}>
+                  <span>
+                    <LoadingButton loading={isLoading} onClick={handleSubmit} variant="contained" disabled={pageActions.add_perm != 1}>
+                      Add
+                    </LoadingButton>
+                  </span>
+                </Tooltip>
               )}
               {isEditState && (
                 <Stack direction="row" spacing={1}>
@@ -290,7 +316,7 @@ const MandalPage = ({ dashboard, showAlert, account }) => {
         </Card>
 
         <Box p={1} />
-        <MandalsList loading={fetchLoading} mandalList={fetchedData.mandal} handleEdit={handleEdit} />
+        <MandalsList pageActions={pageActions} loading={fetchLoading} mandalList={fetchedData.mandal} handleEdit={handleEdit} handleDelete={handleDelete} />
       </Container>
     </Page>
   );

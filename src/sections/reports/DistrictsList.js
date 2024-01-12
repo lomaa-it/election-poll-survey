@@ -11,12 +11,15 @@ import EditNoteIcon from "@mui/icons-material/EditNote";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import CustomMuiDataTable from "../../components/CustomMuiDataTable";
 import CircularProgress from "@mui/material/CircularProgress";
+import Tooltip from "@material-ui/core/Tooltip";
 import { set } from "date-fns";
 import { createDistrictsRoute } from "../../utils/apis";
 import ApiServices from "../../services/apiservices";
 import { ROWS_PER_PAGE_OPTION } from "../../constants";
+import { useAlertContext } from "../../components/AlertProvider";
 
-const DistrictsList = ({ loading, showAlert, districtsList, handleEdit }) => {
+const DistrictsList = ({ loading, showAlert, districtsList, handleEdit, pageActions, handleDelete }) => {
+  const { showLoading, hideLoading, showAlertDialog } = useAlertContext();
   const columns = [
     {
       name: "district_name",
@@ -32,12 +35,21 @@ const DistrictsList = ({ loading, showAlert, districtsList, handleEdit }) => {
 
           return (
             <Stack direction="row">
-              <IconButton color="primary" onClick={(e) => handleEdit(districtsList[index])}>
-                <EditNoteIcon />
-              </IconButton>
-              {/* <IconButton color="error">
-                <DeleteForeverIcon />
-              </IconButton> */}
+              <Tooltip title={pageActions.edit_perm != 1 ? "You don't have access to edit" : ""}>
+                <span>
+                  <IconButton color="primary" onClick={(e) => handleEdit(districtsList[index])} disabled={pageActions.edit_perm != 1}>
+                    <EditNoteIcon />
+                  </IconButton>
+                </span>
+              </Tooltip>
+
+              <Tooltip title={pageActions.delete_perm != 1 ? "You don't have access to delete" : ""}>
+                <span>
+                  <IconButton color="error" onClick={(e) => handleConfirmDelete(districtsList[index])} disabled={pageActions.delete_perm != 1}>
+                    <DeleteForeverIcon />
+                  </IconButton>
+                </span>
+              </Tooltip>
             </Stack>
           );
         },
@@ -55,6 +67,17 @@ const DistrictsList = ({ loading, showAlert, districtsList, handleEdit }) => {
     print: false,
     viewColumns: false,
     filter: false,
+  };
+
+  const handleConfirmDelete = (data) => {
+    showAlertDialog({
+      description: "Are you sure? Do you want to delete this district?",
+      agreeCallback: async () => {
+        showLoading();
+        await handleDelete(data);
+        hideLoading();
+      },
+    });
   };
 
   // const handleSubmit = async () => {

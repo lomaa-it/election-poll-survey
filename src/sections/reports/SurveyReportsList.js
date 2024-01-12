@@ -10,6 +10,7 @@ import { BJPColor, CONGRESSColor, JSPColor, NETURALColor, OTHERColor, TDPColor, 
 import { searchFiltercolor } from "../../constants";
 import { useLocation } from "react-router-dom";
 import { RHFAutoComplete } from "../../components/hook-form";
+import { da } from "date-fns/locale";
 
 const SurveyReportsList = ({ dashboard, getOpinionResults, clearDashboardReducer, account, common }) => {
   const [filterValues, setFilterValues] = useState(null);
@@ -35,6 +36,14 @@ const SurveyReportsList = ({ dashboard, getOpinionResults, clearDashboardReducer
     };
 
     await getOpinionResults(jsonData);
+  };
+
+  const grandTotalForPercentage = (data) => {
+    let grandTotalValue = 0;
+    data.map((item) => {
+      grandTotalValue += parseFloat(item.neutral_percent) + parseFloat(item.ysrcp_percent) + parseFloat(item.tdp_percent) + parseFloat(item.janasena_percent) + parseFloat(item.others_percent) + parseFloat(item.not_traced_percent);
+    });
+    return (grandTotalValue / data.length).toFixed(2) + "%";
   };
 
   return (
@@ -119,8 +128,16 @@ const SurveyReportsList = ({ dashboard, getOpinionResults, clearDashboardReducer
 
           <Grid item xs={12} md={6}>
             <CustomizedTables
-              labels={["Neutral", "YCP", "TDP", "JSP", "Others", "Not Traced"]}
-              rows={dashboard.surveyReports2?.survey_results_by_constituency.map((item, index) => [item.neutral, item.ysrcp, item.tdp, item.janasena, item.others, item.not_traced])}
+              labels={["Neutral", "YCP", "TDP", "JSP", "Others", "Not Traced", "Total"]}
+              rows={dashboard.surveyReports2?.survey_results_by_constituency.map((item, index) => [
+                item.neutral,
+                item.ysrcp,
+                item.tdp,
+                item.janasena,
+                item.others,
+                item.not_traced,
+                parseInt(item.neutral) + parseInt(item.ysrcp) + parseInt(item.tdp) + parseInt(item.janasena) + parseInt(item.others) + parseInt(item.not_traced),
+              ])}
               total={[
                 dashboard.surveyReports2?.all_totals?.neutral_count ?? 0,
                 dashboard.surveyReports2?.all_totals?.ycp_count ?? 0,
@@ -128,6 +145,12 @@ const SurveyReportsList = ({ dashboard, getOpinionResults, clearDashboardReducer
                 dashboard.surveyReports2?.all_totals?.jsp_count ?? 0,
                 dashboard.surveyReports2?.all_totals?.others_count ?? 0,
                 dashboard.surveyReports2?.all_totals?.not_traced_count ?? 0,
+                dashboard.surveyReports2?.all_totals?.neutral_count +
+                  dashboard.surveyReports2?.all_totals?.ycp_count +
+                  dashboard.surveyReports2?.all_totals?.tdp_count +
+                  dashboard.surveyReports2?.all_totals?.jsp_count +
+                  dashboard.surveyReports2?.all_totals?.others_count +
+                  dashboard.surveyReports2?.all_totals?.not_traced_count,
               ]}
             />
           </Grid>
@@ -160,16 +183,17 @@ const SurveyReportsList = ({ dashboard, getOpinionResults, clearDashboardReducer
 
           <Grid item xs={12} md={6}>
             <CustomizedTables
-              labels={["Neutral", "YCP", "TDP", "JSP", "Others", "Not Traced"]}
-              rows={dashboard.surveyReports2?.survey_results_by_constituency.map((item, index) => [item.neutral_percent, item.ysrcp_percent, item.tdp_percent, item.janasena_percent, item.others_percent, item.not_traced_percent])}
-              total={[
-                dashboard.surveyReports2?.all_percentage_totals?.neutral_percentage_count ?? 0,
-                dashboard.surveyReports2?.all_percentage_totals?.ycp_percentage_count ?? 0,
-                dashboard.surveyReports2?.all_percentage_totals?.tdp_percentage_count ?? 0,
-                dashboard.surveyReports2?.all_percentage_totals?.jsp_percentage_count ?? 0,
-                dashboard.surveyReports2?.all_percentage_totals?.others_percentage_count ?? 0,
-                dashboard.surveyReports2?.all_percentage_totals?.not_traced_percentage_count ?? 0,
-              ]}
+              labels={["Neutral", "YCP", "TDP", "JSP", "Others", "Not Traced", "Total"]}
+              rows={dashboard.surveyReports2?.survey_results_by_constituency.map((item, index) => [
+                item.neutral_percent,
+                item.ysrcp_percent,
+                item.tdp_percent,
+                item.janasena_percent,
+                item.others_percent,
+                item.not_traced_percent,
+                (parseFloat(item.neutral_percent) + parseFloat(item.ysrcp_percent) + parseFloat(item.tdp_percent) + parseFloat(item.janasena_percent) + parseFloat(item.others_percent) + parseFloat(item.not_traced_percent)).toFixed(2) + "%",
+              ])}
+              total={["", "", "", "", "", "", ""]}
             />
           </Grid>
         </Grid>
@@ -186,7 +210,12 @@ function CustomizedTables({ labels, rows, total }) {
           <TableRow>
             {labels?.map((item, index) => (
               <TableCell key={index} sx={{ backgroundColor: searchFiltercolor, textAlign: "right" }}>
-                {item}
+                {index == 1 && (
+                  <Typography variant="body2" align="left">
+                    {item}
+                  </Typography>
+                )}
+                {index != 1 && item}
               </TableCell>
             ))}
           </TableRow>
@@ -201,7 +230,22 @@ function CustomizedTables({ labels, rows, total }) {
                     textAlign: "right",
                   }}
                 >
-                  {item}
+                  {index2 == 1 && (
+                    <Typography variant="body2" align="left">
+                      {item}
+                    </Typography>
+                  )}
+                  {index2 != 1 && (
+                    <Typography
+                      variant="body2"
+                      align="center"
+                      sx={{
+                        textAlign: "center",
+                      }}
+                    >
+                      {item}
+                    </Typography>
+                  )}
                 </TableCell>
               ))}
             </TableRow>
@@ -211,7 +255,12 @@ function CustomizedTables({ labels, rows, total }) {
           <TableRow>
             {total?.map((item, index) => (
               <TableCell key={index} sx={{ backgroundColor: searchFiltercolor, textAlign: "right" }}>
-                {item}
+                {index == 1 && (
+                  <Typography variant="body2" align="left">
+                    {item}
+                  </Typography>
+                )}
+                {index != 1 && item}
               </TableCell>
             ))}
           </TableRow>

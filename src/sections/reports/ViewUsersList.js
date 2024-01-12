@@ -20,10 +20,13 @@ import DialogTitle from "@mui/material/DialogTitle";
 import CustomMuiDataTable from "../../components/CustomMuiDataTable";
 import { ROWS_PER_PAGE_OPTION } from "../../constants";
 import ApiServices from "../../services/apiservices";
+import { useAlertContext } from "../../components/AlertProvider";
 
 //
 
 const ViewUsersList = ({ user, showAlert, checkOrUncheckUser, deleteUserInRedux, clearUserReducer, account }) => {
+  const { showLoading, hideLoading, showAlertDialog } = useAlertContext();
+
   const navigate = useNavigate();
 
   const [isLoading, setLoading] = useState(false);
@@ -117,7 +120,7 @@ const ViewUsersList = ({ user, showAlert, checkOrUncheckUser, deleteUserInRedux,
       label: "Action",
       options: {
         customBodyRender: (value, tableMeta, updateValue) => {
-          // console.log("tableMeta", tableMeta.rowData);
+          console.log("tableMeta", tableMeta.rowData[5]);
           return (
             <Box
               sx={{
@@ -129,14 +132,8 @@ const ViewUsersList = ({ user, showAlert, checkOrUncheckUser, deleteUserInRedux,
                   <EditNoteIcon />
                 </IconButton>
                 <>
-                  {tableMeta.rowData[5] !== "MLA" ? (
-                    <IconButton
-                      color="error"
-                      onClick={() => {
-                        setDeleteUserPk(value);
-                        handleClickOpen();
-                      }}
-                    >
+                  {tableMeta.rowData[5] !== account.user.desgination_name ? (
+                    <IconButton color="error" onClick={() => handleConfirmDelete(value)}>
                       <DeleteForeverIcon />
                     </IconButton>
                   ) : null}
@@ -257,6 +254,17 @@ const ViewUsersList = ({ user, showAlert, checkOrUncheckUser, deleteUserInRedux,
     }),
   };
 
+  const handleConfirmDelete = (id) => {
+    showAlertDialog({
+      description: `Do you want to delete this User(User Id : ${id})?`,
+      agreeCallback: async () => {
+        showLoading();
+        await handleDelete(id);
+        hideLoading();
+      },
+    });
+  };
+
   const handleEdit = (id) => {
     var index = user.data.findIndex((e) => e.user_pk == id);
     if (index != -1) {
@@ -267,16 +275,16 @@ const ViewUsersList = ({ user, showAlert, checkOrUncheckUser, deleteUserInRedux,
   };
   console.log("account", account);
 
-  const handleDelete = async () => {
+  const handleDelete = async (id) => {
     try {
       setLoading(true);
-      console.log(deleteUserPk);
-      // var index = user.data.findIndex((e) => e.user_pk == deleteUserPk);
+      // console.log("deleteUserPk",deleteUserPk);
+      var index = user.data.findIndex((e) => e.user_pk == id);
 
-      const response = await ApiServices.deleteRequest(`${deleteUserById + deleteUserPk}`);
+      const response = await ApiServices.deleteRequest(`${deleteUserById + id}`);
       console.log(response);
       showAlert({ text: "User Deleted Successfully", color: "success" });
-      deleteUserInRedux(deleteUserPk, user);
+      deleteUserInRedux(id, user);
       setLoading(false);
     } catch (error) {
       console.error(error);

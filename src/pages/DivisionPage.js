@@ -3,6 +3,7 @@ import Page from "../components/Page";
 import { connect } from "react-redux";
 import { LoadingButton } from "@mui/lab";
 
+import Tooltip from "@material-ui/core/Tooltip";
 import ViewUsersList from "../sections/reports/ViewUsersList";
 import Button from "@mui/material/Button";
 
@@ -15,6 +16,10 @@ import ApiServices from "../services/apiservices";
 import { Edit } from "@mui/icons-material";
 
 const DivisionPage = ({ dashboard, showAlert, account }) => {
+  const userPermission = account.user && account.user.permissions ? account.user.permissions : [];
+  const pageActions = userPermission.filter((p) => p.page_id === 146)[0];
+  console.log("pageActions1", pageActions);
+
   const [fetchLoading, setFetchLoading] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const [isEditState, setEditState] = useState(false);
@@ -105,6 +110,22 @@ const DivisionPage = ({ dashboard, showAlert, account }) => {
       division_id: data.division_id,
       division_name: data.division_name,
     });
+  };
+
+  const handleDelete = async (data) => {
+    setLoading(true);
+    console.log("data852852852", data);
+    try {
+      await ApiServices.deleteRequest(createDivisionsRoute + data.division_id);
+      showAlert({ text: "Division Deleted", color: "success" });
+      fecthDivisionData();
+      handleReset();
+    } catch (error) {
+      console.log(error);
+
+      showAlert({ text: "Division Not Deleted", color: "error" });
+    }
+    setLoading(false);
   };
 
   const handleSubmit = async () => {
@@ -309,9 +330,13 @@ const DivisionPage = ({ dashboard, showAlert, account }) => {
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
               {!isEditState && (
-                <LoadingButton loading={isLoading} onClick={handleSubmit} variant="contained">
-                  Add
-                </LoadingButton>
+                <Tooltip title={pageActions.add_perm != 1 ? "You don't have access to add" : ""}>
+                  <span>
+                    <LoadingButton loading={isLoading} onClick={handleSubmit} variant="contained" disabled={pageActions.add_perm != 1}>
+                      Add
+                    </LoadingButton>
+                  </span>
+                </Tooltip>
               )}
               {isEditState && (
                 <Stack direction="row" spacing={1}>
@@ -329,7 +354,7 @@ const DivisionPage = ({ dashboard, showAlert, account }) => {
         </Card>
 
         <Box p={1} />
-        <DivisionList loading={fetchLoading} divisionList={fetchedData.division} handleEdit={handleEdit} />
+        <DivisionList pageActions={pageActions} loading={fetchLoading} divisionList={fetchedData.division} handleEdit={handleEdit} handleDelete={handleDelete} />
       </Container>
     </Page>
   );

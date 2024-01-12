@@ -5,6 +5,8 @@ import MUIDataTable from "mui-datatables";
 import { connect } from "react-redux";
 import { showAlert } from "../../actions/alert";
 import { LoadingButton } from "@mui/lab";
+
+import Tooltip from "@material-ui/core/Tooltip";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { updateDivisionByIdRoute } from "../../utils/apis";
@@ -14,8 +16,10 @@ import CustomMuiDataTable from "../../components/CustomMuiDataTable";
 import ApiServices from "../../services/apiservices";
 import CircularProgress from "@mui/material/CircularProgress";
 import { ROWS_PER_PAGE_OPTION } from "../../constants";
+import { useAlertContext } from "../../components/AlertProvider";
 
-const DivisionList = ({ loading, showAlert, divisionList, handleEdit }) => {
+const DivisionList = ({ loading, showAlert, divisionList, handleEdit, pageActions, handleDelete }) => {
+  const { showLoading, hideLoading, showAlertDialog } = useAlertContext();
   const columns = [
     {
       name: "district_name",
@@ -42,12 +46,21 @@ const DivisionList = ({ loading, showAlert, divisionList, handleEdit }) => {
 
           return (
             <Stack direction="row">
-              <IconButton color="primary" onClick={(e) => handleEdit(divisionList[index])}>
-                <EditNoteIcon />
-              </IconButton>
-              {/* <IconButton color="error">
-                <DeleteForeverIcon />
-              </IconButton> */}
+              <Tooltip title={pageActions.edit_perm != 1 ? "You don't have access to edit" : ""}>
+                <span>
+                  <IconButton color="primary" onClick={(e) => handleEdit(divisionList[index])} disabled={pageActions.edit_perm != 1}>
+                    <EditNoteIcon />
+                  </IconButton>
+                </span>
+              </Tooltip>
+
+              <Tooltip title={pageActions.delete_perm != 1 ? "You don't have access to delete" : ""}>
+                <span>
+                  <IconButton color="error" onClick={(e) => handleConfirmDelete(divisionList[index])} disabled={pageActions.delete_perm != 1}>
+                    <DeleteForeverIcon />
+                  </IconButton>
+                </span>
+              </Tooltip>
             </Stack>
           );
         },
@@ -67,6 +80,16 @@ const DivisionList = ({ loading, showAlert, divisionList, handleEdit }) => {
     filter: false,
   };
 
+  const handleConfirmDelete = (data) => {
+    showAlertDialog({
+      description: "Are you sure? Do you want to delete this division?",
+      agreeCallback: async () => {
+        showLoading();
+        await handleDelete(data);
+        hideLoading();
+      },
+    });
+  };
   // // update details
   // const handleSubmit = async () => {
   //   console.log("selectedValues", selectedValues);

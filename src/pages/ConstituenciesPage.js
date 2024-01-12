@@ -9,11 +9,16 @@ import ConstituenciesList from "../sections/reports/ConstituenciesList";
 import { useEffect, useState, useRef } from "react";
 import { getAllStatesRoute, getAllConstituenciesWithJoinRoute, createConstituenciesRoute, getAllDistrictsRoute, getAllConstituenciesRoute } from "../utils/apis";
 
+import Tooltip from "@material-ui/core/Tooltip";
 import { showAlert } from "../actions/alert";
 import { set } from "date-fns";
 import ApiServices from "../services/apiservices";
 
 const ConstituenciesPage = ({ dashboard, showAlert, account }) => {
+  const userPermission = account.user && account.user.permissions ? account.user.permissions : [];
+  const pageActions = userPermission.filter((p) => p.page_id === 144)[0];
+  console.log("pageActions1", pageActions);
+
   const [fetchLoading, setFetchLoading] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const [isEditState, setEditState] = useState(false);
@@ -88,6 +93,22 @@ const ConstituenciesPage = ({ dashboard, showAlert, account }) => {
       consistency_id: data.consistency_id,
       consistency_name: data.consistency_name,
     });
+  };
+
+  const handleDelete = async (data) => {
+    setLoading(true);
+    console.log("data852852852", data);
+    try {
+      await ApiServices.deleteRequest(createConstituenciesRoute + data.consistency_id);
+      showAlert({ text: "Constituency Deleted", color: "success" });
+      fecthConstituenciesData();
+      handleReset();
+    } catch (error) {
+      console.log(error);
+
+      showAlert({ text: "Constituency Not Deleted", color: "error" });
+    }
+    setLoading(false);
   };
 
   const handleSubmit = async () => {
@@ -228,9 +249,13 @@ const ConstituenciesPage = ({ dashboard, showAlert, account }) => {
             </Grid>
             <Grid item xs={12} md={6} lg={2}>
               {!isEditState && (
-                <LoadingButton loading={isLoading} onClick={handleSubmit} variant="contained">
-                  Add
-                </LoadingButton>
+                <Tooltip title={pageActions.add_perm != 1 ? "You don't have access to add" : ""}>
+                  <span>
+                    <LoadingButton loading={isLoading} onClick={handleSubmit} variant="contained" disabled={pageActions.add_perm != 1}>
+                      Add
+                    </LoadingButton>
+                  </span>
+                </Tooltip>
               )}
               {isEditState && (
                 <Stack direction="row" spacing={1}>
@@ -248,7 +273,7 @@ const ConstituenciesPage = ({ dashboard, showAlert, account }) => {
         </Card>
 
         <Box p={1} />
-        <ConstituenciesList loading={fetchLoading} constituenciesList={fetchedData.consistency} handleEdit={handleEdit} />
+        <ConstituenciesList pageActions={pageActions} loading={fetchLoading} constituenciesList={fetchedData.consistency} handleEdit={handleEdit} handleDelete={handleDelete} />
       </Container>
     </Page>
   );

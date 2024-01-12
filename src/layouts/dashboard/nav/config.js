@@ -852,6 +852,7 @@ const getAccessNavConfig = (permissions) => {
       var filteredChildren = item.children.filter((childItem) => {
         var index = permissions.findIndex((x) => x.page_id === childItem.page_id);
 
+        console.log("index", index, permissions[index]);
         if (index === -1 || permissions[index].page_access !== 1) {
           return false;
         }
@@ -862,7 +863,7 @@ const getAccessNavConfig = (permissions) => {
       return filteredChildren.length > 0;
     } else {
       var index = permissions.findIndex((x) => x.page_id === item.page_id);
-
+      console.log("index without child", index, permissions[index]);
       if (index === -1 || permissions[index].page_access !== 1) {
         return false;
       }

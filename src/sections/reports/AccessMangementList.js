@@ -114,12 +114,28 @@ const AccessMangementList = ({ common, other, showAlert, getAllAccessPermissions
             <Box alignItems="center">
               {/* <CustomCheckboxWithLabel label="Access Menu" labelPlacement="top" /> */}
               <Stack direction="row" spacing={1}>
-                <CustomCheckboxWithLabel label="PA" checked={accessData[`page_access`] == 1 ? true : false} onChange={(e) => updateAccessPermission(`page_access`, e.target.checked, data)} />
-                <CustomCheckboxWithLabel label="C" checked={accessData[`add_perm`] == 1 ? true : false} onChange={(e) => updateAccessPermission(`add_perm`, e.target.checked, data)} />
-                <CustomCheckboxWithLabel label="R" checked={accessData[`view_perm`] == 1 ? true : false} onChange={(e) => updateAccessPermission(`view_perm`, e.target.checked, data)} />
-                <CustomCheckboxWithLabel label="U" checked={accessData[`edit_perm`] == 1 ? true : false} onChange={(e) => updateAccessPermission(`edit_perm`, e.target.checked, data)} />
-                <CustomCheckboxWithLabel label="D" checked={accessData[`delete_perm`] == 1 ? true : false} onChange={(e) => updateAccessPermission(`delete_perm`, e.target.checked, data)} />
-                <CustomCheckboxWithLabel label="AP" checked={accessData[`approved_perm`] == 1 ? true : false} onChange={(e) => updateAccessPermission(`approved_perm`, e.target.checked, data)} />
+                <CustomCheckboxWithLabel label="Page Access" checked={accessData[`page_access`] == 1 ? true : false} onChange={(e) => updateAccessPermission(`page_access`, e.target.checked, data)} />
+                <CustomCheckboxWithLabel disabled={accessData[`page_access`] != 1 ? true : false} label="Create" checked={accessData[`add_perm`] == 1 ? true : false} onChange={(e) => updateAccessPermission(`add_perm`, e.target.checked, data)} />
+                <CustomCheckboxWithLabel disabled={accessData[`page_access`] != 1 ? true : false} label="Read" checked={accessData[`view_perm`] == 1 ? true : false} onChange={(e) => updateAccessPermission(`view_perm`, e.target.checked, data)} />
+                <CustomCheckboxWithLabel disabled={accessData[`page_access`] != 1 ? true : false} label="Update" checked={accessData[`edit_perm`] == 1 ? true : false} onChange={(e) => updateAccessPermission(`edit_perm`, e.target.checked, data)} />
+                <CustomCheckboxWithLabel
+                  disabled={accessData[`page_access`] != 1 ? true : false}
+                  label="Delete"
+                  checked={accessData[`delete_perm`] == 1 ? true : false}
+                  onChange={(e) => updateAccessPermission(`delete_perm`, e.target.checked, data)}
+                />
+                <CustomCheckboxWithLabel
+                  disabled={accessData[`page_access`] != 1 ? true : false}
+                  label="Approved"
+                  checked={accessData[`approved_perm`] == 1 ? true : false}
+                  onChange={(e) => updateAccessPermission(`approved_perm`, e.target.checked, data)}
+                />
+                <CustomCheckboxWithLabel
+                  disabled={accessData[`page_access`] != 1 ? true : false}
+                  label="Survey Access"
+                  checked={accessData[`survey_perm`] == 1 ? true : false}
+                  onChange={(e) => updateAccessPermission(`survey_perm`, e.target.checked, data)}
+                />
                 {/* <hr /> */}
               </Stack>
             </Box>

@@ -292,68 +292,32 @@ const UpdateVoterDialog = ({ account, common, voterData, showAlert, updateVoterD
                       {
                         label: "Neutral",
                         value: PARTY_ID.NEUTRAL,
-                        custom: (
-                          <Tooltip title={pageActions.edit_perm != 1 ? "You don't have access to select" : ""}>
-                            <span>
-                              <NeutralRadio fontSize={22} disabled={pageActions.edit_perm != 1} />
-                            </span>
-                          </Tooltip>
-                        ),
+                        custom: <NeutralRadio fontSize={22} disabled={pageActions.edit_perm != 1} />,
                       },
                       {
                         label: "YSRCP",
                         value: PARTY_ID.YSRCP,
-                        custom: (
-                          <Tooltip title={pageActions.edit_perm != 1 ? "You don't have access to select" : ""}>
-                            <span>
-                              <YCPRadio fontSize={22} disabled={pageActions.edit_perm != 1} />
-                            </span>
-                          </Tooltip>
-                        ),
+                        custom: <YCPRadio fontSize={22} disabled={pageActions.edit_perm != 1} />,
                       },
                       {
                         label: "TDP",
                         value: PARTY_ID.TDP,
-                        custom: (
-                          <Tooltip title={pageActions.edit_perm != 1 ? "You don't have access to select" : ""}>
-                            <span>
-                              <TDPRadio fontSize={22} disabled={pageActions.edit_perm != 1} />
-                            </span>
-                          </Tooltip>
-                        ),
+                        custom: <TDPRadio fontSize={22} disabled={pageActions.edit_perm != 1} />,
                       },
                       {
                         label: "JSP",
                         value: PARTY_ID.JANASENA,
-                        custom: (
-                          <Tooltip title={pageActions.edit_perm != 1 ? "You don't have access to select" : ""}>
-                            <span>
-                              <JSPRadio fontSize={22} disabled={pageActions.edit_perm != 1} />
-                            </span>
-                          </Tooltip>
-                        ),
+                        custom: <JSPRadio fontSize={22} disabled={pageActions.edit_perm != 1} />,
                       },
                       {
                         label: "Others",
                         value: PARTY_ID.BJP,
-                        custom: (
-                          <Tooltip title={pageActions.edit_perm != 1 ? "You don't have access to select" : ""}>
-                            <span>
-                              <CongressRadio fontSize={22} disabled={pageActions.edit_perm != 1} />
-                            </span>
-                          </Tooltip>
-                        ),
+                        custom: <CongressRadio fontSize={22} disabled={pageActions.edit_perm != 1} />,
                       },
                       {
                         label: "Not Traced",
                         value: PARTY_ID.CONGRESS,
-                        custom: (
-                          <Tooltip title={pageActions.edit_perm != 1 ? "You don't have access to select" : ""}>
-                            <span>
-                              <BJPRadio fontSize={22} disabled={pageActions.edit_perm != 1} />
-                            </span>
-                          </Tooltip>
-                        ),
+                        custom: <BJPRadio fontSize={22} disabled={pageActions.edit_perm != 1} />,
                       },
                       // {
                       //   label: "Others",

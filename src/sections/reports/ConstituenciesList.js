@@ -11,12 +11,14 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import CustomMuiDataTable from "../../components/CustomMuiDataTable";
 import { set } from "date-fns";
 import CircularProgress from "@mui/material/CircularProgress";
-
+import Tooltip from "@material-ui/core/Tooltip";
 import ApiServices from "../../services/apiservices";
 import { UpdateAndDeleteConstituenciesRoute } from "../../utils/apis";
 import { ROWS_PER_PAGE_OPTION } from "../../constants";
+import { useAlertContext } from "../../components/AlertProvider";
 
-const ConstituenciesList = ({ loading, showAlert, constituenciesList, handleEdit }) => {
+const ConstituenciesList = ({ loading, showAlert, constituenciesList, handleEdit, pageActions, handleDelete }) => {
+  const { showLoading, hideLoading, showAlertDialog } = useAlertContext();
   const columns = [
     {
       name: "district_name",
@@ -40,12 +42,21 @@ const ConstituenciesList = ({ loading, showAlert, constituenciesList, handleEdit
 
           return (
             <Stack direction="row">
-              <IconButton color="primary" onClick={(e) => handleEdit(constituenciesList[index])}>
-                <EditNoteIcon />
-              </IconButton>
-              {/* <IconButton color="error">
-                <DeleteForeverIcon />
-              </IconButton> */}
+              <Tooltip title={pageActions.edit_perm != 1 ? "You don't have access to edit" : ""}>
+                <span>
+                  <IconButton color="primary" onClick={(e) => handleEdit(constituenciesList[index])} disabled={pageActions.edit_perm != 1}>
+                    <EditNoteIcon />
+                  </IconButton>
+                </span>
+              </Tooltip>
+
+              <Tooltip title={pageActions.delete_perm != 1 ? "You don't have access to delete" : ""}>
+                <span>
+                  <IconButton color="error" onClick={(e) => handleConfirmDelete(constituenciesList[index])} disabled={pageActions.delete_perm != 1}>
+                    <DeleteForeverIcon />
+                  </IconButton>
+                </span>
+              </Tooltip>
             </Stack>
           );
         },
@@ -63,6 +74,17 @@ const ConstituenciesList = ({ loading, showAlert, constituenciesList, handleEdit
     print: false,
     viewColumns: false,
     filter: false,
+  };
+
+  const handleConfirmDelete = (data) => {
+    showAlertDialog({
+      description: "Are you sure? Do you want to delete this constituency?",
+      agreeCallback: async () => {
+        showLoading();
+        await handleDelete(data);
+        hideLoading();
+      },
+    });
   };
 
   // const handleSubmit = async () => {

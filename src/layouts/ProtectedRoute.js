@@ -21,7 +21,7 @@ const ProtectedRoute = ({ type, auth, showAlert, authLogout }) => {
     };
   }, []);
 
-  return auth.isAuthenticated && type?.includes(auth.user?.desgination_name) ? <Outlet /> : <Navigate to="/logout" replace />;
+  return auth.isAuthenticated ? <Outlet /> : <Navigate to="/logout" replace />;
 };
 
 const mapStateToProps = (state) => {

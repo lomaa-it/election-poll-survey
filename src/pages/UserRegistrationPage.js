@@ -208,7 +208,7 @@ const UserRegistrationPage = ({ account, common, showAlert }) => {
           </Card>
 
           <Card sx={{ p: 3, mt: 1 }}>
-            <Typography sx={{ pb: 2 }}>Assign Authority</Typography>
+            <Typography sx={{ pb: 2 }}>Assign Designation</Typography>
 
             <Grid container spacing={2}>
               <Grid item xs={12} md={6} lg={3}>
