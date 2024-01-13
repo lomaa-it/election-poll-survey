@@ -46,7 +46,7 @@ const Nav = ({ account, openNav, onCloseNav }) => {
   useEffect(() => {
     let navbar = getAccessNavConfig(account.user.permissions);
     setNavConfig(navbar);
-  }, []);
+  }, [account.user.permissions]); // Runs when component mounts and whenever account.user.permissions changes
 
   useEffect(() => {
     if (openNav) {

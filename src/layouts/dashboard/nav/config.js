@@ -844,35 +844,63 @@ const accessNavConfig = userPermission
   })
   .filter((item) => item.title !== "");
 
+// const getAccessNavConfig = (permissions) => {
+//   var filteredConfig = mainNavConfig.filter((item) => {
+//     // console.log("item", item);
+
+//     if (item.children?.length > 0) {
+//       var filteredChildren = item.children.filter((childItem) => {
+//         var index = permissions.findIndex((x) => x.page_id === childItem.page_id);
+
+//         console.log("index", index, permissions[index]);
+//         if (index === -1 || permissions[index].page_access !== 1) {
+//           return false;
+//         }
+
+//         return true;
+//       });
+
+//       return filteredChildren.length > 0;
+//     } else {
+//       var index = permissions.findIndex((x) => x.page_id === item.page_id);
+//       console.log("index without child", index, permissions[index]);
+//       if (index === -1 || permissions[index].page_access !== 1) {
+//         return false;
+//       }
+
+//       return true;
+//     }
+//   });
+
+//   console.log("filtered", mainNavConfig);
+
+//   return filteredConfig;
+// };
+
 const getAccessNavConfig = (permissions) => {
-  var filteredConfig = mainNavConfig.filter((item) => {
-    // console.log("item", item);
+  console.log("permissions", permissions);
+  var filteredConfig = mainNavConfig
+    .map((item) => {
+      if (item.children?.length > 0) {
+        item.children = item.children.filter((childItem) => {
+          var index = permissions.findIndex((x) => x.page_id === childItem.page_id);
 
-    if (item.children?.length > 0) {
-      var filteredChildren = item.children.filter((childItem) => {
-        var index = permissions.findIndex((x) => x.page_id === childItem.page_id);
+          if (index === -1 || permissions[index].page_access !== 1) {
+            return false;
+          }
 
-        console.log("index", index, permissions[index]);
+          return true;
+        });
+      } else {
+        var index = permissions.findIndex((x) => x.page_id === item.page_id);
         if (index === -1 || permissions[index].page_access !== 1) {
           return false;
         }
-
-        return true;
-      });
-
-      return filteredChildren.length > 0;
-    } else {
-      var index = permissions.findIndex((x) => x.page_id === item.page_id);
-      console.log("index without child", index, permissions[index]);
-      if (index === -1 || permissions[index].page_access !== 1) {
-        return false;
       }
 
-      return true;
-    }
-  });
-
-  console.log("filtered", mainNavConfig);
+      return item;
+    })
+    .filter((item) => item.children?.length > 0 || permissions.findIndex((x) => x.page_id === item.page_id) !== -1);
 
   return filteredConfig;
 };

@@ -112,8 +112,16 @@ const SurveyReportsList = ({ dashboard, getOpinionResults, clearDashboardReducer
         <Grid container spacing={1}>
           <Grid item xs={12} md={6}>
             <CustomizedTables
-              labels={["S.No", "Mandal Name", "#Polling Stations", "Male", "Female", "TG", "Total"]}
-              rows={dashboard.surveyReports1.survey_summary_by_constituency.map((item, index) => [index + 1, item.mandal_name, item.parts_count, item.male_voters, item.female_voters, item.other_voters, item.total_voters])}
+              labels={["S.No", "Mandal Name", "#Parts", "Male", "Female", "TG", "Total"]}
+              rows={dashboard.surveyReports1.survey_summary_by_constituency.map((item, index) => [
+                index + 1,
+                item.mandal_name || 0,
+                item.parts_count || 0,
+                item.male_voters || 0,
+                item.female_voters || 0,
+                item.other_voters || 0,
+                item.total_voters || 0,
+              ])}
               total={[
                 "",
                 "Total",
@@ -136,7 +144,7 @@ const SurveyReportsList = ({ dashboard, getOpinionResults, clearDashboardReducer
                 item.janasena,
                 item.others,
                 item.not_traced,
-                parseInt(item.neutral) + parseInt(item.ysrcp) + parseInt(item.tdp) + parseInt(item.janasena) + parseInt(item.others) + parseInt(item.not_traced),
+                parseInt(item.neutral) + parseInt(item.ysrcp) + parseInt(item.tdp) + parseInt(item.janasena) + parseInt(item.others) + parseInt(item.not_traced) || 0,
               ])}
               total={[
                 dashboard.surveyReports2?.all_totals?.neutral_count ?? 0,
@@ -191,9 +199,10 @@ const SurveyReportsList = ({ dashboard, getOpinionResults, clearDashboardReducer
                 item.janasena_percent,
                 item.others_percent,
                 item.not_traced_percent,
-                (parseFloat(item.neutral_percent) + parseFloat(item.ysrcp_percent) + parseFloat(item.tdp_percent) + parseFloat(item.janasena_percent) + parseFloat(item.others_percent) + parseFloat(item.not_traced_percent)).toFixed(2) + "%",
+                // (parseFloat(item.neutral_percent) + parseFloat(item.ysrcp_percent) + parseFloat(item.tdp_percent) + parseFloat(item.janasena_percent) + parseFloat(item.others_percent) + parseFloat(item.not_traced_percent)).toFixed(2) + "%",
+                "100% ",
               ])}
-              total={["", "", "", "", "", "", ""]}
+              total={["\u200B", "\u200B", "\u200B", "\u200B", "\u200B", "\u200B", "\u200B"]}
             />
           </Grid>
         </Grid>
@@ -254,9 +263,9 @@ function CustomizedTables({ labels, rows, total }) {
         <TableHead>
           <TableRow>
             {total?.map((item, index) => (
-              <TableCell key={index} sx={{ backgroundColor: searchFiltercolor, textAlign: "right" }}>
+              <TableCell key={index} sx={{ backgroundColor: searchFiltercolor, textAlign: "center" }}>
                 {index == 1 && (
-                  <Typography variant="body2" align="left">
+                  <Typography variant="body2" align="center">
                     {item}
                   </Typography>
                 )}

@@ -127,6 +127,7 @@ const LoginForm = ({ showAlert, authSuccess }) => {
           if (accessPages.length > 0) {
             const accessPath = accessPages[0].children ? accessPages[0].children[0].path : accessPages[0].path;
             navigate(accessPath, { replace: true });
+            window.location.reload();
           } else {
             console.log("No pages available");
           }
